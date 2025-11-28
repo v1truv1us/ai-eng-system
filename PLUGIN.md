@@ -42,22 +42,47 @@ OpenCode automatically loads plugins from `.opencode/plugin/`. The scaffold incl
 opencode  # Plugin loads automatically on startup
 ```
 
-### Option 2: Global Plugin
+### Option 2: Global Installation
 
-Copy the plugin to your global OpenCode config:
+Install commands, agents, and skills globally for use across all OpenCode projects:
 
 ```bash
-cp -r .opencode/plugin ~/.config/opencode/plugin/ferg-engineering
+# From the ferg-engineering-system repository
+./setup-global.sh
+
+# Or manually:
+mkdir -p ~/.config/opencode/{command,agent,skills/devops}
+cp .opencode/command/*.md ~/.config/opencode/command/
+cp .opencode/agent/*.md ~/.config/opencode/agent/
+cp -r skills/devops/* ~/.config/opencode/skills/devops/
 ```
 
-### Verification
+### Setup Verification
 
-After startup, you'll see:
+The plugin automatically verifies setup on session start:
+
 ```
-[ferg-engineering] Session started. Ferg Engineering System ready.
-[ferg-engineering] Available agents: plan, review, build
+[ferg-engineering] Session started. Verifying setup...
+[ferg-engineering] ✓ All components verified and ready to use
 [ferg-engineering] Available commands: plan, review, seo, work, compound, deploy
+[ferg-engineering] Available agents: plan, review, build
+[ferg-engineering] Available subagents: frontend-reviewer, seo-specialist, architect-advisor
 ```
+
+**If components are missing**, the plugin will suggest how to fix it:
+
+```
+[ferg-engineering] Session started. Verifying setup...
+[ferg-engineering] ⚠ Setup verification found issues:
+  Missing commands: plan.md, seo.md
+[ferg-engineering] To set up globally, run:
+  ./setup-global.sh
+```
+
+The verification checks:
+- Project-local locations first (`.opencode/command/`, `.opencode/agent/`, `skills/`)
+- Falls back to global locations (`~/.config/opencode/`)
+- Ensures all required commands, agents, and skills are available
 
 ## Unified Workflow
 
@@ -143,8 +168,8 @@ ferg-engineering-system/
 │   │   ├── frontend-reviewer.md
 │   │   ├── seo-specialist.md
 │   │   └── architect-advisor.md
-│   └── plugin/               # OpenCode plugin implementation
-│       ├── ferg-engineering.ts
+│   └── plugin/               # OpenCode plugin with verification
+│       ├── ferg-engineering.ts  # Hooks & setup verification
 │       ├── index.ts
 │       └── package.json
 ├── .claude/
@@ -159,8 +184,13 @@ ferg-engineering-system/
 │   └── utilities/
 │       └── deploy.md
 ├── agents/                   # Shared agent definitions (currently empty)
-└── skills/                   # Shared skills
-    └── devops/
+├── skills/                   # Shared skills
+│   └── devops/
+│       ├── coolify-deploy/SKILL.md
+│       └── git-worktree/SKILL.md
+├── setup.sh                  # Project-local setup (Claude symlinks)
+├── setup-global.sh           # Global OpenCode installation
+└── PLUGIN.md                 # Plugin installation & usage guide
 ```
 
 ## Compounding Engineering Philosophy
