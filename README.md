@@ -44,8 +44,8 @@ cd ferg-engineering-system
 
 | Platform | Installation | Commands | Agents | Example Usage |
 |----------|-------------|----------|--------|---------------|
-| **Claude Code** | `/plugin marketplace add ferg-cod3s/ferg-marketplace`<br>`/plugin install ferg-engineering@ferg-cod3s` | `/plan`, `/review`, `/optimize`, `/seo`, `/deploy`, `/compound`, `/recursive-init`, `/work` | N/A | `/plan "Add user authentication"` |
-| **OpenCode** | `npm install -g @ferg-cod3s/engineering-system` | `/ferg/plan`, `/ferg/review`, `/ferg/optimize`, etc. | `ferg/architect-advisor`, `ferg/frontend-reviewer`, `ferg/seo-specialist`, `ferg/prompt-optimizer` | `/ferg/optimize 'Fix this slow query'` or `Use ferg/architect-advisor to evaluate...` |
+| **Claude Code** | `/plugin marketplace add ferg-cod3s/ferg-marketplace`<br>`/plugin install ferg-engineering@ferg-cod3s` | `/plan`, `/review`, `/optimize`, `/seo`, `/deploy`, `/compound`, `/recursive-init`, `/work`, `/create-plugin`, `/create-agent`, `/create-command`, `/create-skill` | N/A | `/plan "Add user authentication"` or `/create-plugin "database migration tool"` |
+| **OpenCode** | `npm install -g @ferg-cod3s/engineering-system` | `/ferg/plan`, `/ferg/review`, `/ferg/optimize`, etc., `/ferg/create-plugin`, `/ferg/create-agent`, `/ferg/create-command`, `/ferg/create-skill`, `/ferg/create-tool` | `ferg/architect-advisor`, `ferg/frontend-reviewer`, `ferg/seo-specialist`, `ferg/prompt-optimizer`, `ferg/agent-creator`, `ferg/command-creator`, `ferg/skill-creator`, `ferg/tool-creator`, `ferg/plugin-validator` | `/ferg/optimize 'Fix this slow query'` or `Use ferg/architect-advisor to evaluate...` or `/ferg/create-agent "code reviewer"` |
 
 ## Architecture (v2.0)
 
@@ -56,11 +56,15 @@ content/                    # ✏️ EDIT HERE - canonical source
 ├── commands/              # Command definitions (YAML frontmatter)
 └── agents/                # Agent definitions (YAML frontmatter)
 
+skills/                     # Skills with progressive disclosure
+└── plugin-dev/            # Plugin development knowledge base
+
 build.ts                   # Bun script: transforms content → platform formats
 
 dist/                      # 🚫 GENERATED - never edit directly
 ├── .claude-plugin/        # Claude Code output (YAML frontmatter)
-└── .opencode/             # OpenCode output (table format)
+├── .opencode/             # OpenCode output (table format)
+└── skills/                # Shared skills (copied)
 ```
 
 **Key Benefits:**
@@ -119,6 +123,11 @@ claude plugin add https://github.com/ferg-cod3s/ferg-engineering-system
 | `/deploy` | Pre-deployment checklist and Coolify deployment |
 | `/optimize` | Transform prompts using research-backed incentive techniques (+45% quality) |
 | `/recursive-init` | Recursively initialize AGENTS.md in all subdirectories |
+| `/create-plugin` | Guided end-to-end plugin creation workflow |
+| `/create-agent` | AI-assisted agent generation for both platforms |
+| `/create-command` | AI-assisted command generation for both platforms |
+| `/create-skill` | AI-assisted skill creation with progressive disclosure |
+| `/create-tool` | AI-assisted custom tool creation for OpenCode |
 
 ## Agents Available (OpenCode)
 
@@ -128,6 +137,62 @@ claude plugin add https://github.com/ferg-cod3s/ferg-engineering-system
 | `ferg/frontend-reviewer` | Frontend code review specialist (React, TypeScript, a11y) |
 | `ferg/seo-specialist` | Technical & on-page SEO expert |
 | `ferg/prompt-optimizer` | Prompt enhancement using research-backed techniques |
+| `ferg/agent-creator` | AI-assisted agent generation for both platforms |
+| `ferg/command-creator` | AI-assisted command generation for both platforms |
+| `ferg/skill-creator` | AI-assisted skill creation with progressive disclosure |
+| `ferg/tool-creator` | AI-assisted custom tool creation for OpenCode |
+| `ferg/plugin-validator` | Validates plugin structure and best practices |
+
+## Plugin Development System
+
+The ferg-engineering-system now includes a comprehensive plugin development system that helps you create extensions for both Claude Code and OpenCode platforms.
+
+### Plugin-Dev Commands
+
+| Command | Purpose |
+|---------|---------|
+| `/create-plugin` | Full 8-phase guided workflow for creating complete plugins |
+| `/create-agent` | Quick agent creation with AI assistance |
+| `/create-command` | Quick command creation with AI assistance |
+| `/create-skill` | Quick skill creation with progressive disclosure |
+| `/create-tool` | Quick custom tool creation for OpenCode |
+
+### Plugin-Dev Agents
+
+| Agent | Purpose |
+|-------|---------|
+| `agent-creator` | Generates properly formatted agents for both platforms |
+| `command-creator` | Generates properly formatted commands for both platforms |
+| `skill-creator` | Creates skills with progressive disclosure |
+| `tool-creator` | Creates TypeScript custom tools for OpenCode |
+| `plugin-validator` | Validates plugin structure and best practices |
+
+### Plugin-Dev Knowledge Base
+
+The `plugin-dev` skill provides comprehensive knowledge about:
+- Claude Code plugin structure (commands, agents, skills, hooks, MCP)
+- OpenCode extension system (commands, agents, skills, custom tools)
+- Cross-platform development patterns
+- Best practices and validation
+
+### Example Usage
+
+```bash
+# Create a complete plugin
+/create-plugin "database migration tool"
+
+# Quick agent creation
+/create-agent "code reviewer that checks for security issues"
+
+# Quick command creation
+/create-command "deploy to staging with health checks"
+
+# Quick skill creation
+/create-skill "PostgreSQL optimization patterns"
+
+# Quick tool creation (OpenCode only)
+/create-tool "database query executor with connection pooling"
+```
 
 ## Development
 
