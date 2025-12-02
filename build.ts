@@ -219,6 +219,13 @@ async function buildClaudePlugin(): Promise<void> {
     await writeFile(dest, content)
   }
 
+  // Copy marketplace.json if it exists
+  const marketplaceJsonPath = join(ROOT, "marketplace.json")
+  if (existsSync(marketplaceJsonPath)) {
+    await copyFile(marketplaceJsonPath, join(CLAUDE_DIR, "marketplace.json"))
+    console.log(`   ✓ marketplace.json`)
+  }
+
   console.log(`   ✓ ${commandFiles.length} commands`)
   console.log(`   ✓ plugin.json`)
 }
@@ -231,18 +238,16 @@ async function buildOpenCode(): Promise<void> {
 
   const commandsDir = join(OPENCODE_DIR, "command", "ferg")
   const agentsDir = join(OPENCODE_DIR, "agent", "ferg")
-  const pluginDir = join(OPENCODE_DIR, "plugin")
 
   await mkdir(commandsDir, { recursive: true })
   await mkdir(agentsDir, { recursive: true })
-  await mkdir(pluginDir, { recursive: true })
 
   // Transform and write commands
   const commandFiles = await getMarkdownFiles(join(CONTENT_DIR, "commands"))
   for (const file of commandFiles) {
     const content = await readFile(file, "utf-8")
-    const { meta } = parseFrontmatter(content)
-    const transformed = transformToOpenCodeCommand(meta, content)
+    const { meta, body } = parseFrontmatter(content)
+    const transformed = transformToOpenCodeCommand(meta, body)
     const dest = join(commandsDir, basename(file))
     await writeFile(dest, transformed)
   }
@@ -258,21 +263,6 @@ async function buildOpenCode(): Promise<void> {
     await writeFile(dest, transformed)
   }
   console.log(`   ✓ ${agentFiles.length} agents`)
-
-  // Generate plugin verification script
-  const pluginScript = `import { definePlugin, file, agent, command } from "@opencode-ai/plugin"
-
-export default definePlugin({
-  name: "ferg-engineering",
-  version: "2.0.0",
-
-  async init(config) {
-    console.log("🔧 Ferg Engineering System loaded")
-  },
-})
-`
-  await writeFile(join(pluginDir, "ferg-engineering.ts"), pluginScript)
-  console.log(`   ✓ plugin script`)
 }
 
 /**
