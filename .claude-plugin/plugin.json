@@ -19,5 +19,6 @@
     "seo",
     "optimization",
     "research"
-  ]
+  ],
+  "commands": "./commands/"
 }
