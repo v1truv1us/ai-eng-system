@@ -21,19 +21,19 @@
     "research"
   ],
   "commands": [
-    "./commands/plan.md",
-    "./commands/work.md",
-    "./commands/review.md",
-    "./commands/seo.md",
-    "./commands/research.md",
-    "./commands/compound.md",
-    "./commands/deploy.md",
-    "./commands/optimize.md",
-    "./commands/recursive-init.md",
-    "./commands/create-agent.md",
-    "./commands/create-command.md",
-    "./commands/create-plugin.md",
-    "./commands/create-skill.md",
-    "./commands/create-tool.md"
+    "./.claude-plugin/commands/plan.md",
+    "./.claude-plugin/commands/work.md",
+    "./.claude-plugin/commands/review.md",
+    "./.claude-plugin/commands/seo.md",
+    "./.claude-plugin/commands/research.md",
+    "./.claude-plugin/commands/compound.md",
+    "./.claude-plugin/commands/deploy.md",
+    "./.claude-plugin/commands/optimize.md",
+    "./.claude-plugin/commands/recursive-init.md",
+    "./.claude-plugin/commands/create-agent.md",
+    "./.claude-plugin/commands/create-command.md",
+    "./.claude-plugin/commands/create-plugin.md",
+    "./.claude-plugin/commands/create-skill.md",
+    "./.claude-plugin/commands/create-tool.md"
   ]
 }
