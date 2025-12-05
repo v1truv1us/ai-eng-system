@@ -9,15 +9,4 @@
     "./commands/work.md",
     "./commands/create-tool.md",
     "./commands/compound.md",
-    "./commands/create-skill.md",
-    "./commands/deploy.md",
-    "./commands/create-command.md",
-    "./commands/research.md",
-    "./commands/seo.md",
-    "./commands/optimize.md",
-    "./commands/plan.md",
-    "./commands/review.md",
-    "./commands/create-agent.md",
-    "./commands/create-plugin.md"
-  ]
 }

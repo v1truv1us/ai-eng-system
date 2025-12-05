@@ -49,19 +49,19 @@
     "bun-types": "latest"
   },
   "author": {
-    "name": "ferg-cod3s",
-    "email": "contact@ferg-cod3s.dev",
-    "url": "https://github.com/ferg-cod3s"
+    "name": "v1truv1us",
+    "email": "contact@v1truv1us.dev",
+    "url": "https://github.com/v1truv1us"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ferg-cod3s/ferg-engineering-system"
+    "url": "https://github.com/v1truv1us/ferg-engineering-system"
   },
   "bugs": {
-    "url": "https://github.com/ferg-cod3s/ferg-engineering-system/issues"
+    "url": "https://github.com/v1truv1us/ferg-engineering-system/issues"
   },
-  "homepage": "https://github.com/ferg-cod3s/ferg-engineering-system#readme",
+  "homepage": "https://github.com/v1truv1us/ferg-engineering-system#readme",
   "engines": {
     "bun": ">=1.0.0"
   }

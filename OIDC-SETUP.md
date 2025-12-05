@@ -18,20 +18,20 @@ OIDC (OpenID Connect) trusted publishing provides:
 - **Repository**: Public or private npm package
 
 ### Package Information
-- **Package**: `@ferg-cod3s/engineering-system`
-- **Repository**: `ferg-cod3s/ferg-engineering-system`
-- **Marketplace**: `ferg-cod3s/ferg-marketplace`
+- **Package**: `@v1truv1us/engineering-system`
+- **Repository**: `v1truv1us/ferg-engineering-system`
+- **Marketplace**: `v1truv1us/ferg-marketplace`
 
 ## 🔧 Step 1: Configure npm Trusted Publishers
 
 ### 1.1 Visit npm Package Settings
-1. Go to: https://www.npmjs.com/package/@ferg-cod3s/engineering-system/access
+1. Go to: https://www.npmjs.com/package/@v1truv1us/engineering-system/access
 2. Click on "Publishing access" or "Trusted publishers"
 
 ### 1.2 Add GitHub Actions as Trusted Publisher
 Configure these settings:
 
-**GitHub Repository**: `ferg-cod3s/ferg-engineering-system`
+**GitHub Repository**: `v1truv1us/ferg-engineering-system`
 **Workflow Filename**: `.github/workflows/publish.yml`
 **Environment**: (optional) `production` (if using environments)
 **Branch Pattern**: `main` or `refs/tags/v*`
@@ -46,7 +46,7 @@ You can use the `setup-npm-trusted-publish` action:
 - name: Setup trusted publishing
   uses: azu/setup-npm-trusted-publish@v1
   with:
-    package: '@ferg-cod3s/engineering-system'
+    package: '@v1truv1us/engineering-system'
 ```
 
 ## 🚀 Step 2: GitHub Actions Workflows

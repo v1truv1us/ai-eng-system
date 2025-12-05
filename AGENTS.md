@@ -2,6 +2,10 @@
 
 Context: UnFergettable-Designs (client web dev) and ferg-cod3s (personal projects).
 
+**See also:** [CLAUDE.md](./CLAUDE.md) — Project philosophy and core guidelines that guide all agent behavior.
+
+This document defines the **agents and tools** available in this system. For the guiding **philosophy**, refer to CLAUDE.md.
+
 ## Agent Coordination
 
 | Agent | Mode | Purpose |

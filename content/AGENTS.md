@@ -1,5 +1,11 @@
 # Content Repository Context
 
+**Hierarchy Level:** Agent and command documentation
+**Parent:** [../AGENTS.md](../AGENTS.md) — Agent coordination and capability definitions
+**Philosophy:** [../CLAUDE.md](../CLAUDE.md) — Compounding Engineering philosophy
+
+Extended documentation for agents and commands defined in the parent AGENTS.md.
+
 ## Project Overview
 Content repository for agents and commands documentation.
 

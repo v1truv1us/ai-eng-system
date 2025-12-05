@@ -1,6 +1,6 @@
 # Ferg Engineering System
 
-A compounding engineering system for UnFergettable-Designs and ferg-cod3s. Provides shared agents, commands, and skills for **Claude Code** and **OpenCode** (SST/OpenCode agentic platform).
+A compounding engineering system for UnFergettable-Designs and v1truv1us. Provides shared agents, commands, and skills for **Claude Code** and **OpenCode** (SST/OpenCode agentic platform).
 
 ## 🚀 Easy Installation
 
@@ -8,32 +8,32 @@ A compounding engineering system for UnFergettable-Designs and ferg-cod3s. Provi
 
 **Option 1: Marketplace (Recommended)**
 ```bash
-/plugin marketplace add ferg-cod3s/ferg-marketplace
-/plugin install ferg-engineering@ferg-cod3s
+/plugin marketplace add v1truv1us/ferg-marketplace
+/plugin install ferg-engineering@v1truv1us
 ```
 
 **Option 2: Direct Repository**
 ```bash
-claude plugin add https://github.com/ferg-cod3s/ferg-engineering-system
+claude plugin add https://github.com/v1truv1us/ferg-engineering-system
 ```
 
 ### For OpenCode (Global - Recommended)
 
 **Option 1: Shell Script**
 ```bash
-git clone https://github.com/ferg-cod3s/ferg-engineering-system
+git clone https://github.com/v1truv1us/ferg-engineering-system
 cd ferg-engineering-system
 ./setup-global.sh  # Installs to ~/.config/opencode with ferg/ namespace
 ```
 
 **Option 2: Bun Package** (Coming Soon)
 ```bash
-bun install -g @ferg-cod3s/engineering-system
+bun install -g @v1truv1us/engineering-system
 ```
 
 ### For OpenCode (Project-Local)
 ```bash
-git clone https://github.com/ferg-cod3s/ferg-engineering-system
+git clone https://github.com/v1truv1us/ferg-engineering-system
 cd ferg-engineering-system
 ./setup.sh  # Creates symlinks in current project
 ```
@@ -44,8 +44,8 @@ cd ferg-engineering-system
 
 | Platform | Installation | Commands | Agents | Example Usage |
 |----------|-------------|----------|--------|---------------|
-| **Claude Code** | `/plugin marketplace add ferg-cod3s/ferg-marketplace`<br>`/plugin install ferg-engineering@ferg-cod3s` | `/plan`, `/review`, `/optimize`, `/seo`, `/deploy`, `/compound`, `/recursive-init`, `/work`, `/create-plugin`, `/create-agent`, `/create-command`, `/create-skill` | N/A | `/plan "Add user authentication"` or `/create-plugin "database migration tool"` |
-| **OpenCode** | `bun install -g @ferg-cod3s/engineering-system` | `/ferg/plan`, `/ferg/review`, `/ferg/optimize`, etc., `/ferg/create-plugin`, `/ferg/create-agent`, `/ferg/create-command`, `/ferg/create-skill`, `/ferg/create-tool` | `ferg/architect-advisor`, `ferg/frontend-reviewer`, `ferg/seo-specialist`, `ferg/prompt-optimizer`, `ferg/agent-creator`, `ferg/command-creator`, `ferg/skill-creator`, `ferg/tool-creator`, `ferg/plugin-validator` | `/ferg/optimize 'Fix this slow query'` or `Use ferg/architect-advisor to evaluate...` or `/ferg/create-agent "code reviewer"` |
+| **Claude Code** | `/plugin marketplace add v1truv1us/ferg-marketplace`<br>`/plugin install ferg-engineering@v1truv1us` | `/plan`, `/review`, `/optimize`, `/seo`, `/deploy`, `/compound`, `/recursive-init`, `/work`, `/create-plugin`, `/create-agent`, `/create-command`, `/create-skill` | N/A | `/plan "Add user authentication"` or `/create-plugin "database migration tool"` |
+| **OpenCode** | `bun install -g @v1truv1us/engineering-system` | `/ferg/plan`, `/ferg/review`, `/ferg/optimize`, etc., `/ferg/create-plugin`, `/ferg/create-agent`, `/ferg/create-command`, `/ferg/create-skill`, `/ferg/create-tool` | `ferg/architect-advisor`, `ferg/frontend-reviewer`, `ferg/seo-specialist`, `ferg/prompt-optimizer`, `ferg/agent-creator`, `ferg/command-creator`, `ferg/skill-creator`, `ferg/tool-creator`, `ferg/plugin-validator` | `/ferg/optimize 'Fix this slow query'` or `Use ferg/architect-advisor to evaluate...` or `/ferg/create-agent "code reviewer"` |
 
 ## Architecture (v2.0)
 
@@ -86,14 +86,14 @@ dist/                      # 🚫 GENERATED - never edit directly
 
 **Build from source:**
 ```bash
-git clone https://github.com/ferg-cod3s/ferg-engineering-system
+git clone https://github.com/v1truv1us/ferg-engineering-system
 cd ferg-engineering-system
 bun run build
 ```
 
 **Claude Code:**
 ```bash
-claude plugin add https://github.com/ferg-cod3s/ferg-engineering-system
+claude plugin add https://github.com/v1truv1us/ferg-engineering-system
 ```
 
 **OpenCode (global install):**
