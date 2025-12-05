@@ -30,7 +30,7 @@ describe('Discovery Phase', () => {
     
     query = {
       id: 'test-discovery-1',
-      query: 'authentication implementation',
+      query: 'authentication class implementation',
       scope: ResearchScope.ALL,
       depth: ResearchDepth.MEDIUM,
       constraints: {

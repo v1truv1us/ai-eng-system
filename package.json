@@ -78,6 +78,7 @@
   },
   "dependencies": {
     "commander": "^14.0.2",
+    "glob": "^13.0.0",
     "yaml": "^2.8.2"
   }
 }

@@ -5,6 +5,9 @@
 
 import { ConfidenceLevel } from '../agents/types.js';
 
+// Re-export for convenience
+export { ConfidenceLevel };
+
 /**
  * Research scope enumeration
  */

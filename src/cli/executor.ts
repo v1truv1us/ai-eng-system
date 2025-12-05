@@ -22,12 +22,20 @@ import {
   PlanGenerationInput,
   CodeReviewInput
 } from '../agents/types.js';
+import { ResearchOrchestrator } from '../research/orchestrator.js';
+import {
+  ResearchQuery,
+  ResearchScope,
+  ResearchDepth,
+  ResearchConfig
+} from '../research/types.js';
 
 export class ExecutorCLI {
   private program: Command;
   private agentCoordinator: AgentCoordinator;
   private planGenerator: PlanGenerator;
   private codeReviewExecutor: CodeReviewExecutor;
+  private researchOrchestrator: ResearchOrchestrator;
 
   constructor() {
     // Initialize agent components
@@ -43,6 +51,20 @@ export class ExecutorCLI {
     this.agentCoordinator = new AgentCoordinator(agentConfig);
     this.planGenerator = new PlanGenerator(this.agentCoordinator);
     this.codeReviewExecutor = new CodeReviewExecutor(this.agentCoordinator);
+    
+    // Initialize research orchestrator
+    const researchConfig: ResearchConfig = {
+      maxConcurrency: 3,
+      defaultTimeout: 30000,
+      enableCaching: true,
+      logLevel: 'info',
+      cacheExpiry: 3600000, // 1 hour
+      maxFileSize: 10 * 1024 * 1024, // 10MB
+      maxResults: 100,
+      enableExternalSearch: false,
+      externalSearchTimeout: 10000
+    };
+    this.researchOrchestrator = new ResearchOrchestrator(researchConfig);
     
     this.program = new Command();
     this.setupCommands();
@@ -121,7 +143,20 @@ export class ExecutorCLI {
       .option('-o, --output <file>', 'Output report file', 'code-review-report.json')
       .option('-v, --verbose', 'Enable verbose output')
       .action(this.codeReviewCommand.bind(this));
-
+    
+    // Research command
+    this.program
+      .command('research')
+      .description('Execute comprehensive multi-phase research analysis')
+      .argument('[query]', 'Research question or topic', '')
+      .option('-s, --scope <scope>', 'Research scope (codebase|documentation|all)', 'all')
+      .option('-d, --depth <depth>', 'Research depth (shallow|medium|deep)', 'medium')
+      .option('-o, --output <file>', 'Output file path', '')
+      .option('-f, --format <format>', 'Export format (markdown|json|html)', 'markdown')
+      .option('--no-cache', 'Disable research caching', false)
+      .option('-v, --verbose', 'Enable verbose output', false)
+      .action(this.executeResearchCommand.bind(this));
+    
     this.program
       .command('agent-status')
       .description('Show agent execution status and metrics')

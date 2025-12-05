@@ -18,6 +18,9 @@ import {
   ResearchError,
   ResearchMetrics
 } from './types.js';
+import { DiscoveryHandler } from './discovery.js';
+import { AnalysisHandler } from './analysis.js';
+import { SynthesisHandlerImpl } from './synthesis.js';
 
 /**
  * Main research orchestrator class
@@ -25,9 +28,9 @@ import {
 export class ResearchOrchestrator extends EventEmitter {
   private agentCoordinator: AgentCoordinator;
   private config: ResearchConfig;
-  private discoveryHandler: any; // Will be implemented in discovery.ts
-  private analysisHandler: any; // Will be implemented in analysis.ts
-  private synthesisHandler: any; // Will be implemented in synthesis.ts
+  private discoveryHandler: DiscoveryHandler;
+  private analysisHandler: AnalysisHandler;
+  private synthesisHandler: SynthesisHandlerImpl;
   private startTime?: Date;
   private currentPhase: ResearchPhase = ResearchPhase.DISCOVERY;
   private progress: ResearchProgress;
@@ -45,6 +48,11 @@ export class ResearchOrchestrator extends EventEmitter {
       enableCaching: config.enableCaching,
       logLevel: config.logLevel
     });
+
+    // Initialize handlers
+    this.discoveryHandler = new DiscoveryHandler(config);
+    this.analysisHandler = new AnalysisHandler(config);
+    this.synthesisHandler = new SynthesisHandlerImpl(config);
 
     // Initialize progress tracking
     this.progress = {
@@ -192,10 +200,6 @@ export class ResearchOrchestrator extends EventEmitter {
     this.emitEvent('phase_started', { phase: ResearchPhase.DISCOVERY });
     
     try {
-      // Import discovery handler dynamically to avoid circular dependencies
-      const { DiscoveryHandler } = await import('./discovery.js');
-      this.discoveryHandler = new DiscoveryHandler(this.config);
-      
       // Execute discovery
       const results = await this.discoveryHandler.discover(query);
       
@@ -223,12 +227,8 @@ export class ResearchOrchestrator extends EventEmitter {
     this.emitEvent('phase_started', { phase: ResearchPhase.ANALYSIS });
     
     try {
-      // Import analysis handler dynamically
-      const { AnalysisHandler } = await import('./analysis.js');
-      this.analysisHandler = new AnalysisHandler(this.config);
-      
       // Execute analysis
-      const results = await this.analysisHandler.analyze(discoveryResults);
+      const results = await this.analysisHandler.executeAnalysis(discoveryResults, query);
       
       this.updateProgress('Analysis Phase', 'Analysis completed');
       this.emitEvent('phase_completed', { 
@@ -254,10 +254,6 @@ export class ResearchOrchestrator extends EventEmitter {
     this.emitEvent('phase_started', { phase: ResearchPhase.SYNTHESIS });
     
     try {
-      // Import synthesis handler dynamically
-      const { SynthesisHandler } = await import('./synthesis.js');
-      this.synthesisHandler = new SynthesisHandler(this.config);
-      
       // Execute synthesis
       const report = await this.synthesisHandler.synthesize(query, analysisResults);
       

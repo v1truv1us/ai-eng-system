@@ -1025,7 +1025,8 @@ graph TD
 | Analysis | 4 | 14 | 2.5 |
 | Synthesis | 3 | 8 | 1.5 |
 | Integration | 4 | 10 | 2 |
-| **Total** | **19** | **56** | **10.5** |
+| Tech Debt & Fixes | 3 | 3.25 | 0.5 |
+| **Total** | **22** | **59.25** | **11** |
 
 ---
 
@@ -1048,6 +1049,101 @@ graph TD
 - Test with real codebase queries
 - Validate evidence references
 - Add confidence scoring
+
+---
+
+## Technical Debt & Refactoring Notes
+
+### TASK-3.6.1: Migrate Tests to bun:test
+**ID**: TASK-3.6.1  
+**Title**: Migrate from Vitest to bun:test  
+**Priority**: HIGH  
+**Complexity**: Medium  
+**Time Estimate**: 2 hours  
+**Dependencies**: All test tasks  
+
+**Description**:
+Current test files use Vitest (`import { describe, it, expect } from 'vitest'`). The project uses Bun as its runtime, so tests should use `bun:test` for consistency and better integration.
+
+**Files to Update**:
+- `tests/research/discovery.test.ts`
+- `tests/research/analysis.test.ts`
+- `tests/research/analysis-fixed.test.ts`
+- `tests/research/analysis-simple.test.ts`
+- `tests/research/synthesis.test.ts`
+- `tests/research/orchestrator.test.ts`
+
+**Changes Required**:
+```typescript
+// Before (Vitest)
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+
+// After (bun:test)
+import { describe, it, expect, beforeEach, mock, spyOn } from 'bun:test';
+```
+
+**Note**: `vi.mock()` becomes `mock.module()` in bun:test.
+
+---
+
+### TASK-3.6.2: Code Review Fixes
+**ID**: TASK-3.6.2  
+**Title**: Address Code Review Findings  
+**Priority**: MEDIUM  
+**Complexity**: Low  
+**Time Estimate**: 1 hour  
+**Dependencies**: None  
+
+**Description**:
+Address issues identified in code review before merge.
+
+**Required Fixes**:
+1. **analysis.ts:579-582** - Add null check for unsafe regex match:
+   ```typescript
+   // Before
+   parseInt(e.content.match(/found (\d+) times/)![1])
+   
+   // After
+   const match = e.content.match(/found (\d+) times/);
+   match ? parseInt(match[1]) : 0
+   ```
+
+2. **synthesis.ts:786** - Add HTML escaping for XSS prevention:
+   ```typescript
+   // Add helper function
+   private escapeHtml(text: string): string {
+     return text
+       .replace(/&/g, '&amp;')
+       .replace(/</g, '&lt;')
+       .replace(/>/g, '&gt;')
+       .replace(/"/g, '&quot;');
+   }
+   ```
+
+**Recommended Improvements**:
+- Replace `any` types with proper `ResearchConfig` interface in analysis.ts and synthesis.ts
+- Update deprecated `substr()` calls to `substring()` or `slice()`
+- Move `vi.mock()` calls to module level in test files
+- Add path traversal protection for file reads in analysis.ts
+
+---
+
+### TASK-3.6.3: Verify Agent Mode for Research Command
+**ID**: TASK-3.6.3  
+**Title**: Confirm Research Command Agent Mode  
+**Priority**: LOW  
+**Complexity**: Low  
+**Time Estimate**: 15 minutes  
+**Dependencies**: None  
+
+**Description**:
+The research command was changed from `agent: plan` to `agent: build`. Verify this is intentional since research typically shouldn't require file edit permissions.
+
+**File**: `.claude-plugin/commands/research.md`
+
+**Decision Required**: Should research command use:
+- `plan` (read-only) - Standard for research operations
+- `build` (edit) - Only if research needs to write output files directly
 
 ---
 
