@@ -8,17 +8,42 @@ import { readFileSync } from 'fs';
 import { PlanParser } from '../execution/plan-parser.js';
 import { TaskExecutor } from '../execution/task-executor.js';
 import { QualityGateRunner } from '../execution/quality-gates.js';
+import { AgentCoordinator } from '../agents/coordinator.js';
+import { PlanGenerator } from '../agents/plan-generator.js';
+import { CodeReviewExecutor } from '../agents/code-review-executor.js';
 import { 
   ExecutionOptions, 
   ExecutionReport, 
   TaskStatus,
   QualityGateResult 
 } from '../execution/types.js';
+import { 
+  AgentCoordinatorConfig,
+  PlanGenerationInput,
+  CodeReviewInput
+} from '../agents/types.js';
 
 export class ExecutorCLI {
   private program: Command;
+  private agentCoordinator: AgentCoordinator;
+  private planGenerator: PlanGenerator;
+  private codeReviewExecutor: CodeReviewExecutor;
 
   constructor() {
+    // Initialize agent components
+    const agentConfig: AgentCoordinatorConfig = {
+      maxConcurrency: 3,
+      defaultTimeout: 30000,
+      retryAttempts: 2,
+      retryDelay: 1000,
+      enableCaching: true,
+      logLevel: 'info'
+    };
+    
+    this.agentCoordinator = new AgentCoordinator(agentConfig);
+    this.planGenerator = new PlanGenerator(this.agentCoordinator);
+    this.codeReviewExecutor = new CodeReviewExecutor(this.agentCoordinator);
+    
     this.program = new Command();
     this.setupCommands();
   }
@@ -73,6 +98,35 @@ export class ExecutorCLI {
       .argument('<file>', 'Plan file to validate')
       .option('-v, --verbose', 'Enable verbose output')
       .action(this.validateCommand.bind(this));
+
+    // Agent orchestration commands
+    this.program
+      .command('generate-plan')
+      .description('Generate implementation plan from description')
+      .argument('<description>', 'Natural language description of what to implement')
+      .option('-s, --scope <scope>', 'Plan scope (architecture|implementation|review|full)', 'full')
+      .option('-r, --requirements <reqs...>', 'List of requirements')
+      .option('-c, --constraints <constraints...>', 'List of constraints')
+      .option('-o, --output <file>', 'Output plan file', 'generated-plan.yaml')
+      .option('-v, --verbose', 'Enable verbose output')
+      .action(this.generatePlanCommand.bind(this));
+
+    this.program
+      .command('code-review')
+      .description('Execute multi-agent code review')
+      .argument('<files...>', 'Files to review')
+      .option('-t, --type <type>', 'Review type (full|incremental|security|performance|frontend)', 'full')
+      .option('-s, --severity <severity>', 'Minimum severity level (low|medium|high|critical)', 'medium')
+      .option('-f, --focus <focus>', 'Focused review (security|performance|frontend|general)')
+      .option('-o, --output <file>', 'Output report file', 'code-review-report.json')
+      .option('-v, --verbose', 'Enable verbose output')
+      .action(this.codeReviewCommand.bind(this));
+
+    this.program
+      .command('agent-status')
+      .description('Show agent execution status and metrics')
+      .option('--json', 'Output in JSON format')
+      .action(this.agentStatusCommand.bind(this));
   }
 
   private async executePlanCommand(
@@ -103,6 +157,7 @@ export class ExecutorCLI {
 
       // Execute tasks
       const executor = new TaskExecutor(executionOptions);
+      executor.setAgentCoordinator(this.agentCoordinator);
       const startTime = new Date();
       
       const taskResults = await executor.executePlan(plan);
@@ -309,5 +364,151 @@ export class ExecutorCLI {
     const content = JSON.stringify(results, null, 2);
     require('fs').writeFileSync(filename, content);
     console.log(`📄 Gate results saved to: ${filename}`);
+  }
+
+  private async generatePlanCommand(
+    description: string,
+    options: any
+  ): Promise<void> {
+    try {
+      console.log(`🤖 Generating plan from: ${description}`);
+      
+      const input: PlanGenerationInput = {
+        description,
+        scope: options.scope,
+        requirements: options.requirements || [],
+        constraints: options.constraints || [],
+        context: {}
+      };
+
+      const result = await this.planGenerator.generatePlan(input);
+      
+      console.log(`📋 Generated Plan: ${result.plan.name}`);
+      console.log(`📝 Description: ${result.plan.description}`);
+      console.log(`🔧 Tasks: ${result.plan.tasks.length}`);
+      console.log(`🎯 Confidence: ${result.confidence}`);
+      
+      if (options.verbose) {
+        console.log(`\n🧠 Reasoning: ${result.reasoning}`);
+        console.log(`\n💡 Suggestions:`);
+        result.suggestions.forEach((suggestion, i) => {
+          console.log(`  ${i + 1}. ${suggestion}`);
+        });
+      }
+
+      // Save plan if requested
+      if (options.output) {
+        const yaml = require('yaml');
+        const content = yaml.stringify(result.plan);
+        require('fs').writeFileSync(options.output, content);
+        console.log(`\n📄 Plan saved to: ${options.output}`);
+      }
+
+    } catch (error) {
+      console.error(`❌ Plan generation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      process.exit(1);
+    }
+  }
+
+  private async codeReviewCommand(
+    files: string[],
+    options: any
+  ): Promise<void> {
+    try {
+      console.log(`🔍 Starting code review for: ${files.join(', ')}`);
+      
+      const input: CodeReviewInput = {
+        files,
+        reviewType: options.type || 'full',
+        severity: options.severity || 'medium',
+        context: {}
+      };
+
+      let result;
+      if (options.focus) {
+        result = await this.codeReviewExecutor.executeFocusedReview(input, options.focus);
+        console.log(`🎯 Focused review (${options.focus}):`);
+      } else {
+        result = await this.codeReviewExecutor.executeCodeReview(input);
+        console.log(`🔍 Full review:`);
+      }
+
+      console.log(`📊 Findings: ${result.findings.length}`);
+      console.log(`📈 Overall Score: ${result.overallScore}/100`);
+      
+      // Group findings by severity
+      const bySeverity = result.summary.bySeverity;
+      Object.entries(bySeverity).forEach(([severity, count]) => {
+        console.log(`  ${severity}: ${count}`);
+      });
+
+      if (options.verbose) {
+        console.log(`\n📝 Detailed Findings:`);
+        result.findings.forEach((finding, i) => {
+          console.log(`  ${i + 1}. ${finding.file}:${finding.line} - ${finding.message}`);
+          if (finding.suggestion) {
+            console.log(`     💡 ${finding.suggestion}`);
+          }
+        });
+      }
+
+      console.log(`\n💡 Recommendations:`);
+      result.recommendations.forEach((rec, i) => {
+        console.log(`  ${i + 1}. ${rec}`);
+      });
+
+      // Save report if requested
+      if (options.output) {
+        const content = JSON.stringify(result, null, 2);
+        require('fs').writeFileSync(options.output, content);
+        console.log(`\n📄 Report saved to: ${options.output}`);
+      }
+
+    } catch (error) {
+      console.error(`❌ Code review failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      process.exit(1);
+    }
+  }
+
+  private async agentStatusCommand(options: any): Promise<void> {
+    try {
+      const progress = this.agentCoordinator.getProgress();
+      const metrics = this.agentCoordinator.getMetrics();
+
+      if (options.json) {
+        const status = {
+          progress,
+          metrics: Object.fromEntries(metrics || [])
+        };
+        console.log(JSON.stringify(status, null, 2));
+      } else {
+        console.log('🤖 Agent Status');
+        console.log('================');
+        
+        if (progress) {
+          console.log(`📊 Progress:`);
+          console.log(`  Total Tasks: ${progress.totalTasks}`);
+          console.log(`  Completed: ${progress.completedTasks}`);
+          console.log(`  Failed: ${progress.failedTasks}`);
+          console.log(`  Running: ${progress.runningTasks}`);
+          console.log(`  Progress: ${progress.percentageComplete.toFixed(1)}%`);
+        }
+
+        if (metrics && metrics.size > 0) {
+          console.log(`\n📈 Metrics:`);
+          metrics.forEach((metric, agentType) => {
+            console.log(`  ${agentType}:`);
+            console.log(`    Executions: ${metric.executionCount}`);
+            console.log(`    Success Rate: ${(metric.successRate * 100).toFixed(1)}%`);
+            console.log(`    Avg Time: ${metric.averageExecutionTime.toFixed(0)}ms`);
+            console.log(`    Confidence: ${metric.averageConfidence.toFixed(2)}`);
+          });
+        }
+      }
+
+    } catch (error) {
+      console.error(`❌ Failed to get agent status: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      process.exit(1);
+    }
   }
 }

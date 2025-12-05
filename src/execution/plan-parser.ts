@@ -15,6 +15,12 @@ import {
   ValidationError,
   ValidationErrorType 
 } from './types.js';
+import { 
+  AgentTask,
+  AgentType as AgentTaskType,
+  ExecutionStrategy,
+  ConfidenceLevel
+} from '../agents/types.js';
 
 export class PlanParser {
   private errors: ValidationError[] = [];
@@ -237,19 +243,27 @@ export class PlanParser {
       return null;
     }
 
-    if (!taskData.command || typeof taskData.command !== 'string') {
-      this.errors.push({
-        type: ValidationErrorType.REQUIRED,
-        message: `Task "${taskData.id}" requires a valid command`,
-        path: `tasks[${index}].command`
-      });
-      return null;
+    // Agent tasks don't require commands
+    if (!this.isAgentTaskType(taskData.type)) {
+      if (!taskData.command || typeof taskData.command !== 'string') {
+        this.errors.push({
+          type: ValidationErrorType.REQUIRED,
+          message: `Task "${taskData.id}" requires a valid command`,
+          path: `tasks[${index}].command`
+        });
+        return null;
+      }
     }
 
     // Parse task type
     let taskType: TaskType = TaskType.SHELL;
     if (taskData.type) {
       if (!Object.values(TaskType).includes(taskData.type)) {
+        // Check if it's an agent task type
+        if (this.isAgentTaskType(taskData.type)) {
+          return this.parseAgentTask(taskData, index);
+        }
+        
         this.errors.push({
           type: ValidationErrorType.TYPE,
           message: `Invalid task type "${taskData.type}" for task "${taskData.id}"`,
@@ -299,7 +313,7 @@ export class PlanParser {
       name: taskData.name,
       description: taskData.description,
       type: taskType,
-      command: taskData.command,
+      command: taskData.command, // Will be undefined for agent tasks
       workingDirectory: taskData.workingDirectory,
       environment: taskData.environment || {},
       dependsOn: Array.isArray(taskData.dependsOn) ? taskData.dependsOn : [],
@@ -456,5 +470,217 @@ export class PlanParser {
         visit(task.id);
       }
     }
+  }
+
+  /**
+   * Check if a task type is an agent task type
+   */
+  private isAgentTaskType(type: string): boolean {
+    return Object.values(AgentTaskType).includes(type as AgentTaskType);
+  }
+
+  /**
+   * Parse and validate an agent task
+   */
+  private parseAgentTask(taskData: any, index: number): AgentTask | null {
+    // Validate agent type
+    if (!taskData.type || !Object.values(AgentTaskType).includes(taskData.type)) {
+      this.errors.push({
+        type: ValidationErrorType.TYPE,
+        message: `Invalid agent type "${taskData.type}" for task "${taskData.id}"`,
+        path: `tasks[${index}].type`,
+        value: taskData.type
+      });
+      return null;
+    }
+
+    // Validate agent input
+    if (!taskData.input || typeof taskData.input !== 'object') {
+      this.errors.push({
+        type: ValidationErrorType.REQUIRED,
+        message: `Agent task "${taskData.id}" requires valid input`,
+        path: `tasks[${index}].input`
+      });
+      return null;
+    }
+
+    // Validate execution strategy
+    if (!taskData.strategy || !Object.values(ExecutionStrategy).includes(taskData.strategy)) {
+      this.errors.push({
+        type: ValidationErrorType.REQUIRED,
+        message: `Agent task "${taskData.id}" requires valid execution strategy`,
+        path: `tasks[${index}].strategy`,
+        value: taskData.strategy
+      });
+      return null;
+    }
+
+    // Validate agent input structure
+    const agentInput = taskData.input;
+    if (!agentInput.type || !Object.values(AgentTaskType).includes(agentInput.type)) {
+      this.errors.push({
+        type: ValidationErrorType.REQUIRED,
+        message: `Agent task "${taskData.id}" input requires valid type`,
+        path: `tasks[${index}].input.type`,
+        value: agentInput.type
+      });
+      return null;
+    }
+
+    if (!agentInput.context || typeof agentInput.context !== 'object') {
+      this.errors.push({
+        type: ValidationErrorType.REQUIRED,
+        message: `Agent task "${taskData.id}" input requires valid context`,
+        path: `tasks[${index}].input.context`
+      });
+      return null;
+    }
+
+    // Validate timeout for agent tasks
+    if (taskData.timeout !== undefined) {
+      if (typeof taskData.timeout !== 'number' || taskData.timeout <= 0) {
+        this.errors.push({
+          type: ValidationErrorType.RANGE,
+          message: `Agent task "${taskData.id}" timeout must be a positive number`,
+          path: `tasks[${index}].timeout`,
+          value: taskData.timeout
+        });
+      }
+    } else {
+      // Set default timeout for agent tasks
+      taskData.timeout = 30000; // 30 seconds default
+    }
+
+    // Validate retry configuration for agent tasks
+    if (taskData.retry) {
+      if (!taskData.retry.maxAttempts || typeof taskData.retry.maxAttempts !== 'number' || taskData.retry.maxAttempts < 1) {
+        this.errors.push({
+          type: ValidationErrorType.RANGE,
+          message: `Agent task "${taskData.id}" retry.maxAttempts must be a positive number`,
+          path: `tasks[${index}].retry.maxAttempts`,
+          value: taskData.retry?.maxAttempts
+        });
+      }
+
+      if (!taskData.retry.delay || typeof taskData.retry.delay !== 'number' || taskData.retry.delay < 0) {
+        this.errors.push({
+          type: ValidationErrorType.RANGE,
+          message: `Agent task "${taskData.id}" retry.delay must be a non-negative number`,
+          path: `tasks[${index}].retry.delay`,
+          value: taskData.retry?.delay
+        });
+      }
+    }
+
+    return {
+      id: taskData.id,
+      type: taskData.type as AgentTaskType,
+      name: taskData.name,
+      description: taskData.description,
+      input: {
+        type: agentInput.type as AgentTaskType,
+        context: agentInput.context || {},
+        parameters: agentInput.parameters || {},
+        timeout: agentInput.timeout
+      },
+      strategy: taskData.strategy as ExecutionStrategy,
+      dependsOn: Array.isArray(taskData.dependsOn) ? taskData.dependsOn : [],
+      timeout: taskData.timeout,
+      retry: taskData.retry
+    };
+  }
+
+  /**
+   * Validate agent task dependencies
+   */
+  private validateAgentTaskDependencies(tasks: (Task | AgentTask)[]): void {
+    const taskIds = new Set(tasks.map(t => t.id));
+    const agentTaskIds = new Set(
+      tasks.filter(t => this.isAgentTask(t)).map(t => t.id)
+    );
+
+    for (const task of tasks) {
+      if (this.isAgentTask(task) && task.dependsOn) {
+        for (const depId of task.dependsOn) {
+          // Check if dependency exists
+          if (!taskIds.has(depId)) {
+            this.errors.push({
+              type: ValidationErrorType.UNKNOWN_DEPENDENCY,
+              message: `Agent task "${task.id}" depends on unknown task "${depId}"`,
+              path: `tasks.${task.id}.dependsOn`,
+              value: depId
+            });
+          }
+
+          // Check for agent task dependencies on shell tasks (warning)
+          const depTask = tasks.find(t => t.id === depId);
+          if (depTask && !this.isAgentTask(depTask)) {
+            this.warnings.push(`Agent task "${task.id}" depends on shell task "${depId}". Consider using agent tasks for consistency.`);
+          }
+        }
+      }
+    }
+
+    // Check for circular dependencies including agent tasks
+    this.detectCircularDependencies(tasks);
+  }
+
+  /**
+   * Check if a task is an agent task
+   */
+  private isAgentTask(task: Task | AgentTask): task is AgentTask {
+    return 'type' in task && 'input' in task && 'strategy' in task;
+  }
+
+  /**
+   * Get all agent tasks from a plan
+   */
+  public getAgentTasks(plan: Plan): AgentTask[] {
+    return plan.tasks.filter(task => this.isAgentTask(task)) as AgentTask[];
+  }
+
+  /**
+   * Get all shell tasks from a plan
+   */
+  public getShellTasks(plan: Plan): Task[] {
+    return plan.tasks.filter(task => !this.isAgentTask(task));
+  }
+
+  /**
+   * Validate agent task configuration
+   */
+  public validateAgentTaskConfiguration(plan: Plan): {
+    isValid: boolean;
+    errors: ValidationError[];
+    warnings: string[];
+  } {
+    const agentTasks = this.getAgentTasks(plan);
+    const errors: ValidationError[] = [];
+    const warnings: string[] = [];
+
+    // Check if agent coordinator would be needed
+    if (agentTasks.length > 0) {
+      warnings.push(`Plan contains ${agentTasks.length} agent task(s). Agent coordinator must be configured.`);
+    }
+
+    // Check for agent task timeouts
+    for (const task of agentTasks) {
+      if (!task.timeout || task.timeout < 5000) {
+        warnings.push(`Agent task "${task.id}" has short or missing timeout. Consider setting at least 5 seconds.`);
+      }
+    }
+
+    // Check for agent task retry configuration
+    for (const task of agentTasks) {
+      if (!task.retry) {
+        warnings.push(`Agent task "${task.id}" has no retry configuration. Consider adding retry logic for reliability.`);
+      }
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors,
+      warnings
+    };
   }
 }

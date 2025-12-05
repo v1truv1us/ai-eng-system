@@ -12,11 +12,20 @@ import {
   ExecutionOptions, 
   Plan 
 } from './types.js';
+import { AgentCoordinator } from '../agents/coordinator.js';
+import { 
+  AgentTask, 
+  AgentTaskResult, 
+  AgentTaskStatus,
+  AgentType,
+  AggregationStrategy
+} from '../agents/types.js';
 
 export class TaskExecutor {
   private options: ExecutionOptions;
   private taskResults: Map<string, TaskResult> = new Map();
   private runningTasks: Set<string> = new Set();
+  private agentCoordinator?: AgentCoordinator;
 
   constructor(options: ExecutionOptions = {}) {
     this.options = {
@@ -26,6 +35,13 @@ export class TaskExecutor {
       verbose: false,
       ...options
     };
+  }
+
+  /**
+   * Set agent coordinator for executing agent tasks
+   */
+  public setAgentCoordinator(coordinator: AgentCoordinator): void {
+    this.agentCoordinator = coordinator;
   }
 
   /**
@@ -100,6 +116,11 @@ export class TaskExecutor {
         };
         this.taskResults.set(task.id, result);
         return result;
+      }
+
+      // Check if this is an agent task
+      if (this.isAgentTask(task)) {
+        return await this.executeAgentTask(task as AgentTask, startTime);
       }
 
       // Execute the task with retry logic
@@ -338,6 +359,151 @@ const result: TaskResult = {
 
   private sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  /**
+   * Check if a task is an agent task
+   */
+  private isAgentTask(task: Task): task is AgentTask {
+    return 'type' in task && 'input' in task && 'strategy' in task;
+  }
+
+  /**
+   * Execute an agent task using the agent coordinator
+   */
+  private async executeAgentTask(task: AgentTask, startTime: Date): Promise<TaskResult> {
+    if (!this.agentCoordinator) {
+      throw new Error(`Agent coordinator not set. Cannot execute agent task: ${task.id}`);
+    }
+
+    try {
+      this.log(`Executing agent task: ${task.id} (${task.type})`);
+      
+      // Execute the agent task
+      const agentResult = await this.agentCoordinator.executeTask(task);
+      
+      // Convert agent result to task result
+      const result: TaskResult = {
+        id: task.id,
+        status: this.convertAgentStatus(agentResult.status),
+        exitCode: agentResult.status === AgentTaskStatus.COMPLETED ? 0 : 1,
+        stdout: agentResult.output ? JSON.stringify(agentResult.output, null, 2) : '',
+        stderr: agentResult.error || '',
+        duration: agentResult.executionTime,
+        startTime,
+        endTime: agentResult.endTime,
+        error: agentResult.error
+      };
+
+      this.taskResults.set(task.id, result);
+      this.log(`Agent task ${task.id} completed with status: ${result.status}`);
+      
+      return result;
+
+    } catch (error) {
+      const endTime = new Date();
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      
+      this.log(`Agent task ${task.id} failed: ${errorMessage}`);
+      
+      const result: TaskResult = {
+        id: task.id,
+        status: TaskStatus.FAILED,
+        exitCode: -1,
+        stdout: '',
+        stderr: errorMessage,
+        duration: endTime.getTime() - startTime.getTime(),
+        startTime,
+        endTime,
+        error: errorMessage
+      };
+      
+      return result;
+    }
+  }
+
+  /**
+   * Convert agent task status to regular task status
+   */
+  private convertAgentStatus(agentStatus: AgentTaskStatus): TaskStatus {
+    switch (agentStatus) {
+      case AgentTaskStatus.COMPLETED:
+        return TaskStatus.COMPLETED;
+      case AgentTaskStatus.FAILED:
+      case AgentTaskStatus.TIMEOUT:
+        return TaskStatus.FAILED;
+      case AgentTaskStatus.SKIPPED:
+        return TaskStatus.SKIPPED;
+      case AgentTaskStatus.RUNNING:
+      case AgentTaskStatus.PENDING:
+      default:
+        return TaskStatus.FAILED; // Should not happen in final result
+    }
+  }
+
+  /**
+   * Execute multiple agent tasks with coordination
+   */
+  public async executeAgentTasks(
+    tasks: AgentTask[], 
+    strategy: AggregationStrategy = { type: 'sequential' }
+  ): Promise<TaskResult[]> {
+    if (!this.agentCoordinator) {
+      throw new Error('Agent coordinator not set');
+    }
+
+    this.log(`Executing ${tasks.length} agent tasks with strategy: ${strategy.type}`);
+    
+    try {
+      // Execute agent tasks using coordinator
+      const agentResults = await this.agentCoordinator.executeTasks(tasks, strategy);
+      
+      // Convert to task results
+      const taskResults: TaskResult[] = agentResults.map(agentResult => ({
+        id: agentResult.id,
+        status: this.convertAgentStatus(agentResult.status),
+        exitCode: agentResult.status === AgentTaskStatus.COMPLETED ? 0 : 1,
+        stdout: agentResult.output ? JSON.stringify(agentResult.output, null, 2) : '',
+        stderr: agentResult.error || '',
+        duration: agentResult.executionTime,
+        startTime: agentResult.startTime,
+        endTime: agentResult.endTime,
+        error: agentResult.error
+      }));
+
+      // Store results
+      for (const result of taskResults) {
+        this.taskResults.set(result.id, result);
+      }
+
+      return taskResults;
+
+    } catch (error) {
+      this.log(`Agent task execution failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw error;
+    }
+  }
+
+  /**
+   * Get agent execution progress
+   */
+  public getAgentProgress(): any {
+    if (!this.agentCoordinator) {
+      return null;
+    }
+    
+    return this.agentCoordinator.getProgress();
+  }
+
+  /**
+   * Get agent execution metrics
+   */
+  public getAgentMetrics(): Map<AgentType, any> | null {
+    if (!this.agentCoordinator) {
+      return null;
+    }
+    
+    return this.agentCoordinator.getMetrics();
   }
 
   private log(message: string): void {
