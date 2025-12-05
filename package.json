@@ -1,6 +1,6 @@
 {
   "name": "@ferg-cod3s/engineering-system",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Compounding engineering system for Claude Code and OpenCode. Shared agents, commands, skills, and plugin development tools.",
   "type": "module",
   "main": "dist/index.js",
