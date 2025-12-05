@@ -54,6 +54,17 @@ export {
   createContextRetriever
 } from "./retrieval"
 
+// Vector Search
+export {
+  VectorMemoryManager,
+  VectorMath,
+  TextTokenizer,
+  ContextRanker,
+  type VectorEmbedding,
+  type VectorStore,
+  type SearchResult
+} from "./vector"
+
 /**
  * Initialize the complete context engineering system
  */

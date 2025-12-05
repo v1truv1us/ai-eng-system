@@ -5,8 +5,20 @@
   "author": "ferg-cod3s",
   "license": "MIT",
   "commands": [
-    "./commands/recursive-init.md",
+    "./commands/plan.md",
     "./commands/work.md",
-    "./commands/create-tool.md",
+    "./commands/review.md",
+    "./commands/seo.md",
     "./commands/compound.md",
+    "./commands/deploy.md",
+    "./commands/optimize.md",
+    "./commands/create-agent.md",
+    "./commands/create-command.md",
+    "./commands/create-skill.md",
+    "./commands/create-tool.md",
+    "./commands/create-plugin.md",
+    "./commands/research.md",
+    "./commands/context.md",
+    "./commands/recursive-init.md"
+  ]
 }

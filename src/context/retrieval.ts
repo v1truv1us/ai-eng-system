@@ -15,12 +15,22 @@ import type {
 import { SessionManager } from "./session"
 import { MemoryManager } from "./memory"
 import { ProgressiveSkillLoader } from "./progressive"
+import { VectorMemoryManager, VectorMath, ContextRanker } from "./vector"
 
 export class ContextRetriever {
   private config: ContextConfig
   private sessionManager: SessionManager
   private memoryManager: MemoryManager
   private skillLoader: ProgressiveSkillLoader
+  private vectorManager: VectorMemoryManager
+  private contextCache: Map<string, { context: AssembledContext; expires: number }> = new Map()
+
+  /**
+   * Initialize vector manager
+   */
+  async initializeVectorManager(): Promise<void> {
+    await this.vectorManager.initialize()
+  }
 
   constructor(
     sessionManager: SessionManager,
@@ -32,9 +42,10 @@ export class ContextRetriever {
     this.sessionManager = sessionManager
     this.memoryManager = memoryManager
     this.skillLoader = skillLoader
+    this.vectorManager = new VectorMemoryManager(config)
   }
 
-  /**
+/**
    * Assemble context based on triggers
    */
   async assemble(triggers: ContextTrigger[]): Promise<AssembledContext> {
@@ -51,30 +62,59 @@ export class ContextRetriever {
           break
 
         case "file_open":
-          // Load relevant memories for the file
+          // Load relevant memories for file
           const filePath = trigger.data.path as string
-          const fileMemories = this.memoryManager.searchMemories(filePath, {
+          
+          // Use semantic search for file-related memories
+          const fileMemories = await this.vectorManager.semanticSearch(filePath, {
+            limit: 5,
+            minScore: 0.3,
+            memoryType: "procedural"
+          })
+          
+          // Also do traditional search
+          const traditionalMemories = this.memoryManager.searchMemories(filePath, {
             minConfidence: 0.6
           })
-          memories.push(...fileMemories)
+          
+          memories.push(...fileMemories, ...traditionalMemories)
           break
 
         case "command":
-          // Load memories related to the command
+          // Load memories related to command
           const command = trigger.data.command as string
+          
+// Semantic search for command-related memories
+          const semanticMemories = await this.vectorManager.semanticSearch(command, {
+            limit: 3,
+            minScore: 0.4
+memoryType: "procedural"
+          })
+          
+          // Traditional search
           const commandMemories = this.memoryManager.searchMemories(command, {
             minConfidence: 0.5
           })
-          memories.push(...commandMemories)
+          
+          memories.push(...semanticMemories, ...commandMemories)
           break
 
         case "query":
-          // Search memories for the query
+          // Search memories for query with enhanced ranking
           const query = trigger.data.query as string
-          const queryMemories = this.memoryManager.searchMemories(query, {
-            minConfidence: 0.4
-          })
-          memories.push(...queryMemories)
+          
+          // Get all memories for ranking
+          const allMemories = this.memoryManager.getAllMemories()
+          const context = {
+            query,
+            activeFiles: this.sessionManager.getActiveFiles(),
+            currentTask: this.sessionManager.getContext<string>("currentTask"),
+            sessionType: this.sessionManager.getSession()?.metadata.mode
+          }
+          
+          // Rank memories by relevance
+          const rankedMemories = ContextRanker.rankByRelevance(allMemories, context)
+          memories.push(...rankedMemories.slice(0, 10))
           break
 
         case "task":
@@ -87,6 +127,32 @@ export class ContextRetriever {
           memories.push(...taskMemories)
           break
       }
+    }
+
+    // Deduplicate memories
+    const uniqueMemories = Array.from(
+      new Map(memories.map(m => [m.id, m])).values()
+    )
+
+    // Calculate token estimate
+    for (const memory of uniqueMemories) {
+      tokenEstimate += Math.ceil(memory.content.length / 4)
+    }
+
+    const duration = Date.now() - startTime
+
+    return {
+      session: this.sessionManager.getSession() || undefined,
+      memories: uniqueMemories,
+      skills,
+      tokenEstimate,
+      meta: {
+        assembledAt: new Date().toISOString(),
+        triggers: triggers.map(t => t.type),
+        duration
+      }
+    }
+  }
     }
 
     // Deduplicate memories
@@ -146,7 +212,17 @@ export class ContextRetriever {
         break
     }
 
-    return this.assemble(triggers)
+    const cacheKey = this.generateCacheKey(triggers)
+    const cached = await this.getCachedContext(cacheKey)
+    
+    if (cached) {
+      return cached
+    }
+
+    const context = await this.assemble(triggers)
+    this.cacheContext(cacheKey, context)
+    
+    return context
   }
 
   /**
@@ -161,7 +237,17 @@ export class ContextRetriever {
       }
     ]
 
-    return this.assemble(triggers)
+    const cacheKey = this.generateCacheKey(triggers)
+    const cached = await this.getCachedContext(cacheKey)
+    
+    if (cached) {
+      return cached
+    }
+
+    const context = await this.assemble(triggers)
+    this.cacheContext(cacheKey, context)
+    
+    return context
   }
 
   /**
@@ -176,7 +262,7 @@ export class ContextRetriever {
       ""
     ]
 
-    if (session) {
+    if (Session) {
       lines.push("### Session")
       lines.push(this.sessionManager.getSessionSummary())
       lines.push("")
@@ -194,6 +280,52 @@ export class ContextRetriever {
     lines.push(this.memoryManager.getSummary(3))
 
     return lines.join("\n")
+  }
+
+  /**
+   * Get cached context or create new one
+   */
+  private async getCachedContext(
+    cacheKey: string,
+    ttlMs: number = 300000 // 5 minutes
+  ): Promise<AssembledContext | null> {
+    const cached = this.contextCache.get(cacheKey)
+    
+    if (cached && Date.now() < cached.expires) {
+      // Update access time for memories
+      for (const memory of cached.context.memories) {
+        await this.memoryManager.accessMemory(memory.id)
+      }
+      
+      return cached.context
+    }
+
+    return null
+  }
+
+  /**
+   * Cache context with TTL
+   */
+  private cacheContext(
+    cacheKey: string,
+    context: AssembledContext,
+    ttlMs: number = 300000 // 5 minutes
+  ): void {
+    this.contextCache.set(cacheKey, {
+      context,
+      expires: Date.now() + ttlMs
+    })
+  }
+
+  /**
+   * Generate cache key from triggers
+   */
+  private generateCacheKey(triggers: ContextTrigger[]): string {
+    const sorted = [...triggers].sort((a, b) => a.type.localeCompare(b.type))
+    return JSON.stringify(sorted.map(t => ({
+      type: t.type,
+      data: t.data
+    })))
   }
 
   /**
@@ -227,5 +359,10 @@ export async function createContextRetriever(
   await sessionManager.initialize()
   await memoryManager.initialize()
 
-  return new ContextRetriever(sessionManager, memoryManager, skillLoader, config)
+  const retriever = new ContextRetriever(sessionManager, memoryManager, skillLoader, config)
+  
+  // Initialize vector manager
+  await retriever.initializeVectorManager()
+
+  return retriever
 }
