@@ -1,5 +1,11 @@
 # Scripts Context
 
+**Hierarchy Level:** Build automation and deployment utilities
+**Parent:** [../AGENTS.md](../AGENTS.md) — Agent coordination
+**Philosophy:** [../CLAUDE.md](../CLAUDE.md) — Compounding Engineering philosophy
+
+Build scripts and installation utilities that support the agent infrastructure defined in AGENTS.md.
+
 ## Project Overview
 Build and installation utilities for the Ferg Engineering System.
 

@@ -8,3 +8,6 @@ bun.lockb
 
 # Note: dist/ is committed so users don't need bun to use the system
 # Run `bun run build` after editing content/ to regenerate
+
+# Context engineering local storage (user-specific, not committed)
+.ferg-context/

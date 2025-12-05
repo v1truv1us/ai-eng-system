@@ -1,5 +1,11 @@
 # Claude Commands Context
 
+**Hierarchy Level:** Technical implementation of agents and commands
+**Parent:** [../AGENTS.md](../AGENTS.md) — Agent coordination and capabilities
+**Philosophy:** [../CLAUDE.md](../CLAUDE.md) — Project philosophy (Compounding Engineering)
+
+This AGENTS.md provides the **technical implementation** layer that translates the philosophy from CLAUDE.md into executable commands and agent integration points.
+
 ## Project Overview
 Claude Code command definitions for the Ferg Engineering System.
 

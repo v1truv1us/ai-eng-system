@@ -1,5 +1,11 @@
 # Skills Repository Context
 
+**Hierarchy Level:** Claude Code plugin skill definitions
+**Parent:** Root [AGENTS.md](../../AGENTS.md) — Agent coordination
+**Philosophy:** [CLAUDE.md](../../CLAUDE.md) — Compounding Engineering philosophy
+
+Claude Code plugin-specific skills supporting the agent coordination system.
+
 ## Project Overview
 Modular skill definitions for DevOps and prompting capabilities.
 

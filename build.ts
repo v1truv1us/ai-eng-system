@@ -180,7 +180,7 @@ async function buildClaudePlugin(): Promise<void> {
     name: "ferg-engineering",
     version: packageJson.version,
     description: "Compounding engineering system for Claude Code",
-    author: "ferg-cod3s",
+    author: "v1truv1us",
     license: "MIT"
   }
 
