@@ -147,7 +147,8 @@ class StatisticalAnalyzer:
         # Current power
         current_power = analysis.solve_power(
             effect_size=effect_size,
-            nobs=len(baseline),
+            nobs1=len(baseline),
+            ratio=1.0,
             alpha=self.alpha
         )
 

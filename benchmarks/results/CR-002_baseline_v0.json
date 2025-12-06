@@ -8,7 +8,7 @@
     "task_id": "CR-002",
     "prompt_type": "baseline",
     "variant_id": "v0",
-    "timestamp": 1764999769.8839092,
+    "timestamp": 1765019337.8769054,
     "provider": "mock",
     "model": "mock-model",
     "tokens_used": null,

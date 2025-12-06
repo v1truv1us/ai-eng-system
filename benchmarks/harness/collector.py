@@ -12,9 +12,11 @@ from pathlib import Path
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
 
+import os
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
+from dotenv import load_dotenv
 
 @dataclass
 class APIConfig:
@@ -74,45 +76,61 @@ class LLMProvider(ABC):
         pass
 
 class AnthropicProvider(LLMProvider):
-    """Anthropic Claude API provider."""
+    """Anthropic Claude via Claude Code CLI."""
 
     def call_api(self, prompt: str) -> Tuple[str, Dict[str, Any]]:
-        headers = {
-            'x-api-key': self.config.api_key,
-            'anthropic-version': '2023-06-01',
-            'content-type': 'application/json'
-        }
+        import subprocess
 
-        data = {
-            'model': self.config.model,
-            'max_tokens': self.config.max_tokens,
-            'temperature': self.config.temperature,
-            'messages': [{'role': 'user', 'content': prompt}]
-        }
+        # Create a temporary file with the prompt
+        prompt_file = f"/tmp/claude_prompt_{hash(prompt) % 10000}.txt"
+        with open(prompt_file, 'w') as f:
+            f.write(prompt)
 
         start_time = time.time()
-        response = self.session.post(
-            f"{self.config.base_url}/messages",
-            headers=headers,
-            json=data,
-            timeout=self.config.timeout
-        )
-        response_time = int((time.time() - start_time) * 1000)
 
-        if response.status_code != 200:
-            raise Exception(f"API call failed: {response.status_code} - {response.text}")
+        try:
+            # Use Claude Code to get response (non-interactive mode)
+            cmd = ['claude', '-p', prompt]
+            env = os.environ.copy()  # Pass through environment variables
+            result = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                timeout=self.config.timeout,
+                env=env,
+                cwd=os.getcwd()  # Run in current directory
+            )
 
-        result = response.json()
-        response_text = result['content'][0]['text']
-        tokens_used = result.get('usage', {}).get('input_tokens', 0) + result.get('usage', {}).get('output_tokens', 0)
+            response_time = int((time.time() - start_time) * 1000)
 
-        metadata = {
-            'tokens_used': tokens_used,
-            'response_time_ms': response_time,
-            'model': result.get('model', self.config.model)
-        }
+            if result.returncode != 0:
+                raise Exception(f"Claude Code failed (exit code {result.returncode}): stdout='{result.stdout}', stderr='{result.stderr}'")
 
-        return response_text, metadata
+            response_text = result.stdout.strip()
+
+            # Clean up
+            try:
+                os.remove(prompt_file)
+            except:
+                pass
+
+            metadata = {
+                'tokens_used': len(prompt.split()) + len(response_text.split()),
+                'response_time_ms': response_time,
+                'model': 'claude-code'
+            }
+
+            return response_text, metadata
+
+        except subprocess.TimeoutExpired:
+            raise Exception(f"Claude Code timed out after {self.config.timeout}s")
+        except Exception as e:
+            # Clean up on error
+            try:
+                os.remove(prompt_file)
+            except:
+                pass
+            raise e
 
 class OpenAIProvider(LLMProvider):
     """OpenAI GPT API provider."""
@@ -153,6 +171,131 @@ class OpenAIProvider(LLMProvider):
         }
 
         return response_text, metadata
+
+class OpenCodeProvider(LLMProvider):
+    """OpenCode via OpenCode CLI."""
+
+    def call_api(self, prompt: str) -> Tuple[str, Dict[str, Any]]:
+        import subprocess
+
+        start_time = time.time()
+
+        try:
+            # Use OpenCode CLI to get response
+            cmd = ['opencode', 'run', prompt]
+            result = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                timeout=self.config.timeout,
+                input='exit\n'  # Exit after getting response
+            )
+
+            response_time = int((time.time() - start_time) * 1000)
+
+            if result.returncode != 0:
+                raise Exception(f"OpenCode CLI failed: {result.stderr}")
+
+            response_text = result.stdout.strip()
+
+            metadata = {
+                'tokens_used': len(prompt.split()) + len(response_text.split()),
+                'response_time_ms': response_time,
+                'model': 'opencode-cli'
+            }
+
+            return response_text, metadata
+
+        except subprocess.TimeoutExpired:
+            raise Exception(f"OpenCode CLI timed out after {self.config.timeout}s")
+
+class DeepSeekProvider(LLMProvider):
+    """DeepSeek API provider."""
+
+    def call_api(self, prompt: str) -> Tuple[str, Dict[str, Any]]:
+        headers = {
+            'Authorization': f'Bearer {self.config.api_key}',
+            'Content-Type': 'application/json'
+        }
+
+        data = {
+            'model': self.config.model,
+            'messages': [{'role': 'user', 'content': prompt}],
+            'max_tokens': self.config.max_tokens,
+            'temperature': self.config.temperature
+        }
+
+        start_time = time.time()
+        response = self.session.post(
+            f"{self.config.base_url}/chat/completions",
+            headers=headers,
+            json=data,
+            timeout=self.config.timeout
+        )
+        response_time = int((time.time() - start_time) * 1000)
+
+        if response.status_code != 200:
+            raise Exception(f"API call failed: {response.status_code} - {response.text}")
+
+        result = response.json()
+        response_text = result['choices'][0]['message']['content']
+        tokens_used = result.get('usage', {}).get('total_tokens', 0)
+
+        metadata = {
+            'tokens_used': tokens_used,
+            'response_time_ms': response_time,
+            'model': result.get('model', self.config.model)
+        }
+
+        return response_text, metadata
+
+class GitHubProvider(LLMProvider):
+    """GitHub Copilot via copilot-api proxy."""
+
+    def call_api(self, prompt: str) -> Tuple[str, Dict[str, Any]]:
+        headers = {
+            'Content-Type': 'application/json'
+        }
+
+        data = {
+            'model': self.config.model,
+            'messages': [{'role': 'user', 'content': prompt}],
+            'max_tokens': self.config.max_tokens,
+            'temperature': self.config.temperature
+        }
+
+        start_time = time.time()
+        response = self.session.post(
+            f"{self.config.base_url}/chat/completions",
+            headers=headers,
+            json=data,
+            timeout=self.config.timeout
+        )
+        response_time = int((time.time() - start_time) * 1000)
+
+        if response.status_code != 200:
+            raise Exception(f"GitHub Copilot API failed: {response.status_code} - {response.text}")
+
+        result = response.json()
+        response_text = result['choices'][0]['message']['content']
+        tokens_used = result.get('usage', {}).get('total_tokens', 0)
+
+        metadata = {
+            'tokens_used': tokens_used,
+            'response_time_ms': response_time,
+            'model': result.get('model', self.config.model)
+        }
+
+        return response_text, metadata
+
+class CursorProvider(LLMProvider):
+    """Cursor AI (placeholder - CLI not yet available)."""
+
+    def call_api(self, prompt: str) -> Tuple[str, Dict[str, Any]]:
+        # Cursor doesn't currently have a CLI interface
+        # This is a placeholder for when/if Cursor provides CLI access
+        raise Exception("Cursor CLI not available. Cursor is primarily a GUI application. "
+                       "Consider using Cursor's API if available, or wait for CLI support.")
 
 class RateLimiter:
     """Simple rate limiter for API calls."""
@@ -226,23 +369,86 @@ class ResponseCache:
         with open(cache_file, 'w') as f:
             json.dump(response_data, f, indent=2)
 
+class MockProvider:
+    """Mock provider for testing."""
+
+    def __init__(self, config):
+        self.config = config
+
+    def call_api(self, prompt: str) -> Tuple[str, Dict[str, Any]]:
+        """Return mock response."""
+        import time
+        response_text = getattr(self.config, 'mock_response', 'Mock response for testing')
+        metadata = {
+            'tokens_used': len(prompt.split()) + len(response_text.split()),
+            'response_time_ms': 100,  # Mock response time
+            'model': 'mock-model'
+        }
+        return response_text, metadata
+
 class ResponseCollector:
     """Main response collector for validation framework."""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: Dict[str, Any], dry_run: bool = False):
         self.config = config
         self.cache = ResponseCache()
         self.rate_limiter = RateLimiter(RateLimit(**config.get('rate_limit', {})))
-        self.provider = self._create_provider(config['api'])
+
+        # Support both single API and multiple APIs
+        if 'apis' in config:
+            if dry_run:
+                # Use mock providers for dry run
+                self.providers = {api['provider']: self._create_provider({'provider': 'mock', 'mock_response': f'Dry run mock for {api["provider"]}'}) for api in config['apis']}
+            else:
+                self.providers = {api['provider']: self._create_provider(api) for api in config['apis']}
+        elif 'api' in config:
+            if dry_run:
+                self.providers = {config['api']['provider']: self._create_provider({'provider': 'mock', 'mock_response': f'Dry run mock for {config["api"]["provider"]}'})}
+            else:
+                self.providers = {config['api']['provider']: self._create_provider(config['api'])}
+        else:
+            raise ValueError("Config must contain either 'api' or 'apis' key")
 
     def _create_provider(self, api_config: Dict[str, Any]) -> LLMProvider:
         """Create appropriate provider based on configuration."""
-        config = APIConfig(**api_config)
+        # Load environment variables from .env file
+        load_dotenv()
+
+        # CLI-based providers don't need API keys (except OpenCode which may need external auth)
+        # All authentication is handled by the respective CLI tools
+
+        if api_config.get('provider') == 'mock':
+            # Create a mock config object
+            class MockConfig:
+                def __init__(self, **kwargs):
+                    for k, v in kwargs.items():
+                        setattr(self, k, v)
+            config = MockConfig(**api_config)
+            return MockProvider(config)
+
+        # Create config object, handling CLI providers that don't need API keys
+        if api_config.get('provider') in ['anthropic', 'opencode']:
+            # CLI-based providers
+            class CLIConfig:
+                def __init__(self, **kwargs):
+                    for k, v in kwargs.items():
+                        setattr(self, k, v)
+            config = CLIConfig(**api_config)
+        else:
+            config = APIConfig(**api_config)
 
         if config.provider.lower() == 'anthropic':
             return AnthropicProvider(config)
         elif config.provider.lower() == 'openai':
             return OpenAIProvider(config)
+        elif config.provider.lower() == 'opencode':
+            return OpenCodeProvider(config)
+        elif config.provider.lower() == 'deepseek':
+            return DeepSeekProvider(config)
+        elif config.provider.lower() == 'github':
+            return GitHubProvider(config)
+        elif config.provider.lower() == 'cursor':
+            return CursorProvider(config)
         else:
             raise ValueError(f"Unsupported provider: {config.provider}")
 
@@ -253,12 +459,23 @@ class ResponseCollector:
         variant_id: str,
         prompt: str,
         output_dir: str,
+        provider_name: str = None,
         dry_run: bool = False
     ) -> Dict[str, Any]:
         """Collect response for a single prompt."""
 
+        # Select provider
+        if provider_name and provider_name in self.providers:
+            provider = self.providers[provider_name]
+        elif len(self.providers) == 1:
+            provider = list(self.providers.values())[0]
+            provider_name = list(self.providers.keys())[0]
+        else:
+            raise ValueError(f"Multiple providers available but none specified. Available: {list(self.providers.keys())}")
+
         # Create cache key
-        cache_key = self.cache.get_cache_key(prompt, self.provider.config.provider, self.provider.config.model)
+        model_name = getattr(provider.config, 'model', 'mock-model')
+        cache_key = self.cache.get_cache_key(prompt, provider_name, model_name)
 
         # Check cache first
         cached = self.cache.get_cached_response(cache_key)
@@ -279,8 +496,8 @@ class ResponseCollector:
                     prompt_type=prompt_type,
                     variant_id=variant_id,
                     timestamp=time.time(),
-                    provider=self.provider.config.provider,
-                    model=self.provider.config.model,
+                    provider='mock',
+                    model='mock-model',
                     cached=False
                 ).__dict__,
                 'cached': False
@@ -293,7 +510,7 @@ class ResponseCollector:
 
             # Make API call
             try:
-                response_text, api_metadata = self.provider.call_api(prompt)
+                response_text, api_metadata = provider.call_api(prompt)
                 self.rate_limiter.record_request()
 
                 response_data = {
@@ -307,8 +524,8 @@ class ResponseCollector:
                         prompt_type=prompt_type,
                         variant_id=variant_id,
                         timestamp=time.time(),
-                        provider=self.provider.config.provider,
-                        model=self.provider.config.model,
+                        provider=provider_name,
+                        model=getattr(provider.config, 'model', 'mock-model'),
                         tokens_used=api_metadata.get('tokens_used'),
                         response_time_ms=api_metadata.get('response_time_ms'),
                         cached=False
@@ -331,8 +548,8 @@ class ResponseCollector:
                         prompt_type=prompt_type,
                         variant_id=variant_id,
                         timestamp=time.time(),
-                        provider=self.provider.config.provider,
-                        model=self.provider.config.model,
+                        provider=provider_name,
+                        model=getattr(provider.config, 'model', 'mock-model'),
                         cached=False
                     ).__dict__,
                     'error': str(e),
@@ -353,7 +570,7 @@ class ResponseCollector:
         requests: List[Dict[str, Any]],
         output_dir: str,
         dry_run: bool = False,
-        concurrency: int = 3
+        concurrency: int = 1  # Reduced concurrency for CLI tools
     ) -> List[Dict[str, Any]]:
         """Collect responses for multiple prompts with concurrency control."""
 
@@ -364,6 +581,7 @@ class ResponseCollector:
                 variant_id=request['variant_id'],
                 prompt=request['prompt'],
                 output_dir=output_dir,
+                provider_name=request.get('provider'),
                 dry_run=dry_run
             )
 

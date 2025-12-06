@@ -8,8 +8,8 @@ console.log('🔍 Testing DiscoveryHandler Parameter Passing');
 console.log('=============================================\n');
 
 try {
-  const { DiscoveryHandler } = await import('./src/research/discovery.js');
-  const { ResearchScope } = await import('./src/research/types.js');
+  const { DiscoveryHandler } = await import('./src/research/discovery.ts');
+  const { ResearchScope } = await import('./src/research/types.ts');
   
   console.log('✅ Modules imported');
   

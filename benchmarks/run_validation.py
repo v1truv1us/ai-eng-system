@@ -11,8 +11,8 @@ import sys
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 
-from .collector import ResponseCollector
-from .analyzer import StatisticalAnalyzer
+from harness.collector import ResponseCollector
+from harness.analyzer import StatisticalAnalyzer
 
 class ValidationRunner:
     """Main validation runner orchestrating the complete workflow."""
@@ -102,37 +102,45 @@ class ValidationRunner:
         self,
         tasks: Dict[str, Dict[str, Any]],
         prompts: Dict[str, Dict[str, str]],
-        num_variants: int = 3
+        num_variants: int = 3,
+        providers: List[str] = None
     ) -> List[Dict[str, Any]]:
         """Create collection requests for all tasks and prompt types."""
         requests = []
 
+        # If no providers specified, use a default
+        if not providers:
+            providers = ['default']
+
         for task_id, task_data in tasks.items():
-            # For each prompt type (baseline, enhanced)
-            for prompt_type in ['baseline', 'enhanced']:
-                # Get appropriate prompt template
-                category = task_data.get('category', 'unknown')
-                prompt_template = prompts.get(prompt_type, {}).get(category)
+            # For each provider
+            for provider in providers:
+                # For each prompt type (baseline, enhanced)
+                for prompt_type in ['baseline', 'enhanced']:
+                    # Get appropriate prompt template
+                    category = task_data.get('category', 'unknown')
+                    prompt_template = prompts.get(prompt_type, {}).get(category)
 
-                if not prompt_template:
-                    print(f"⚠️  No {prompt_type} prompt template found for category: {category}")
-                    continue
+                    if not prompt_template:
+                        print(f"⚠️  No {prompt_type} prompt template found for category: {category}")
+                        continue
 
-                # Create variants (for now, just use the base template)
-                # In a full implementation, this would generate multiple variants
-                for variant_num in range(num_variants):
-                    variant_id = f"v{variant_num}"
+                    # Create variants (for now, just use the base template)
+                    # In a full implementation, this would generate multiple variants
+                    for variant_num in range(num_variants):
+                        variant_id = f"v{variant_num}"
 
-                    # Populate template with task data
-                    prompt = self._populate_template(prompt_template, task_data)
+                        # Populate template with task data
+                        prompt = self._populate_template(prompt_template, task_data)
 
-                    requests.append({
-                        'task_id': task_id,
-                        'prompt_type': prompt_type,
-                        'variant_id': variant_id,
-                        'prompt': prompt,
-                        'task_data': task_data
-                    })
+                        requests.append({
+                            'task_id': task_id,
+                            'prompt_type': prompt_type,
+                            'variant_id': variant_id,
+                            'provider': provider,
+                            'prompt': prompt,
+                            'task_data': task_data
+                        })
 
         print(f"📝 Created {len(requests)} collection requests")
         return requests
@@ -171,7 +179,17 @@ class ValidationRunner:
         # Load configuration
         print("📋 Loading configuration...")
         config = self.load_config(config_file)
-        self.collector = ResponseCollector(config)
+        self.collector = ResponseCollector(config, dry_run=dry_run)
+
+        # Extract providers from config
+        if 'apis' in config:
+            providers = [api['provider'] for api in config['apis']]
+        elif 'api' in config:
+            providers = [config['api']['provider']]
+        else:
+            providers = ['mock']
+
+        print(f"🤖 Using providers: {', '.join(providers)}")
 
         # Load tasks
         print("📋 Loading benchmark tasks...")
@@ -189,7 +207,7 @@ class ValidationRunner:
         # Create collection requests
         if not skip_collection:
             print("📝 Creating collection requests...")
-            requests = self.create_collection_requests(tasks, prompts, num_variants)
+            requests = self.create_collection_requests(tasks, prompts, num_variants, providers)
 
             # Collect responses
             print("📥 Collecting responses...")
@@ -227,22 +245,24 @@ class ValidationRunner:
         responses_dir = Path(output_dir)
         eval_count = 0
 
-        for response_file in responses_dir.glob("*_baseline_*.json"):
-            # Find corresponding enhanced response
-            base_name = response_file.stem
-            enhanced_name = base_name.replace('_baseline_', '_enhanced_')
-            enhanced_file = responses_dir / f"{enhanced_name}.json"
+        # Get all response files
+        response_files = list(responses_dir.glob("*.json"))
+        response_files = [f for f in response_files if not f.name.endswith('_eval.json')]
 
-            if enhanced_file.exists():
+        for response_file in response_files:
+            try:
+                with open(response_file, 'r') as f:
+                    response_data = json.load(f)
+
                 # Create mock evaluation result
                 eval_result = {
-                    'task_id': base_name.split('_')[0],
+                    'task_id': response_data.get('task_id', 'unknown'),
                     'evaluation': {
-                        'accuracy': {'score': 4.2, 'reasoning': 'Good accuracy'},
-                        'completeness': {'score': 4.0, 'reasoning': 'Mostly complete'},
-                        'clarity': {'score': 4.5, 'reasoning': 'Very clear'},
-                        'actionability': {'score': 4.1, 'reasoning': 'Actionable recommendations'},
-                        'relevance': {'score': 4.3, 'reasoning': 'Highly relevant'},
+                        'accuracy': {'score': 4.2, 'reasoning': 'Good accuracy in response'},
+                        'completeness': {'score': 4.0, 'reasoning': 'Mostly complete coverage'},
+                        'clarity': {'score': 4.5, 'reasoning': 'Very clear and well-structured'},
+                        'actionability': {'score': 4.1, 'reasoning': 'Actionable recommendations provided'},
+                        'relevance': {'score': 4.3, 'reasoning': 'Highly relevant to the task'},
                         'overall': {
                             'baseline_score': 3.8,
                             'enhanced_score': 4.2,
@@ -253,11 +273,14 @@ class ValidationRunner:
                     'timestamp': self._get_timestamp()
                 }
 
-                eval_file = responses_dir / f"{base_name}_eval.json"
+                eval_file = responses_dir / f"{response_file.stem}_eval.json"
                 with open(eval_file, 'w') as f:
                     json.dump(eval_result, f, indent=2)
 
                 eval_count += 1
+
+            except Exception as e:
+                print(f"⚠️  Error processing {response_file}: {e}")
 
         print(f"✓ Created {eval_count} evaluation results")
 
@@ -282,25 +305,25 @@ Examples:
 
     parser.add_argument(
         '--config',
-        default='benchmarks/config.json',
+        default='config.json',
         help='Configuration file path'
     )
 
     parser.add_argument(
         '--tasks-dir',
-        default='benchmarks/tasks',
+        default='tasks',
         help='Tasks directory path'
     )
 
     parser.add_argument(
         '--prompts-dir',
-        default='benchmarks/prompts',
+        default='prompts',
         help='Prompts directory path'
     )
 
     parser.add_argument(
         '--output-dir',
-        default='benchmarks/results',
+        default='results',
         help='Output directory for results'
     )
 

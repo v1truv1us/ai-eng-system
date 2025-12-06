@@ -1,5 +1,5 @@
 # Statistical Analysis Report
-Generated: 2025-12-06T05:42:50.311670
+Generated: 2025-12-06T11:08:58.392861
 
 ## Executive Summary
 
@@ -12,14 +12,14 @@ Generated: 2025-12-06T05:42:50.311670
 
 | Technique | Sample Size | Improvement | Cohen's d | p-value | Significant |
 |-----------|-------------|-------------|-----------|---------|-------------|
-| combined | 72 | 10.5% | -inf | 0.0000 | ✓ |
+| combined | 73 | 10.5% | -inf | 0.0000 | ✓ |
 
 ## Detailed Analysis
 
 ### combined
 
 #### Statistics
-- **Sample Size**: 72
+- **Sample Size**: 73
 .2f
 .2f
 .2f
