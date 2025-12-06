@@ -1,0 +1,103 @@
+{
+  "title": "Positional Bias Test Report",
+  "description": "Analysis of positional bias in LLM evaluations",
+  "generated": "2025-12-06T23:30:57",
+  "task_results": {
+    "CR-002": {
+      "task_id": "CR-002",
+      "original_winner": "enhanced",
+      "randomized_winner": "enhanced",
+      "consistency_score": 0.55,
+      "position_effect": 0.09999999999999998,
+      "significant_bias": true
+    },
+    "CR-001": {
+      "task_id": "CR-001",
+      "original_winner": "enhanced",
+      "randomized_winner": "baseline",
+      "consistency_score": 0.4,
+      "position_effect": 0.6,
+      "significant_bias": "True"
+    },
+    "AR-001": {
+      "task_id": "AR-001",
+      "original_winner": "enhanced",
+      "randomized_winner": "enhanced",
+      "consistency_score": 0.6,
+      "position_effect": 0.19999999999999996,
+      "significant_bias": true
+    },
+    "AR-003": {
+      "task_id": "AR-003",
+      "original_winner": "enhanced",
+      "randomized_winner": "enhanced",
+      "consistency_score": 0.65,
+      "position_effect": 0.30000000000000004,
+      "significant_bias": "True"
+    },
+    "HP-001": {
+      "task_id": "HP-001",
+      "original_winner": "enhanced",
+      "randomized_winner": "enhanced",
+      "consistency_score": 0.6,
+      "position_effect": 0.19999999999999996,
+      "significant_bias": true
+    },
+    "HP-002": {
+      "task_id": "HP-002",
+      "original_winner": "enhanced",
+      "randomized_winner": "enhanced",
+      "consistency_score": 0.5,
+      "position_effect": 0.0,
+      "significant_bias": true
+    },
+    "CT-002": {
+      "task_id": "CT-002",
+      "original_winner": "enhanced",
+      "randomized_winner": "enhanced",
+      "consistency_score": 0.5,
+      "position_effect": 0.0,
+      "significant_bias": true
+    },
+    "CT-003": {
+      "task_id": "CT-003",
+      "original_winner": "enhanced",
+      "randomized_winner": "enhanced",
+      "consistency_score": 0.5,
+      "position_effect": 0.0,
+      "significant_bias": true
+    },
+    "CT-001": {
+      "task_id": "CT-001",
+      "original_winner": "enhanced",
+      "randomized_winner": "baseline",
+      "consistency_score": 0.45,
+      "position_effect": 0.3,
+      "significant_bias": "True"
+    },
+    "HP-003": {
+      "task_id": "HP-003",
+      "original_winner": "enhanced",
+      "randomized_winner": "baseline",
+      "consistency_score": 0.35,
+      "position_effect": 0.10000000000000003,
+      "significant_bias": true
+    }
+  },
+  "analysis": {
+    "total_tasks_tested": 10,
+    "average_consistency": 0.51,
+    "consistency_std": 0.08888194417315588,
+    "average_position_effect": 0.18,
+    "max_position_effect": 0.6,
+    "tasks_with_significant_bias": 10,
+    "bias_percentage": 100.0,
+    "overall_bias_detected": true,
+    "recommendations": [
+      "Positional bias detected - implement response order randomization in production",
+      "Consider majority voting across multiple orderings",
+      "Low consistency with gold standard - review evaluation prompts",
+      "Strong positional effects observed - evaluate mitigation strategies"
+    ]
+  }
+}
