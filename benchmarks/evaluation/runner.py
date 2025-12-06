@@ -26,10 +26,11 @@ from harness.analyzer import StatisticalAnalyzer
 class EvaluationRunner:
     """Main evaluation runner for validation framework."""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: Dict[str, Any], dry_run: bool = False):
         self.config = config
+        self.dry_run = dry_run
         self.scorer = GEvalScorer()
-        self.collector = ResponseCollector(config, dry_run=config.get("dry_run", False))
+        self.collector = ResponseCollector(config, dry_run=dry_run)
         self.analyzer = StatisticalAnalyzer()
         self.geval_template = self._load_geval_template()
 

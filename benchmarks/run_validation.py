@@ -181,16 +181,19 @@ class ValidationRunner:
         print("🚀 Starting Ferg Engineering System Validation")
         print("=" * 50)
 
+        # Store dry_run for use in evaluation
+        self.dry_run = dry_run
+
         # Load configuration
         print("📋 Loading configuration...")
-        config = self.load_config(config_file)
-        self.collector = ResponseCollector(config, dry_run=dry_run)
+        self.config = self.load_config(config_file)
+        self.collector = ResponseCollector(self.config, dry_run=dry_run)
 
         # Extract providers from config
-        if "apis" in config:
-            providers = [api["provider"] for api in config["apis"]]
-        elif "api" in config:
-            providers = [config["api"]["provider"]]
+        if "apis" in self.config:
+            providers = [api["provider"] for api in self.config["apis"]]
+        elif "api" in self.config:
+            providers = [self.config["api"]["provider"]]
         else:
             providers = ["mock"]
 
@@ -251,8 +254,8 @@ class ValidationRunner:
         from evaluation.runner import EvaluationRunner
 
         try:
-            # Create evaluation runner
-            eval_runner = EvaluationRunner(self.config)
+            # Create evaluation runner with loaded config
+            eval_runner = EvaluationRunner(self.config, dry_run=self.dry_run)
 
             # Run evaluations
             result = await eval_runner.run_evaluation(
@@ -263,71 +266,7 @@ class ValidationRunner:
 
         except Exception as e:
             print(f"❌ Error running evaluations: {e}")
-            # Fallback to mock evaluations for now
-            await self._fallback_evaluations(output_dir)
-
-    async def _fallback_evaluations(self, output_dir: str) -> None:
-        """Fallback mock evaluations if real evaluation fails."""
-        print("⚠️  Using fallback mock evaluations")
-
-        responses_dir = Path(output_dir)
-        eval_count = 0
-
-        # Get all response files
-        response_files = list(responses_dir.glob("*.json"))
-        response_files = [
-            f for f in response_files if not f.name.endswith("_eval.json")
-        ]
-
-        for response_file in response_files:
-            try:
-                with open(response_file, "r") as f:
-                    response_data = json.load(f)
-
-                # Create mock evaluation result
-                eval_result = {
-                    "task_id": response_data.get("task_id", "unknown"),
-                    "evaluation": {
-                        "accuracy": {
-                            "score": 4.2,
-                            "reasoning": "Good accuracy in response",
-                        },
-                        "completeness": {
-                            "score": 4.0,
-                            "reasoning": "Mostly complete coverage",
-                        },
-                        "clarity": {
-                            "score": 4.5,
-                            "reasoning": "Very clear and well-structured",
-                        },
-                        "actionability": {
-                            "score": 4.1,
-                            "reasoning": "Actionable recommendations provided",
-                        },
-                        "relevance": {
-                            "score": 4.3,
-                            "reasoning": "Highly relevant to the task",
-                        },
-                        "overall": {
-                            "baseline_score": 3.8,
-                            "enhanced_score": 4.2,
-                            "winner": "enhanced",
-                            "confidence": 0.85,
-                        },
-                    },
-                    "timestamp": self._get_timestamp(),
-                }
-
-                eval_file = responses_dir / f"{response_file.stem}_eval.json"
-                with open(eval_file, "w") as f:
-                    json.dump(eval_result, f, indent=2)
-
-                eval_count += 1
-
-            except Exception as e:
-                print(f"⚠️  Error processing {response_file}: {e}")
-
-        print(f"✓ Created {eval_count} mock evaluation results")
+            raise e
 
     def _get_timestamp(self) -> str:
         """Get current timestamp."""
