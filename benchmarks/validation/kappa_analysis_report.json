@@ -1,0 +1,81 @@
+{
+  "title": "Cohen's Kappa Analysis Report",
+  "description": "Inter-rater agreement analysis between LLM and human evaluations",
+  "generated": "2025-12-06T23:28:48",
+  "results": {
+    "accuracy": {
+      "kappa": 0.41176470588235303,
+      "observed_agreement": 0.8,
+      "expected_agreement": 0.66,
+      "confidence_interval": [
+        0.31176470588235305,
+        0.511764705882353
+      ],
+      "sample_size": 10,
+      "interpretation": "Moderate agreement"
+    },
+    "completeness": {
+      "kappa": 0.6153846153846154,
+      "observed_agreement": 0.9,
+      "expected_agreement": 0.7400000000000001,
+      "confidence_interval": [
+        0.5153846153846154,
+        0.7153846153846154
+      ],
+      "sample_size": 10,
+      "interpretation": "Substantial agreement"
+    },
+    "clarity": {
+      "kappa": 0.6153846153846154,
+      "observed_agreement": 0.8,
+      "expected_agreement": 0.54,
+      "confidence_interval": [
+        0.5153846153846154,
+        0.7153846153846154
+      ],
+      "sample_size": 10,
+      "interpretation": "Substantial agreement"
+    },
+    "actionability": {
+      "kappa": 0.41176470588235303,
+      "observed_agreement": 0.8,
+      "expected_agreement": 0.66,
+      "confidence_interval": [
+        0.31176470588235305,
+        0.511764705882353
+      ],
+      "sample_size": 10,
+      "interpretation": "Moderate agreement"
+    },
+    "relevance": {
+      "kappa": 1.0,
+      "observed_agreement": 1.0,
+      "expected_agreement": 0.52,
+      "confidence_interval": [
+        0.9,
+        1.1
+      ],
+      "sample_size": 10,
+      "interpretation": "Perfect agreement"
+    },
+    "overall": {
+      "kappa": 0.6108597285067874,
+      "confidence_interval": [
+        0.5108597285067874,
+        0.7108597285067874
+      ],
+      "interpretation": "Substantial agreement",
+      "dimensions_analyzed": 5
+    }
+  },
+  "summary": {
+    "total_dimensions": 5,
+    "successful_analyses": 5,
+    "average_kappa": 0.6108597285067874,
+    "kappa_range": [
+      0.41176470588235303,
+      1.0
+    ],
+    "validation_status": "passed"
+  }
+}
