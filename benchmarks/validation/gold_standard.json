@@ -1,0 +1,846 @@
+{
+  "metadata": {
+    "created": "2025-12-06T16:25:42.830025",
+    "description": "Simulated gold standard ratings for meta-validation demonstration",
+    "num_tasks": 10,
+    "rating_scale": "1-5 (1=Very Poor, 5=Excellent)",
+    "raters": [
+      "simulated_expert",
+      "simulated_intermediate"
+    ]
+  },
+  "tasks": {
+    "CR-002": {
+      "title": "Review Database Query Function for N+1 and SQL Injection",
+      "category": "code-review",
+      "difficulty": "medium"
+    },
+    "CR-001": {
+      "title": "Review Authentication Middleware for Security Issues",
+      "category": "code-review",
+      "difficulty": "medium"
+    },
+    "AR-002": {
+      "title": "Design Caching Strategy for E-commerce Product Catalog",
+      "category": "architecture",
+      "difficulty": "hard"
+    },
+    "AR-001": {
+      "title": "Choose Between REST and GraphQL for New API",
+      "category": "architecture",
+      "difficulty": "medium"
+    },
+    "HP-002": {
+      "title": "Optimize Slow Database Query Hitting 10M+ Rows",
+      "category": "hard-problems",
+      "difficulty": "hard"
+    },
+    "HP-001": {
+      "title": "Debug Race Condition in Concurrent File Upload Handler",
+      "category": "hard-problems",
+      "difficulty": "hard"
+    },
+    "CT-002": {
+      "title": "Create CLI Tool Architecture with Plugin System",
+      "category": "creative",
+      "difficulty": "hard"
+    },
+    "CT-001": {
+      "title": "Design REST API Schema for Booking System",
+      "category": "creative",
+      "difficulty": "medium"
+    },
+    "AR-003": {
+      "title": "Evaluate Microservices vs Monolith for Startup MVP",
+      "category": "architecture",
+      "difficulty": "hard"
+    },
+    "CR-003": {
+      "title": "Review Payment Processing Module for Security and Race Conditions",
+      "category": "code-review",
+      "difficulty": "hard"
+    }
+  },
+  "ratings": {
+    "CR-002_expert": {
+      "accuracy": {
+        "score": 4.4,
+        "reasoning": "Expert analysis of accuracy for code-review task",
+        "confidence": 0.9
+      },
+      "completeness": {
+        "score": 4.5,
+        "reasoning": "Expert analysis of completeness for code-review task",
+        "confidence": 0.9
+      },
+      "clarity": {
+        "score": 5,
+        "reasoning": "Expert analysis of clarity for code-review task",
+        "confidence": 0.9
+      },
+      "actionability": {
+        "score": 4.3,
+        "reasoning": "Expert analysis of actionability for code-review task",
+        "confidence": 0.9
+      },
+      "relevance": {
+        "score": 4.7,
+        "reasoning": "Expert analysis of relevance for code-review task",
+        "confidence": 0.9
+      },
+      "overall": {
+        "baseline_score": 3.8,
+        "enhanced_score": 4.4,
+        "winner": "enhanced",
+        "confidence": 0.85,
+        "rationale": "Enhanced response shows expert-level analysis and domain knowledge"
+      },
+      "rater_info": {
+        "rater_id": "simulated_expert",
+        "experience_level": "expert",
+        "timestamp": "2025-12-06T16:25:42.830047"
+      }
+    },
+    "CR-002_intermediate": {
+      "accuracy": {
+        "score": 4.6,
+        "reasoning": "Intermediate analysis of accuracy",
+        "confidence": 0.7
+      },
+      "completeness": {
+        "score": 4.1,
+        "reasoning": "Intermediate analysis of completeness",
+        "confidence": 0.7
+      },
+      "clarity": {
+        "score": 4.9,
+        "reasoning": "Intermediate analysis of clarity",
+        "confidence": 0.7
+      },
+      "actionability": {
+        "score": 4.5,
+        "reasoning": "Intermediate analysis of actionability",
+        "confidence": 0.7
+      },
+      "relevance": {
+        "score": 4.7,
+        "reasoning": "Intermediate analysis of relevance",
+        "confidence": 0.7
+      },
+      "overall": {
+        "baseline_score": 3.9189539372946487,
+        "enhanced_score": 4.657428064277544,
+        "winner": "enhanced",
+        "confidence": 0.6,
+        "rationale": "Enhanced response appears more comprehensive"
+      },
+      "rater_info": {
+        "rater_id": "simulated_intermediate",
+        "experience_level": "intermediate",
+        "timestamp": "2025-12-06T16:25:42.830054"
+      }
+    },
+    "CR-001_expert": {
+      "accuracy": {
+        "score": 4.4,
+        "reasoning": "Expert analysis of accuracy for code-review task",
+        "confidence": 0.9
+      },
+      "completeness": {
+        "score": 4.5,
+        "reasoning": "Expert analysis of completeness for code-review task",
+        "confidence": 0.9
+      },
+      "clarity": {
+        "score": 4.8,
+        "reasoning": "Expert analysis of clarity for code-review task",
+        "confidence": 0.9
+      },
+      "actionability": {
+        "score": 4.4,
+        "reasoning": "Expert analysis of actionability for code-review task",
+        "confidence": 0.9
+      },
+      "relevance": {
+        "score": 4.5,
+        "reasoning": "Expert analysis of relevance for code-review task",
+        "confidence": 0.9
+      },
+      "overall": {
+        "baseline_score": 3.8,
+        "enhanced_score": 4.4,
+        "winner": "enhanced",
+        "confidence": 0.85,
+        "rationale": "Enhanced response shows expert-level analysis and domain knowledge"
+      },
+      "rater_info": {
+        "rater_id": "simulated_expert",
+        "experience_level": "expert",
+        "timestamp": "2025-12-06T16:25:42.830062"
+      }
+    },
+    "CR-001_intermediate": {
+      "accuracy": {
+        "score": 4.0,
+        "reasoning": "Intermediate analysis of accuracy",
+        "confidence": 0.7
+      },
+      "completeness": {
+        "score": 5.0,
+        "reasoning": "Intermediate analysis of completeness",
+        "confidence": 0.7
+      },
+      "clarity": {
+        "score": 4.7,
+        "reasoning": "Intermediate analysis of clarity",
+        "confidence": 0.7
+      },
+      "actionability": {
+        "score": 4.9,
+        "reasoning": "Intermediate analysis of actionability",
+        "confidence": 0.7
+      },
+      "relevance": {
+        "score": 4.9,
+        "reasoning": "Intermediate analysis of relevance",
+        "confidence": 0.7
+      },
+      "overall": {
+        "baseline_score": 3.558205663359018,
+        "enhanced_score": 4.480039827462401,
+        "winner": "enhanced",
+        "confidence": 0.6,
+        "rationale": "Enhanced response appears more comprehensive"
+      },
+      "rater_info": {
+        "rater_id": "simulated_intermediate",
+        "experience_level": "intermediate",
+        "timestamp": "2025-12-06T16:25:42.830068"
+      }
+    },
+    "AR-002_expert": {
+      "accuracy": {
+        "score": 4.2,
+        "reasoning": "Expert analysis of accuracy for architecture task",
+        "confidence": 0.9
+      },
+      "completeness": {
+        "score": 4.8,
+        "reasoning": "Expert analysis of completeness for architecture task",
+        "confidence": 0.9
+      },
+      "clarity": {
+        "score": 4.3,
+        "reasoning": "Expert analysis of clarity for architecture task",
+        "confidence": 0.9
+      },
+      "actionability": {
+        "score": 4.2,
+        "reasoning": "Expert analysis of actionability for architecture task",
+        "confidence": 0.9
+      },
+      "relevance": {
+        "score": 4.6,
+        "reasoning": "Expert analysis of relevance for architecture task",
+        "confidence": 0.9
+      },
+      "overall": {
+        "baseline_score": 3.5,
+        "enhanced_score": 4.1,
+        "winner": "enhanced",
+        "confidence": 0.8,
+        "rationale": "Enhanced response provides more comprehensive analysis"
+      },
+      "rater_info": {
+        "rater_id": "simulated_expert",
+        "experience_level": "expert",
+        "timestamp": "2025-12-06T16:25:42.830074"
+      }
+    },
+    "AR-002_intermediate": {
+      "accuracy": {
+        "score": 4.4,
+        "reasoning": "Intermediate analysis of accuracy",
+        "confidence": 0.7
+      },
+      "completeness": {
+        "score": 4.9,
+        "reasoning": "Intermediate analysis of completeness",
+        "confidence": 0.7
+      },
+      "clarity": {
+        "score": 4.6,
+        "reasoning": "Intermediate analysis of clarity",
+        "confidence": 0.7
+      },
+      "actionability": {
+        "score": 4.1,
+        "reasoning": "Intermediate analysis of actionability",
+        "confidence": 0.7
+      },
+      "relevance": {
+        "score": 4.2,
+        "reasoning": "Intermediate analysis of relevance",
+        "confidence": 0.7
+      },
+      "overall": {
+        "baseline_score": 3.6740405718071227,
+        "enhanced_score": 3.8392567937591457,
+        "winner": "enhanced",
+        "confidence": 0.6,
+        "rationale": "Enhanced response appears more comprehensive"
+      },
+      "rater_info": {
+        "rater_id": "simulated_intermediate",
+        "experience_level": "intermediate",
+        "timestamp": "2025-12-06T16:25:42.830078"
+      }
+    },
+    "AR-001_expert": {
+      "accuracy": {
+        "score": 4.4,
+        "reasoning": "Expert analysis of accuracy for architecture task",
+        "confidence": 0.9
+      },
+      "completeness": {
+        "score": 4.4,
+        "reasoning": "Expert analysis of completeness for architecture task",
+        "confidence": 0.9
+      },
+      "clarity": {
+        "score": 4.1,
+        "reasoning": "Expert analysis of clarity for architecture task",
+        "confidence": 0.9
+      },
+      "actionability": {
+        "score": 4.4,
+        "reasoning": "Expert analysis of actionability for architecture task",
+        "confidence": 0.9
+      },
+      "relevance": {
+        "score": 4.7,
+        "reasoning": "Expert analysis of relevance for architecture task",
+        "confidence": 0.9
+      },
+      "overall": {
+        "baseline_score": 3.5,
+        "enhanced_score": 4.1,
+        "winner": "enhanced",
+        "confidence": 0.8,
+        "rationale": "Enhanced response provides more comprehensive analysis"
+      },
+      "rater_info": {
+        "rater_id": "simulated_expert",
+        "experience_level": "expert",
+        "timestamp": "2025-12-06T16:25:42.830084"
+      }
+    },
+    "AR-001_intermediate": {
+      "accuracy": {
+        "score": 4.9,
+        "reasoning": "Intermediate analysis of accuracy",
+        "confidence": 0.7
+      },
+      "completeness": {
+        "score": 4.1,
+        "reasoning": "Intermediate analysis of completeness",
+        "confidence": 0.7
+      },
+      "clarity": {
+        "score": 4.2,
+        "reasoning": "Intermediate analysis of clarity",
+        "confidence": 0.7
+      },
+      "actionability": {
+        "score": 4.7,
+        "reasoning": "Intermediate analysis of actionability",
+        "confidence": 0.7
+      },
+      "relevance": {
+        "score": 4.2,
+        "reasoning": "Intermediate analysis of relevance",
+        "confidence": 0.7
+      },
+      "overall": {
+        "baseline_score": 3.3364320073616636,
+        "enhanced_score": 4.250361861302902,
+        "winner": "enhanced",
+        "confidence": 0.6,
+        "rationale": "Enhanced response appears more comprehensive"
+      },
+      "rater_info": {
+        "rater_id": "simulated_intermediate",
+        "experience_level": "intermediate",
+        "timestamp": "2025-12-06T16:25:42.830088"
+      }
+    },
+    "HP-002_expert": {
+      "accuracy": {
+        "score": 3.8,
+        "reasoning": "Expert analysis of accuracy for hard-problems task",
+        "confidence": 0.9
+      },
+      "completeness": {
+        "score": 4.1,
+        "reasoning": "Expert analysis of completeness for hard-problems task",
+        "confidence": 0.9
+      },
+      "clarity": {
+        "score": 3.7,
+        "reasoning": "Expert analysis of clarity for hard-problems task",
+        "confidence": 0.9
+      },
+      "actionability": {
+        "score": 4.3,
+        "reasoning": "Expert analysis of actionability for hard-problems task",
+        "confidence": 0.9
+      },
+      "relevance": {
+        "score": 4.2,
+        "reasoning": "Expert analysis of relevance for hard-problems task",
+        "confidence": 0.9
+      },
+      "overall": {
+        "baseline_score": 3.5,
+        "enhanced_score": 4.1,
+        "winner": "enhanced",
+        "confidence": 0.8,
+        "rationale": "Enhanced response provides more comprehensive analysis"
+      },
+      "rater_info": {
+        "rater_id": "simulated_expert",
+        "experience_level": "expert",
+        "timestamp": "2025-12-06T16:25:42.830093"
+      }
+    },
+    "HP-002_intermediate": {
+      "accuracy": {
+        "score": 3.9,
+        "reasoning": "Intermediate analysis of accuracy",
+        "confidence": 0.7
+      },
+      "completeness": {
+        "score": 3.9,
+        "reasoning": "Intermediate analysis of completeness",
+        "confidence": 0.7
+      },
+      "clarity": {
+        "score": 3.7,
+        "reasoning": "Intermediate analysis of clarity",
+        "confidence": 0.7
+      },
+      "actionability": {
+        "score": 4.8,
+        "reasoning": "Intermediate analysis of actionability",
+        "confidence": 0.7
+      },
+      "relevance": {
+        "score": 4.2,
+        "reasoning": "Intermediate analysis of relevance",
+        "confidence": 0.7
+      },
+      "overall": {
+        "baseline_score": 3.396055611669053,
+        "enhanced_score": 4.289826573967614,
+        "winner": "enhanced",
+        "confidence": 0.6,
+        "rationale": "Enhanced response appears more comprehensive"
+      },
+      "rater_info": {
+        "rater_id": "simulated_intermediate",
+        "experience_level": "intermediate",
+        "timestamp": "2025-12-06T16:25:42.830098"
+      }
+    },
+    "HP-001_expert": {
+      "accuracy": {
+        "score": 4.1,
+        "reasoning": "Expert analysis of accuracy for hard-problems task",
+        "confidence": 0.9
+      },
+      "completeness": {
+        "score": 4.4,
+        "reasoning": "Expert analysis of completeness for hard-problems task",
+        "confidence": 0.9
+      },
+      "clarity": {
+        "score": 4.0,
+        "reasoning": "Expert analysis of clarity for hard-problems task",
+        "confidence": 0.9
+      },
+      "actionability": {
+        "score": 4.0,
+        "reasoning": "Expert analysis of actionability for hard-problems task",
+        "confidence": 0.9
+      },
+      "relevance": {
+        "score": 4.2,
+        "reasoning": "Expert analysis of relevance for hard-problems task",
+        "confidence": 0.9
+      },
+      "overall": {
+        "baseline_score": 3.5,
+        "enhanced_score": 4.1,
+        "winner": "enhanced",
+        "confidence": 0.8,
+        "rationale": "Enhanced response provides more comprehensive analysis"
+      },
+      "rater_info": {
+        "rater_id": "simulated_expert",
+        "experience_level": "expert",
+        "timestamp": "2025-12-06T16:25:42.830104"
+      }
+    },
+    "HP-001_intermediate": {
+      "accuracy": {
+        "score": 4.4,
+        "reasoning": "Intermediate analysis of accuracy",
+        "confidence": 0.7
+      },
+      "completeness": {
+        "score": 4.1,
+        "reasoning": "Intermediate analysis of completeness",
+        "confidence": 0.7
+      },
+      "clarity": {
+        "score": 4.3,
+        "reasoning": "Intermediate analysis of clarity",
+        "confidence": 0.7
+      },
+      "actionability": {
+        "score": 4.4,
+        "reasoning": "Intermediate analysis of actionability",
+        "confidence": 0.7
+      },
+      "relevance": {
+        "score": 4.0,
+        "reasoning": "Intermediate analysis of relevance",
+        "confidence": 0.7
+      },
+      "overall": {
+        "baseline_score": 3.479376998756753,
+        "enhanced_score": 4.3396648912946025,
+        "winner": "enhanced",
+        "confidence": 0.6,
+        "rationale": "Enhanced response appears more comprehensive"
+      },
+      "rater_info": {
+        "rater_id": "simulated_intermediate",
+        "experience_level": "intermediate",
+        "timestamp": "2025-12-06T16:25:42.830109"
+      }
+    },
+    "CT-002_expert": {
+      "accuracy": {
+        "score": 4.2,
+        "reasoning": "Expert analysis of accuracy for creative task",
+        "confidence": 0.9
+      },
+      "completeness": {
+        "score": 4.5,
+        "reasoning": "Expert analysis of completeness for creative task",
+        "confidence": 0.9
+      },
+      "clarity": {
+        "score": 4.6,
+        "reasoning": "Expert analysis of clarity for creative task",
+        "confidence": 0.9
+      },
+      "actionability": {
+        "score": 4.4,
+        "reasoning": "Expert analysis of actionability for creative task",
+        "confidence": 0.9
+      },
+      "relevance": {
+        "score": 4.4,
+        "reasoning": "Expert analysis of relevance for creative task",
+        "confidence": 0.9
+      },
+      "overall": {
+        "baseline_score": 3.8,
+        "enhanced_score": 4.4,
+        "winner": "enhanced",
+        "confidence": 0.85,
+        "rationale": "Enhanced response shows expert-level analysis and domain knowledge"
+      },
+      "rater_info": {
+        "rater_id": "simulated_expert",
+        "experience_level": "expert",
+        "timestamp": "2025-12-06T16:25:42.830114"
+      }
+    },
+    "CT-002_intermediate": {
+      "accuracy": {
+        "score": 4.4,
+        "reasoning": "Intermediate analysis of accuracy",
+        "confidence": 0.7
+      },
+      "completeness": {
+        "score": 4.1,
+        "reasoning": "Intermediate analysis of completeness",
+        "confidence": 0.7
+      },
+      "clarity": {
+        "score": 4.3,
+        "reasoning": "Intermediate analysis of clarity",
+        "confidence": 0.7
+      },
+      "actionability": {
+        "score": 4.1,
+        "reasoning": "Intermediate analysis of actionability",
+        "confidence": 0.7
+      },
+      "relevance": {
+        "score": 4.7,
+        "reasoning": "Intermediate analysis of relevance",
+        "confidence": 0.7
+      },
+      "overall": {
+        "baseline_score": 3.5451419036422998,
+        "enhanced_score": 4.6904140020332505,
+        "winner": "enhanced",
+        "confidence": 0.6,
+        "rationale": "Enhanced response appears more comprehensive"
+      },
+      "rater_info": {
+        "rater_id": "simulated_intermediate",
+        "experience_level": "intermediate",
+        "timestamp": "2025-12-06T16:25:42.830118"
+      }
+    },
+    "CT-001_expert": {
+      "accuracy": {
+        "score": 4.0,
+        "reasoning": "Expert analysis of accuracy for creative task",
+        "confidence": 0.9
+      },
+      "completeness": {
+        "score": 4.4,
+        "reasoning": "Expert analysis of completeness for creative task",
+        "confidence": 0.9
+      },
+      "clarity": {
+        "score": 4.6,
+        "reasoning": "Expert analysis of clarity for creative task",
+        "confidence": 0.9
+      },
+      "actionability": {
+        "score": 4.4,
+        "reasoning": "Expert analysis of actionability for creative task",
+        "confidence": 0.9
+      },
+      "relevance": {
+        "score": 4.7,
+        "reasoning": "Expert analysis of relevance for creative task",
+        "confidence": 0.9
+      },
+      "overall": {
+        "baseline_score": 3.8,
+        "enhanced_score": 4.4,
+        "winner": "enhanced",
+        "confidence": 0.85,
+        "rationale": "Enhanced response shows expert-level analysis and domain knowledge"
+      },
+      "rater_info": {
+        "rater_id": "simulated_expert",
+        "experience_level": "expert",
+        "timestamp": "2025-12-06T16:25:42.830123"
+      }
+    },
+    "CT-001_intermediate": {
+      "accuracy": {
+        "score": 4.2,
+        "reasoning": "Intermediate analysis of accuracy",
+        "confidence": 0.7
+      },
+      "completeness": {
+        "score": 4.8,
+        "reasoning": "Intermediate analysis of completeness",
+        "confidence": 0.7
+      },
+      "clarity": {
+        "score": 4.2,
+        "reasoning": "Intermediate analysis of clarity",
+        "confidence": 0.7
+      },
+      "actionability": {
+        "score": 4.1,
+        "reasoning": "Intermediate analysis of actionability",
+        "confidence": 0.7
+      },
+      "relevance": {
+        "score": 4.3,
+        "reasoning": "Intermediate analysis of relevance",
+        "confidence": 0.7
+      },
+      "overall": {
+        "baseline_score": 3.99511363615714,
+        "enhanced_score": 4.506007189630746,
+        "winner": "enhanced",
+        "confidence": 0.6,
+        "rationale": "Enhanced response appears more comprehensive"
+      },
+      "rater_info": {
+        "rater_id": "simulated_intermediate",
+        "experience_level": "intermediate",
+        "timestamp": "2025-12-06T16:25:42.830127"
+      }
+    },
+    "AR-003_expert": {
+      "accuracy": {
+        "score": 4.1,
+        "reasoning": "Expert analysis of accuracy for architecture task",
+        "confidence": 0.9
+      },
+      "completeness": {
+        "score": 4.6,
+        "reasoning": "Expert analysis of completeness for architecture task",
+        "confidence": 0.9
+      },
+      "clarity": {
+        "score": 4.3,
+        "reasoning": "Expert analysis of clarity for architecture task",
+        "confidence": 0.9
+      },
+      "actionability": {
+        "score": 4.2,
+        "reasoning": "Expert analysis of actionability for architecture task",
+        "confidence": 0.9
+      },
+      "relevance": {
+        "score": 4.5,
+        "reasoning": "Expert analysis of relevance for architecture task",
+        "confidence": 0.9
+      },
+      "overall": {
+        "baseline_score": 3.5,
+        "enhanced_score": 4.1,
+        "winner": "enhanced",
+        "confidence": 0.8,
+        "rationale": "Enhanced response provides more comprehensive analysis"
+      },
+      "rater_info": {
+        "rater_id": "simulated_expert",
+        "experience_level": "expert",
+        "timestamp": "2025-12-06T16:25:42.830132"
+      }
+    },
+    "AR-003_intermediate": {
+      "accuracy": {
+        "score": 3.9,
+        "reasoning": "Intermediate analysis of accuracy",
+        "confidence": 0.7
+      },
+      "completeness": {
+        "score": 4.3,
+        "reasoning": "Intermediate analysis of completeness",
+        "confidence": 0.7
+      },
+      "clarity": {
+        "score": 4.0,
+        "reasoning": "Intermediate analysis of clarity",
+        "confidence": 0.7
+      },
+      "actionability": {
+        "score": 4.5,
+        "reasoning": "Intermediate analysis of actionability",
+        "confidence": 0.7
+      },
+      "relevance": {
+        "score": 5.0,
+        "reasoning": "Intermediate analysis of relevance",
+        "confidence": 0.7
+      },
+      "overall": {
+        "baseline_score": 3.2446383414981286,
+        "enhanced_score": 4.331363959092394,
+        "winner": "enhanced",
+        "confidence": 0.6,
+        "rationale": "Enhanced response appears more comprehensive"
+      },
+      "rater_info": {
+        "rater_id": "simulated_intermediate",
+        "experience_level": "intermediate",
+        "timestamp": "2025-12-06T16:25:42.830136"
+      }
+    },
+    "CR-003_expert": {
+      "accuracy": {
+        "score": 4.8,
+        "reasoning": "Expert analysis of accuracy for code-review task",
+        "confidence": 0.9
+      },
+      "completeness": {
+        "score": 4.0,
+        "reasoning": "Expert analysis of completeness for code-review task",
+        "confidence": 0.9
+      },
+      "clarity": {
+        "score": 4.9,
+        "reasoning": "Expert analysis of clarity for code-review task",
+        "confidence": 0.9
+      },
+      "actionability": {
+        "score": 4.1,
+        "reasoning": "Expert analysis of actionability for code-review task",
+        "confidence": 0.9
+      },
+      "relevance": {
+        "score": 4.5,
+        "reasoning": "Expert analysis of relevance for code-review task",
+        "confidence": 0.9
+      },
+      "overall": {
+        "baseline_score": 3.8,
+        "enhanced_score": 4.4,
+        "winner": "enhanced",
+        "confidence": 0.85,
+        "rationale": "Enhanced response shows expert-level analysis and domain knowledge"
+      },
+      "rater_info": {
+        "rater_id": "simulated_expert",
+        "experience_level": "expert",
+        "timestamp": "2025-12-06T16:25:42.830141"
+      }
+    },
+    "CR-003_intermediate": {
+      "accuracy": {
+        "score": 5,
+        "reasoning": "Intermediate analysis of accuracy",
+        "confidence": 0.7
+      },
+      "completeness": {
+        "score": 4.4,
+        "reasoning": "Intermediate analysis of completeness",
+        "confidence": 0.7
+      },
+      "clarity": {
+        "score": 4.7,
+        "reasoning": "Intermediate analysis of clarity",
+        "confidence": 0.7
+      },
+      "actionability": {
+        "score": 4.1,
+        "reasoning": "Intermediate analysis of actionability",
+        "confidence": 0.7
+      },
+      "relevance": {
+        "score": 4.7,
+        "reasoning": "Intermediate analysis of relevance",
+        "confidence": 0.7
+      },
+      "overall": {
+        "baseline_score": 3.8417755187440137,
+        "enhanced_score": 4.668134754415672,
+        "winner": "enhanced",
+        "confidence": 0.6,
+        "rationale": "Enhanced response appears more comprehensive"
+      },
+      "rater_info": {
+        "rater_id": "simulated_intermediate",
+        "experience_level": "intermediate",
+        "timestamp": "2025-12-06T16:25:42.830146"
+      }
+    }
+  }
+}
