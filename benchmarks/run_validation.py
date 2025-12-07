@@ -103,51 +103,86 @@ class ValidationRunner:
         self,
         tasks: Dict[str, Dict[str, Any]],
         prompts: Dict[str, Dict[str, str]],
-        num_variants: int = 3,
+        target_responses_per_category: int = 40,
         providers: List[str] = None,
     ) -> List[Dict[str, Any]]:
-        """Create collection requests for all tasks and prompt types."""
+        """Create collection requests for all tasks and prompt types with scaled collection."""
         requests = []
 
         # If no providers specified, use a default
         if not providers:
             providers = ["default"]
 
+        # Group tasks by category
+        tasks_by_category = {}
         for task_id, task_data in tasks.items():
-            # For each provider
-            for provider in providers:
-                # For each prompt type (baseline, enhanced)
-                for prompt_type in ["baseline", "enhanced"]:
-                    # Get appropriate prompt template
-                    category = task_data.get("category", "unknown")
-                    prompt_template = prompts.get(prompt_type, {}).get(category)
+            category = task_data.get("category", "unknown")
+            if category not in tasks_by_category:
+                tasks_by_category[category] = []
+            tasks_by_category[category].append((task_id, task_data))
 
-                    if not prompt_template:
-                        print(
-                            f"⚠️  No {prompt_type} prompt template found for category: {category}"
+        print(f"📊 Task distribution by category:")
+        for category, category_tasks in tasks_by_category.items():
+            print(f"  {category}: {len(category_tasks)} tasks")
+
+        # For each category, generate enough requests to reach target
+        for category, category_tasks in tasks_by_category.items():
+            category_requests = 0
+            target_per_type = (
+                target_responses_per_category // 2
+            )  # Split between baseline/enhanced
+
+            for task_id, task_data in category_tasks:
+                # For each provider
+                for provider in providers:
+                    # For each prompt type (baseline, enhanced)
+                    for prompt_type in ["baseline", "enhanced"]:
+                        # Get appropriate prompt template
+                        prompt_template = prompts.get(prompt_type, {}).get(category)
+
+                        if not prompt_template:
+                            print(
+                                f"⚠️  No {prompt_type} prompt template found for category: {category}"
+                            )
+                            continue
+
+                        # Calculate variants needed for this task to reach target
+                        remaining_needed = max(
+                            1, target_per_type // len(category_tasks)
                         )
-                        continue
+                        variants_per_task = min(
+                            remaining_needed, 10
+                        )  # Cap at 10 variants per task
 
-                    # Create variants (for now, just use the base template)
-                    # In a full implementation, this would generate multiple variants
-                    for variant_num in range(num_variants):
-                        variant_id = f"v{variant_num}"
+                        # Create variants
+                        for variant_num in range(variants_per_task):
+                            variant_id = f"v{variant_num}"
 
-                        # Populate template with task data
-                        prompt = self._populate_template(prompt_template, task_data)
+                            # Populate template with task data
+                            prompt = self._populate_template(prompt_template, task_data)
 
-                        requests.append(
-                            {
-                                "task_id": task_id,
-                                "prompt_type": prompt_type,
-                                "variant_id": variant_id,
-                                "provider": provider,
-                                "prompt": prompt,
-                                "task_data": task_data,
-                            }
-                        )
+                            requests.append(
+                                {
+                                    "task_id": task_id,
+                                    "prompt_type": prompt_type,
+                                    "variant_id": variant_id,
+                                    "provider": provider,
+                                    "prompt": prompt,
+                                    "task_data": task_data,
+                                }
+                            )
+                            category_requests += 1
 
-        print(f"📝 Created {len(requests)} collection requests")
+            print(f"  {category}: {category_requests} requests generated")
+
+        print(f"📝 Created {len(requests)} total collection requests")
+
+        # Verify we have adequate coverage
+        baseline_count = sum(1 for r in requests if r["prompt_type"] == "baseline")
+        enhanced_count = sum(1 for r in requests if r["prompt_type"] == "enhanced")
+        print(f"  Baseline: {baseline_count} requests")
+        print(f"  Enhanced: {enhanced_count} requests")
+
         return requests
 
     def _populate_template(self, template: str, task_data: Dict[str, Any]) -> str:
@@ -218,7 +253,7 @@ class ValidationRunner:
         if not skip_collection:
             print("📝 Creating collection requests...")
             requests = self.create_collection_requests(
-                tasks, prompts, num_variants, providers
+                tasks, prompts, target_responses_per_category=40, providers=providers
             )
 
             # Collect responses
