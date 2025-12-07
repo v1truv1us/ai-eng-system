@@ -78,9 +78,25 @@ class EvaluationRunner {
       this.gEvalTemplate = templateContent;
     }
 
-    // Initialize OpenCode SDK - create server and client
+    // Initialize OpenCode SDK client
     console.log("📖 Initializing OpenCode SDK...");
     const serverPort = this.config.opencode?.serverPort || 4096;
+    const serverUrl = `http://127.0.0.1:${serverPort}`;
+    
+    try {
+      // Try to connect to existing server first
+      const response = await fetch(`${serverUrl}/config`, { signal: AbortSignal.timeout(2000) });
+      if (response.ok) {
+        console.log(`✓ Connected to existing OpenCode server at ${serverUrl}`);
+        this.client = createOpencodeClient({ baseUrl: serverUrl });
+        return;
+      }
+    } catch {
+      // Server not running, will start a new one
+    }
+
+    // Start new OpenCode server
+    console.log(`📖 Starting OpenCode server on port ${serverPort}...`);
     this.instance = await createOpencode({
       hostname: "127.0.0.1",
       port: serverPort,
@@ -91,8 +107,7 @@ class EvaluationRunner {
 
     // Use the client from the instance
     this.client = (this.instance as any).client;
-    const serverUrl = (this.instance as any).server?.url || `http://localhost:${serverPort}`;
-    console.log(`✓ OpenCode server running at ${serverUrl}`);
+    console.log(`✓ OpenCode server started at ${serverUrl}`);
   }
 
   async runEvaluation(resultsDir: string): Promise<{ status: string; evaluations: number }> {
@@ -430,9 +445,7 @@ async function main() {
   }
 }
 
-// Run if executed directly
-if (process.argv[1] === import.meta.url) {
-  main().catch(console.error);
-}
+// Always run main when this file is executed
+main().catch(console.error);
 
 export { EvaluationRunner };
