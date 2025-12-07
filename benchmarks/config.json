@@ -2,17 +2,11 @@
   "apis": [
     {
       "provider": "opencode",
-      "model": "opencode-cli",
+      "model": "claude-3-5-sonnet-20241022",
       "max_tokens": 163000,
       "temperature": 0.1,
-      "timeout": 300
-    },
-    {
-      "provider": "cursor",
-      "model": "cursor-cli",
-      "max_tokens": 100000,
-      "temperature": 0.1,
-      "timeout": 300
+      "timeout": 300,
+      "description": "OpenCode Server with Claude backend. Requires OPENCODE_SERVER_URL env var (default: http://localhost:4096). Server must have anthropic provider configured."
     }
   ],
   "rate_limit": {

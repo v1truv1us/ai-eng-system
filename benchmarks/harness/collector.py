@@ -185,41 +185,110 @@ class OpenAIProvider(LLMProvider):
 
 
 class OpenCodeProvider(LLMProvider):
-    """OpenCode via OpenCode CLI."""
+    """OpenCode via OpenCode Server."""
 
     def call_api(self, prompt: str) -> Tuple[str, Dict[str, Any]]:
         import subprocess
+        import uuid
 
         start_time = time.time()
 
         try:
-            # Use OpenCode CLI to get response
-            cmd = ["opencode", "run", prompt]
-            result = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                timeout=self.config.timeout,
-                input="exit\n",  # Exit after getting response
+            # Step 1: Start an OpenCode server if not already running
+            # Check if server is running on default port
+            opencode_server_url = os.getenv(
+                "OPENCODE_SERVER_URL", "http://localhost:4096"
             )
+
+            # Try to connect to existing server
+            try:
+                response = requests.get(f"{opencode_server_url}/config", timeout=2)
+                server_running = response.status_code == 200
+            except:
+                server_running = False
+
+            # If no server running, start one
+            if not server_running:
+                # Start OpenCode server in background (non-blocking)
+                cmd = ["opencode", "serve", "--port", "4096"]
+                subprocess.Popen(
+                    cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+                )
+                # Give server time to start
+                import time as time_module
+
+                time_module.sleep(2)
+
+            # Step 2: Create a session and send the prompt
+            session_data = {"title": f"Evaluation_{uuid.uuid4().hex[:8]}"}
+
+            session_response = requests.post(
+                f"{opencode_server_url}/session",
+                json=session_data,
+                timeout=self.config.timeout,
+            )
+
+            if session_response.status_code != 201:
+                raise Exception(f"Failed to create session: {session_response.text}")
+
+            session_id = session_response.json()["id"]
+
+            # Step 3: Send the prompt as a message
+            message_data = {
+                "parts": [{"type": "text", "text": prompt}],
+                "model": {
+                    "providerID": self.config.provider
+                    if hasattr(self.config, "provider")
+                    else "anthropic",
+                    "modelID": getattr(
+                        self.config, "model", "claude-3-5-sonnet-20241022"
+                    ),
+                },
+            }
+
+            message_response = requests.post(
+                f"{opencode_server_url}/session/{session_id}/message",
+                json=message_data,
+                timeout=self.config.timeout,
+            )
+
+            if message_response.status_code != 201:
+                raise Exception(f"Failed to send message: {message_response.text}")
+
+            # Extract response text from the message
+            message_data = message_response.json()
+            response_text = ""
+
+            # The response contains 'parts' array with the AI response
+            if "parts" in message_data:
+                for part in message_data["parts"]:
+                    if part.get("type") == "text":
+                        response_text += part.get("text", "")
 
             response_time = int((time.time() - start_time) * 1000)
 
-            if result.returncode != 0:
-                raise Exception(f"OpenCode CLI failed: {result.stderr}")
-
-            response_text = result.stdout.strip()
+            # Clean up session
+            try:
+                requests.delete(
+                    f"{opencode_server_url}/session/{session_id}", timeout=5
+                )
+            except:
+                pass  # Ignore cleanup errors
 
             metadata = {
                 "tokens_used": len(prompt.split()) + len(response_text.split()),
                 "response_time_ms": response_time,
-                "model": "opencode-cli",
+                "model": "opencode-server",
+                "server_url": opencode_server_url,
+                "session_id": session_id,
             }
 
             return response_text, metadata
 
         except subprocess.TimeoutExpired:
-            raise Exception(f"OpenCode CLI timed out after {self.config.timeout}s")
+            raise Exception(f"OpenCode Server timed out after {self.config.timeout}s")
+        except Exception as e:
+            raise Exception(f"OpenCode Server error: {str(e)}")
 
 
 class DeepSeekProvider(LLMProvider):
