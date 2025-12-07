@@ -1,18 +1,34 @@
 {
-  "name": "@ferg-cod3s/engineering-system",
-  "version": "0.2.0",
-  "description": "Compounding engineering system for Claude Code and OpenCode. Shared agents, commands, skills, and plugin development tools.",
+  "name": "@ferg-engineering/system",
+  "version": "0.3.0",
+  "description": "Ferg Engineering System: AI-powered engineering automation with comprehensive research, validation, and deployment workflows",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
     "ferg-install": "scripts/install.js"
   },
   "files": [
-    "dist/",
-    "scripts/",
-    "README.md",
-    "LICENSE"
+    "dist",
+    ".opencode",
+    ".claude",
+    ".claude-plugin"
   ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js"
+    },
+    "./agents": {
+      "import": "./dist/agents/index.js"
+    }
+  },
+  "homepage": "https://github.com/v1truv1us/ferg-engineering-system",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/v1truv1us/ferg-engineering-system"
+  },
+  "bugs": {
+    "url": "https://github.com/v1truv1us/ferg-engineering-system/issues"
+  },
   "scripts": {
     "build": "bun run build.ts",
     "build:watch": "bun run build.ts --watch",
@@ -31,54 +47,36 @@
     "test:watch": "bun test --watch",
     "test:coverage": "bun test --coverage",
     "install:global": "bun scripts/install.js --global",
-    "install:local": "bun scripts/install.js --local"
+    "install:local": "bun scripts/install.js --local",
+    "eval:run": "bun run benchmarks/evaluation/runner.ts",
+    "eval:dry": "DRY_RUN=true bun run benchmarks/evaluation/runner.ts"
   },
   "publishConfig": {
-    "access": "public",
-    "provenance": true,
-    "registry": "https://npm.pkg.github.com"
+    "access": "public"
   },
   "keywords": [
+    "ai",
     "engineering",
-    "workflow",
-    "agents",
-    "claude-code",
-    "opencode",
-    "code-review",
-    "planning",
+    "automation",
+    "research",
+    "validation",
     "deployment",
-    "seo",
-    "optimization",
-    "productivity",
-    "plugin-development",
-    "extension-tools",
-    "ai-assistance",
-    "cross-platform"
+    "agents",
+    "opencode"
   ],
-  "devDependencies": {
-    "bun-types": "latest",
-    "@types/node": "^20.0.0"
-  },
-  "author": {
-    "name": "v1truv1us",
-    "email": "contact@v1truv1us.dev",
-    "url": "https://github.com/v1truv1us"
-  },
+  "author": "John Ferguson",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/v1truv1us/ferg-engineering-system"
-  },
-  "bugs": {
-    "url": "https://github.com/v1truv1us/ferg-engineering-system/issues"
-  },
-  "homepage": "https://github.com/v1truv1us/ferg-engineering-system#readme",
-  "engines": {
-    "bun": ">=1.0.0"
-  },
   "dependencies": {
-    "commander": "^14.0.2",
-    "glob": "^13.0.0",
+    "@opencode-ai/sdk": "^1.0.134",
     "yaml": "^2.8.2"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/node": "^22.10.5",
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "bun": ">=1.0.0"
   }
 }
