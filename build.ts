@@ -273,6 +273,16 @@ async function buildOpenCode(): Promise<void> {
     await writeFile(dest, transformed)
   }
   console.log(`   ✓ ${agentFiles.length} agents`)
+
+  // Copy opencode.jsonc configuration
+  const opencodeConfigSrc = join(ROOT, ".opencode", "opencode.jsonc")
+  const opencodeConfigDest = join(OPENCODE_DIR, "opencode.jsonc")
+  if (existsSync(opencodeConfigSrc)) {
+    await copyFile(opencodeConfigSrc, opencodeConfigDest)
+    console.log(`   ✓ configuration copied`)
+  } else {
+    console.log(`   ⚠️  configuration not found`)
+  }
 }
 
 /**
