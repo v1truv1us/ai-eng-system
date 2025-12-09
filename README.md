@@ -19,16 +19,21 @@ claude plugin add https://github.com/v1truv1us/ferg-engineering-system
 
 ### For OpenCode (Global - Recommended)
 
-**Option 1: Shell Script**
+**Option 1: npm Package (Recommended)**
+```bash
+npm install -g @v1truv1us/ai-eng-system --registry https://npm.pkg.github.com
+```
+
+**Option 2: Shell Script**
 ```bash
 git clone https://github.com/v1truv1us/ferg-engineering-system
 cd ferg-engineering-system
-./setup-global.sh  # Installs to ~/.config/opencode with ferg/ namespace
+./setup-global.sh  # Installs to ~/.config/opencode with ai-eng/ namespace
 ```
 
-**Option 2: Bun Package** (Coming Soon)
+**Option 3: Bun Package**
 ```bash
-bun install -g @v1truv1us/engineering-system
+bun install -g @v1truv1us/ai-eng-system
 ```
 
 ### For OpenCode (Project-Local)
@@ -45,7 +50,7 @@ cd ferg-engineering-system
 | Platform | Installation | Commands | Agents | Example Usage |
 |----------|-------------|----------|--------|---------------|
 | **Claude Code** | `/plugin marketplace add v1truv1us/ferg-marketplace`<br>`/plugin install ferg-engineering@v1truv1us` | `/plan`, `/review`, `/optimize`, `/seo`, `/deploy`, `/compound`, `/recursive-init`, `/work`, `/create-plugin`, `/create-agent`, `/create-command`, `/create-skill` | N/A | `/plan "Add user authentication"` or `/create-plugin "database migration tool"` |
-| **OpenCode** | `bun install -g @v1truv1us/engineering-system` | `/ferg/plan`, `/ferg/review`, `/ferg/optimize`, etc., `/ferg/create-plugin`, `/ferg/create-agent`, `/ferg/create-command`, `/ferg/create-skill`, `/ferg/create-tool` | `ferg/architect-advisor`, `ferg/frontend-reviewer`, `ferg/seo-specialist`, `ferg/prompt-optimizer`, `ferg/agent-creator`, `ferg/command-creator`, `ferg/skill-creator`, `ferg/tool-creator`, `ferg/plugin-validator` | `/ferg/optimize 'Fix this slow query'` or `Use ferg/architect-advisor to evaluate...` or `/ferg/create-agent "code reviewer"` |
+| **OpenCode** | `npm install -g @v1truv1us/ai-eng-system --registry https://npm.pkg.github.com` | `/ai-eng/plan`, `/ai-eng/review`, `/ai-eng/optimize`, etc., `/ai-eng/create-plugin`, `/ai-eng/create-agent`, `/ai-eng/create-command`, `/ai-eng/create-skill`, `/ai-eng/create-tool` | `ai-eng/architect-advisor`, `ai-eng/frontend-reviewer`, `ai-eng/seo-specialist`, `ai-eng/prompt-optimizer`, `ai-eng/agent-creator`, `ai-eng/command-creator`, `ai-eng/skill-creator`, `ai-eng/tool-creator`, `ai-eng/plugin-validator` | `/ai-eng/optimize 'Fix this slow query'` or `Use ai-eng/architect-advisor to evaluate...` or `/ai-eng/create-agent "code reviewer"` |
 
 ## Architecture (v2.0)
 
@@ -98,7 +103,7 @@ claude plugin add https://github.com/v1truv1us/ferg-engineering-system
 
 **OpenCode (global install):**
 ```bash
-./setup-global.sh  # Installs to ~/.config/opencode with ferg/ namespace
+./setup-global.sh  # Installs to ~/.config/opencode with ai-eng/ namespace
 ```
 
 **OpenCode (project-local):**
@@ -133,15 +138,15 @@ claude plugin add https://github.com/v1truv1us/ferg-engineering-system
 
 | Agent | Description |
 |-------|-------------|
-| `ferg/architect-advisor` | System architecture decisions with trade-off analysis |
-| `ferg/frontend-reviewer` | Frontend code review specialist (React, TypeScript, a11y) |
-| `ferg/seo-specialist` | Technical & on-page SEO expert |
-| `ferg/prompt-optimizer` | Prompt enhancement using research-backed techniques |
-| `ferg/agent-creator` | AI-assisted agent generation for both platforms |
-| `ferg/command-creator` | AI-assisted command generation for both platforms |
-| `ferg/skill-creator` | AI-assisted skill creation with progressive disclosure |
-| `ferg/tool-creator` | AI-assisted custom tool creation for OpenCode |
-| `ferg/plugin-validator` | Validates plugin structure and best practices |
+| `ai-eng/architect-advisor` | System architecture decisions with trade-off analysis |
+| `ai-eng/frontend-reviewer` | Frontend code review specialist (React, TypeScript, a11y) |
+| `ai-eng/seo-specialist` | Technical & on-page SEO expert |
+| `ai-eng/prompt-optimizer` | Prompt enhancement using research-backed techniques |
+| `ai-eng/agent-creator` | AI-assisted agent generation for both platforms |
+| `ai-eng/command-creator` | AI-assisted command generation for both platforms |
+| `ai-eng/skill-creator` | AI-assisted skill creation with progressive disclosure |
+| `ai-eng/tool-creator` | AI-assisted custom tool creation for OpenCode |
+| `ai-eng/plugin-validator` | Validates plugin structure and best practices |
 
 ## Plugin Development System
 
