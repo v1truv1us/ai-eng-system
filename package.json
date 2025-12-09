@@ -1,5 +1,5 @@
 {
-  "name": "@ferg-cod3s/engineering-system",
+  "name": "@v1truv1us/ai-eng-system",
   "version": "0.2.1",
   "description": "Compounding engineering system for Claude Code and OpenCode. Shared agents, commands, skills, and plugin development tools.",
   "type": "module",
