@@ -8,49 +8,89 @@ A compounding engineering system for UnFergettable-Designs and v1truv1us. Provid
 
 **Option 1: Marketplace (Recommended)**
 ```bash
-/plugin marketplace add v1truv1us/ferg-marketplace
-/plugin install ferg-engineering@v1truv1us
+/plugin marketplace add v1truv1us/ai-eng-marketplace
+/plugin install ai-eng-system@v1truv1us
 ```
 
 **Option 2: Direct Repository**
 ```bash
-claude plugin add https://github.com/v1truv1us/ferg-engineering-system
+claude plugin add https://github.com/v1truv1us/ai-eng-system
 ```
 
 ### For OpenCode (Global - Recommended)
 
-**Option 1: npm Package (Recommended)**
+**Option 1: Shell Script (Local Build - Recommended)**
 ```bash
-npm install -g @v1truv1us/ai-eng-system --registry https://npm.pkg.github.com
+git clone https://github.com/v1truv1us/ai-eng-system
+cd ai-eng-system
+bun run build  # Build the system
+bun run install:global  # Install to ~/.config/opencode with ai-eng/ namespace
 ```
 
-**Option 2: Shell Script**
+**Option 2: Bun Package (Requires GitHub Packages Access)**
 ```bash
-git clone https://github.com/v1truv1us/ferg-engineering-system
-cd ferg-engineering-system
-./setup-global.sh  # Installs to ~/.config/opencode with ai-eng/ namespace
-```
+# Configure bun for GitHub Packages registry
+echo '[install.scopes]
+"@v1truv1us" = { url = "https://npm.pkg.github.com" }' >> ~/.bunfig.toml
 
-**Option 3: Bun Package**
-```bash
+# Authenticate with GitHub (requires GitHub CLI with packages scope)
+gh auth login
+
+# Install globally
 bun install -g @v1truv1us/ai-eng-system
+```
+
+**Option 3: npm Package (Requires GitHub Packages Access)**
+```bash
+# Configure npm for GitHub Packages
+npm config set @v1truv1us:registry https://npm.pkg.github.com
+
+# Install globally (requires GitHub authentication with packages scope)
+npm install -g @v1truv1us/ai-eng-system
 ```
 
 ### For OpenCode (Project-Local)
 ```bash
-git clone https://github.com/v1truv1us/ferg-engineering-system
-cd ferg-engineering-system
+git clone https://github.com/v1truv1us/ai-eng-system
+cd ai-eng-system
 ./setup.sh  # Creates symlinks in current project
 ```
 
 > **No Bun required for installation** - pre-built `dist/` is included. Bun only needed if you want to modify the system.
 
+## Troubleshooting
+
+### Authentication Issues with GitHub Packages
+
+If you encounter `403 Forbidden` errors when installing from GitHub Packages:
+
+1. **Token Scope Requirements:**
+   Your GitHub token needs `read:packages` permission. Standard GitHub CLI tokens may not include this scope.
+
+2. **Repository Access:**
+   You need read access to the `v1truv1us/ai-eng-system` repository.
+
+3. **Recommended Solution: Use Local Installation**
+   The shell script method (Option 1) works reliably and doesn't require special token permissions:
+   ```bash
+   git clone https://github.com/v1truv1us/ai-eng-system
+   cd ai-eng-system
+   bun run install:global
+   ```
+
+4. **For GitHub Packages Access:**
+   If you need to use the package registry, ensure your GitHub token has the `read:packages` scope. You may need to create a Personal Access Token with the appropriate permissions.
+
+### Registry Configuration
+
+Bun automatically uses the configuration from `~/.bunfig.toml`. For npm, the registry is configured per-scope.
+
 ## 📋 Quick Reference
 
 | Platform | Installation | Commands | Agents | Example Usage |
 |----------|-------------|----------|--------|---------------|
-| **Claude Code** | `/plugin marketplace add v1truv1us/ferg-marketplace`<br>`/plugin install ferg-engineering@v1truv1us` | `/plan`, `/review`, `/optimize`, `/seo`, `/deploy`, `/compound`, `/recursive-init`, `/work`, `/create-plugin`, `/create-agent`, `/create-command`, `/create-skill` | N/A | `/plan "Add user authentication"` or `/create-plugin "database migration tool"` |
-| **OpenCode** | `npm install -g @v1truv1us/ai-eng-system --registry https://npm.pkg.github.com` | `/ai-eng/plan`, `/ai-eng/review`, `/ai-eng/optimize`, etc., `/ai-eng/create-plugin`, `/ai-eng/create-agent`, `/ai-eng/create-command`, `/ai-eng/create-skill`, `/ai-eng/create-tool` | `ai-eng/architect-advisor`, `ai-eng/frontend-reviewer`, `ai-eng/seo-specialist`, `ai-eng/prompt-optimizer`, `ai-eng/agent-creator`, `ai-eng/command-creator`, `ai-eng/skill-creator`, `ai-eng/tool-creator`, `ai-eng/plugin-validator` | `/ai-eng/optimize 'Fix this slow query'` or `Use ai-eng/architect-advisor to evaluate...` or `/ai-eng/create-agent "code reviewer"` |
+| **Claude Code** | `/plugin marketplace add v1truv1us/ai-eng-marketplace`<br>`/plugin install ai-eng-system@v1truv1us` | `/ai-eng/plan`, `/ai-eng/review`, `/ai-eng/optimize`, `/ai-eng/seo`, `/ai-eng/deploy`, `/ai-eng/compound`, `/ai-eng/recursive-init`, `/ai-eng/work`, `/ai-eng/create-plugin`, `/ai-eng/create-agent`, `/ai-eng/create-command`, `/ai-eng/create-skill`, `/ai-eng/create-tool`, `/ai-eng/research`, `/ai-eng/context` | N/A | `/ai-eng/plan "Add user authentication"` or `/ai-eng/create-plugin "database migration tool"` |
+| **OpenCode** | `git clone https://github.com/v1truv1us/ai-eng-system`<br>`cd ai-eng-system && bun run install:global` | `/ai-eng/plan`, `/ai-eng/review`, `/ai-eng/optimize`, `/ai-eng/seo`, `/ai-eng/deploy`, `/ai-eng/compound`, `/ai-eng/recursive-init`, `/ai-eng/work`, `/ai-eng/create-plugin`, `/ai-eng/create-agent`, `/ai-eng/create-command`, `/ai-eng/create-skill`, `/ai-eng/create-tool`, `/ai-eng/research`, `/ai-eng/context` | `ai-eng/architect-advisor`, `ai-eng/frontend-reviewer`, `ai-eng/seo-specialist`, `ai-eng/prompt-optimizer`, `ai-eng/agent-creator`, `ai-eng/command-creator`, `ai-eng/skill-creator`, `ai-eng/tool-creator`, `ai-eng/plugin-validator`, `ai-eng/code-reviewer`, `ai-eng/database-optimizer`, `ai-eng/api-builder-enhanced`, `ai-eng/full-stack-developer`, `ai-eng/deployment-engineer`, `ai-eng/ml-engineer`, `ai-eng/security-scanner`, `ai-eng/performance-engineer`, `ai-eng/test-generator`, `ai-eng/monitoring-expert`, `ai-eng/cost-optimizer`, `ai-eng/infrastructure-builder`, `ai-eng/backend-architect`, `ai-eng/java-pro`, `ai-eng/ai-engineer` | `/ai-eng/optimize 'Fix this slow query'` or `Use ai-eng/architect-advisor to evaluate...` or `/ai-eng/create-agent "code reviewer"` |
 
 ## Architecture (v2.0)
 
@@ -78,6 +118,25 @@ dist/                      # 🚫 GENERATED - never edit directly
 - ✅ Automated transformation via `bun run build`
 - ✅ Easy to add future platforms
 
+## ✅ Installation Verification
+
+**Latest Installation:** Successfully installed globally using the local build method.
+
+**What was installed:**
+- ✅ **15 Commands** in `~/.config/opencode/command/ai-eng/`
+- ✅ **24 Agents** in `~/.config/opencode/agent/ai-eng/`
+- ✅ **Skills** in `~/.config/opencode/skills/`
+
+**Available Commands:**
+- `/ai-eng/plan`, `/ai-eng/review`, `/ai-eng/optimize`, `/ai-eng/seo`, `/ai-eng/deploy`
+- `/ai-eng/compound`, `/ai-eng/recursive-init`, `/ai-eng/work`, `/ai-eng/research`, `/ai-eng/context`
+- `/ai-eng/create-plugin`, `/ai-eng/create-agent`, `/ai-eng/create-command`, `/ai-eng/create-skill`, `/ai-eng/create-tool`
+
+**Available Agents:**
+- `ai-eng/architect-advisor`, `ai-eng/frontend-reviewer`, `ai-eng/seo-specialist`, `ai-eng/prompt-optimizer`
+- `ai-eng/code-reviewer`, `ai-eng/database-optimizer`, `ai-eng/api-builder-enhanced`, `ai-eng/full-stack-developer`
+- And 16 more specialized agents...
+
 ## Quick Start
 
 ### Prerequisites
@@ -91,19 +150,19 @@ dist/                      # 🚫 GENERATED - never edit directly
 
 **Build from source:**
 ```bash
-git clone https://github.com/v1truv1us/ferg-engineering-system
-cd ferg-engineering-system
+git clone https://github.com/v1truv1us/ai-eng-system
+cd ai-eng-system
 bun run build
 ```
 
 **Claude Code:**
 ```bash
-claude plugin add https://github.com/v1truv1us/ferg-engineering-system
+claude plugin add https://github.com/v1truv1us/ai-eng-system
 ```
 
 **OpenCode (global install):**
 ```bash
-./setup-global.sh  # Installs to ~/.config/opencode with ai-eng/ namespace
+bun run install:global  # Installs to ~/.config/opencode with ai-eng/ namespace
 ```
 
 **OpenCode (project-local):**
@@ -150,7 +209,7 @@ claude plugin add https://github.com/v1truv1us/ferg-engineering-system
 
 ## Plugin Development System
 
-The ferg-engineering-system now includes a comprehensive plugin development system that helps you create extensions for both Claude Code and OpenCode platforms.
+The ai-eng-system now includes a comprehensive plugin development system that helps you create extensions for both Claude Code and OpenCode platforms.
 
 ### Plugin-Dev Commands
 

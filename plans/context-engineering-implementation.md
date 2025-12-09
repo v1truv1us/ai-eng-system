@@ -6,7 +6,7 @@
 
 ## Overview
 
-Implementing context engineering patterns from Google's research and Claude Skills best practices to enhance ferg-engineering-system with:
+Implementing context engineering patterns from Google's research and Claude Skills best practices to enhance ai-eng-system with:
 
 1. **Session Management** - Persistent workbench state across conversations
 2. **Memory System** - Declarative/procedural memory with provenance tracking
@@ -24,7 +24,7 @@ Implementing context engineering patterns from Google's research and Claude Skil
 ## Architecture
 
 ```
-.ferg-context/                    # Local context storage (gitignored)
+.ai-eng-context/                    # Local context storage (gitignored)
 ├── sessions/
 │   ├── current.json              # Active session state
 │   └── archive/                  # Previous sessions

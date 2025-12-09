@@ -45,7 +45,120 @@ export class ContextRetriever {
     this.vectorManager = new VectorMemoryManager(config)
   }
 
-/**
+  /**
+   * Infer context from user queries automatically
+   */
+  private async inferContextFromQuery(query: string): Promise<void> {
+    if (!this.config.enableAutoInference) return
+
+    // Extract preferences from questions like "should I use X or Y?"
+    const preferencePatterns = [
+      /(?:should I|do you recommend|what about) ([\w\s]+) (?:or|vs|versus) ([\w\s]+)\?/i,
+      /I (?:prefer|like|want to use) ([\w\s]+)/i,
+      /(?:never|always|usually) ([\w\s]+)/i
+    ]
+
+    for (const pattern of preferencePatterns) {
+      const match = query.match(pattern)
+      if (match) {
+        const preference = match[1] || match[0]
+        await this.memoryManager.addMemory("declarative",
+          `User preference: ${preference}`,
+          {
+            source: "inferred",
+            context: `Inferred from query: "${query}"`,
+            tags: ["preference", "inferred"]
+          }
+        )
+        break
+      }
+    }
+  }
+
+  /**
+   * Infer context from conversation patterns
+   */
+  private async inferContextFromConversation(message: string, response: string): Promise<void> {
+    if (!this.config.enableAutoInference) return
+
+    // Extract technical decisions
+    const decisionPatterns = [
+      /(?:we decided|let's use|we're going with|chosen) ([\w\s]+(?:framework|library|tool|approach|pattern))/i,
+      /(?:implementing|building|creating) ([\w\s]+) using ([\w\s]+)/i
+    ]
+
+    for (const pattern of decisionPatterns) {
+      const match = message.match(pattern) || response.match(pattern)
+      if (match) {
+        const technology = match[1]
+        await this.memoryManager.addMemory("procedural",
+          `Using ${technology} for implementation`,
+          {
+            source: "inferred",
+            context: `Conversation context: "${message.substring(0, 100)}..."`,
+            tags: ["technology", "decision", "inferred"]
+          }
+        )
+        break
+      }
+    }
+
+    // Extract problem-solving patterns
+    if (message.includes("error") || message.includes("bug") || message.includes("issue")) {
+      await this.memoryManager.addMemory("episodic",
+        `Encountered issue: ${message.substring(0, 200)}...`,
+        {
+          source: "inferred",
+          context: "Problem-solving conversation",
+          tags: ["debugging", "issue", "inferred"]
+        }
+      )
+    }
+  }
+
+  /**
+   * Infer context from code changes
+   */
+  private async inferContextFromCode(filePath: string, changes: string): Promise<void> {
+    if (!this.config.enableAutoInference) return
+
+    // Extract framework/library usage patterns
+    const frameworkPatterns = {
+      "react": /import.*from ['"]react['"]/i,
+      "vue": /import.*from ['"]vue['"]/i,
+      "angular": /import.*from ['"]@angular['"]/i,
+      "express": /const.*=.*require\(['"]express['"]\)/i,
+      "fastify": /const.*=.*require\(['"]fastify['"]\)/i,
+      "typescript": /interface|type.*=.*\{/
+    }
+
+    for (const [framework, pattern] of Object.entries(frameworkPatterns)) {
+      if (pattern.test(changes)) {
+        await this.memoryManager.addMemory("declarative",
+          `Project uses ${framework}`,
+          {
+            source: "inferred",
+            context: `Detected in ${filePath}`,
+            tags: ["framework", "technology", "inferred"]
+          }
+        )
+      }
+    }
+
+    // Extract architectural patterns
+    if (changes.includes("middleware") || changes.includes("router")) {
+      await this.memoryManager.addMemory("procedural",
+        "Using middleware/router pattern",
+        {
+          source: "inferred",
+          context: `Code pattern in ${filePath}`,
+          tags: ["architecture", "pattern", "inferred"]
+        }
+      )
+    }
+  }
+
+  /**
    * Assemble context based on triggers
    */
   async assemble(triggers: ContextTrigger[]): Promise<AssembledContext> {
@@ -102,6 +215,25 @@ memoryType: "procedural"
         case "query":
           // Search memories for query with enhanced ranking
           const query = trigger.data.query as string
+
+          // Auto-infer context from query patterns
+          await this.inferContextFromQuery(query)
+          break
+
+        case "conversation_turn":
+          // Analyze conversation for implicit context
+          const message = trigger.data.message as string
+          const response = trigger.data.response as string
+
+          await this.inferContextFromConversation(message, response)
+          break
+
+        case "file_edit":
+          // Learn from code patterns and changes
+          const filePath = trigger.data.filePath as string
+          const changes = trigger.data.changes as string
+
+          await this.inferContextFromCode(filePath, changes)
           
           // Get all memories for ranking
           const allMemories = this.memoryManager.getAllMemories()
@@ -352,15 +484,19 @@ memoryType: "procedural"
 export async function createContextRetriever(
   config?: Partial<ContextConfig>
 ): Promise<ContextRetriever> {
-  const sessionManager = new SessionManager(config)
-  const memoryManager = new MemoryManager(config)
-  const skillLoader = new ProgressiveSkillLoader(config?.storagePath)
+  // Load configuration (merges defaults + project config + passed config)
+  const { loadConfig } = await import("./types")
+  const finalConfig = await loadConfig(config)
+
+  const sessionManager = new SessionManager(finalConfig)
+  const memoryManager = new MemoryManager(finalConfig)
+  const skillLoader = new ProgressiveSkillLoader(finalConfig.storagePath)
 
   await sessionManager.initialize()
   await memoryManager.initialize()
 
-  const retriever = new ContextRetriever(sessionManager, memoryManager, skillLoader, config)
-  
+  const retriever = new ContextRetriever(sessionManager, memoryManager, skillLoader, finalConfig)
+
   // Initialize vector manager
   await retriever.initializeVectorManager()
 

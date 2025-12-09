@@ -19,38 +19,46 @@ Content repository for agents and commands documentation.
 - Include practical examples and usage patterns
 
 ## Key Content
-**Agents:**
+
+### Original Ferg Engineering Agents
 - `architect-advisor.md` - System architecture guidance
 - `frontend-reviewer.md` - Frontend code review specialist
 - `prompt-optimizer.md` - Prompt enhancement techniques
 - `seo-specialist.md` - Technical SEO expertise
 
-**Imported CodeFlow Agents (Enhanced with Research-Backed Prompting):**
+### Imported CodeFlow Agents (Enhanced with Research-Backed Prompting)
 
-### Development & Architecture
+#### Development & Architecture
 - `backend-architect.md` - System design and architecture decisions
 - `database-optimizer.md` - Database performance and optimization
-- `security-scanner.md` - Security vulnerability detection
+- `infrastructure-builder.md` - Cloud infrastructure design
 - `api-builder-enhanced.md` - API development and documentation
 - `full-stack-developer.md` - End-to-end application development
 - `java-pro.md` - Java development with modern features
 
-### Quality & Testing
+#### Quality & Testing
 - `code-reviewer.md` - Comprehensive code quality assessment
 - `test-generator.md` - Automated test suite generation
+- `security-scanner.md` - Security vulnerability detection
 - `performance-engineer.md` - Application performance optimization
 
-### Operations & Infrastructure
-- `infrastructure-builder.md` - Cloud infrastructure design
-- `deployment-engineer.md` - Deployment automation and CI/CD
-- `monitoring-expert.md` - Observability and alerting
-- `cost-optimizer.md` - Cloud cost optimization
+#### DevOps & Deployment
+- `deployment-engineer.md` - CI/CD pipeline design and deployment automation
+- `monitoring-expert.md` - Observability, alerting, and system monitoring
+- `cost-optimizer.md` - Cloud cost optimization and resource efficiency
 
-### AI & Machine Learning
-- `ai-engineer.md` - AI integration and development
-- `ml-engineer.md` - Machine learning model development
+#### AI & Machine Learning
+- `ai-engineer.md` - AI integration and LLM application development
+- `ml-engineer.md` - Machine learning model development and deployment
 
-*All imported agents use maximum-level research-backed prompting techniques (+60-80% quality improvement) including expert personas, step-by-step reasoning, stakes language, and challenge framing.*
+#### Plugin Development
+- `agent-creator.md` - AI-assisted agent generation
+- `command-creator.md` - AI-assisted command generation
+- `skill-creator.md` - AI-assisted skill creation
+- `tool-creator.md` - AI-assisted custom tool creation
+- `plugin-validator.md` - Plugin structure validation and best practices
+
+*All agents use research-backed prompting techniques (+45-115% quality improvement) including expert personas, step-by-step reasoning, stakes language, and challenge framing.*
 
 **Commands:**
 - Mirrors `.claude/commands/` but with expanded documentation

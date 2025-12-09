@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 
 /**
- * Comprehensive test suite for ferg-engineering-system
+ * Comprehensive test suite for ai-eng-system
  * 
  * Tests:
  * - Build system functionality
@@ -14,13 +14,14 @@
  */
 
 import { describe, it, expect, beforeAll, afterAll, beforeEach, afterEach } from 'bun:test'
-import { build, validate } from '../build.ts'
-import { readFile, writeFile, mkdir, rm, existsSync } from 'fs/promises'
+import { readFile, writeFile, mkdir, rm } from 'fs/promises'
+import { existsSync } from 'fs'
 import { join, basename, dirname } from 'path'
 import { tmpdir } from 'os'
+import { spawn } from 'child_process'
 
 // Test utilities
-const TEST_ROOT = join(tmpdir(), `ferg-test-${Date.now()}`)
+const TEST_ROOT = join(tmpdir(), `ai-eng-test-${Date.now()}`)
 const CONTENT_DIR = join(TEST_ROOT, 'content')
 const DIST_DIR = join(TEST_ROOT, 'dist')
 const SKILLS_DIR = join(TEST_ROOT, 'skills')
@@ -232,8 +233,8 @@ Missing description field.
 
   describe('Build Process', () => {
     it('should build Claude Code plugin structure', async () => {
-      // Run build process
-      await build()
+      // Run build process in test directory
+      await runBuild()
       
       // Check Claude Code output
       const claudeDir = join(DIST_DIR, '.claude-plugin')
@@ -244,7 +245,7 @@ Missing description field.
       expect(existsSync(pluginJsonPath)).toBe(true)
       
       const pluginJson = JSON.parse(await readFile(pluginJsonPath, 'utf-8'))
-      expect(pluginJson.name).toBe('ferg-engineering')
+      expect(pluginJson.name).toBe('ai-eng-system')
       expect(pluginJson.version).toBe(MOCK_PACKAGE_JSON.version)
       
       // Check hooks.json
@@ -267,21 +268,21 @@ Missing description field.
     })
 
     it('should build OpenCode plugin structure', async () => {
-      await build()
+      await runBuild()
       
       // Check OpenCode output
       const opencodeDir = join(DIST_DIR, '.opencode')
       expect(existsSync(opencodeDir)).toBe(true)
       
       // Check commands
-      const commandsDir = join(opencodeDir, 'command', 'ferg')
+      const commandsDir = join(opencodeDir, 'command', 'ai-eng')
       expect(existsSync(commandsDir)).toBe(true)
-      
+
       const testCommandPath = join(commandsDir, 'test-command.md')
       expect(existsSync(testCommandPath)).toBe(true)
-      
+
       // Check agents
-      const agentsDir = join(opencodeDir, 'agent', 'ferg')
+      const agentsDir = join(opencodeDir, 'agent', 'ai-eng')
       expect(existsSync(agentsDir)).toBe(true)
       
       const testAgentPath = join(agentsDir, 'test-agent.md')
@@ -289,7 +290,7 @@ Missing description field.
     })
 
     it('should copy skills to dist', async () => {
-      await build()
+      await runBuild()
       
       const skillsDistDir = join(DIST_DIR, 'skills')
       expect(existsSync(skillsDistDir)).toBe(true)
@@ -301,9 +302,9 @@ Missing description field.
 
   describe('Content Transformation', () => {
     it('should transform commands to OpenCode table format', async () => {
-      await build()
+      await runBuild()
       
-      const opencodeCommandPath = join(DIST_DIR, '.opencode', 'command', 'ferg', 'test-command.md')
+      const opencodeCommandPath = join(DIST_DIR, '.opencode', 'command', 'ai-eng', 'test-command.md')
       const content = await readFile(opencodeCommandPath, 'utf-8')
       
       // Should contain table format
@@ -313,7 +314,7 @@ Missing description field.
     })
 
     it('should transform agents to OpenCode table format', async () => {
-      await build()
+      await runBuild()
       
       const opencodeAgentPath = join(DIST_DIR, '.opencode', 'agent', 'ferg', 'test-agent.md')
       const content = await readFile(opencodeAgentPath, 'utf-8')
@@ -325,7 +326,7 @@ Missing description field.
     })
 
     it('should preserve Claude Code YAML format', async () => {
-      await build()
+      await runBuild()
       
       const claudeCommandPath = join(DIST_DIR, '.claude-plugin', 'commands', 'test-command.md')
       const content = await readFile(claudeCommandPath, 'utf-8')
@@ -374,7 +375,7 @@ description: invalid yaml: unclosed "quote"
   describe('Performance', () => {
     it('should complete build within reasonable time', async () => {
       const startTime = Date.now()
-      await build()
+      await runBuild()
       const endTime = Date.now()
       
       // Should complete within 5 seconds for small test dataset
@@ -389,7 +390,7 @@ description: invalid yaml: unclosed "quote"
       }
       
       const startTime = Date.now()
-      await build()
+      await runBuild()
       const endTime = Date.now()
       
       // Should still complete within reasonable time
@@ -422,19 +423,24 @@ async function getMarkdownFiles(dir: string): Promise<string[]> {
   return files
 }
 
-// Mock the build process for testing
-async function build(): Promise<void> {
-  // This is a simplified version for testing
-  // In reality, we'd import and run the actual build function
-  const { build: actualBuild } = await import('../build.ts')
-  
-  // Override ROOT for testing
-  const originalDir = process.cwd()
-  process.chdir(TEST_ROOT)
-  
-  try {
-    await actualBuild()
-  } finally {
-    process.chdir(originalDir)
-  }
+// Function to run build script as subprocess
+async function runBuild(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    // Run build from project root, but set environment to use test directory
+    const buildProcess = spawn('bun', ['run', 'build.ts'], {
+      cwd: process.cwd(), // Run from project root
+      env: { ...process.env, TEST_ROOT }, // Pass test root if needed
+      stdio: 'inherit'
+    })
+
+    buildProcess.on('close', (code) => {
+      if (code === 0) {
+        resolve()
+      } else {
+        reject(new Error(`Build failed with code ${code}`))
+      }
+    })
+
+    buildProcess.on('error', reject)
+  })
 }

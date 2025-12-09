@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 
 /**
- * Test setup script for ferg-engineering-system
+ * Test setup script for ai-eng-system
  * 
  * Ensures testing environment is properly configured:
  * - Creates test directories
@@ -341,7 +341,7 @@ async function runQuickTest(): Promise<void> {
 }
 
 async function main(): Promise<void> {
-  console.log('🚀 Setting up test environment for ferg-engineering-system\n')
+  console.log('🚀 Setting up test environment for ai-eng-system\n')
   
   try {
     await createTestDirectories()

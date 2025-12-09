@@ -1,6 +1,6 @@
 #!/bin/bash
 # Setup script for Ferg Engineering System - Namespaced Global Installation
-# Builds from content/ and installs to ~/.config/opencode under ferg/ namespace
+# Builds from content/ and installs to ~/.config/opencode under ai-eng/ namespace
 
 set -euo pipefail
 
@@ -11,9 +11,9 @@ GLOBAL_DIR="${HOME}/.config/opencode"
 echo "🔧 Ferg Engineering System - Namespaced Global Install"
 echo "========================================================"
 echo ""
-echo "All components will be installed under the 'ferg/' namespace:"
-echo "  Commands: /ferg/plan, /ferg/review, /ferg/optimize, etc."
-echo "  Agents:   ferg/architect-advisor, ferg/prompt-optimizer, etc."
+echo "All components will be installed under the 'ai-eng/' namespace:"
+echo "  Commands: /ai-eng/plan, /ai-eng/review, /ai-eng/optimize, etc."
+echo "  Agents:   ai-eng/architect-advisor, ai-eng/prompt-optimizer, etc."
 echo ""
 
 # Check for npm installation option
@@ -55,27 +55,27 @@ else
 fi
 
 # Create namespaced directories
-mkdir -p "$GLOBAL_DIR/agent/ferg"
-mkdir -p "$GLOBAL_DIR/command/ferg"
+mkdir -p "$GLOBAL_DIR/agent/ai-eng"
+mkdir -p "$GLOBAL_DIR/command/ai-eng"
 mkdir -p "$GLOBAL_DIR/skills/prompting/incentive-prompting"
 mkdir -p "$GLOBAL_DIR/skills/devops"
 
-# Install ferg agents (namespaced)
-echo "📦 Installing ferg/ agents..."
-for agent in "$DIST_DIR/.opencode/agent/ferg"/*.md; do
+# Install ai-eng agents (namespaced)
+echo "📦 Installing ai-eng/ agents..."
+for agent in "$DIST_DIR/.opencode/agent/ai-eng"/*.md; do
   if [ -f "$agent" ]; then
-    cp "$agent" "$GLOBAL_DIR/agent/ferg/"
-    echo "   ✅ ferg/$(basename "$agent" .md)"
+    cp "$agent" "$GLOBAL_DIR/agent/ai-eng/"
+    echo "   ✅ ai-eng/$(basename "$agent" .md)"
   fi
 done
 
-# Install ferg commands (namespaced)
+# Install ai-eng commands (namespaced)
 echo ""
-echo "📦 Installing ferg/ commands..."
-for cmd in "$DIST_DIR/.opencode/command/ferg"/*.md; do
+echo "📦 Installing ai-eng/ commands..."
+for cmd in "$DIST_DIR/.opencode/command/ai-eng"/*.md; do
   if [ -f "$cmd" ]; then
-    cp "$cmd" "$GLOBAL_DIR/command/ferg/"
-    echo "   ✅ /ferg/$(basename "$cmd" .md)"
+    cp "$cmd" "$GLOBAL_DIR/command/ai-eng/"
+    echo "   ✅ /ai-eng/$(basename "$cmd" .md)"
   fi
 done
 
@@ -93,21 +93,21 @@ echo ""
 echo "========================================================"
 echo "✅ Namespaced install complete!"
 echo ""
-echo "Available commands (use with /ferg/ prefix):"
-echo "  /ferg/plan           - Create implementation plans"
-echo "  /ferg/review         - Multi-perspective code review"
-echo "  /ferg/deploy         - Deployment checklist + Coolify"
-echo "  /ferg/optimize       - Enhance prompts with research techniques"
-echo "  /ferg/seo            - SEO audit"
-echo "  /ferg/recursive-init - Recursive AGENTS.md initialization"
+echo "Available commands (use with /ai-eng/ prefix):"
+echo "  /ai-eng/plan           - Create implementation plans"
+echo "  /ai-eng/review         - Multi-perspective code review"
+echo "  /ai-eng/deploy         - Deployment checklist + Coolify"
+echo "  /ai-eng/optimize       - Enhance prompts with research techniques"
+echo "  /ai-eng/seo            - SEO audit"
+echo "  /ai-eng/recursive-init - Recursive AGENTS.md initialization"
 echo ""
-echo "Available agents (use with ferg/ prefix):"
-echo "  ferg/architect-advisor   - Architecture decisions"
-echo "  ferg/frontend-reviewer   - Frontend code review"
-echo "  ferg/seo-specialist      - SEO analysis"
-echo "  ferg/prompt-optimizer    - Prompt enhancement"
+echo "Available agents (use with ai-eng/ prefix):"
+echo "  ai-eng/architect-advisor   - Architecture decisions"
+echo "  ai-eng/frontend-reviewer   - Frontend code review"
+echo "  ai-eng/seo-specialist      - SEO analysis"
+echo "  ai-eng/prompt-optimizer    - Prompt enhancement"
 echo ""
 echo "Example usage in OpenCode:"
-echo "  /ferg/optimize 'Help me fix this database query'"
-echo "  'Use ferg/architect-advisor to evaluate microservices vs monolith'"
+echo "  /ai-eng/optimize 'Help me fix this database query'"
+echo "  'Use ai-eng/architect-advisor to evaluate microservices vs monolith'"
 echo ""

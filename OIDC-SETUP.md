@@ -19,8 +19,8 @@ OIDC (OpenID Connect) trusted publishing provides:
 
 ### Package Information
 - **Package**: `@v1truv1us/engineering-system`
-- **Repository**: `v1truv1us/ferg-engineering-system`
-- **Marketplace**: `v1truv1us/ferg-marketplace`
+- **Repository**: `v1truv1us/ai-eng-system`
+- **Marketplace**: `v1truv1us/ai-eng-marketplace`
 
 ## 🔧 Step 1: Configure npm Trusted Publishers
 
@@ -31,7 +31,7 @@ OIDC (OpenID Connect) trusted publishing provides:
 ### 1.2 Add GitHub Actions as Trusted Publisher
 Configure these settings:
 
-**GitHub Repository**: `v1truv1us/ferg-engineering-system`
+**GitHub Repository**: `v1truv1us/ai-eng-system`
 **Workflow Filename**: `.github/workflows/publish.yml`
 **Environment**: (optional) `production` (if using environments)
 **Branch Pattern**: `main` or `refs/tags/v*`
@@ -154,7 +154,7 @@ jobs:
         id: version-check
         run: |
           CURRENT_VERSION=$(node -p "require('./package.json').version")
-          PUBLISHED_VERSION=$(npm view @ferg-cod3s/engineering-system version 2>/dev/null || echo "0.0.0")
+          PUBLISHED_VERSION=$(npm view @v1truv1us/ai-eng-system version 2>/dev/null || echo "0.0.0")
           if [ "$CURRENT_VERSION" != "$PUBLISHED_VERSION" ]; then
             echo "should_publish=true" >> $GITHUB_OUTPUT
             echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
@@ -206,7 +206,7 @@ jobs:
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ferg-cod3s/ferg-marketplace
+          repository: v1truv1us/ai-eng-marketplace
           event-type: release
           client-payload: '{"version": "${{ github.event.release.tag_name }}", "repository": "${{ github.repository }}", "release_url": "${{ github.event.release.html_url }}"}'
 ```
@@ -217,7 +217,7 @@ Ensure your `package.json` includes proper publishing configuration:
 
 ```json
 {
-  "name": "@ferg-cod3s/engineering-system",
+  "name": "@v1truv1us/ai-eng-system",
   "version": "2.0.0",
   "description": "Compounding engineering system for Claude Code and OpenCode. Shared agents, commands, and skills.",
   "type": "module",
@@ -247,7 +247,7 @@ Ensure your `package.json` includes proper publishing configuration:
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ferg-cod3s/ferg-engineering-system.git"
+    "url": "https://github.com/v1truv1us/ai-eng-system.git"
   },
   "keywords": [
     "engineering",
@@ -278,7 +278,7 @@ Ensure your `package.json` includes proper publishing configuration:
 
 ### 4.1 Create Marketplace Repository
 ```bash
-gh repo create ferg-marketplace --public --description "Ferg Engineering System - GitHub Marketplace"
+gh repo create v1truv1us/ai-eng-marketplace --public --description "AI Engineering System - GitHub Marketplace"
 ```
 
 ### 4.2 Marketplace Configuration Files
@@ -294,7 +294,7 @@ gh repo create ferg-marketplace --public --description "Ferg Engineering System 
     "email": "contact@ferg-cod3s.dev",
     "url": "https://github.com/ferg-cod3s"
   },
-  "repository": "https://github.com/ferg-cod3s/ferg-marketplace",
+  "repository": "https://github.com/v1truv1us/ai-eng-marketplace",
   "license": "MIT",
   "plugins": [
     {
@@ -302,8 +302,8 @@ gh repo create ferg-marketplace --public --description "Ferg Engineering System 
       "description": "Compounding engineering system with shared agents, commands, and skills for Claude Code & OpenCode",
       "version": "2.0.0",
       "author": "ferg-cod3s",
-      "repository": "https://github.com/ferg-cod3s/ferg-engineering-system",
-      "homepage": "https://github.com/ferg-cod3s/ferg-engineering-system#readme",
+      "repository": "https://github.com/v1truv1us/ai-eng-system",
+      "homepage": "https://github.com/v1truv1us/ai-eng-system#readme",
       "license": "MIT",
       "keywords": [
         "engineering",
@@ -320,7 +320,7 @@ gh repo create ferg-marketplace --public --description "Ferg Engineering System 
       "sources": [
         {
           "type": "github",
-          "url": "https://github.com/ferg-cod3s/ferg-engineering-system"
+          "url": "https://github.com/v1truv1us/ai-eng-system"
         }
       ],
       "compatibility": {
@@ -383,7 +383,7 @@ jobs:
       - name: Checkout marketplace repo
         uses: actions/checkout@v4
         with:
-          repository: ferg-cod3s/ferg-marketplace
+          repository: v1truv1us/ai-eng-marketplace
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update marketplace.json
@@ -428,7 +428,7 @@ environments:
 
 ### 5.2 Branch Protection
 ```bash
-gh api repos/ferg-cod3s/ferg-engineering-system/branches/main/protection \
+gh api repos/v1truv1us/ai-eng-system/branches/main/protection \
   --method PUT \
   --field required_status_checks='{"strict":true,"contexts":["ci"]}' \
   --field enforce_admins=true \
@@ -460,7 +460,7 @@ git push origin v2.0.1-test
 ### 6.2 Verify Publishing
 1. Check npm package page for new version
 2. Verify provenance is attached (look for ✅ verified badge)
-3. Test installation: `npm i @ferg-cod3s/engineering-system@2.0.1-test`
+3. Test installation: `npm i @v1truv1us/ai-eng-system@2.0.1-test`
 
 ### 6.3 Debug Commands
 ```bash

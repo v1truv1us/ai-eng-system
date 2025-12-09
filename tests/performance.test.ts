@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 
 /**
- * Performance tests for ferg-engineering-system
+ * Performance tests for ai-eng-system
  * 
  * Tests system performance under various load conditions:
  * - Large file counts
@@ -17,9 +17,9 @@ import { join } from 'path'
 import { tmpdir } from 'os'
 import { performance } from 'perf_hooks'
 
-const TEST_ROOT = join(tmpdir(), `ferg-perf-${Date.now()}`)
+const TEST_ROOT = join(tmpdir(), `ai-eng-perf-${Date.now()}`)
 
-describe('Ferg Engineering System - Performance Tests', () => {
+describe('AI Engineering System - Performance Tests', () => {
   beforeAll(async () => {
     await mkdir(TEST_ROOT, { recursive: true })
   })

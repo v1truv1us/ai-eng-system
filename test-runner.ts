@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 
 /**
- * Test runner for ferg-engineering-system
+ * Test runner for ai-eng-system
  * 
  * Provides comprehensive testing with different test suites and reporting.
  * Usage:
@@ -130,7 +130,7 @@ ${failedSuites > 0 ?
 
 ---
 
-*This report was generated automatically by the ferg-engineering-system test runner.*
+*This report was generated automatically by the ai-eng-system test runner.*
 `
   
   writeFileSync('test-report.md', report)

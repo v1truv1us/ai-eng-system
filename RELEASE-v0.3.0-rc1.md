@@ -187,7 +187,7 @@ Special thanks to contributors who made Phase 3 possible:
 
 ```bash
 # Install the latest version
-bun install ferg-engineering-system@0.3.0-rc1
+bun install ai-eng-system@0.3.0-rc1
 
 # Verify installation
 bun run research --help
@@ -201,7 +201,7 @@ bun run research "test your setup"
 - **Usage Guide**: [PHASE-3-USAGE.md](./PHASE-3-USAGE.md)
 - **API Documentation**: [src/research/](../src/research/)
 - **Test Coverage**: `bun run test:coverage`
-- **Migration Issues**: [GitHub Issues](https://github.com/your-org/ferg-engineering-system/issues)
+- **Migration Issues**: [GitHub Issues](https://github.com/v1truv1us/ai-eng-system/issues)
 
 ---
 

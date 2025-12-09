@@ -6,8 +6,8 @@ This guide covers all installation methods for the Ferg Engineering System acros
 
 | Platform | Recommended Method | Commands |
 |----------|-------------------|----------|
-| **Claude Code** | Marketplace | `/plugin marketplace add v1truv1us/ferg-marketplace`<br>`/plugin install ferg-engineering@v1truv1us` |
-| **OpenCode** | GitHub Packages | `npm install -g @v1truv1us/engineering-system --registry https://npm.pkg.github.com` |
+| **Claude Code** | Marketplace | `/plugin marketplace add v1truv1us/ai-eng-marketplace`<br>`/plugin install ai-eng-system@v1truv1us` |
+| **OpenCode** | GitHub Packages | `npm install -g @v1truv1us/ai-eng-system --registry https://npm.pkg.github.com` |
 
 ## 📋 Detailed Installation Methods
 
@@ -15,8 +15,8 @@ This guide covers all installation methods for the Ferg Engineering System acros
 
 #### Option 1: Marketplace (Recommended)
 ```bash
-/plugin marketplace add v1truv1us/ferg-marketplace
-/plugin install ferg-engineering@v1truv1us
+/plugin marketplace add v1truv1us/ai-eng-marketplace
+/plugin install ai-eng-system@v1truv1us
 ```
 
 **Benefits:**
@@ -27,7 +27,7 @@ This guide covers all installation methods for the Ferg Engineering System acros
 
 #### Option 2: Direct Repository
 ```bash
-claude plugin add https://github.com/v1truv1us/ferg-engineering-system
+claude plugin add https://github.com/v1truv1us/ai-eng-system
 ```
 
 **Benefits:**
@@ -39,7 +39,7 @@ claude plugin add https://github.com/v1truv1us/ferg-engineering-system
 
 #### Option 1: GitHub Packages (Recommended)
 ```bash
-npm install -g @v1truv1us/engineering-system --registry https://npm.pkg.github.com
+npm install -g @v1truv1us/ai-eng-system --registry https://npm.pkg.github.com
 ```
 
 **Benefits:**
@@ -50,7 +50,7 @@ npm install -g @v1truv1us/engineering-system --registry https://npm.pkg.github.c
 
 #### Option 2: npm Package (Alternative)
 ```bash
-npm install -g @v1truv1us/engineering-system
+npm install -g @v1truv1us/ai-eng-system --registry https://npm.pkg.github.com
 ```
 
 **Benefits:**
@@ -61,9 +61,9 @@ npm install -g @v1truv1us/engineering-system
 
 #### Option 2: Shell Script
 ```bash
-git clone https://github.com/v1truv1us/ferg-engineering-system
-cd ferg-engineering-system
-./setup-global.sh
+git clone https://github.com/v1truv1us/ai-eng-system
+cd ai-eng-system
+bun run install:global
 ```
 
 **Benefits:**
@@ -74,9 +74,9 @@ cd ferg-engineering-system
 
 #### Option 3: Project-Local
 ```bash
-git clone https://github.com/v1truv1us/ferg-engineering-system
-cd ferg-engineering-system
-./setup.sh
+git clone https://github.com/v1truv1us/ai-eng-system
+cd ai-eng-system
+bun run install:local
 ```
 
 **Benefits:**
@@ -98,15 +98,18 @@ cd ferg-engineering-system
 ## 📦 What Gets Installed
 
 ### Claude Code
-- **Commands:** 8 slash commands (`/plan`, `/review`, `/optimize`, etc.)
-- **Location:** `~/.claude/plugins/ferg-engineering-system/`
+- **Commands:** 15 namespaced slash commands (`/ai-eng/plan`, `/ai-eng/review`, `/ai-eng/optimize`, `/ai-eng/research`, etc.)
+- **Agents:** 24 specialized agents
+- **Skills:** 4 skill packages (devops, prompting, research, plugin-dev)
+- **Location:** `~/.claude/plugins/ai-eng-system/`
 - **Format:** Markdown files with YAML frontmatter
 
 ### OpenCode
-- **Commands:** 8 namespaced commands (`/ferg/plan`, `/ferg/review`, etc.)
-- **Agents:** 4 specialized agents (`ferg/architect-advisor`, etc.)
-- **Skills:** 2 skill packages (prompting, devops)
+- **Commands:** 15 namespaced commands (`/ai-eng/plan`, `/ai-eng/review`, etc.)
+- **Agents:** 24 specialized agents (`ai-eng/architect-advisor`, etc.)
+- **Skills:** 4 skill packages (devops, prompting, research, plugin-dev)
 - **Location:** `~/.config/opencode/` (global) or `.opencode/` (local)
+- **Namespace:** `ai-eng/`
 
 ## 🛠️ Troubleshooting
 
@@ -118,18 +121,21 @@ cd ferg-engineering-system
 /plugin list
 
 # Reinstall if needed
-/plugin uninstall ferg-engineering@v1truv1us
-/plugin install ferg-engineering@v1truv1us
+/plugin uninstall ai-eng-system@v1truv1us
+/plugin install ai-eng-system@v1truv1us
 ```
 
 **"Command not found" in OpenCode**
 ```bash
 # Verify installation
-ls ~/.config/opencode/command/ferg/
-ls ~/.config/opencode/agent/ferg/
+ls ~/.config/opencode/command/ai-eng/
+ls ~/.config/opencode/agent/ai-eng/
+
+# Test a command
+/ai-eng/plan "test installation"
 
 # Reinstall if needed
-npm run install:global
+npm install -g @v1truv1us/ai-eng-system --registry https://npm.pkg.github.com
 # or
 ./setup-global.sh
 ```
@@ -137,7 +143,7 @@ npm run install:global
 **Permission errors**
 ```bash
 # For npm global installs
-npm install -g @v1truv1us/engineering-system --unsafe-perm
+npm install -g @v1truv1us/ai-eng-system --unsafe-perm --registry https://npm.pkg.github.com
 
 # For shell scripts
 chmod +x setup*.sh
@@ -149,7 +155,7 @@ chmod +x setup*.sh
 curl -fsSL https://bun.sh/install | bash
 
 # Or use npm instead
-npm install -g @v1truv1us/engineering-system
+npm install -g @v1truv1us/ai-eng-system --registry https://npm.pkg.github.com
 ```
 
 ### Verification
@@ -168,7 +174,7 @@ After installation, verify everything works:
 **OpenCode:**
 ```bash
 # Test a command
-/ferg/plan "test installation"
+/ai-eng/plan "test installation"
 
 # Use verification script
 ./verify-install.sh
@@ -178,17 +184,17 @@ After installation, verify everything works:
 
 ### Claude Code (Marketplace)
 ```bash
-/plugin update ferg-engineering@v1truv1us
+/plugin update ai-eng-system@v1truv1us
 ```
 
 ### OpenCode (GitHub Packages)
 ```bash
-npm update -g @v1truv1us/engineering-system --registry https://npm.pkg.github.com
+npm update -g @v1truv1us/ai-eng-system --registry https://npm.pkg.github.com
 ```
 
 ### OpenCode (npm Alternative)
 ```bash
-npm update -g @v1truv1us/engineering-system
+npm update -g @v1truv1us/ai-eng-system --registry https://npm.pkg.github.com
 ```
 
 ### Manual Updates
@@ -218,9 +224,9 @@ git pull origin main
 - name: Install Ferg Engineering
   run: |
     if command -v claude &> /dev/null; then
-claude plugin add https://github.com/v1truv1us/ferg-engineering-system
+      claude plugin add https://github.com/v1truv1us/ai-eng-system
     else
-      npm install -g @v1truv1us/engineering-system
+      npm install -g @v1truv1us/ai-eng-system --registry https://npm.pkg.github.com
     fi
 ```
 

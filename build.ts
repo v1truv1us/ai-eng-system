@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 /**
- * Build script for ferg-engineering-system
+ * Build script for ai-eng-system
  * 
  * Transforms canonical content from content/ into platform-specific formats:
  * - dist/.claude-plugin/ for Claude Code
@@ -184,10 +184,10 @@ async function buildClaudePlugin(): Promise<void> {
   const commands = commandFiles.map(file => `./commands/${basename(file)}`)
 
   const pluginJson = {
-    name: "ferg-engineering",
+    name: "ai-eng-system",
     version: packageJson.version,
-    description: "Compounding engineering system for Claude Code",
-    author: "ferg-cod3s",
+    description: "AI Engineering System with context engineering and research orchestration for Claude Code",
+    author: "v1truv1us",
     license: "MIT",
     commands: commands
   }
@@ -202,7 +202,7 @@ async function buildClaudePlugin(): Promise<void> {
     hooks: {
       SessionStart: [
         {
-          description: "Initialize ferg-engineering-system on session start",
+          description: "Initialize ai-eng-system on session start",
           hooks: [
             {
               type: "notification",
@@ -307,7 +307,7 @@ async function copySkills(): Promise<void> {
 async function build(): Promise<void> {
   const startTime = Date.now()
   
-  console.log("\n🚀 Building ferg-engineering-system...\n")
+   console.log("\n🚀 Building ai-eng-system...\n")
 
   // Clean dist
   if (existsSync(DIST_DIR)) {

@@ -3,7 +3,7 @@
 **Date**: December 5, 2025  
 **Version**: 0.2.0  
 **Status**: Released ✅  
-**GitHub Release**: https://github.com/v1truv1us/ferg-engineering-system/releases/tag/v0.2.0
+**GitHub Release**: https://github.com/v1truv1us/ai-eng-system/releases/tag/v0.2.0
 
 ---
 
@@ -158,7 +158,7 @@ This release enhances the `/plan` and `/work` commands to support **systematic, 
 
 ### GitHub Release
 
-**URL**: https://github.com/v1truv1us/ferg-engineering-system/releases/tag/v0.2.0
+**URL**: https://github.com/v1truv1us/ai-eng-system/releases/tag/v0.2.0
 
 **Details**:
 - Title: v0.2.0: Enhanced /plan and /work Commands
@@ -174,20 +174,20 @@ This release enhances the `/plan` and `/work` commands to support **systematic, 
 ### NPM
 
 ```bash
-npm install @ferg-cod3s/engineering-system@0.2.0
+npm install @v1truv1us/ai-eng-system@0.2.0 --registry https://npm.pkg.github.com
 ```
 
 ### Bun
 
 ```bash
-bun add @ferg-cod3s/engineering-system@0.2.0
+bun add @v1truv1us/ai-eng-system@0.2.0 --registry https://npm.pkg.github.com
 ```
 
 ### From Source
 
 ```bash
-git clone https://github.com/v1truv1us/ferg-engineering-system.git
-cd ferg-engineering-system
+git clone https://github.com/v1truv1us/ai-eng-system.git
+cd ai-eng-system
 git checkout v0.2.0
 npm install
 npm run build
@@ -427,6 +427,6 @@ This project is licensed under the MIT License. See [LICENSE](./LICENSE) for det
 
 ## 🎉 Thank You
 
-Thank you for using ferg-engineering-system! We're excited about these enhancements and look forward to your feedback.
+Thank you for using ai-eng-system! We're excited about these enhancements and look forward to your feedback.
 
 **Happy coding!** 🚀

@@ -7,7 +7,7 @@
 
 ## Executive Summary
 
-The ferg-engineering-system v0.2.0 is a **specification and documentation system**. To make it production-ready, we need to implement the **execution engines** that actually perform the operations described in the documentation.
+The ai-eng-system v0.2.0 is a **specification and documentation system**. To make it production-ready, we need to implement the **execution engines** that actually perform the operations described in the documentation.
 
 This roadmap outlines a 7-week implementation plan to build:
 1. **Core Execution Engine** - Task parsing, execution, quality gates

@@ -67,12 +67,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/v1truv1us/ferg-engineering-system"
+    "url": "https://github.com/v1truv1us/ai-eng-system"
   },
   "bugs": {
-    "url": "https://github.com/v1truv1us/ferg-engineering-system/issues"
+    "url": "https://github.com/v1truv1us/ai-eng-system/issues"
   },
-  "homepage": "https://github.com/v1truv1us/ferg-engineering-system#readme",
+  "homepage": "https://github.com/v1truv1us/ai-eng-system#readme",
   "engines": {
     "bun": ">=1.0.0"
   },

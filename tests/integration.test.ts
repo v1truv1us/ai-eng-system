@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 
 /**
- * Integration tests for ferg-engineering-system
+ * Integration tests for ai-eng-system
  * 
  * Tests real-world scenarios and end-to-end workflows:
  * - Complete build process
@@ -40,7 +40,7 @@ describe('Ferg Engineering System - Integration Tests', () => {
     it('should build entire project successfully', () => {
       const result = execSync('bun run build', { encoding: 'utf-8', cwd: TEST_ROOT })
       
-      expect(result).toContain('Building ferg-engineering-system')
+      expect(result).toContain('Building ai-eng-system')
       expect(result).toContain('Build complete')
       expect(result).toContain('Output: dist/')
     })
@@ -384,7 +384,7 @@ description: invalid: yaml: structure: unclosed
       
       expect(hooksJson.hooks).toBeDefined()
       expect(hooksJson.hooks.SessionStart).toBeDefined()
-      expect(hooksJson.hooks.SessionStart[0].description).toContain('Initialize ferg-engineering-system')
+      expect(hooksJson.hooks.SessionStart[0].description).toContain('Initialize ai-eng-system')
     })
 
     it('should copy marketplace.json if exists', async () => {
@@ -400,7 +400,7 @@ description: invalid: yaml: structure: unclosed
 
 // Helper function to copy project structure
 async function copyProjectStructure(): Promise<void> {
-  const originalRoot = '/home/vitruvius/git/ferg-engineering-system'
+   const originalRoot = '/home/vitruvius/git/ai-eng-system'
   
   // Copy essential files and directories
   const essentialItems = [

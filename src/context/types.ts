@@ -135,7 +135,7 @@ export interface LoadedSkill {
 export type RetrievalPattern = 'push' | 'pull' | 'hybrid'
 
 export interface ContextTrigger {
-  type: 'session_start' | 'file_open' | 'command' | 'query' | 'task'
+  type: 'session_start' | 'file_open' | 'command' | 'query' | 'task' | 'conversation_turn' | 'file_edit'
   pattern: RetrievalPattern
   data: Record<string, unknown>
 }
@@ -174,15 +174,44 @@ export interface ContextConfig {
   enableEmbeddings: boolean
   /** Default skill tier to load */
   defaultSkillTier: SkillTier
+  /** Enable automatic context inference from conversations and actions */
+  enableAutoInference: boolean
 }
 
 export const DEFAULT_CONFIG: ContextConfig = {
-  storagePath: '.ferg-context',
+  storagePath: '.ai-context',
   maxMemoriesPerType: 100,
   sessionArchiveDays: 30,
   confidenceDecayRate: 0.05,
   enableEmbeddings: false,
-  defaultSkillTier: 1
+  defaultSkillTier: 1,
+  enableAutoInference: true  // Enable automatic inference by default
+}
+
+/**
+ * Load configuration from .ai-context/config.json if it exists
+ */
+export async function loadConfig(customConfig?: Partial<ContextConfig>): Promise<ContextConfig> {
+  const config = { ...DEFAULT_CONFIG, ...customConfig }
+
+  try {
+    // Try to load project-specific config
+    const { readFile } = await import("fs/promises")
+    const { existsSync } = await import("fs")
+    const { join } = await import("path")
+
+    const configPath = join(config.storagePath, "config.json")
+    if (existsSync(configPath)) {
+      const configContent = await readFile(configPath, "utf-8")
+      const projectConfig = JSON.parse(configContent)
+      return { ...config, ...projectConfig }
+    }
+  } catch (error) {
+    // Ignore config loading errors, use defaults
+    console.warn("Could not load context config, using defaults:", error)
+  }
+
+  return config
 }
 
 // ============================================================================

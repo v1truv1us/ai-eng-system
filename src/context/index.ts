@@ -33,7 +33,7 @@ export type {
   ContextEventHandler
 } from "./types"
 
-export { DEFAULT_CONFIG } from "./types"
+export { DEFAULT_CONFIG, loadConfig } from "./types"
 
 // Session Manager
 export { SessionManager, getSessionManager } from "./session"

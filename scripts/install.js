@@ -13,6 +13,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const packageRoot = path.dirname(__dirname);
 
+// Namespace configuration for OpenCode installations
+const NAMESPACE_PREFIX = "ai-eng";
+
 // Parse command line arguments
 const args = process.argv.slice(2);
 const isGlobal = args.includes('--global');

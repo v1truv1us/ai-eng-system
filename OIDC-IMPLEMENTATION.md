@@ -13,20 +13,20 @@
 #### Claude Code
 ```bash
 # Marketplace (Recommended)
-/plugin marketplace add ferg-cod3s/ferg-marketplace
-/plugin install ferg-engineering@ferg-cod3s
+/plugin marketplace add v1truv1us/ai-eng-marketplace
+/plugin install ai-eng-system@v1truv1us
 
 # Direct Repository (Still works)
-claude plugin add https://github.com/ferg-cod3s/ferg-engineering-system
+claude plugin add https://github.com/v1truv1us/ai-eng-system
 ```
 
 #### OpenCode
 ```bash
 # npm Package (Recommended)
-npm install -g @ferg-cod3s/engineering-system
+npm install -g @v1truv1us/ai-eng-system --registry https://npm.pkg.github.com
 
 # Shell Script (Enhanced)
-./setup-global.sh  # Now offers npm choice
+bun run install:global  # Now offers npm choice
 ```
 
 ### 🔧 GitHub Actions Workflows
@@ -50,7 +50,7 @@ npm install -g @ferg-cod3s/engineering-system
 1. **[INSTALLATION.md](INSTALLATION.md)** - Complete installation guide with troubleshooting
 2. **[OIDC-SETUP.md](OIDC-SETUP.md)** - Comprehensive OIDC configuration guide
 3. **Enhanced README.md** - Updated with all installation methods
-4. **Marketplace Repository** - Ready for deployment at `ferg-cod3s/ferg-marketplace`
+4. **Marketplace Repository** - Ready for deployment at `v1truv1us/ai-eng-marketplace`
 
 ### 🛡️ Security Enhancements
 
@@ -63,17 +63,17 @@ npm install -g @ferg-cod3s/engineering-system
 ## 🎯 Next Steps for Deployment
 
 ### 1. Configure npm Trusted Publishers
-1. Visit: https://www.npmjs.com/package/@ferg-cod3s/engineering-system/access
+1. Visit: https://www.npmjs.com/package/@v1truv1us/ai-eng-system/access
 2. Add GitHub Actions as trusted publisher:
-   - Repository: `ferg-cod3s/ferg-engineering-system`
+   - Repository: `v1truv1us/ai-eng-system`
    - Workflow: `.github/workflows/publish.yml`
    - Branch pattern: `refs/tags/v*`
 
 ### 2. Deploy Marketplace Repository
 ```bash
-cd /tmp/ferg-marketplace-oidc
-gh repo create ferg-cod3s/ferg-marketplace --public
-git remote add origin git@github.com:ferg-cod3s/ferg-marketplace.git
+cd /tmp/ai-eng-marketplace
+gh repo create v1truv1us/ai-eng-marketplace --public
+git remote add origin git@github.com:v1truv1us/ai-eng-marketplace.git
 git push -u origin master
 git branch -m master main
 git push origin main
@@ -108,7 +108,7 @@ git push origin claude/ferg-engineering-scaffold-01S8XxGkhKtLp4hzpbjJsfcw
 ## 🎁 Final Architecture
 
 ```
-ferg-engineering-system/
+ai-eng-system/
 ├── .github/workflows/     # Automated publishing
 │   ├── publish.yml         # Tag-based publishing
 │   ├── auto-publish.yml     # Auto-publish from main

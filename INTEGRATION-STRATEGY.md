@@ -74,7 +74,7 @@ Select 20-30 high-impact agents from CodeFlow that complement Ferg's existing ca
 
 # Configuration
 CODEFLOW_ENHANCED_DIR="/home/vitruvius/git/codeflow/enhanced-agents"
-FERG_CONTENT_DIR="/home/vitruvius/git/ferg-engineering-system/content/agents"
+AI_ENG_CONTENT_DIR="/home/vitruvius/git/ai-eng-system/content/agents"
 SELECTED_AGENTS=(
   "development/backend_architect.md"
   "development/database_optimizer.md"

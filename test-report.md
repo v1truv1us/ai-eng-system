@@ -22,4 +22,4 @@ Generated: 2025-12-05T18:25:00.533Z
 
 ---
 
-*This report was generated automatically by the ferg-engineering-system test runner.*
+*This report was generated automatically by the ai-eng-system test runner.*

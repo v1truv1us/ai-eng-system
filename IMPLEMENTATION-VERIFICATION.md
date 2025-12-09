@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-This document verifies what the ferg-engineering-system v0.2.0 implementation actually does versus what was documented.
+This document verifies what the ai-eng-system v0.2.0 implementation actually does versus what was documented.
 
 ---
 
@@ -20,7 +20,7 @@ This document verifies what the ferg-engineering-system v0.2.0 implementation ac
 
 **Verification**:
 ```bash
-ls ~/.config/opencode/command/ferg/ | wc -l
+ls ~/.config/opencode/command/ai-eng/ | wc -l
 # Result: 18 items (15 commands + . + ..)
 ```
 
@@ -32,8 +32,8 @@ ls ~/.config/opencode/command/ferg/ | wc -l
 
 **Evidence**:
 - Installation script output shows all components installed
-- Files present in ~/.config/opencode/command/ferg/
-- Files present in ~/.config/opencode/agent/ferg/
+- Files present in ~/.config/opencode/command/ai-eng/
+- Files present in ~/.config/opencode/agent/ai-eng/
 - Skills directory populated
 
 ---
@@ -57,7 +57,7 @@ npm run build
 **Evidence**:
 ```
 ✅ Build complete in 64ms
-   Output: /home/vitruvius/git/ferg-engineering-system/dist/
+   Output: /home/vitruvius/git/ai-eng-system/dist/
 ```
 
 ---
@@ -68,7 +68,7 @@ npm run build
 
 **Verification**:
 ```bash
-head -10 ~/.config/opencode/command/ferg/plan.md
+head -10 ~/.config/opencode/command/ai-eng/plan.md
 # Result: Shows table format with description and agent metadata
 ```
 
@@ -91,11 +91,11 @@ head -10 ~/.config/opencode/command/ferg/plan.md
 
 ### 4. Plan Command Content
 
-**Claim**: "/ferg/plan creates atomic task decomposition with 5-phase planning"
+**Claim**: "/ai-eng/plan creates atomic task decomposition with 5-phase planning"
 
 **Verification**:
 ```bash
-grep -c "Phase" ~/.config/opencode/command/ferg/plan.md
+grep -c "Phase" ~/.config/opencode/command/ai-eng/plan.md
 # Result: Multiple phase references found
 ```
 
@@ -116,13 +116,13 @@ grep -c "Phase" ~/.config/opencode/command/ferg/plan.md
 
 ### 5. Work Command Content
 
-**Claim**: "/ferg/work has 4-phase execution with 6 sequential quality gates"
+**Claim**: "/ai-eng/work has 4-phase execution with 6 sequential quality gates"
 
 **Verification**:
 ```bash
-grep -c "Phase" ~/.config/opencode/command/ferg/work.md
+grep -c "Phase" ~/.config/opencode/command/ai-eng/work.md
 # Result: Multiple phase references found
-grep -c "Gate" ~/.config/opencode/command/ferg/work.md
+grep -c "Gate" ~/.config/opencode/command/ai-eng/work.md
 # Result: Multiple gate references found
 ```
 
@@ -151,9 +151,9 @@ grep -c "Gate" ~/.config/opencode/command/ferg/work.md
 
 **Verification**:
 ```bash
-ls ~/.config/opencode/command/ferg/ | wc -l
+ls ~/.config/opencode/command/ai-eng/ | wc -l
 # Result: 18 items (15 commands)
-ls ~/.config/opencode/agent/ferg/ | wc -l
+ls ~/.config/opencode/agent/ai-eng/ | wc -l
 # Result: 24 agents
 ```
 
@@ -188,7 +188,7 @@ gh release view v0.2.0
 
 **Evidence**:
 - Tag: v0.2.0
-- Release URL: https://github.com/v1truv1us/ferg-engineering-system/releases/tag/v0.2.0
+- Release URL: https://github.com/v1truv1us/ai-eng-system/releases/tag/v0.2.0
 - Release status: Published (not draft)
 - Release notes: 2000+ characters with full feature list
 
@@ -243,7 +243,7 @@ gh release view v0.2.0
 
 ### 3. Multiple Execution Modes
 
-**Claim**: "/ferg/work supports --continue, --validate-only, --dry-run modes"
+**Claim**: "/ai-eng/work supports --continue, --validate-only, --dry-run modes"
 
 **Status**: ⚠️ PARTIALLY VERIFIED
 - Documentation describes all three modes
@@ -263,7 +263,7 @@ gh release view v0.2.0
 
 ### 1. Actual Plan Generation
 
-**Claim**: "/ferg/plan creates a plan file with atomic tasks"
+**Claim**: "/ai-eng/plan creates a plan file with atomic tasks"
 
 **Status**: ❌ NOT VERIFIED
 - Commands are documentation files
@@ -281,7 +281,7 @@ gh release view v0.2.0
 
 ### 2. Actual Work Execution
 
-**Claim**: "/ferg/work executes plans with quality gates"
+**Claim**: "/ai-eng/work executes plans with quality gates"
 
 **Status**: ❌ NOT VERIFIED
 - Commands are documentation files
@@ -300,7 +300,7 @@ gh release view v0.2.0
 
 ### 3. Actual Research Execution
 
-**Claim**: "/ferg/research performs multi-phase research"
+**Claim**: "/ai-eng/research performs multi-phase research"
 
 **Status**: ❌ NOT VERIFIED
 - Commands are documentation files
@@ -318,7 +318,7 @@ gh release view v0.2.0
 
 ### 4. Actual Review Execution
 
-**Claim**: "/ferg/review performs code review"
+**Claim**: "/ai-eng/review performs code review"
 
 **Status**: ❌ NOT VERIFIED
 - Commands are documentation files
@@ -393,7 +393,7 @@ gh release view v0.2.0
 
 ### Current State
 
-The ferg-engineering-system v0.2.0 is a **documentation and specification system**. It provides:
+The ai-eng-system v0.2.0 is a **documentation and specification system**. It provides:
 
 1. **Comprehensive Documentation** of how to:
    - Create atomic task plans
@@ -546,7 +546,7 @@ The system is **NOT a fully functional automation tool**. To make it functional,
 
 **Requires Implementation**: Execution engines ❌
 
-The ferg-engineering-system v0.2.0 provides excellent documentation and specifications for atomic task-based development with quality gates. However, the actual execution of these processes requires additional implementation work.
+The ai-eng-system v0.2.0 provides excellent documentation and specifications for atomic task-based development with quality gates. However, the actual execution of these processes requires additional implementation work.
 
 The system is ready to be used as a **guide and reference**, but not as an **automated tool** without further development.
 

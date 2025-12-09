@@ -1,5 +1,5 @@
 #!/bin/bash
-# Verification script for ferg-engineering-system installation
+# Verification script for ai-eng-system installation
 
 set -euo pipefail
 
@@ -25,9 +25,9 @@ echo ""
 
 # Check OpenCode setup (project-local)
 echo "📋 OpenCode Setup (Project-Local):"
-if [ -d ".opencode/command/ferg" ]; then
-  cmd_count=$(ls .opencode/command/ferg/*.md 2>/dev/null | wc -l)
-  agent_count=$(ls .opencode/agent/ferg/*.md 2>/dev/null | wc -l)
+if [ -d ".opencode/command/ai-eng" ]; then
+  cmd_count=$(ls .opencode/command/ai-eng/*.md 2>/dev/null | wc -l)
+  agent_count=$(ls .opencode/agent/ai-eng/*.md 2>/dev/null | wc -l)
   if [ "$cmd_count" -gt 0 ]; then
     echo "   ✅ Commands found: $cmd_count commands"
     echo "   ✅ Agents found: $agent_count agents"
@@ -35,7 +35,7 @@ if [ -d ".opencode/command/ferg" ]; then
     echo "   ❌ No commands/agents found"
   fi
 else
-  echo "   ⚠️  .opencode/command/ferg not found (run ./setup.sh)"
+   echo "   ⚠️  .opencode/command/ai-eng not found (run ./setup.sh)"
 fi
 
 echo ""
@@ -43,9 +43,9 @@ echo ""
 # Check OpenCode setup (global)
 echo "📋 OpenCode Setup (Global):"
 GLOBAL_DIR="$HOME/.config/opencode"
-if [ -d "$GLOBAL_DIR/command/ferg" ]; then
-  cmd_count=$(ls "$GLOBAL_DIR/command/ferg"/*.md 2>/dev/null | wc -l)
-  agent_count=$(ls "$GLOBAL_DIR/agent/ferg"/*.md 2>/dev/null | wc -l)
+if [ -d "$GLOBAL_DIR/command/ai-eng" ]; then
+  cmd_count=$(ls "$GLOBAL_DIR/command/ai-eng"/*.md 2>/dev/null | wc -l)
+  agent_count=$(ls "$GLOBAL_DIR/agent/ai-eng"/*.md 2>/dev/null | wc -l)
   if [ "$cmd_count" -gt 0 ]; then
     echo "   ✅ Commands found: $cmd_count commands"
     echo "   ✅ Agents found: $agent_count agents"

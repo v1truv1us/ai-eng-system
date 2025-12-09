@@ -1,5 +1,5 @@
 ---
-name: context
+name: ai-eng/context
 description: Manage session state, memories, and context engineering
 agent: build
 ---
@@ -180,6 +180,26 @@ Retrieved when you:
 - Start a new task
 - Request context summary
 
+## Automatic Context Inference
+
+**Enabled by default** - the system automatically learns from your conversations and actions:
+
+### From Conversations
+- **Preferences**: "I prefer TypeScript" → remembers preference
+- **Decisions**: "Let's use React" → records technology choice
+- **Problems**: Error discussions → tracks debugging patterns
+
+### From Code Changes
+- **Frameworks**: Detects React/Vue/Angular imports
+- **Patterns**: Identifies middleware, routing, authentication patterns
+- **Architecture**: Learns project structure and conventions
+
+### From Queries
+- **Technology choices**: Questions about frameworks/tools
+- **Workflow preferences**: How you like to work
+
+**All inferred memories have lower confidence (0.7) and decay over time**, allowing the system to learn while avoiding false assumptions.
+
 ## Token Efficiency
 
 The context system uses Progressive Disclosure Architecture to minimize token usage:
@@ -192,15 +212,30 @@ This achieves ~90% token reduction compared to loading all resources upfront.
 
 ## Examples
 
-### Track a Feature Implementation
+### Manual Context Recording (Always Available)
 ```bash
-/context task add "Implement user authentication" --priority=high
+/context task add "Implement authentication" --priority=high
 /context decision "Use JWT tokens for stateless auth" \
   --rationale="Scales better than session-based auth" \
   --tags=security,authentication
 /context remember "JWT tokens stored in httpOnly cookies" \
   --type=procedural --tags=security,authentication
 ```
+
+### Automatic Inference (Happens in Background)
+The system automatically learns from natural conversation:
+
+**You say:** "I prefer using TypeScript over JavaScript for type safety"
+**System learns:** `User preference: TypeScript for type safety` (declarative memory)
+
+**You say:** "Let's implement this using React hooks"
+**System learns:** `Using React hooks for implementation` (procedural memory)
+
+**You ask:** "Should I use Express or Fastify for the API?"
+**System learns:** `Considering Express or Fastify for API` (episodic memory)
+
+**You edit code with:** `import React from 'react'`
+**System learns:** `Project uses React` (declarative memory)
 
 ### Search for Past Decisions
 ```bash
@@ -216,7 +251,7 @@ This achieves ~90% token reduction compared to loading all resources upfront.
 
 ## Integration with Other Commands
 
-The context system integrates with other ferg-engineering commands:
+The context system integrates with other ai-eng-system commands:
 
 - **`/plan`** - Saves decisions and context for the plan
 - **`/work`** - Tracks tasks and progress in the session
@@ -230,11 +265,54 @@ Context operations are optimized for speed:
 - Memory search: <50ms
 - Context assembly: <200ms
 
+## Configuration
+
+## Per-Project Configuration
+
+**Configuration is per-project** - each project can have its own settings in `.ai-context/config.json`.
+
+### Disable Automatic Inference
+If you prefer explicit control over context learning:
+
+```bash
+# Create project-specific config
+mkdir -p .ai-context
+echo '{
+  "enableAutoInference": false
+}' > .ai-context/config.json
+```
+
+### Custom Storage Path
+```bash
+# Use a different storage directory
+echo '{
+  "storagePath": ".my-context"
+}' > .ai-context/config.json
+```
+
+### Full Configuration Options
+```json
+{
+  "storagePath": ".ai-context",
+  "maxMemoriesPerType": 100,
+  "sessionArchiveDays": 30,
+  "confidenceDecayRate": 0.05,
+  "enableEmbeddings": false,
+  "defaultSkillTier": 1,
+  "enableAutoInference": true
+}
+```
+
+**Note**: Configuration is loaded hierarchically:
+1. **Defaults** (built-in)
+2. **Project config** (`.ai-context/config.json`)
+3. **Runtime overrides** (passed to functions)
+
 ## Privacy & Storage
 
-All context data is stored locally in `.ferg-context/` directory:
+All context data is stored locally in `.ai-context/` directory:
 - Not uploaded to any service
 - Not shared with Claude or other services
 - Fully under your control
 
-Add `.ferg-context/` to `.gitignore` to keep it out of version control.
+Add `.ai-context/` to `.gitignore` to keep it out of version control.

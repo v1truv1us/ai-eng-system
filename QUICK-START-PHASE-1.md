@@ -63,7 +63,7 @@ touch src/execution/plan-parser.ts
 touch tests/execution/plan-parser.test.ts
 
 # Run tests
-npm run test
+bun test
 ```
 
 **Deliverable**: Parse and validate plan files ✅
@@ -77,7 +77,7 @@ touch src/execution/task-executor.ts
 touch tests/execution/task-executor.test.ts
 
 # Run tests
-npm run test
+bun test
 ```
 
 **Deliverable**: Execute tasks in order ✅
@@ -91,7 +91,7 @@ touch src/execution/quality-gates.ts
 touch tests/execution/quality-gates.test.ts
 
 # Run tests
-npm run test
+bun test
 ```
 
 **Deliverable**: Run quality gates ✅
@@ -117,7 +117,7 @@ npm run test
 ### Day 3-4: Testing & Docs
 ```bash
 # Check coverage
-npm run test:coverage
+bun run test:coverage
 
 # Create example plans
 mkdir -p test-data/plans
@@ -132,10 +132,10 @@ touch docs/PHASE-1-USAGE.md
 ### Day 5: Release
 ```bash
 # Update version
-npm version 0.3.0-alpha
+bun run version 0.3.0-alpha
 
 # Build
-npm run build
+bun run build
 
 # Create tag
 git tag v0.3.0-alpha
@@ -257,7 +257,7 @@ plan:
           acceptance_criteria: [...]
           time_estimate_minutes: 30
           complexity: low|medium|high
-          command: "npm run build"  # Optional
+           command: "bun run build"  # Optional
 ```
 
 ### Execution Flow

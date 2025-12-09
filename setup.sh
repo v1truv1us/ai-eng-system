@@ -1,5 +1,5 @@
 #!/bin/bash
-# Setup script for ferg-engineering-system
+# Setup script for ai-eng-system
 # Builds from content/ and creates symlinks from dist/ for project-local use.
 
 set -euo pipefail
@@ -46,35 +46,32 @@ fi
 # OpenCode setup  
 echo ""
 echo "🔗 Setting up OpenCode..."
-mkdir -p .opencode/command/ferg .opencode/agent/ferg .opencode/plugin
+mkdir -p .opencode/command/ai-eng .opencode/agent/ai-eng .opencode/plugin
 
 # Link commands
-for cmd in "$DIST_DIR/.opencode/command/ferg/"*.md; do
+for cmd in "$DIST_DIR/.opencode/command/ai-eng/"*.md; do
   if [ -f "$cmd" ]; then
     name="$(basename "$cmd")"
-    ln -sf "$cmd" ".opencode/command/ferg/$name"
+    ln -sf "$cmd" ".opencode/command/ai-eng/$name"
     echo "   ✓ command: $name"
   fi
 done
 
 # Link agents
-for agent in "$DIST_DIR/.opencode/agent/ferg/"*.md; do
+for agent in "$DIST_DIR/.opencode/agent/ai-eng/"*.md; do
   if [ -f "$agent" ]; then
     name="$(basename "$agent")"
-    ln -sf "$agent" ".opencode/agent/ferg/$name"
+    ln -sf "$agent" ".opencode/agent/ai-eng/$name"
     echo "   ✓ agent: $name"
   fi
 done
 
-# Copy plugin
-if [ -f "$DIST_DIR/.opencode/plugin/ferg-engineering.ts" ]; then
-  cp "$DIST_DIR/.opencode/plugin/ferg-engineering.ts" .opencode/plugin/
-  echo "   ✓ plugin script"
-fi
+# Note: Plugin setup is handled by the global installation script
+# No plugin file needed for project-local setup
 
 echo ""
 echo "✅ Setup complete!"
 echo ""
 echo "Usage:"
 echo "  Claude Code: Commands available as /plan, /review, etc."
-echo "  OpenCode:    Commands available as /ferg/plan, /ferg/review, etc."
+echo "  OpenCode:    Commands available as /ai-eng/plan, /ai-eng/review, etc."

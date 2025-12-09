@@ -1,6 +1,6 @@
 # Testing Guide for Ferg Engineering System
 
-This guide covers the comprehensive test suite for the ferg-engineering-system plugin.
+This guide covers the comprehensive test suite for the ai-eng-system plugin.
 
 ## Test Structure
 
