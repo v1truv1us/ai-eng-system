@@ -26,6 +26,9 @@ const SKILLS_DIR = join(ROOT, "skills")
 const CLAUDE_DIR = join(DIST_DIR, ".claude-plugin")
 const OPENCODE_DIR = join(DIST_DIR, ".opencode")
 
+// Namespace configuration for OpenCode installations
+const NAMESPACE_PREFIX = "ai-eng"
+
 interface CommandMeta {
   name: string
   description: string
@@ -243,8 +246,8 @@ async function buildClaudePlugin(): Promise<void> {
 async function buildOpenCode(): Promise<void> {
   console.log("📦 Building OpenCode plugin...")
 
-  const commandsDir = join(OPENCODE_DIR, "command", "ferg")
-  const agentsDir = join(OPENCODE_DIR, "agent", "ferg")
+  const commandsDir = join(OPENCODE_DIR, "command", NAMESPACE_PREFIX)
+  const agentsDir = join(OPENCODE_DIR, "agent", NAMESPACE_PREFIX)
 
   await mkdir(commandsDir, { recursive: true })
   await mkdir(agentsDir, { recursive: true })
