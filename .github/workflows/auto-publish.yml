@@ -40,12 +40,17 @@ jobs:
         id: version-check
         run: |
           CURRENT_VERSION=$(node -p "require('./package.json').version")
-          PUBLISHED_VERSION=$(npm view @v1truv1us/ai-eng-system version 2>/dev/null || echo "0.0.0")
+          # Try to get published version, but don't fail if authentication fails
+          PUBLISHED_VERSION=$(npm view @v1truv1us/ai-eng-system version --registry=https://registry.npmjs.org 2>/dev/null || echo "0.0.0")
+          echo "Current version: $CURRENT_VERSION"
+          echo "Published version: $PUBLISHED_VERSION"
           if [ "$CURRENT_VERSION" != "$PUBLISHED_VERSION" ]; then
             echo "should_publish=true" >> $GITHUB_OUTPUT
             echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+            echo "Publishing new version $CURRENT_VERSION"
           else
             echo "should_publish=false" >> $GITHUB_OUTPUT
+            echo "Version $CURRENT_VERSION already published, skipping"
           fi
 
       - name: Build and test
@@ -56,7 +61,7 @@ jobs:
 
       - name: Publish to NPM
         if: steps.version-check.outputs.should_publish == 'true'
-        run: npm publish
+        run: npm publish --registry=https://registry.npmjs.org
         # Provenance is automatic with OIDC - no --provenance flag needed
 
       - name: Publish to GitHub Packages
