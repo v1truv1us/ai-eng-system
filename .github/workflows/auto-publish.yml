@@ -1,6 +1,9 @@
 name: Auto-publish from Main
 
 on:
+  push:
+    branches:
+      - 'publish-*'  # Trigger on publish branches
   pull_request:
     branches:
       - claude/ferg-engineering-scaffold-01S8XxGkhKtLp4hzpbjJsfcw
