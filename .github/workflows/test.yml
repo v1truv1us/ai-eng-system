@@ -1,0 +1,13 @@
+name: Test Workflow
+
+on:
+  push:
+    branches:
+      - claude/ferg-engineering-scaffold-01S8XxGkhKtLp4hzpbjJsfcw
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test workflow execution
+        run: echo "Workflow is running on default branch"
