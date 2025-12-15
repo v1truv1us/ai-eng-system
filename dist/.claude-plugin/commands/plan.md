@@ -8,6 +8,21 @@ agent: plan
 
 Create a structured, atomic implementation plan for: $ARGUMENTS
 
+## Usage
+
+```bash
+/ai-eng/plan [description] [options]
+```
+
+### Options
+
+- `--swarm`: Use Swarms multi-agent orchestration instead of legacy coordinator
+- `-s, --scope <scope>`: Plan scope (architecture|implementation|review|full) [default: full]
+- `-r, --requirements <reqs...>`: List of specific requirements
+- `-c, --constraints <constraints...>`: List of constraints to consider
+- `-o, --output <file>`: Output plan file [default: generated-plan.yaml]
+- `-v, --verbose`: Enable verbose output
+
 ## Planning Philosophy
 
 **Atomic Plans**: Every plan should be decomposed into small, independently completable chunks that:

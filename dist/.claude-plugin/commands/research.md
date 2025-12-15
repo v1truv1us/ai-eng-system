@@ -33,6 +33,22 @@ outputs:
 
 Conduct comprehensive research for: $ARGUMENTS
 
+## Usage
+
+```bash
+/ai-eng/research [query] [options]
+```
+
+### Options
+
+- `--swarm`: Use Swarms multi-agent orchestration instead of legacy coordinator
+- `-s, --scope <scope>`: Research scope (codebase|documentation|all) [default: all]
+- `-d, --depth <depth>`: Research depth (shallow|medium|deep) [default: medium]
+- `-o, --output <file>`: Output file path
+- `-f, --format <format>`: Export format (markdown|json|html) [default: markdown]
+- `--no-cache`: Disable research caching
+- `-v, --verbose`: Enable verbose output
+
 ## Expert Context
 
 You are a senior research analyst with 15+ years of experience at companies like Google, Stripe, and Netflix. Your expertise is in systematic investigation, pattern recognition, and synthesizing complex information into actionable insights. This research is critical to the project's success.

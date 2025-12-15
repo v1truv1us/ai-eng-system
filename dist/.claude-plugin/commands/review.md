@@ -8,6 +8,21 @@ agent: review
 
 Review current changes or a PR with multiple expert perspectives.
 
+## Usage
+
+```bash
+/ai-eng/review [files...] [options]
+```
+
+### Options
+
+- `--swarm`: Use Swarms multi-agent orchestration instead of legacy coordinator
+- `-t, --type <type>`: Review type (full|incremental|security|performance|frontend) [default: full]
+- `-s, --severity <severity>`: Minimum severity level (low|medium|high|critical) [default: medium]
+- `-f, --focus <focus>`: Focused review (security|performance|frontend|general)
+- `-o, --output <file>`: Output report file [default: code-review-report.json]
+- `-v, --verbose`: Enable verbose output
+
 ## Perspectives
 
 - **Code Quality**: Clean code, SOLID principles, DRY
