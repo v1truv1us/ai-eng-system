@@ -15,8 +15,12 @@ describe('Execution Engine Integration', () => {
   let planParser: PlanParser;
   let taskExecutor: TaskExecutor;
   let gateRunner: QualityGateRunner;
+  let previousSilentEnv: string | undefined;
 
   beforeEach(() => {
+    previousSilentEnv = process.env.AI_ENG_SILENT;
+    process.env.AI_ENG_SILENT = '1';
+
     // Create test directory
     try {
       mkdirSync(testDir, { recursive: true });
@@ -36,6 +40,14 @@ describe('Execution Engine Integration', () => {
     } catch (error) {
       // Directory might not exist or be in use
     }
+
+    if (previousSilentEnv === undefined) {
+      delete process.env.AI_ENG_SILENT;
+    } else {
+      process.env.AI_ENG_SILENT = previousSilentEnv;
+    }
+
+    previousSilentEnv = undefined;
   });
 
   describe('Complete Workflow', () => {

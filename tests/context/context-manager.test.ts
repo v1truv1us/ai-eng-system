@@ -1,417 +1,359 @@
 #!/usr/bin/env bun
 
 /**
- * Tests for the context management module
- * Tests memory, retrieval, and session functionality
+ * Tests for the context engineering module (current architecture)
+ *
+ * These tests validate the modern primitives:
+ * - SessionManager (persistent workbench)
+ * - MemoryManager (typed memories)
+ * - VectorMemoryManager (local semantic index)
+ * - ContextRetriever (push/pull context assembly)
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'bun:test'
-import { ContextManager } from '../../src/context'
-import { MemoryStore } from '../../src/context/memory'
-import { VectorStore } from '../../src/context/vector'
-import { SessionManager } from '../../src/context/session'
-import { join } from 'path'
-import { tmpdir } from 'os'
-import { writeFileSync, unlinkSync, existsSync, mkdirSync, rmSync } from 'fs'
+import { describe, it, expect, beforeEach, afterEach } from "bun:test"
+import { join } from "path"
+import { tmpdir } from "os"
+import { existsSync, rmSync, mkdirSync } from "fs"
 
-describe('Context Management', () => {
-  let contextManager: ContextManager
-  let memoryStore: MemoryStore
-  let vectorStore: VectorStore
-  let sessionManager: SessionManager
+import { SessionManager } from "../../src/context/session"
+import { MemoryManager } from "../../src/context/memory"
+import { VectorMemoryManager } from "../../src/context/vector"
+import { ContextRetriever } from "../../src/context/retrieval"
+import { ProgressiveSkillLoader } from "../../src/context/progressive"
+import type { AgentType, ConfidenceLevel } from "../../src/agents/types"
+
+function makeTempDir(): string {
+  // randomUUID is available in Bun
+  const id = crypto.randomUUID()
+  return join(tmpdir(), `ai-eng-context-test-${id}`)
+}
+
+describe("Context Engineering (current)", () => {
   let tempDir: string
+  let previousSilentEnv: string | undefined
 
   beforeEach(() => {
-    tempDir = join(tmpdir(), `ai-eng-context-test-${Date.now()}`)
+    previousSilentEnv = process.env.AI_ENG_SILENT
+    process.env.AI_ENG_SILENT = '1'
+
+    tempDir = makeTempDir()
     mkdirSync(tempDir, { recursive: true })
-    
-    memoryStore = new MemoryStore()
-    vectorStore = new VectorStore({ dimension: 1536, indexType: 'flat' })
-    sessionManager = new SessionManager({ storagePath: tempDir })
-    contextManager = new ContextManager({
-      memoryStore,
-      vectorStore,
-      sessionManager
-    })
   })
 
   afterEach(() => {
-    // Cleanup temp directory
     if (existsSync(tempDir)) {
       rmSync(tempDir, { recursive: true, force: true })
     }
+
+    if (previousSilentEnv === undefined) {
+      delete process.env.AI_ENG_SILENT
+    } else {
+      process.env.AI_ENG_SILENT = previousSilentEnv
+    }
+
+    previousSilentEnv = undefined
   })
 
-  describe('MemoryStore', () => {
-    it('should store and retrieve memories', async () => {
-      const memory = {
-        id: 'test-memory-1',
-        content: 'Test memory content',
-        metadata: { type: 'test', importance: 0.8 },
-        timestamp: new Date(),
-        tags: ['test', 'memory']
-      }
+  describe("SessionManager", () => {
+    it("initializes and starts a session (persisted)", async () => {
+      const sessionManager = new SessionManager({ storagePath: tempDir })
+      await sessionManager.initialize()
 
-      await memoryStore.store(memory)
-      const retrieved = await memoryStore.retrieve('test-memory-1')
-
-      expect(retrieved).toBeDefined()
-      expect(retrieved?.id).toBe(memory.id)
-      expect(retrieved?.content).toBe(memory.content)
-      expect(retrieved?.metadata).toEqual(memory.metadata)
-    })
-
-    it('should handle non-existent memory retrieval', async () => {
-      const retrieved = await memoryStore.retrieve('non-existent')
-      expect(retrieved).toBeNull()
-    })
-
-    it('should search memories by content', async () => {
-      const memories = [
-        {
-          id: 'mem1',
-          content: 'JavaScript programming concepts',
-          metadata: { type: 'code' },
-          timestamp: new Date(),
-          tags: ['javascript']
-        },
-        {
-          id: 'mem2',
-          content: 'Python programming basics',
-          metadata: { type: 'code' },
-          timestamp: new Date(),
-          tags: ['python']
-        },
-        {
-          id: 'mem3',
-          content: 'JavaScript async patterns',
-          metadata: { type: 'code' },
-          timestamp: new Date(),
-          tags: ['javascript', 'async']
-        }
-      ]
-
-      for (const memory of memories) {
-        await memoryStore.store(memory)
-      }
-
-      const results = await memoryStore.search('JavaScript')
-      expect(results).toHaveLength(2)
-      expect(results.map(r => r.id)).toContain('mem1')
-      expect(results.map(r => r.id)).toContain('mem3')
-    })
-
-    it('should filter memories by tags', async () => {
-      const memories = [
-        {
-          id: 'mem1',
-          content: 'Frontend development',
-          metadata: { type: 'frontend' },
-          timestamp: new Date(),
-          tags: ['frontend', 'react']
-        },
-        {
-          id: 'mem2',
-          content: 'Backend development',
-          metadata: { type: 'backend' },
-          timestamp: new Date(),
-          tags: ['backend', 'nodejs']
-        }
-      ]
-
-      for (const memory of memories) {
-        await memoryStore.store(memory)
-      }
-
-      const results = await memoryStore.findByTags(['frontend'])
-      expect(results).toHaveLength(1)
-      expect(results[0].id).toBe('mem1')
-    })
-
-    it('should delete memories', async () => {
-      const memory = {
-        id: 'mem-to-delete',
-        content: 'This will be deleted',
-        metadata: { type: 'test' },
-        timestamp: new Date(),
-        tags: []
-      }
-
-      await memoryStore.store(memory)
-      expect(await memoryStore.retrieve('mem-to-delete')).toBeDefined()
-
-      await memoryStore.delete('mem-to-delete')
-      expect(await memoryStore.retrieve('mem-to-delete')).toBeNull()
-    })
-
-    it('should handle memory expiration', async () => {
-      const oldMemory = {
-        id: 'old-memory',
-        content: 'Old memory',
-        metadata: { type: 'test' },
-        timestamp: new Date(Date.now() - 25 * 60 * 60 * 1000), // 25 hours ago
-        tags: []
-      }
-
-      const recentMemory = {
-        id: 'recent-memory',
-        content: 'Recent memory',
-        metadata: { type: 'test' },
-        timestamp: new Date(),
-        tags: []
-      }
-
-      await memoryStore.store(oldMemory)
-      await memoryStore.store(recentMemory)
-
-      // Clean up memories older than 24 hours
-      await memoryStore.cleanup(24 * 60 * 60 * 1000)
-
-      expect(await memoryStore.retrieve('old-memory')).toBeNull()
-      expect(await memoryStore.retrieve('recent-memory')).toBeDefined()
-    })
-  })
-
-  describe('VectorStore', () => {
-    it('should store and retrieve vectors', async () => {
-      const vector = Array(1536).fill(0).map((_, i) => i / 1536)
-      const metadata = {
-        id: 'vec1',
-        content: 'Test vector content',
-        type: 'test'
-      }
-
-      await vectorStore.store(vector, metadata)
-      const results = await vectorStore.similaritySearch(vector, 5)
-
-      expect(results).toHaveLength(1)
-      expect(results[0].metadata.id).toBe('vec1')
-      expect(results[0].score).toBeCloseTo(1.0, 2)
-    })
-
-    it('should perform similarity search correctly', async () => {
-      const vectors = [
-        {
-          data: Array(1536).fill(0).map((_, i) => i / 1536),
-          metadata: { id: 'vec1', content: 'Similar content A' }
-        },
-        {
-          data: Array(1536).fill(0).map((_, i) => (i + 100) / 1536),
-          metadata: { id: 'vec2', content: 'Similar content B' }
-        },
-        {
-          data: Array(1536).fill(0).map((_, i) => (i + 500) / 1536),
-          metadata: { id: 'vec3', content: 'Different content' }
-        }
-      ]
-
-      for (const vector of vectors) {
-        await vectorStore.store(vector.data, vector.metadata)
-      }
-
-      const queryVector = Array(1536).fill(0).map((_, i) => i / 1536)
-      const results = await vectorStore.similaritySearch(queryVector, 3)
-
-      expect(results).toHaveLength(3)
-      expect(results[0].metadata.id).toBe('vec1') // Most similar
-      expect(results[1].metadata.id).toBe('vec2') // Second most similar
-      expect(results[2].metadata.id).toBe('vec3') // Least similar
-    })
-
-    it('should handle empty vector store', async () => {
-      const vector = Array(1536).fill(0).map((_, i) => i / 1536)
-      const results = await vectorStore.similaritySearch(vector, 5)
-
-      expect(results).toHaveLength(0)
-    })
-
-    it('should delete vectors', async () => {
-      const vector = Array(1536).fill(0).map((_, i) => i / 1536)
-      const metadata = { id: 'vec-to-delete', content: 'Delete me' }
-
-      await vectorStore.store(vector, metadata)
-      
-      let results = await vectorStore.similaritySearch(vector, 5)
-      expect(results).toHaveLength(1)
-
-      await vectorStore.delete('vec-to-delete')
-      
-      results = await vectorStore.similaritySearch(vector, 5)
-      expect(results).toHaveLength(0)
-    })
-  })
-
-  describe('SessionManager', () => {
-    it('should create and manage sessions', async () => {
-      const sessionId = await sessionManager.createSession({
-        userId: 'test-user',
-        metadata: { purpose: 'testing' }
+      const session1 = await sessionManager.startSession({
+        project: "test-project",
+        mode: "build",
+        platform: "opencode"
       })
 
-      expect(sessionId).toBeDefined()
-      expect(typeof sessionId).toBe('string')
+      expect(session1.id).toBeDefined()
+      expect(session1.metadata.project).toBe("test-project")
+      expect(sessionManager.getSession()?.id).toBe(session1.id)
 
-      const session = await sessionManager.getSession(sessionId)
-      expect(session).toBeDefined()
-      expect(session?.userId).toBe('test-user')
-      expect(session?.metadata.purpose).toBe('testing')
+      // Starting again should restore current session rather than creating a new one
+      const session2 = await sessionManager.startSession({ mode: "review" })
+      expect(session2.id).toBe(session1.id)
+      expect(session2.metadata.mode).toBe("review")
     })
 
-    it('should update session activity', async () => {
-      const sessionId = await sessionManager.createSession({ userId: 'test-user' })
-      const originalSession = await sessionManager.getSession(sessionId)
-      
-      // Wait a bit to ensure timestamp difference
-      await new Promise(resolve => setTimeout(resolve, 10))
+    it("stores and retrieves workbench context", async () => {
+      const sessionManager = new SessionManager({ storagePath: tempDir })
+      await sessionManager.initialize()
+      await sessionManager.startSession({ project: "test-project" })
 
-      await sessionManager.updateActivity(sessionId)
-      const updatedSession = await sessionManager.getSession(sessionId)
+      await sessionManager.setContext("currentTask", "code-review")
+      await sessionManager.setContext("files", ["a.ts", "b.ts"])
 
-      expect(updatedSession?.lastActivity.getTime()).toBeGreaterThan(
-        originalSession?.lastActivity.getTime() || 0
-      )
-    })
-
-    it('should store and retrieve session context', async () => {
-      const sessionId = await sessionManager.createSession({ userId: 'test-user' })
-      
-      const context = {
-        currentTask: 'code-review',
-        files: ['file1.ts', 'file2.ts'],
-        metadata: { priority: 'high' }
-      }
-
-      await sessionManager.setContext(sessionId, context)
-      const retrievedContext = await sessionManager.getContext(sessionId)
-
-      expect(retrievedContext).toEqual(context)
-    })
-
-    it('should handle session expiration', async () => {
-      const sessionId = await sessionManager.createSession({ userId: 'test-user' })
-      
-      // Manually set old timestamp for testing
-      const session = await sessionManager.getSession(sessionId)
-      if (session) {
-        session.lastActivity = new Date(Date.now() - 25 * 60 * 60 * 1000) // 25 hours ago
-        await sessionManager.saveSession(session)
-      }
-
-      await sessionManager.cleanupExpiredSessions(24 * 60 * 60 * 1000) // 24 hours
-      
-      const expiredSession = await sessionManager.getSession(sessionId)
-      expect(expiredSession).toBeNull()
-    })
-
-    it('should list user sessions', async () => {
-      const userId = 'test-user'
-      
-      const session1Id = await sessionManager.createSession({ userId })
-      const session2Id = await sessionManager.createSession({ userId })
-      await sessionManager.createSession({ userId: 'other-user' })
-
-      const userSessions = await sessionManager.getUserSessions(userId)
-
-      expect(userSessions).toHaveLength(2)
-      const sessionIds = userSessions.map(s => s.id)
-      expect(sessionIds).toContain(session1Id)
-      expect(sessionIds).toContain(session2Id)
+      expect(sessionManager.getContext("currentTask")).toBe("code-review")
+      expect(sessionManager.getContext<string[]>("files")).toEqual(["a.ts", "b.ts"])
     })
   })
 
-  describe('ContextManager Integration', () => {
-    it('should integrate all context components', async () => {
-      const sessionId = await sessionManager.createSession({ userId: 'integration-user' })
-      
-      // Store memory
-      const memory = {
-        id: 'integration-memory',
-        content: 'Integration test memory',
-        metadata: { type: 'integration' },
-        timestamp: new Date(),
-        tags: ['integration', 'test']
-      }
-      await memoryStore.store(memory)
+  describe("MemoryManager", () => {
+    it("adds and searches memories", async () => {
+      const memoryManager = new MemoryManager({ storagePath: tempDir })
+      await memoryManager.initialize()
 
-      // Store vector
-      const vector = Array(1536).fill(0).map((_, i) => i / 1536)
-      await vectorStore.store(vector, { 
-        id: 'integration-vector',
-        content: 'Integration test vector'
+      const m1 = await memoryManager.addMemory("procedural", "JavaScript programming patterns", {
+        tags: ["javascript", "patterns"]
+      })
+      await memoryManager.addMemory("procedural", "Python programming basics", {
+        tags: ["python"]
       })
 
-      // Set session context
-      const context = {
-        currentMemory: 'integration-memory',
-        currentVector: 'integration-vector'
-      }
-      await sessionManager.setContext(sessionId, context)
-
-      // Retrieve integrated context
-      const sessionData = await sessionManager.getSession(sessionId)
-      const memoryData = await memoryStore.retrieve('integration-memory')
-      const vectorResults = await vectorStore.similaritySearch(vector, 1)
-
-      expect(sessionData?.context).toEqual(context)
-      expect(memoryData?.content).toBe('Integration test memory')
-      expect(vectorResults).toHaveLength(1)
-      expect(vectorResults[0].metadata.id).toBe('integration-vector')
+      const results = memoryManager.searchMemories("JavaScript")
+      expect(results.map(r => r.id)).toContain(m1.id)
+      expect(results[0].content).toContain("JavaScript")
     })
 
-    it('should handle context search across all stores', async () => {
-      const sessionId = await sessionManager.createSession({ userId: 'search-user' })
+    it("deletes memories", async () => {
+      const memoryManager = new MemoryManager({ storagePath: tempDir })
+      await memoryManager.initialize()
 
-      // Add data to all stores
-      await memoryStore.store({
-        id: 'search-memory',
-        content: 'JavaScript programming patterns',
-        metadata: { type: 'code' },
-        timestamp: new Date(),
-        tags: ['javascript', 'patterns']
-      })
+      const m = await memoryManager.addMemory("declarative", "Will be deleted")
+      expect(memoryManager.getAllMemories().some(x => x.id === m.id)).toBe(true)
 
-      const jsVector = Array(1536).fill(0).map((_, i) => Math.sin(i))
-      await vectorStore.store(jsVector, {
-        id: 'search-vector',
-        content: 'JavaScript async programming'
-      })
-
-      // Perform integrated search
-      const memoryResults = await memoryStore.search('JavaScript')
-      const vectorResults = await vectorStore.similaritySearch(jsVector, 5)
-
-      expect(memoryResults).toHaveLength(1)
-      expect(memoryResults[0].id).toBe('search-memory')
-      expect(vectorResults).toHaveLength(1)
-      expect(vectorResults[0].metadata.id).toBe('search-vector')
+      const deleted = await memoryManager.deleteMemory(m.id)
+      expect(deleted).toBe(true)
+      expect(memoryManager.getAllMemories().some(x => x.id === m.id)).toBe(false)
     })
   })
 
-  describe('Error Handling', () => {
-    it('should handle invalid session IDs gracefully', async () => {
-      const session = await sessionManager.getSession('invalid-session-id')
-      expect(session).toBeNull()
+  describe("VectorMemoryManager", () => {
+    it("creates and stores embeddings for memories", async () => {
+      const memoryManager = new MemoryManager({ storagePath: tempDir })
+      await memoryManager.initialize()
+
+      const vectorManager = new VectorMemoryManager({ storagePath: tempDir })
+      await vectorManager.initialize()
+
+      const m = await memoryManager.addMemory("procedural", "Vector searchable memory", {
+        tags: ["vector"]
+      })
+
+      await vectorManager.addMemoryWithVector(m)
+
+      const stats = vectorManager.getStats()
+      expect(stats.totalEmbeddings).toBe(1)
+      expect(stats.dimension).toBeGreaterThan(0)
+
+      const exported = await vectorManager.exportVectors("json")
+      const parsed = JSON.parse(exported)
+      expect(parsed.embeddings).toHaveLength(1)
+      expect(parsed.embeddings[0].metadata.memoryId).toBe(m.id)
+    })
+  })
+
+  describe("ContextRetriever", () => {
+    it("pullContext returns relevant memories (traditional search)", async () => {
+      const sessionManager = new SessionManager({ storagePath: tempDir })
+      const memoryManager = new MemoryManager({ storagePath: tempDir })
+      const skillLoader = new ProgressiveSkillLoader(join(process.cwd(), "skills"))
+
+      await sessionManager.initialize()
+      await memoryManager.initialize()
+
+      await sessionManager.startSession({ project: "test-project", mode: "build" })
+
+      const m = await memoryManager.addMemory("procedural", "JavaScript async patterns", {
+        tags: ["javascript", "async"]
+      })
+
+      const retriever = new ContextRetriever(sessionManager, memoryManager, skillLoader, {
+        storagePath: tempDir
+      })
+      await retriever.initializeVectorManager()
+
+      const ctx = await retriever.pullContext("JavaScript")
+      expect(ctx.memories.some(mem => mem.id === m.id)).toBe(true)
+      expect(ctx.memories.some(mem => mem.content.includes("JavaScript"))).toBe(true)
+      expect(ctx.meta.triggers).toContain("query")
     })
 
-    it('should handle vector dimension mismatches', async () => {
-      const wrongVector = Array(100).fill(0) // Wrong dimension
-      const metadata = { id: 'wrong-dim', content: 'Wrong dimension' }
+    it("cached pullContext increments access count via accessMemory", async () => {
+      const sessionManager = new SessionManager({ storagePath: tempDir })
+      const memoryManager = new MemoryManager({ storagePath: tempDir })
+      const skillLoader = new ProgressiveSkillLoader(join(process.cwd(), "skills"))
 
-      // Should handle gracefully or throw appropriate error
-      expect(async () => {
-        await vectorStore.store(wrongVector, metadata)
-      }).toThrow()
+      await sessionManager.initialize()
+      await memoryManager.initialize()
+      await sessionManager.startSession({ project: "test-project" })
+
+      const m = await memoryManager.addMemory("procedural", "Cache access test", {
+        tags: ["cache"]
+      })
+
+      const retriever = new ContextRetriever(sessionManager, memoryManager, skillLoader, {
+        storagePath: tempDir
+      })
+      await retriever.initializeVectorManager()
+
+      await retriever.pullContext("Cache")
+
+      // Second call should be cached and trigger accessMemory() in getCachedContext.
+      await retriever.pullContext("Cache")
+
+      const updated = memoryManager.getAllMemories().find(x => x.id === m.id)
+      expect(updated).toBeDefined()
+      expect(updated?.accessCount).toBeGreaterThanOrEqual(1)
+    })
+  })
+
+  describe("ContextEnvelope", () => {
+    let sessionManager: SessionManager
+
+    beforeEach(async () => {
+      sessionManager = new SessionManager({ storagePath: tempDir })
+      await sessionManager.initialize()
     })
 
-    it('should handle corrupted session data', async () => {
-      const sessionId = await sessionManager.createSession({ userId: 'test-user' })
-      
-      // Write invalid JSON to session file
-      const sessionFile = join(tempDir, `${sessionId}.json`)
-      writeFileSync(sessionFile, 'invalid json content')
+    it("should build context envelope with session state", async () => {
+      const session = await sessionManager.startSession({ title: "Test Session" })
+      session.workbench.activeFiles = ["file1.ts", "file2.ts"]
+      session.workbench.pendingTasks = [{ id: "task1", description: "Test task", status: "pending" }]
+      session.workbench.decisions = [{ id: "dec1", description: "Test decision", rationale: "Test rationale" }]
 
-      const session = await sessionManager.getSession(sessionId)
-      expect(session).toBeNull() // Should handle corrupted data gracefully
+      const envelope = sessionManager.buildContextEnvelope("req-123", 0)
+
+      expect(envelope.session.id).toBe(session.id)
+      expect(envelope.session.activeFiles).toEqual(["file1.ts", "file2.ts"])
+      expect(envelope.session.pendingTasks).toHaveLength(1)
+      expect(envelope.session.decisions).toHaveLength(1)
+      expect(envelope.meta.requestId).toBe("req-123")
+      expect(envelope.meta.depth).toBe(0)
+      expect(envelope.previousResults).toEqual([])
+      expect(envelope.taskContext).toEqual({})
+    })
+
+    it("should include previous results and task context", async () => {
+      await sessionManager.startSession({ title: "Test Session" })
+
+      const previousResults = [{
+        agentType: "code-reviewer" as AgentType,
+        output: { review: "Good code" },
+        confidence: "high" as ConfidenceLevel
+      }]
+
+      const taskContext = { priority: "high", deadline: "2025-12-20" }
+
+      const envelope = sessionManager.buildContextEnvelope("req-456", 1, previousResults, taskContext)
+
+      expect(envelope.previousResults).toEqual(previousResults)
+      expect(envelope.taskContext).toEqual(taskContext)
+      expect(envelope.meta.depth).toBe(1)
+    })
+
+    it("should serialize envelope with size limits", async () => {
+      const session = await sessionManager.startSession({ title: "Test Session" })
+
+      // Add many files to test limiting
+      session.workbench.activeFiles = Array.from({ length: 15 }, (_, i) => `file${i}.ts`)
+
+      const envelope = sessionManager.buildContextEnvelope("req-789", 0)
+      const serialized = sessionManager.serializeContextEnvelope(envelope)
+
+      expect(serialized).toContain("req-789")
+      expect(envelope.session.activeFiles).toHaveLength(10) // Limited to 10
+    })
+
+    it("should throw error when no active session", () => {
+      expect(() => {
+        sessionManager.buildContextEnvelope("req-999", 0)
+      }).toThrow("No active session for context envelope")
+    })
+
+    it("should merge context envelopes with conflict resolution", async () => {
+      await sessionManager.startSession({ title: "Test Session" })
+
+      const envelope1: ContextEnvelope = {
+        session: { id: "session-1", activeFiles: [], pendingTasks: [], decisions: [] },
+        memories: { declarative: [], procedural: [], episodic: [] },
+        previousResults: [{ agentType: "reviewer", output: "Good", confidence: "high" }],
+        taskContext: { priority: "high", status: "in-progress" },
+        meta: { requestId: "req-1", timestamp: new Date(), depth: 0 }
+      }
+
+      const envelope2: ContextEnvelope = {
+        session: { id: "session-1", activeFiles: [], pendingTasks: [], decisions: [] },
+        memories: { declarative: [], procedural: [], episodic: [] },
+        previousResults: [{ agentType: "scanner", output: "Clean", confidence: "medium" }],
+        taskContext: { priority: "low", status: "completed" }, // Conflicts with envelope1
+        meta: { requestId: "req-2", timestamp: new Date(), depth: 0 }
+      }
+
+      const merged = sessionManager.mergeContextEnvelopes([envelope1, envelope2], 'last-wins')
+
+      expect(merged.previousResults).toHaveLength(2) // Both results kept
+      expect(merged.taskContext.priority).toBe("low") // Last-wins strategy
+      expect(merged.taskContext.status).toBe("completed")
+      expect(merged.meta.mergedFrom).toBe(2)
+    })
+
+    it("should resolve conflicts using consensus strategy", async () => {
+      await sessionManager.startSession({ title: "Test Session" })
+
+      const envelope1: ContextEnvelope = {
+        session: { id: "session-1", activeFiles: [], pendingTasks: [], decisions: [] },
+        memories: { declarative: [], procedural: [], episodic: [] },
+        previousResults: [],
+        taskContext: { priority: "high" },
+        meta: { requestId: "req-1", timestamp: new Date(), depth: 0 }
+      }
+
+      const envelope2: ContextEnvelope = {
+        session: { id: "session-1", activeFiles: [], pendingTasks: [], decisions: [] },
+        memories: { declarative: [], procedural: [], episodic: [] },
+        previousResults: [],
+        taskContext: { priority: "high" }, // Same value
+        meta: { requestId: "req-2", timestamp: new Date(), depth: 0 }
+      }
+
+      const envelope3: ContextEnvelope = {
+        session: { id: "session-1", activeFiles: [], pendingTasks: [], decisions: [] },
+        memories: { declarative: [], procedural: [], episodic: [] },
+        previousResults: [],
+        taskContext: { priority: "low" }, // Different value
+        meta: { requestId: "req-3", timestamp: new Date(), depth: 0 }
+      }
+
+      const merged = sessionManager.mergeContextEnvelopes([envelope1, envelope2, envelope3], 'consensus')
+
+      expect(merged.taskContext.priority).toBe("high") // Consensus: 2 high vs 1 low
+    })
+
+    it("should record and retrieve handoff audit records", async () => {
+      const session = await sessionManager.startSession({ title: "Test Session" })
+      const correlationId = sessionManager.generateCorrelationId()
+
+      sessionManager.recordHandoff(correlationId, "code-reviewer", "security-scanner", 1024, true, "Routine check")
+
+      const auditTrail = sessionManager.getAuditTrail(correlationId)
+      expect(auditTrail).toHaveLength(1)
+      expect(auditTrail[0].fromAgent).toBe("code-reviewer")
+      expect(auditTrail[0].toAgent).toBe("security-scanner")
+      expect(auditTrail[0].success).toBe(true)
+      expect(auditTrail[0].sessionId).toBe(session.id)
+    })
+
+    it("should maintain audit log with size limits", async () => {
+      await sessionManager.startSession({ title: "Test Session" })
+
+      // Add more than 100 records
+      for (let i = 0; i < 105; i++) {
+        const correlationId = `test-${i}`
+        sessionManager.recordHandoff(correlationId, `agent-${i}`, `agent-${i+1}`, 100, true)
+      }
+
+      const allRecords = sessionManager.getAllAuditRecords()
+      expect(allRecords.length).toBeLessThanOrEqual(100)
+    })
+
+    it("should generate unique correlation IDs", () => {
+      const id1 = sessionManager.generateCorrelationId()
+      const id2 = sessionManager.generateCorrelationId()
+
+      expect(id1).not.toBe(id2)
+      expect(id1).toMatch(/^corr-\d+-/)
+      expect(id2).toMatch(/^corr-\d+-/)
     })
   })
 })

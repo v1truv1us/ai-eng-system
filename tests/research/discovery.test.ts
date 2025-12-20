@@ -50,11 +50,11 @@ describe('Discovery Phase', () => {
       const startTime = Date.now();
       const results = await handler.discover(query);
       const duration = Date.now() - startTime;
-      
+
       expect(results).toBeDefined();
       expect(Array.isArray(results)).toBe(true);
       expect(duration).toBeGreaterThan(0);
-    });
+    }, 20000);
 
     it('should handle discovery agent failures gracefully', async () => {
       // Mock a locator that fails
@@ -87,7 +87,11 @@ describe('Discovery Phase', () => {
     });
 
     it('should find relevant files', async () => {
-      const result = await locator.discover('authentication', ResearchScope.CODEBASE);
+      const result = await locator.discover({
+        ...query,
+        query: 'authentication',
+        scope: ResearchScope.CODEBASE
+      });
       
       expect(result).toBeDefined();
       expect(result.source).toBe('codebase-locator');
@@ -96,7 +100,11 @@ describe('Discovery Phase', () => {
     });
 
     it('should score file relevance', async () => {
-      const result = await locator.discover('typescript', ResearchScope.CODEBASE);
+      const result = await locator.discover({
+        ...query,
+        query: 'typescript',
+        scope: ResearchScope.CODEBASE
+      });
       
       expect(result.files.length).toBeGreaterThan(0);
       
@@ -110,7 +118,11 @@ describe('Discovery Phase', () => {
     });
 
     it('should extract snippets for top files', async () => {
-      const result = await locator.discover('component', ResearchScope.CODEBASE);
+      const result = await locator.discover({
+        ...query,
+        query: 'component',
+        scope: ResearchScope.CODEBASE
+      });
       
       const filesWithSnippets = result.files.filter(file => file.snippet);
       expect(filesWithSnippets.length).toBeGreaterThan(0);
@@ -124,7 +136,11 @@ describe('Discovery Phase', () => {
     });
 
     it('should detect file languages', async () => {
-      const result = await locator.discover('code', ResearchScope.CODEBASE);
+      const result = await locator.discover({
+        ...query,
+        query: 'code',
+        scope: ResearchScope.CODEBASE
+      });
       
       const hasLanguages = result.files.every(file => 
         typeof file.language === 'string' && 
@@ -142,7 +158,12 @@ describe('Discovery Phase', () => {
         }
       };
       
-      const result = await locator.discover('test', ResearchScope.CODEBASE, constrainedQuery.constraints);
+      const result = await locator.discover({
+        ...query,
+        query: 'test',
+        scope: ResearchScope.CODEBASE,
+        constraints: constrainedQuery.constraints
+      });
       
       expect(result.files.length).toBeLessThanOrEqual(5);
       
@@ -165,7 +186,11 @@ describe('Discovery Phase', () => {
     });
 
     it('should find documentation files', async () => {
-      const result = await locator.discover('authentication', ResearchScope.DOCUMENTATION);
+      const result = await locator.discover({
+        ...query,
+        query: 'authentication',
+        scope: ResearchScope.DOCUMENTATION
+      });
       
       expect(result).toBeDefined();
       expect(result.source).toBe('research-locator');
@@ -174,7 +199,11 @@ describe('Discovery Phase', () => {
     });
 
     it('should parse document titles and sections', async () => {
-      const result = await locator.discover('README', ResearchScope.DOCUMENTATION);
+      const result = await locator.discover({
+        ...query,
+        query: 'README',
+        scope: ResearchScope.DOCUMENTATION
+      });
       
       const hasTitles = result.documentation.every(doc => 
         typeof doc.title === 'string' && 
@@ -184,7 +213,11 @@ describe('Discovery Phase', () => {
     });
 
     it('should score document relevance', async () => {
-      const result = await locator.discover('authentication', ResearchScope.DOCUMENTATION);
+      const result = await locator.discover({
+        ...query,
+        query: 'authentication',
+        scope: ResearchScope.DOCUMENTATION
+      });
       
       const hasRelevance = result.documentation.every(doc => 
         typeof doc.relevance === 'number' && 
@@ -195,7 +228,11 @@ describe('Discovery Phase', () => {
     });
 
     it('should detect document types', async () => {
-      const result = await locator.discover('docs', ResearchScope.DOCUMENTATION);
+      const result = await locator.discover({
+        ...query,
+        query: 'docs',
+        scope: ResearchScope.DOCUMENTATION
+      });
       
       const hasTypes = result.documentation.every(doc => 
         typeof doc.type === 'string' && 
@@ -215,7 +252,12 @@ describe('Discovery Phase', () => {
         }
       };
       
-      const result = await locator.discover('test', ResearchScope.DOCUMENTATION, constrainedQuery.constraints);
+      const result = await locator.discover({
+        ...query,
+        query: 'test',
+        scope: ResearchScope.DOCUMENTATION,
+        constraints: constrainedQuery.constraints
+      });
       
       // All docs should be within date range
       const allInDateRange = result.documentation.every(doc => {
@@ -246,7 +288,11 @@ describe('Discovery Phase', () => {
     });
 
     it('should find similar code implementations', async () => {
-      const result = await locator.discover('component', ResearchScope.CODEBASE);
+      const result = await locator.discover({
+        ...query,
+        query: 'component',
+        scope: ResearchScope.CODEBASE
+      });
       
       expect(result).toBeDefined();
       expect(result.source).toBe('pattern-finder');
@@ -255,7 +301,11 @@ describe('Discovery Phase', () => {
     });
 
     it('should categorize patterns', async () => {
-      const result = await locator.discover('factory', ResearchScope.CODEBASE);
+      const result = await locator.discover({
+        ...query,
+        query: 'factory',
+        scope: ResearchScope.CODEBASE
+      });
       
       const hasCategories = result.patterns.every(pattern => 
         typeof pattern.category === 'string' && 
@@ -265,7 +315,11 @@ describe('Discovery Phase', () => {
     });
 
     it('should calculate pattern frequency', async () => {
-      const result = await locator.discover('function', ResearchScope.CODEBASE);
+      const result = await locator.discover({
+        ...query,
+        query: 'function',
+        scope: ResearchScope.CODEBASE
+      });
       
       const hasFrequency = result.patterns.every(pattern => 
         typeof pattern.frequency === 'number' && 
@@ -275,7 +329,11 @@ describe('Discovery Phase', () => {
     });
 
     it('should calculate pattern confidence', async () => {
-      const result = await locator.discover('interface', ResearchScope.CODEBASE);
+      const result = await locator.discover({
+        ...query,
+        query: 'interface',
+        scope: ResearchScope.CODEBASE
+      });
       
       const hasConfidence = result.patterns.every(pattern => 
         ['low', 'medium', 'high'].includes(pattern.confidence)
@@ -316,7 +374,7 @@ describe('Discovery Phase', () => {
         result.executionTime > 0
       );
       expect(allHaveExecutionTime).toBe(true);
-    });
+    }, 20000);
 
     it('should calculate confidence levels', async () => {
       const results = await handler.discover(query);

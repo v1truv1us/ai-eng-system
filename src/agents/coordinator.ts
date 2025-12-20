@@ -67,8 +67,8 @@ export class AgentCoordinator extends EventEmitter {
       // Aggregate results
       const aggregatedResults = this.aggregateResults(results, strategy);
       
-      // Clear completed tasks after execution
-      this.completedTasks.clear();
+      // Keep completed tasks so progress can be inspected after execution.
+      // Call reset() when you want to clear state between runs.
       
       this.emit('execution_completed', { results: aggregatedResults });
       return aggregatedResults;
@@ -117,7 +117,16 @@ export class AgentCoordinator extends EventEmitter {
       await this.checkTaskDependencies(task);
       
       // Execute the agent
-      const output = await this.executeAgent(task);
+      // Apply coordinator-level default timeout as an upper bound.
+      const effectiveTimeout = task.timeout ?? this.config.defaultTimeout;
+      const coordinatorTask: AgentTask = {
+        ...task,
+        // If a task provided timeout is longer than coordinator default, clamp it.
+        timeout: Math.min(effectiveTimeout, this.config.defaultTimeout)
+      };
+
+      // Always pass the task with effective timeout to the executor bridge
+      const output = await this.executeAgent(coordinatorTask);
       
       // Update metrics
       this.updateMetrics(task.type, output, true);

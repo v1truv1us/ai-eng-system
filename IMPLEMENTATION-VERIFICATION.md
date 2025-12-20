@@ -16,7 +16,7 @@ This document verifies the ai-eng-system v0.3.0 implementation. The system has e
 
 ### 1. Installation & Deployment
 
-**Claim**: "15 Commands, 24 Agents, 5 Skills installed globally"
+**Claim**: "15 Commands, 29 Agents, 4 skill packs installed globally"
 
 **Verification**:
 ```bash
@@ -26,8 +26,8 @@ ls ~/.config/opencode/command/ai-eng/ | wc -l
 
 **Status**: ✅ VERIFIED
 - All 15 commands are installed
-- All 26 agents are installed
-- All 5 skills are installed
+- All 29 agents are installed
+- All 4 skill packs are installed
 - Global installation path: ~/.config/opencode/
 
 ### 2. Build System

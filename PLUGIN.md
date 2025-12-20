@@ -30,8 +30,8 @@ claude plugin link .
 ### Verification
 
 After installation, verify in Claude Code:
-- **15 Commands available**: `/plan`, `/review`, `/seo`, `/work`, `/compound`, `/deploy`, `/optimize`, `/recursive-init`, `/research`, `/context`, `/create-plugin`, `/create-agent`, `/create-command`, `/create-skill`, `/create-tool`
-- **26 Agents available**: All specialized agents for development, testing, deployment, and architecture
+- **15 Commands available**: `/ai-eng/plan`, `/ai-eng/review`, `/ai-eng/seo`, `/ai-eng/work`, `/ai-eng/compound`, `/ai-eng/deploy`, `/ai-eng/optimize`, `/ai-eng/recursive-init`, `/ai-eng/research`, `/ai-eng/context`, `/ai-eng/create-plugin`, `/ai-eng/create-agent`, `/ai-eng/create-command`, `/ai-eng/create-skill`, `/ai-eng/create-tool`
+- **29 Agents available**: All specialized agents for development, testing, deployment, and architecture
 - **Skills**: DevOps, prompting, and research skills
 
 ## OpenCode Installation
@@ -214,7 +214,7 @@ Both Claude Code and OpenCode share the same command and agent definitions:
 ai-eng-system/
 ├── content/                  # ✏️ Single source of truth for commands & agents
 │   ├── commands/             # Command definitions (15 total)
-│   └── agents/               # Agent definitions (24 total)
+│   └── agents/               # Agent definitions (29 total)
 ├── skills/                   # Reusable skills (DevOps, prompting, research)
 │   ├── devops/
 │   │   ├── coolify-deploy/
@@ -226,13 +226,13 @@ ai-eng-system/
 ├── dist/                     # 🚫 Auto-generated platform outputs
 │   ├── .claude-plugin/       # Claude Code format
 │   │   ├── commands/         # 15 commands
-│   │   ├── agents/           # 24 agents
+│   │   ├── agents/           # 29 agents
 │   │   ├── skills/           # All skills
 │   │   ├── plugin.json       # Plugin metadata
 │   │   └── marketplace.json  # Marketplace configuration
 │   └── .opencode/            # OpenCode format (ai-eng/ namespace)
 │       ├── command/ai-eng/   # 15 commands
-│       └── agent/ai-eng/     # 24 agents
+│       └── agent/ai-eng/     # 29 agents
 ├── scripts/                  # Build and installation utilities
 │   ├── install.js            # Global/local installation
 │   └── build.ts              # Build system

@@ -62,6 +62,7 @@ const SAMPLE_AGENT = `---
 name: test-agent
 description: A test agent for validation
 mode: subagent
+category: quality-testing
 temperature: 0.1
 tools:
   read: true
@@ -140,6 +141,28 @@ describe('Ferg Engineering System - Build System', () => {
     if (existsSync(DIST_DIR)) {
       await rm(DIST_DIR, { recursive: true })
     }
+
+    // Tests may remove content/ as part of error handling checks.
+    // Recreate required fixtures so tests remain isolated.
+    await mkdir(join(CONTENT_DIR, 'commands'), { recursive: true })
+    await mkdir(join(CONTENT_DIR, 'agents'), { recursive: true })
+    await mkdir(join(SKILLS_DIR, 'test-skill'), { recursive: true })
+
+    if (!existsSync(join(CONTENT_DIR, 'commands', 'test-command.md'))) {
+      await writeFile(join(CONTENT_DIR, 'commands', 'test-command.md'), SAMPLE_COMMAND)
+    }
+
+    if (!existsSync(join(CONTENT_DIR, 'agents', 'test-agent.md'))) {
+      await writeFile(join(CONTENT_DIR, 'agents', 'test-agent.md'), SAMPLE_AGENT)
+    }
+
+    if (!existsSync(join(SKILLS_DIR, 'test-skill', 'SKILL.md'))) {
+      await writeFile(join(SKILLS_DIR, 'test-skill', 'SKILL.md'), SAMPLE_SKILL)
+    }
+
+    if (!existsSync(join(TEST_ROOT, 'package.json'))) {
+      await writeFile(join(TEST_ROOT, 'package.json'), JSON.stringify(MOCK_PACKAGE_JSON, null, 2))
+    }
   })
 
   describe('Frontmatter Parsing', () => {
@@ -214,6 +237,7 @@ describe('Ferg Engineering System - Build System', () => {
 
     it('should detect missing required fields', async () => {
       // Create invalid command
+      const invalidPath = join(CONTENT_DIR, 'commands', 'invalid-command.md')
       const invalidCommand = `---
 name: invalid-command
 ---
@@ -222,12 +246,18 @@ name: invalid-command
 
 Missing description field.
 `
-      await writeFile(join(CONTENT_DIR, 'commands', 'invalid-command.md'), invalidCommand)
-      
-      // Validation should fail (we'll test this through the validate function)
-      const content = await readFile(join(CONTENT_DIR, 'commands', 'invalid-command.md'), 'utf-8')
-      expect(content).toContain('name: invalid-command')
-      expect(content).not.toContain('description:')
+
+      try {
+        await writeFile(invalidPath, invalidCommand)
+
+        // Validation should fail (we'll test this through the validate function)
+        const content = await readFile(invalidPath, 'utf-8')
+        expect(content).toContain('name: invalid-command')
+        expect(content).not.toContain('description:')
+      } finally {
+        // Prevent this fixture from polluting later validation tests
+        await rm(invalidPath, { force: true })
+      }
     })
   })
 
@@ -284,8 +314,8 @@ Missing description field.
       // Check agents
       const agentsDir = join(opencodeDir, 'agent', 'ai-eng')
       expect(existsSync(agentsDir)).toBe(true)
-      
-      const testAgentPath = join(agentsDir, 'test-agent.md')
+
+      const testAgentPath = join(agentsDir, 'quality-testing', 'test-agent.md')
       expect(existsSync(testAgentPath)).toBe(true)
     })
 
@@ -301,28 +331,34 @@ Missing description field.
   })
 
   describe('Content Transformation', () => {
-    it('should transform commands to OpenCode table format', async () => {
+    it('should keep OpenCode commands as MD-first YAML', async () => {
       await runBuild()
       
       const opencodeCommandPath = join(DIST_DIR, '.opencode', 'command', 'ai-eng', 'test-command.md')
       const content = await readFile(opencodeCommandPath, 'utf-8')
       
-      // Should contain table format
-      expect(content).toContain('| description | agent | subtask |')
-      expect(content).toContain('|---|---|---|')
-      expect(content).toContain('| A test command for validation | build | true |')
+      // OpenCode should receive the original YAML frontmatter (no table transform)
+      expect(content).toContain('---')
+      expect(content).toContain('name: test-command')
+      expect(content).toContain('description: A test command for validation')
+      expect(content).toContain('agent: build')
+      expect(content).toContain('subtask: true')
+      expect(content).toContain('This is a test command body with multiple lines.')
     })
 
-    it('should transform agents to OpenCode table format', async () => {
+    it('should namespace OpenCode agents by category and strip frontmatter name', async () => {
       await runBuild()
       
-      const opencodeAgentPath = join(DIST_DIR, '.opencode', 'agent', 'ai-eng', 'test-agent.md')
+      // OpenCode agent should be nested by YAML category.
+      const opencodeAgentPath = join(DIST_DIR, '.opencode', 'agent', 'ai-eng', 'quality-testing', 'test-agent.md')
       const content = await readFile(opencodeAgentPath, 'utf-8')
-      
-      // Should contain table format
-      expect(content).toContain('| description | mode |')
-      expect(content).toContain('|---|---|')
-      expect(content).toContain('| A test agent for validation | subagent |')
+
+      // YAML still present, but name removed so path-derived name wins in OpenCode.
+      expect(content).toContain('---')
+      expect(content).not.toContain('name: test-agent')
+      expect(content).toContain('description: A test agent for validation')
+      expect(content).toContain('mode: subagent')
+      expect(content).toContain('This is a test agent body with comprehensive details.')
     })
 
     it('should preserve Claude Code YAML format', async () => {
@@ -344,14 +380,12 @@ Missing description field.
     it('should handle missing content directory', async () => {
       // Remove content directory temporarily
       await rm(CONTENT_DIR, { recursive: true })
-      
-      // Build should fail gracefully
-      expect(async () => {
-        await build()
-      }).toThrow()
+
+      // Build should fail (runBuild rejects on non-zero exit)
+      await expect(runBuild()).rejects.toThrow()
     })
 
-    it('should handle invalid YAML frontmatter', async () => {
+    it('should fail fast on invalid YAML frontmatter', async () => {
       const invalidYaml = `---
 name: test
 description: invalid yaml: unclosed "quote"
@@ -359,10 +393,14 @@ description: invalid yaml: unclosed "quote"
 
 # Content
 `
-      await writeFile(join(CONTENT_DIR, 'commands', 'invalid-yaml.md'), invalidYaml)
-      
-      // Should handle gracefully (implementation dependent)
-      expect(existsSync(join(CONTENT_DIR, 'commands', 'invalid-yaml.md'))).toBe(true)
+      const invalidPath = join(CONTENT_DIR, 'commands', 'invalid-yaml.md')
+      await writeFile(invalidPath, invalidYaml)
+
+      // With build-time validation enabled, invalid YAML becomes a hard failure.
+      await expect(runBuild()).rejects.toThrow()
+
+      // Cleanup so other tests are not impacted.
+      await rm(invalidPath)
     })
 
     it('should handle file permission errors gracefully', async () => {
@@ -429,7 +467,7 @@ async function runBuild(): Promise<void> {
     // Run build from project root, but set environment to use test directory
     const buildProcess = spawn('bun', ['run', 'build.ts'], {
       cwd: process.cwd(), // Run from project root
-      env: { ...process.env, TEST_ROOT }, // Pass test root if needed
+      env: { ...process.env, TEST_ROOT, PATH: process.env.PATH }, // Pass test root and PATH if needed
       stdio: 'inherit'
     })
 

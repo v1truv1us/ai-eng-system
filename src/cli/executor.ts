@@ -5,32 +5,41 @@
 
 import { Command } from 'commander';
 import { readFileSync } from 'fs';
+import { join } from 'path';
+import { MemoryManager } from '../context/memory.js';
+import { loadConfig, createCommandEnvelope } from '../context/types.js';
+import { MarkdownContextExporter } from '../context/exporters/index.js';
 import { PlanParser } from '../execution/plan-parser.js';
 import { TaskExecutor } from '../execution/task-executor.js';
 import { QualityGateRunner } from '../execution/quality-gates.js';
 import { AgentCoordinator } from '../agents/coordinator.js';
 import { PlanGenerator } from '../agents/plan-generator.js';
 import { CodeReviewExecutor } from '../agents/code-review-executor.js';
-import { 
-  ExecutionOptions, 
-  ExecutionReport, 
+import { ExecutorBridge } from '../agents/executor-bridge.js';
+import { AgentRegistry } from '../agents/registry.js';
+import {
+  ExecutionOptions,
+  ExecutionReport,
   TaskStatus,
-  QualityGateResult 
+  QualityGateResult
 } from '../execution/types.js';
-import { 
+import {
   AgentCoordinatorConfig,
   PlanGenerationInput,
-  CodeReviewInput
+  CodeReviewInput,
+  AgentTask,
+  AgentType,
+  ExecutionStrategy
 } from '../agents/types.js';
 import { ResearchOrchestrator } from '../research/orchestrator.js';
 import {
   ResearchQuery,
   ResearchScope,
   ResearchDepth,
-  ResearchConfig
+  ResearchConfig,
+  ResearchProgress,
+  ResearchError
 } from '../research/types.js';
-import { CommandSwarmsIntegration, getCommandSwarmsIntegration, CommandResult } from '../command-swarms-integration.js';
-import { createSwarmsClient, checkLocalSwarmsAvailable } from '../local-swarms-executor.js';
 
 export class ExecutorCLI {
   private program: Command;
@@ -38,10 +47,18 @@ export class ExecutorCLI {
   private planGenerator: PlanGenerator;
   private codeReviewExecutor: CodeReviewExecutor;
   private researchOrchestrator: ResearchOrchestrator;
-  private commandSwarmsIntegration: CommandSwarmsIntegration | null = null;
-  private swarmsAvailable: boolean = false;
+  private memoryManager: MemoryManager;
+  private exporter: MarkdownContextExporter | null;
+  private contextInitialized: boolean;
+  private contextInitPromise: Promise<void> | null;
 
   constructor() {
+    // Initialize context system (best-effort; non-fatal if it fails)
+    this.memoryManager = new MemoryManager();
+    this.exporter = null;
+    this.contextInitialized = false;
+    this.contextInitPromise = null;
+
     // Initialize agent components
     const agentConfig: AgentCoordinatorConfig = {
       maxConcurrency: 3,
@@ -69,10 +86,7 @@ export class ExecutorCLI {
       externalSearchTimeout: 10000
     };
     this.researchOrchestrator = new ResearchOrchestrator(researchConfig);
-    
-    // Initialize Swarms integration (lazy - check availability on demand)
-    this.initializeSwarmsIntegration();
-    
+
     this.program = new Command();
     this.setupCommands();
   }
@@ -84,45 +98,106 @@ export class ExecutorCLI {
     return this.program;
   }
 
-  /**
-   * Initialize Swarms integration (async, non-blocking)
-   */
-  private async initializeSwarmsIntegration(): Promise<void> {
-    try {
-      this.swarmsAvailable = await checkLocalSwarmsAvailable();
-      if (this.swarmsAvailable) {
-        const swarmsClient = createSwarmsClient({ mode: 'local' });
-        this.commandSwarmsIntegration = getCommandSwarmsIntegration(swarmsClient as any);
-        console.log('🐝 Swarms integration available (local mode)');
+  private async initializeContext(): Promise<void> {
+    if (this.contextInitialized) return
+    if (this.contextInitPromise) return this.contextInitPromise
+
+    this.contextInitPromise = (async () => {
+      try {
+        const config = await loadConfig();
+        this.memoryManager = new MemoryManager(config);
+        await this.memoryManager.initialize();
+
+        if (config.export?.enabled) {
+          this.exporter = new MarkdownContextExporter(config);
+        }
+      } catch {
+        // best-effort only
+      } finally {
+        this.contextInitialized = true
       }
-    } catch (error) {
-      // Swarms not available, fall back to legacy coordinator
-      this.swarmsAvailable = false;
-    }
+    })()
+
+    return this.contextInitPromise
   }
 
-  /**
-   * Execute command via Swarms if available and requested
-   */
-  private async executeViaSwarms(
-    command: string,
-    args: string[],
-    options: { timeout?: number } = {}
-  ): Promise<CommandResult | null> {
-    if (!this.commandSwarmsIntegration) {
-      return null;
+  private async recordEnvelope(params: {
+    commandName: string
+    status: 'success' | 'failure'
+    startTimeMs: number
+    endTimeMs: number
+    inputs?: Record<string, unknown>
+    outputSummary?: string
+    filesTouched?: string[]
+    decisions?: string[]
+    error?: unknown
+  }): Promise<void> {
+    await this.initializeContext()
+    const envelope = createCommandEnvelope({
+      commandName: params.commandName,
+      status: params.status,
+      startTimeMs: params.startTimeMs,
+      endTimeMs: params.endTimeMs,
+      inputs: params.inputs,
+      outputSummary: params.outputSummary,
+      filesTouched: params.filesTouched,
+      decisions: params.decisions,
+      project: process.cwd(),
+      error: params.error
+    })
+
+    try {
+      await this.memoryManager.storeCommandEnvelope(envelope, {
+        source: 'agent',
+        context: `CLI command ${params.commandName}`
+      })
+    } catch {
+      // ignore
     }
 
     try {
-      return await this.commandSwarmsIntegration.executeCommand(command, args, {
-        fallbackToDirect: true,
-        timeout: options.timeout || 300000
-      });
-    } catch (error) {
-      console.warn(`Swarms execution failed, falling back to legacy: ${error}`);
-      return null;
+      if (this.exporter) {
+        await this.exporter.exportEnvelope(envelope)
+      }
+    } catch {
+      // ignore
     }
   }
+
+  private async runWithEnvelope<T>(
+    commandName: string,
+    inputs: Record<string, unknown>,
+    fn: () => Promise<T>,
+    summarize?: (result: T) => string
+  ): Promise<T> {
+    const start = Date.now();
+
+    try {
+      const result = await fn();
+      const end = Date.now();
+      await this.recordEnvelope({
+        commandName,
+        status: 'success',
+        startTimeMs: start,
+        endTimeMs: end,
+        inputs,
+        outputSummary: summarize ? summarize(result) : undefined
+      })
+      return result;
+    } catch (error) {
+      const end = Date.now();
+      await this.recordEnvelope({
+        commandName,
+        status: 'failure',
+        startTimeMs: start,
+        endTimeMs: end,
+        inputs,
+        error
+      })
+      throw error;
+    }
+  }
+
 
   private setupCommands(): void {
     this.program
@@ -177,7 +252,6 @@ export class ExecutorCLI {
       .option('-r, --requirements <reqs...>', 'List of requirements')
       .option('-c, --constraints <constraints...>', 'List of constraints')
       .option('-o, --output <file>', 'Output plan file', 'generated-plan.yaml')
-      .option('--swarm', 'Use Swarms orchestration instead of legacy coordinator')
       .option('-v, --verbose', 'Enable verbose output')
       .action(this.generatePlanCommand.bind(this));
 
@@ -189,7 +263,6 @@ export class ExecutorCLI {
       .option('-s, --severity <severity>', 'Minimum severity level (low|medium|high|critical)', 'medium')
       .option('-f, --focus <focus>', 'Focused review (security|performance|frontend|general)')
       .option('-o, --output <file>', 'Output report file', 'code-review-report.json')
-      .option('--swarm', 'Use Swarms orchestration instead of legacy coordinator')
       .option('-v, --verbose', 'Enable verbose output')
       .action(this.codeReviewCommand.bind(this));
     
@@ -203,7 +276,6 @@ export class ExecutorCLI {
       .option('-o, --output <file>', 'Output file path', '')
       .option('-f, --format <format>', 'Export format (markdown|json|html)', 'markdown')
       .option('--no-cache', 'Disable research caching', false)
-      .option('--swarm', 'Use Swarms orchestration instead of legacy coordinator')
       .option('-v, --verbose', 'Enable verbose output', false)
       .action(this.executeResearchCommand.bind(this));
     
@@ -213,80 +285,83 @@ export class ExecutorCLI {
       .option('--json', 'Output in JSON format')
       .action(this.agentStatusCommand.bind(this));
 
-    // Swarms status command
-    this.program
-      .command('swarm-status')
-      .description('Show Swarms integration status and available agents')
-      .option('--json', 'Output in JSON format')
-      .action(this.swarmStatusCommand.bind(this));
   }
 
   private async executePlanCommand(
-    file: string, 
+    file: string,
     options: any
   ): Promise<void> {
+    const inputs = { file, ...options }
+
     try {
-      console.log(`🚀 Executing plan: ${file}`);
-      
-      const executionOptions: ExecutionOptions = {
-        dryRun: options.dryRun || false,
-        continueOnError: options.continueOnError || false,
-        verbose: options.verbose || false,
-        workingDirectory: options.workingDirectory
-      };
+      const report = await this.runWithEnvelope(
+        'plan',
+        inputs,
+        async () => {
+          console.log(`🚀 Executing plan: ${file}`);
 
-      // Parse plan
-      const parser = new PlanParser();
-      const plan = parser.parseFile(file);
-      
-      console.log(`📋 Plan: ${plan.metadata.name} v${plan.metadata.version}`);
-      console.log(`📝 Description: ${plan.metadata.description || 'No description'}`);
-      console.log(`🔧 Tasks: ${plan.tasks.length}`);
-      
-      if (plan.qualityGates && plan.qualityGates.length > 0) {
-        console.log(`✅ Quality Gates: ${plan.qualityGates.length}`);
-      }
+          const executionOptions: ExecutionOptions = {
+            dryRun: options.dryRun || false,
+            continueOnError: options.continueOnError || false,
+            verbose: options.verbose || false,
+            workingDirectory: options.workingDirectory
+          };
 
-      // Execute tasks
-      const executor = new TaskExecutor(executionOptions);
-      executor.setAgentCoordinator(this.agentCoordinator);
-      const startTime = new Date();
-      
-      const taskResults = await executor.executePlan(plan);
-      const endTime = new Date();
-      
-      // Execute quality gates if defined
-      let qualityGateResults: QualityGateResult[] = [];
-      if (plan.qualityGates && plan.qualityGates.length > 0) {
-        console.log('\\n🔍 Running quality gates...');
-        const gateRunner = new QualityGateRunner(executionOptions);
-        qualityGateResults = await gateRunner.executeQualityGates(plan.qualityGates);
-      }
+          // Parse plan
+          const parser = new PlanParser();
+          const plan = parser.parseFile(file);
 
-      // Generate report
-      const report: ExecutionReport = {
-        planId: plan.metadata.id,
-        status: this.calculateOverallStatus(taskResults, qualityGateResults),
-        startTime,
-        endTime,
-        totalDuration: endTime.getTime() - startTime.getTime(),
-        taskResults,
-        qualityGateResults,
-        summary: this.generateSummary(taskResults, qualityGateResults)
-      };
+          console.log(`📋 Plan: ${plan.metadata.name} v${plan.metadata.version}`);
+          console.log(`📝 Description: ${plan.metadata.description || 'No description'}`);
+          console.log(`🔧 Tasks: ${plan.tasks.length}`);
 
-      // Display results
-      this.displayExecutionReport(report);
-      
-      // Save report if requested
-      if (options.report) {
-        this.saveReport(report, options.report);
-      }
+          if (plan.qualityGates && plan.qualityGates.length > 0) {
+            console.log(`✅ Quality Gates: ${plan.qualityGates.length}`);
+          }
 
-      // Exit with appropriate code
+          // Execute tasks
+          const executor = new TaskExecutor(executionOptions);
+          executor.setAgentCoordinator(this.agentCoordinator);
+          const startTime = new Date();
+
+          const taskResults = await executor.executePlan(plan);
+          const endTime = new Date();
+
+          // Execute quality gates if defined
+          let qualityGateResults: QualityGateResult[] = [];
+          if (plan.qualityGates && plan.qualityGates.length > 0) {
+            console.log('\\n🔍 Running quality gates...');
+            const gateRunner = new QualityGateRunner(executionOptions);
+            qualityGateResults = await gateRunner.executeQualityGates(plan.qualityGates);
+          }
+
+          // Generate report
+          const report: ExecutionReport = {
+            planId: plan.metadata.id,
+            status: this.calculateOverallStatus(taskResults, qualityGateResults),
+            startTime,
+            endTime,
+            totalDuration: endTime.getTime() - startTime.getTime(),
+            taskResults,
+            qualityGateResults,
+            summary: this.generateSummary(taskResults, qualityGateResults)
+          };
+
+          // Display results
+          this.displayExecutionReport(report);
+
+          // Save report if requested
+          if (options.report) {
+            this.saveReport(report, options.report);
+          }
+
+          return report
+        },
+        (r) => `Plan ${r.planId} finished with status ${r.status}`
+      )
+
       const exitCode = report.status === TaskStatus.COMPLETED ? 0 : 1;
       process.exit(exitCode);
-      
     } catch (error) {
       console.error('❌ Error executing plan:', error instanceof Error ? error.message : 'Unknown error');
       process.exit(1);
@@ -294,40 +369,50 @@ export class ExecutorCLI {
   }
 
   private async executeGatesCommand(options: any): Promise<void> {
+    const inputs = { ...options }
+
     try {
-      console.log('🔍 Running quality gates...');
-      
-      const executionOptions: ExecutionOptions = {
-        dryRun: options.dryRun || false,
-        verbose: options.verbose || false
-      };
+      const results = await this.runWithEnvelope(
+        'gates',
+        inputs,
+        async () => {
+          console.log('🔍 Running quality gates...');
 
-      let gates;
-      
-      if (options.config) {
-        // Load custom gates configuration
-        const configContent = readFileSync(options.config, 'utf8');
-        gates = JSON.parse(configContent);
-      } else {
-        // Use default gates
-        gates = QualityGateRunner.getDefaultGates();
-      }
+          const executionOptions: ExecutionOptions = {
+            dryRun: options.dryRun || false,
+            verbose: options.verbose || false
+          };
 
-      const gateRunner = new QualityGateRunner(executionOptions);
-      const results = await gateRunner.executeQualityGates(gates);
-      
-      this.displayGateResults(results);
-      
-      // Save results if requested
-      if (options.report) {
-        this.saveGateResults(results, options.report);
-      }
+          let gates;
 
-      // Exit with appropriate code
+          if (options.config) {
+            // Load custom gates configuration
+            const configContent = readFileSync(options.config, 'utf8');
+            gates = JSON.parse(configContent);
+          } else {
+            // Use default gates
+            gates = QualityGateRunner.getDefaultGates();
+          }
+
+          const gateRunner = new QualityGateRunner(executionOptions);
+          const results = await gateRunner.executeQualityGates(gates);
+
+          this.displayGateResults(results);
+
+          // Save results if requested
+          if (options.report) {
+            this.saveGateResults(results, options.report);
+          }
+
+          return results
+        },
+        (r) => `Quality gates: ${r.filter(x => x.passed).length} passed, ${r.filter(x => !x.passed).length} failed`
+      )
+
       const failedGates = results.filter(r => !r.passed);
       const exitCode = failedGates.length === 0 ? 0 : 1;
       process.exit(exitCode);
-      
+
     } catch (error) {
       console.error('❌ Error running quality gates:', error instanceof Error ? error.message : 'Unknown error');
       process.exit(1);
@@ -335,15 +420,26 @@ export class ExecutorCLI {
   }
 
   private async reportCommand(file: string, options: any): Promise<void> {
+    const inputs = { file, ...options }
+
     try {
-      const reportContent = readFileSync(file, 'utf8');
-      const report: ExecutionReport = JSON.parse(reportContent);
-      
-      if (options.format === 'json') {
-        console.log(JSON.stringify(report, null, 2));
-      } else {
-        this.displayExecutionReport(report);
-      }
+      await this.runWithEnvelope(
+        'report',
+        inputs,
+        async () => {
+          const reportContent = readFileSync(file, 'utf8');
+          const report: ExecutionReport = JSON.parse(reportContent);
+
+          if (options.format === 'json') {
+            console.log(JSON.stringify(report, null, 2));
+          } else {
+            this.displayExecutionReport(report);
+          }
+
+          return report
+        },
+        (r) => `Displayed report for planId ${r.planId}`
+      )
     } catch (error) {
       console.error('❌ Error reading report:', error instanceof Error ? error.message : 'Unknown error');
       process.exit(1);
@@ -351,25 +447,36 @@ export class ExecutorCLI {
   }
 
   private async validateCommand(file: string, options: any): Promise<void> {
+    const inputs = { file, ...options }
+
     try {
-      console.log(`🔍 Validating plan: ${file}`);
-      
-      const parser = new PlanParser();
-      const plan = parser.parseFile(file);
-      
-      console.log('✅ Plan validation successful!');
-      console.log(`📋 Plan: ${plan.metadata.name} v${plan.metadata.version}`);
-      console.log(`🔧 Tasks: ${plan.tasks.length}`);
-      console.log(`✅ Quality Gates: ${plan.qualityGates?.length || 0}`);
-      
-      if (options.verbose) {
-        const warnings = parser.getWarnings();
-        if (warnings.length > 0) {
-          console.log('\\n⚠️  Warnings:');
-          warnings.forEach(warning => console.log(`  - ${warning}`));
-        }
-      }
-      
+      await this.runWithEnvelope(
+        'validate',
+        inputs,
+        async () => {
+          console.log(`🔍 Validating plan: ${file}`);
+
+          const parser = new PlanParser();
+          const plan = parser.parseFile(file);
+
+          console.log('✅ Plan validation successful!');
+          console.log(`📋 Plan: ${plan.metadata.name} v${plan.metadata.version}`);
+          console.log(`🔧 Tasks: ${plan.tasks.length}`);
+          console.log(`✅ Quality Gates: ${plan.qualityGates?.length || 0}`);
+
+          if (options.verbose) {
+            const warnings = parser.getWarnings();
+            if (warnings.length > 0) {
+              console.log('\\n⚠️  Warnings:');
+              warnings.forEach(warning => console.log(`  - ${warning}`));
+            }
+          }
+
+          return plan
+        },
+        (p) => `Validated plan ${p.metadata.id}`
+      )
+
     } catch (error) {
       console.error('❌ Plan validation failed:', error instanceof Error ? error.message : 'Unknown error');
       process.exit(1);
@@ -462,69 +569,50 @@ export class ExecutorCLI {
     description: string,
     options: any
   ): Promise<void> {
+    const inputs = { description, ...options }
+
     try {
-      console.log(`🤖 Generating plan from: ${description}`);
-      
-      // Try Swarms execution if requested
-      if (options.swarm && this.commandSwarmsIntegration) {
-        console.log('🐝 Using Swarms orchestration...');
-        const swarmResult = await this.executeViaSwarms('plan', [description], {
-          timeout: 300000
-        });
-        
-        if (swarmResult && swarmResult.success) {
-          console.log('✅ Swarm execution completed');
-          console.log(swarmResult.output);
-          
-          if (swarmResult.agentUsed) {
-            console.log(`\n🤖 Agent used: ${swarmResult.agentUsed}`);
+      await this.runWithEnvelope(
+        'generate-plan',
+        inputs,
+        async () => {
+          console.log(`🤖 Generating plan from: ${description}`);
+
+          const input: PlanGenerationInput = {
+            description,
+            scope: options.scope,
+            requirements: options.requirements || [],
+            constraints: options.constraints || [],
+            context: {}
+          };
+
+          const result = await this.planGenerator.generatePlan(input);
+
+          console.log(`📋 Generated Plan: ${result.plan.name}`);
+          console.log(`📝 Description: ${result.plan.description}`);
+          console.log(`🔧 Tasks: ${result.plan.tasks.length}`);
+          console.log(`🎯 Confidence: ${result.confidence}`);
+
+          if (options.verbose) {
+            console.log(`\n🧠 Reasoning: ${result.reasoning}`);
+            console.log(`\n💡 Suggestions:`);
+            result.suggestions.forEach((suggestion, i) => {
+              console.log(`  ${i + 1}. ${suggestion}`);
+            });
           }
-          if (swarmResult.executionTime) {
-            console.log(`⏱️  Execution time: ${swarmResult.executionTime}ms`);
-          }
-          
-          // Save output if requested
-          if (options.output && swarmResult.output) {
-            require('fs').writeFileSync(options.output, swarmResult.output);
+
+          // Save plan if requested
+          if (options.output) {
+            const yaml = require('yaml');
+            const content = yaml.stringify(result.plan);
+            require('fs').writeFileSync(options.output, content);
             console.log(`\n📄 Plan saved to: ${options.output}`);
           }
-          return;
-        }
-        
-        console.log('⚠️  Swarm execution returned no result, falling back to legacy...');
-      }
-      
-      // Legacy execution path
-      const input: PlanGenerationInput = {
-        description,
-        scope: options.scope,
-        requirements: options.requirements || [],
-        constraints: options.constraints || [],
-        context: {}
-      };
 
-      const result = await this.planGenerator.generatePlan(input);
-      
-      console.log(`📋 Generated Plan: ${result.plan.name}`);
-      console.log(`📝 Description: ${result.plan.description}`);
-      console.log(`🔧 Tasks: ${result.plan.tasks.length}`);
-      console.log(`🎯 Confidence: ${result.confidence}`);
-      
-      if (options.verbose) {
-        console.log(`\n🧠 Reasoning: ${result.reasoning}`);
-        console.log(`\n💡 Suggestions:`);
-        result.suggestions.forEach((suggestion, i) => {
-          console.log(`  ${i + 1}. ${suggestion}`);
-        });
-      }
-
-      // Save plan if requested
-      if (options.output) {
-        const yaml = require('yaml');
-        const content = yaml.stringify(result.plan);
-        require('fs').writeFileSync(options.output, content);
-        console.log(`\n📄 Plan saved to: ${options.output}`);
-      }
+          return result
+        },
+        (r: any) => `Generated plan '${r.plan?.name ?? 'unknown'}' (confidence ${r.confidence})`
+      )
 
     } catch (error) {
       console.error(`❌ Plan generation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -536,85 +624,66 @@ export class ExecutorCLI {
     files: string[],
     options: any
   ): Promise<void> {
+    const inputs = { files, ...options }
+
     try {
-      console.log(`🔍 Starting code review for: ${files.join(', ')}`);
-      
-      // Try Swarms execution if requested
-      if (options.swarm && this.commandSwarmsIntegration) {
-        console.log('🐝 Using Swarms orchestration...');
-        const swarmResult = await this.executeViaSwarms('review', files, {
-          timeout: 300000
-        });
-        
-        if (swarmResult && swarmResult.success) {
-          console.log('✅ Swarm code review completed');
-          console.log(swarmResult.output);
-          
-          if (swarmResult.agentUsed) {
-            console.log(`\n🤖 Agent used: ${swarmResult.agentUsed}`);
+      await this.runWithEnvelope(
+        'code-review',
+        inputs,
+        async () => {
+          console.log(`🔍 Starting code review for: ${files.join(', ')}`);
+
+          const input: CodeReviewInput = {
+            files,
+            reviewType: options.type || 'full',
+            severity: options.severity || 'medium',
+            context: {}
+          };
+
+          let result;
+          if (options.focus) {
+            result = await this.codeReviewExecutor.executeFocusedReview(input, options.focus);
+            console.log(`🎯 Focused review (${options.focus}):`);
+          } else {
+            result = await this.codeReviewExecutor.executeCodeReview(input);
+            console.log(`🔍 Full review:`);
           }
-          if (swarmResult.executionTime) {
-            console.log(`⏱️  Execution time: ${swarmResult.executionTime}ms`);
+
+          console.log(`📊 Findings: ${result.findings.length}`);
+          console.log(`📈 Overall Score: ${result.overallScore}/100`);
+
+          // Group findings by severity
+          const bySeverity = result.summary.bySeverity;
+          Object.entries(bySeverity).forEach(([severity, count]) => {
+            console.log(`  ${severity}: ${count}`);
+          });
+
+          if (options.verbose) {
+            console.log(`\n📝 Detailed Findings:`);
+            result.findings.forEach((finding, i) => {
+              console.log(`  ${i + 1}. ${finding.file}:${finding.line} - ${finding.message}`);
+              if (finding.suggestion) {
+                console.log(`     💡 ${finding.suggestion}`);
+              }
+            });
           }
-          
-          // Save output if requested
-          if (options.output && swarmResult.output) {
-            require('fs').writeFileSync(options.output, swarmResult.output);
+
+          console.log(`\n💡 Recommendations:`);
+          result.recommendations.forEach((rec, i) => {
+            console.log(`  ${i + 1}. ${rec}`);
+          });
+
+          // Save report if requested
+          if (options.output) {
+            const content = JSON.stringify(result, null, 2);
+            require('fs').writeFileSync(options.output, content);
             console.log(`\n📄 Report saved to: ${options.output}`);
           }
-          return;
-        }
-        
-        console.log('⚠️  Swarm execution returned no result, falling back to legacy...');
-      }
-      
-      // Legacy execution path
-      const input: CodeReviewInput = {
-        files,
-        reviewType: options.type || 'full',
-        severity: options.severity || 'medium',
-        context: {}
-      };
 
-      let result;
-      if (options.focus) {
-        result = await this.codeReviewExecutor.executeFocusedReview(input, options.focus);
-        console.log(`🎯 Focused review (${options.focus}):`);
-      } else {
-        result = await this.codeReviewExecutor.executeCodeReview(input);
-        console.log(`🔍 Full review:`);
-      }
-
-      console.log(`📊 Findings: ${result.findings.length}`);
-      console.log(`📈 Overall Score: ${result.overallScore}/100`);
-      
-      // Group findings by severity
-      const bySeverity = result.summary.bySeverity;
-      Object.entries(bySeverity).forEach(([severity, count]) => {
-        console.log(`  ${severity}: ${count}`);
-      });
-
-      if (options.verbose) {
-        console.log(`\n📝 Detailed Findings:`);
-        result.findings.forEach((finding, i) => {
-          console.log(`  ${i + 1}. ${finding.file}:${finding.line} - ${finding.message}`);
-          if (finding.suggestion) {
-            console.log(`     💡 ${finding.suggestion}`);
-          }
-        });
-      }
-
-      console.log(`\n💡 Recommendations:`);
-      result.recommendations.forEach((rec, i) => {
-        console.log(`  ${i + 1}. ${rec}`);
-      });
-
-      // Save report if requested
-      if (options.output) {
-        const content = JSON.stringify(result, null, 2);
-        require('fs').writeFileSync(options.output, content);
-        console.log(`\n📄 Report saved to: ${options.output}`);
-      }
+          return result
+        },
+        (r: any) => `Code review completed: ${r.findings?.length ?? 0} findings, score ${r.overallScore}/100`
+      )
 
     } catch (error) {
       console.error(`❌ Code review failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -623,40 +692,58 @@ export class ExecutorCLI {
   }
 
   private async agentStatusCommand(options: any): Promise<void> {
+    const inputs = { ...options }
+
     try {
-      const progress = this.agentCoordinator.getProgress();
-      const metrics = this.agentCoordinator.getMetrics();
+      const status = await this.runWithEnvelope(
+        'agent-status',
+        inputs,
+        async () => {
+          const progress = this.agentCoordinator.getProgress();
+          const metrics = this.agentCoordinator.getMetrics();
 
-      if (options.json) {
-        const status = {
-          progress,
-          metrics: Object.fromEntries(metrics || [])
-        };
-        console.log(JSON.stringify(status, null, 2));
-      } else {
-        console.log('🤖 Agent Status');
-        console.log('================');
-        
-        if (progress) {
-          console.log(`📊 Progress:`);
-          console.log(`  Total Tasks: ${progress.totalTasks}`);
-          console.log(`  Completed: ${progress.completedTasks}`);
-          console.log(`  Failed: ${progress.failedTasks}`);
-          console.log(`  Running: ${progress.runningTasks}`);
-          console.log(`  Progress: ${progress.percentageComplete.toFixed(1)}%`);
-        }
+          if (options.json) {
+            const status = {
+              progress,
+              metrics: Object.fromEntries(metrics || [])
+            };
+            console.log(JSON.stringify(status, null, 2));
+            return status
+          }
 
-        if (metrics && metrics.size > 0) {
-          console.log(`\n📈 Metrics:`);
-          metrics.forEach((metric, agentType) => {
-            console.log(`  ${agentType}:`);
-            console.log(`    Executions: ${metric.executionCount}`);
-            console.log(`    Success Rate: ${(metric.successRate * 100).toFixed(1)}%`);
-            console.log(`    Avg Time: ${metric.averageExecutionTime.toFixed(0)}ms`);
-            console.log(`    Confidence: ${metric.averageConfidence.toFixed(2)}`);
-          });
-        }
-      }
+          console.log('🤖 Agent Status');
+          console.log('================');
+
+          if (progress) {
+            console.log(`📊 Progress:`);
+            console.log(`  Total Tasks: ${progress.totalTasks}`);
+            console.log(`  Completed: ${progress.completedTasks}`);
+            console.log(`  Failed: ${progress.failedTasks}`);
+            console.log(`  Running: ${progress.runningTasks}`);
+            console.log(`  Progress: ${progress.percentageComplete.toFixed(1)}%`);
+          }
+
+          if (metrics && metrics.size > 0) {
+            console.log(`\n📈 Metrics:`);
+            metrics.forEach((metric, agentType) => {
+              console.log(`  ${agentType}:`);
+              console.log(`    Executions: ${metric.executionCount}`);
+              console.log(`    Success Rate: ${(metric.successRate * 100).toFixed(1)}%`);
+              console.log(`    Avg Time: ${metric.averageExecutionTime.toFixed(0)}ms`);
+              console.log(`    Confidence: ${metric.averageConfidence.toFixed(2)}`);
+            });
+          }
+
+          return {
+            progress,
+            metrics: metrics ? Object.fromEntries(metrics || []) : {}
+          }
+        },
+        () => `Displayed agent status`
+      )
+
+      // For status, always exit 0 if we got this far.
+      void status
 
     } catch (error) {
       console.error(`❌ Failed to get agent status: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -668,131 +755,112 @@ export class ExecutorCLI {
     query: string,
     options: any
   ): Promise<void> {
+    const inputs = { query, ...options }
+
     try {
-      console.log(`🔍 Starting research: ${query || '(interactive mode)'}`);
-      
-      // Try Swarms execution if requested
-      if (options.swarm && this.commandSwarmsIntegration) {
-        console.log('🐝 Using Swarms orchestration...');
-        const swarmResult = await this.executeViaSwarms('research', [query], {
-          timeout: 600000 // 10 minutes for research
-        });
-        
-        if (swarmResult && swarmResult.success) {
-          console.log('✅ Swarm research completed');
-          console.log(swarmResult.output);
-          
-          if (swarmResult.agentUsed) {
-            console.log(`\n🤖 Agent used: ${swarmResult.agentUsed}`);
+      await this.runWithEnvelope(
+        'research',
+        inputs,
+        async () => {
+          console.log(`🔍 Starting research: ${query || '(interactive mode)'}`);
+
+          // Parse scope and depth from options
+          const scope = options.scope === 'codebase' ? ResearchScope.CODEBASE :
+                       options.scope === 'documentation' ? ResearchScope.DOCUMENTATION :
+                       options.scope === 'external' ? ResearchScope.EXTERNAL :
+                       ResearchScope.ALL;
+
+          const depth = options.depth === 'shallow' ? ResearchDepth.SHALLOW :
+                       options.depth === 'medium' ? ResearchDepth.MEDIUM :
+                       options.depth === 'deep' ? ResearchDepth.DEEP :
+                       ResearchDepth.MEDIUM;
+
+          const researchQuery: ResearchQuery = {
+            id: `research-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            query,
+            scope,
+            depth,
+            constraints: {
+              maxFiles: options.maxFiles || 100,
+              maxDuration: options.maxDuration || 300000, // 5 minutes
+              excludePatterns: options.exclude || []
+            },
+            context: {
+              verbose: options.verbose || false,
+              cacheEnabled: options.cache !== false
+            }
+          };
+
+          const config: ResearchConfig = {
+            maxConcurrency: 3,
+            defaultTimeout: 30000,
+            enableCaching: options.cache !== false,
+            logLevel: options.verbose ? 'debug' : 'info',
+            outputFormat: options.format || 'markdown',
+            outputPath: options.output || ''
+          };
+
+          const orchestrator = new ResearchOrchestrator(config);
+
+          // Set up progress tracking
+          orchestrator.on('progress', (progress: ResearchProgress) => {
+            const percentage = (progress.completedSteps / progress.totalSteps * 100).toFixed(1);
+            console.log(`📊 Progress: ${progress.currentPhase} - ${percentage}% (${progress.completedSteps}/${progress.totalSteps})`);
+          });
+
+          orchestrator.on('error', (error: ResearchError) => {
+            console.error(`❌ Research error in ${error.phase}: ${error.error}`);
+          });
+
+          // Execute research
+          const result = await orchestrator.research(researchQuery);
+
+          // Display results
+          console.log('\n🎯 Research Results');
+          console.log('==================');
+          console.log(`📋 Query: ${result.query.query}`);
+          console.log(`🔍 Scope: ${result.query.scope}`);
+          console.log(`⚡ Depth: ${result.query.depth}`);
+          console.log(`⏱️  Duration: ${result.metrics.totalDuration}ms`);
+
+          if (result.findings.length > 0) {
+            console.log(`\n🔍 Key Findings (${result.findings.length}):`);
+            result.findings.forEach((finding, i) => {
+              console.log(`  ${i + 1}. ${finding.title} (${finding.impact})`);
+              if (finding.evidence && finding.evidence.length > 0) {
+                console.log(`     Evidence: ${finding.evidence.length} sources`);
+              }
+            });
           }
-          if (swarmResult.executionTime) {
-            console.log(`⏱️  Execution time: ${swarmResult.executionTime}ms`);
+
+          if (result.recommendations.length > 0) {
+            console.log(`\n💡 Recommendations (${result.recommendations.length}):`);
+            result.recommendations.forEach((rec, i) => {
+              console.log(`  ${i + 1}. ${rec}`);
+            });
           }
-          
-          // Save output if requested
-          if (options.output && swarmResult.output) {
-            require('fs').writeFileSync(options.output, swarmResult.output);
+
+          if (result.risks.length > 0) {
+            console.log(`\n⚠️  Risks Identified (${result.risks.length}):`);
+            result.risks.forEach((risk, i) => {
+              console.log(`  ${i + 1}. ${risk.description} (${risk.severity})`);
+            });
+          }
+
+          // Save results if requested
+          if (options.output) {
+            const content = options.format === 'json' ?
+              JSON.stringify(result, null, 2) :
+              result.summary;
+
+            require('fs').writeFileSync(options.output, content);
             console.log(`\n📄 Results saved to: ${options.output}`);
           }
-          return;
-        }
-        
-        console.log('⚠️  Swarm execution returned no result, falling back to legacy...');
-      }
-      
-      // Legacy execution path
-      // Parse scope and depth from options
-      const scope = options.scope === 'codebase' ? ResearchScope.CODEBASE :
-                   options.scope === 'documentation' ? ResearchScope.DOCUMENTATION :
-                   options.scope === 'external' ? ResearchScope.EXTERNAL :
-                   ResearchScope.ALL;
-      
-      const depth = options.depth === 'shallow' ? ResearchDepth.SHALLOW :
-                   options.depth === 'medium' ? ResearchDepth.MEDIUM :
-                   options.depth === 'deep' ? ResearchDepth.DEEP :
-                   ResearchDepth.MEDIUM;
 
-      const researchQuery: ResearchQuery = {
-        id: `research-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        query,
-        scope,
-        depth,
-        constraints: {
-          maxFiles: options.maxFiles || 100,
-          maxDuration: options.maxDuration || 300000, // 5 minutes
-          excludePatterns: options.exclude || []
+          return result
         },
-        context: {
-          verbose: options.verbose || false,
-          cacheEnabled: options.cache !== false
-        }
-      };
-
-      const config: ResearchConfig = {
-        maxConcurrency: 3,
-        defaultTimeout: 30000,
-        enableCaching: options.cache !== false,
-        logLevel: options.verbose ? 'debug' : 'info',
-        outputFormat: options.format || 'markdown',
-        outputPath: options.output || ''
-      };
-
-      const orchestrator = new ResearchOrchestrator(config);
-      
-      // Set up progress tracking
-      orchestrator.on('progress', (progress: ResearchProgress) => {
-        const percentage = (progress.completedSteps / progress.totalSteps * 100).toFixed(1);
-        console.log(`📊 Progress: ${progress.currentPhase} - ${percentage}% (${progress.completedSteps}/${progress.totalSteps})`);
-      });
-
-      orchestrator.on('error', (error: ResearchError) => {
-        console.error(`❌ Research error in ${error.phase}: ${error.error}`);
-      });
-
-      // Execute research
-      const result = await orchestrator.research(researchQuery);
-      
-      // Display results
-      console.log('\n🎯 Research Results');
-      console.log('==================');
-      console.log(`📋 Query: ${result.query.query}`);
-      console.log(`🔍 Scope: ${result.query.scope}`);
-      console.log(`⚡ Depth: ${result.query.depth}`);
-      console.log(`⏱️  Duration: ${result.metrics.totalDuration}ms`);
-      
-      if (result.findings.length > 0) {
-        console.log(`\n🔍 Key Findings (${result.findings.length}):`);
-        result.findings.forEach((finding, i) => {
-          console.log(`  ${i + 1}. ${finding.title} (${finding.impact})`);
-          if (finding.evidence && finding.evidence.length > 0) {
-            console.log(`     Evidence: ${finding.evidence.length} sources`);
-          }
-        });
-      }
-
-      if (result.recommendations.length > 0) {
-        console.log(`\n💡 Recommendations (${result.recommendations.length}):`);
-        result.recommendations.forEach((rec, i) => {
-          console.log(`  ${i + 1}. ${rec}`);
-        });
-      }
-
-      if (result.risks.length > 0) {
-        console.log(`\n⚠️  Risks Identified (${result.risks.length}):`);
-        result.risks.forEach((risk, i) => {
-          console.log(`  ${i + 1}. ${risk.description} (${risk.severity})`);
-        });
-      }
-
-      // Save results if requested
-      if (options.output) {
-        const content = options.format === 'json' ? 
-          JSON.stringify(result, null, 2) : 
-          result.summary;
-        
-        require('fs').writeFileSync(options.output, content);
-        console.log(`\n📄 Results saved to: ${options.output}`);
-      }
+        (r: any) => `Research completed: ${r.findings?.length ?? 0} findings, ${r.recommendations?.length ?? 0} recommendations`
+      )
 
     } catch (error) {
       console.error(`❌ Research failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -800,84 +868,5 @@ export class ExecutorCLI {
     }
   }
 
-  private async swarmStatusCommand(options: any): Promise<void> {
-    try {
-      // Check Swarms availability
-      const isAvailable = await checkLocalSwarmsAvailable();
-      
-      if (options.json) {
-        const status = {
-          available: isAvailable,
-          mode: isAvailable ? 'local' : 'unavailable',
-          agents: isAvailable && this.commandSwarmsIntegration 
-            ? await (createSwarmsClient({ mode: 'local' }) as any).getAvailableAgents()
-            : [],
-          commands: isAvailable && this.commandSwarmsIntegration
-            ? this.commandSwarmsIntegration.getAvailableCommands().map(c => c.command)
-            : []
-        };
-        console.log(JSON.stringify(status, null, 2));
-      } else {
-        console.log('🐝 Swarms Integration Status');
-        console.log('============================');
-        
-        if (isAvailable) {
-          console.log('✅ Status: Available (local mode)');
-          
-          // Get available agents
-          const executor = createSwarmsClient({ mode: 'local' }) as any;
-          const agents = await executor.getAvailableAgents();
-          
-          console.log(`\n🤖 Available Agents (${agents.length}):`);
-          
-          // Group agents by category
-          const categories: Record<string, string[]> = {
-            'Architecture & Planning': ['architect-advisor', 'backend-architect', 'infrastructure-builder'],
-            'Development & Coding': ['frontend-reviewer', 'full-stack-developer', 'api-builder-enhanced', 'database-optimizer', 'java-pro'],
-            'Quality & Testing': ['code-reviewer', 'test-generator', 'security-scanner', 'performance-engineer'],
-            'DevOps & Deployment': ['deployment-engineer', 'monitoring-expert', 'cost-optimizer'],
-            'AI & Machine Learning': ['ai-engineer', 'ml-engineer'],
-            'Content & SEO': ['seo-specialist', 'prompt-optimizer'],
-            'Plugin Development': ['agent-creator', 'command-creator', 'skill-creator', 'tool-creator', 'plugin-validator']
-          };
-          
-          for (const [category, categoryAgents] of Object.entries(categories)) {
-            const available = categoryAgents.filter(a => agents.includes(a));
-            if (available.length > 0) {
-              console.log(`\n  ${category}:`);
-              available.forEach(a => console.log(`    • ${a}`));
-            }
-          }
-          
-          // Show available commands
-          if (this.commandSwarmsIntegration) {
-            const commands = this.commandSwarmsIntegration.getAvailableCommands();
-            console.log(`\n📋 Swarm-Enabled Commands (${commands.length}):`);
-            commands.forEach(cmd => {
-              console.log(`  • ${cmd.command}: ${cmd.description}`);
-              console.log(`    Swarm Type: ${cmd.swarmType}`);
-              console.log(`    Capabilities: ${cmd.capabilities.join(', ')}`);
-            });
-          }
-          
-          console.log('\n💡 Usage:');
-          console.log('  Add --swarm flag to commands to use Swarms orchestration:');
-          console.log('  ai-exec generate-plan "Build a todo app" --swarm');
-          console.log('  ai-exec code-review src/*.ts --swarm');
-          console.log('  ai-exec research "How does auth work?" --swarm');
-          
-        } else {
-          console.log('❌ Status: Unavailable');
-          console.log('\n⚠️  Swarms Python library not detected.');
-          console.log('   To enable Swarms integration:');
-          console.log('   pip install swarms');
-          console.log('\n   Once installed, Swarms will be auto-detected on next run.');
-        }
-      }
 
-    } catch (error) {
-      console.error(`❌ Failed to get swarm status: ${error instanceof Error ? error.message : 'Unknown error'}`);
-      process.exit(1);
-    }
-  }
 }

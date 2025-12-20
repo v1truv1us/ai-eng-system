@@ -26,7 +26,7 @@ Analysis of /ferg/* command presence reveals a namespace migration from 'ferg' t
 #### Current Command Architecture
 **Primary Namespace**: `ai-eng/`
 - Build configuration: `build.ts:30` - `const NAMESPACE_PREFIX = "ai-eng"`
-- Built artifacts: `dist/.opencode/command/ai-eng/` (15 commands), `dist/.opencode/agent/ai-eng/` (24 agents)
+- Built artifacts: `dist/.opencode/command/ai-eng/` (15 commands), `dist/.opencode/agent/ai-eng/` (29 agents)
 - Commands: `compound`, `context`, `create-agent`, `create-command`, `create-plugin`, `create-skill`, `create-tool`, `deploy`, `optimize`, `plan`, `recursive-init`, `research`, `review`, `seo`, `work`
 
 #### Legacy /ferg/ References

@@ -13,8 +13,13 @@ import { writeFileSync, mkdirSync, rmSync, existsSync } from 'fs';
 describe('AgentRegistry', () => {
   let registry: AgentRegistry;
   let tempDir: string;
+  let previousSilentEnv: string | undefined;
 
   beforeEach(() => {
+    // Silence expected parse errors during this suite.
+    previousSilentEnv = process.env.AI_ENG_SILENT;
+    process.env.AI_ENG_SILENT = '1';
+
     registry = new AgentRegistry();
     tempDir = join(process.cwd(), `test-plugin-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`);
     mkdirSync(tempDir, { recursive: true });
@@ -25,6 +30,14 @@ describe('AgentRegistry', () => {
     if (existsSync(tempDir)) {
       rmSync(tempDir, { recursive: true, force: true });
     }
+
+    if (previousSilentEnv === undefined) {
+      delete process.env.AI_ENG_SILENT;
+    } else {
+      process.env.AI_ENG_SILENT = previousSilentEnv;
+    }
+
+    previousSilentEnv = undefined;
   });
 
   describe('Loading from Plugin Structure', () => {

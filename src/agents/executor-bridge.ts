@@ -9,16 +9,52 @@
  */
 
 import { AgentRegistry } from './registry.js';
-import { AgentType, AgentDefinition, AgentTask, AgentOutput, ExecutionMode, LocalOperation, LocalResult } from './types.js';
-import { glob } from 'glob';
-import { readFile, stat } from 'fs/promises';
+import { AgentType, AgentDefinition, AgentTask, AgentOutput, ExecutionMode, LocalOperation, LocalResult, ConfidenceLevel } from './types.js';
+import { readFile, stat, readdir } from 'fs/promises';
 import { join } from 'path';
+
+/**
+ * Simple glob implementation using readdir
+ */
+async function simpleGlob(pattern: string, options?: { cwd?: string; ignore?: string[] }): Promise<string[]> {
+  const cwd = options?.cwd || process.cwd();
+  const ignore = options?.ignore || [];
+  
+  try {
+    const entries = await readdir(cwd, { withFileTypes: true, recursive: true });
+    const files: string[] = [];
+    
+    for (const entry of entries) {
+      if (entry.isFile()) {
+        const relativePath = entry.parentPath 
+          ? join(entry.parentPath.replace(cwd, ''), entry.name)
+          : entry.name;
+        
+        // Simple ignore check
+        const shouldIgnore = ignore.some(ig => {
+          const igPattern = ig.replace(/\*\*/g, '').replace(/\*/g, '');
+          return relativePath.includes(igPattern.replace(/\//g, ''));
+        });
+        
+        if (!shouldIgnore) {
+          files.push(relativePath);
+        }
+      }
+    }
+    
+    return files;
+  } catch (error) {
+    return [];
+  }
+}
 
 export class ExecutorBridge {
   private registry: AgentRegistry;
+  private sessionManager?: any; // Optional session manager for context envelopes
 
-  constructor(registry: AgentRegistry) {
+  constructor(registry: AgentRegistry, sessionManager?: any) {
     this.registry = registry;
+    this.sessionManager = sessionManager;
   }
 
   /**
@@ -55,7 +91,7 @@ export class ExecutorBridge {
       AgentType.DATABASE_OPTIMIZER,
       AgentType.AI_ENGINEER,
       AgentType.ML_ENGINEER,
-      AgentType.PROMT_OPTIMIZER
+      AgentType.PROMPT_OPTIMIZER
     ];
 
     // Local execution for data processing and file operations
@@ -107,7 +143,7 @@ export class ExecutorBridge {
 
   private async executeInternal(task: AgentTask): Promise<AgentOutput> {
     const mode = this.selectExecutionMode(task);
-
+    
     if (mode === 'task-tool') {
       return this.executeWithTaskTool(task);
     } else {
@@ -116,76 +152,39 @@ export class ExecutorBridge {
   }
 
   /**
-   * Execute using Task tool subagents
+   * Cleanup resources
+   *
+   * Note: MCP-based Task-tool execution was removed. This bridge now only supports
+   * local execution in standalone mode.
+   */
+  async cleanup(): Promise<void> {}
+
+  /**
+   * Execute using Task tool subagents.
+   *
+   * IMPORTANT: In this repository, running Task tool subagents requires the
+   * OpenCode runtime (where the Task tool executes in-process). The ai-eng-system
+   * package is a standalone orchestration layer and does not invoke OpenCode.
+   *
+   * For now, we fail gracefully with a clear message.
    */
   private async executeWithTaskTool(task: AgentTask): Promise<AgentOutput> {
-    const agent = this.registry.get(task.type);
-
-    // Create a minimal agent definition if not found in registry
-    const agentDef = agent || {
+    const subagentType = this.mapToSubagentType(task.type);
+    return {
       type: task.type,
-      name: task.type.replace(/-/g, '_'),
-      description: `${task.type} agent`,
-      mode: 'subagent' as const,
-      temperature: 0.7,
-      capabilities: [],
-      handoffs: [],
-      tags: [],
-      category: 'general',
-      tools: {
-        read: true,
-        grep: false,
-        glob: false,
-        list: false,
-        bash: false,
-        edit: false,
-        write: false,
-        patch: false
+      success: false,
+      result: {
+        message:
+          'Task tool execution is not available in standalone ai-eng-system mode. ' +
+          'Run this workflow inside OpenCode (where the task tool runs in-process), ' +
+          'or change the task to a local operation.',
+        subagentType,
       },
-      promptPath: '',
-      prompt: `Execute ${task.type} task`
+      confidence: ConfidenceLevel.LOW,
+      reasoning: 'Task-tool execution requires OpenCode runtime (MCP removed)',
+      executionTime: 0,
+      error: 'Task tool requires OpenCode runtime',
     };
-
-    try {
-      // Build enhanced prompt
-      const enhancedPrompt = await this.buildEnhancedPrompt(agent, task);
-
-      // Map to subagent type
-      const subagentType = this.mapToSubagentType(task.type);
-
-      // In a real implementation, this would invoke the Task tool
-      // For now, simulate the execution
-      const startTime = Date.now();
-
-      // Simulate processing time (skip for very short timeouts used in tests)
-      if (!task.timeout || task.timeout > 100) {
-        const processingTime = 500 + Math.random() * 1000;
-        await new Promise(resolve => setTimeout(resolve, processingTime));
-      }
-
-      // Return agent-specific mock results
-      const result = this.generateMockResultForAgent(task.type, task.input?.context);
-
-      return {
-        type: task.type,
-        success: true,
-        result,
-        confidence: 'high' as const,
-        reasoning: `Executed ${task.type} using Task tool subagent ${subagentType}`,
-        executionTime: Date.now() - startTime
-      };
-
-    } catch (error) {
-      return {
-        type: task.type,
-        success: false,
-        result: {},
-        confidence: 'low' as const,
-        reasoning: `Failed to execute ${task.type}: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        executionTime: 0,
-        error: error instanceof Error ? error.message : 'Unknown error'
-      };
-    }
   }
 
   /**
@@ -223,7 +222,7 @@ export class ExecutorBridge {
         type: task.type,
         success: true,
         result,
-        confidence: 'medium' as const,
+        confidence: ConfidenceLevel.MEDIUM,
         reasoning: `Executed ${task.type} locally`,
         executionTime: Date.now() - startTime
       };
@@ -233,7 +232,7 @@ export class ExecutorBridge {
         type: task.type,
         success: false,
         result: {},
-        confidence: 'low' as const,
+        confidence: ConfidenceLevel.LOW,
         reasoning: `Local execution failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
         executionTime: Date.now() - startTime,
         error: error instanceof Error ? error.message : 'Unknown error'
@@ -269,7 +268,7 @@ export class ExecutorBridge {
       [AgentType.PLUGIN_VALIDATOR]: 'ai-eng/plugin-validator',
       [AgentType.INFRASTRUCTURE_BUILDER]: 'operations/infrastructure_builder',
       [AgentType.JAVA_PRO]: 'development/java_pro',
-      [AgentType.PROMT_OPTIMIZER]: 'ai-innovation/prompt_optimizer' // Note: typo in enum
+      [AgentType.PROMPT_OPTIMIZER]: 'ai-innovation/prompt_optimizer'
     };
 
     return mapping[type] || `unknown/${type}`;
@@ -351,7 +350,7 @@ ${contextStr || 'No additional context provided'}`;
 
       switch (operation.operation) {
         case 'glob':
-          const files = await glob(operation.pattern || '**/*', {
+          const files = await simpleGlob(operation.pattern || '**/*', {
             cwd: operation.cwd,
             ignore: ['**/node_modules/**', '**/dist/**', '**/.git/**']
           });
@@ -360,7 +359,7 @@ ${contextStr || 'No additional context provided'}`;
 
         case 'grep':
           // Simple grep implementation
-          const grepFiles = await glob(operation.include || '**/*', {
+          const grepFiles = await simpleGlob(operation.include || '**/*', {
             cwd: operation.cwd,
             ignore: ['**/node_modules/**', '**/dist/**', '**/.git/**']
           });
@@ -477,97 +476,5 @@ ${contextStr || 'No additional context provided'}`;
     };
   }
 
-  private generateMockResultForAgent(agentType: AgentType, context?: any): any {
-    switch (agentType) {
-      case AgentType.ARCHITECT_ADVISOR:
-        return {
-          tasks: [
-            {
-              id: 'arch-design',
-              name: 'Design system architecture',
-              description: 'Create high-level system architecture',
-              command: 'create-architecture-diagram'
-            }
-          ],
-          dependencies: [],
-          suggestions: ['Consider scalability requirements']
-        };
 
-      case AgentType.BACKEND_ARCHITECT:
-        return {
-          tasks: [
-            {
-              id: 'backend-api',
-              name: 'Design API endpoints',
-              description: 'Create RESTful API design',
-              command: 'design-api'
-            }
-          ],
-          dependencies: [],
-          suggestions: ['Consider data migration strategy']
-        };
-
-      case AgentType.FRONTEND_REVIEWER:
-        return {
-          tasks: [
-            {
-              id: 'frontend-ui',
-              name: 'Design UI components',
-              description: 'Create reusable UI components',
-              command: 'design-components'
-            }
-          ],
-          dependencies: [],
-          suggestions: ['Consider accessibility requirements']
-        };
-
-      case AgentType.SEO_SPECIALIST:
-        return {
-          tasks: [
-            {
-              id: 'seo-meta',
-              name: 'Implement meta tags',
-              description: 'Add SEO meta tags to pages',
-              command: 'add-meta-tags'
-            }
-          ],
-          dependencies: [],
-          suggestions: ['Optimize page load speed']
-        };
-
-      case AgentType.CODE_REVIEWER:
-        // Return no findings for empty file lists
-        const hasFiles = context?.files && context.files.length > 0;
-        console.log('CODE_REVIEWER context:', JSON.stringify(context), 'hasFiles:', hasFiles);
-        const result = {
-          findings: hasFiles ? [] : [],
-          recommendations: hasFiles ? ['Code looks good', 'Consider adding tests'] : [],
-          overallScore: hasFiles ? 85 : 100
-        };
-        console.log('CODE_REVIEWER result:', result);
-        return result;
-
-      case AgentType.SECURITY_SCANNER:
-        const hasFilesSec = context?.files && context.files.length > 0;
-        return {
-          findings: hasFilesSec ? [] : [],
-          recommendations: hasFilesSec ? ['Security checks passed'] : [],
-          overallScore: hasFilesSec ? 90 : 100
-        };
-
-      case AgentType.PERFORMANCE_ENGINEER:
-        const hasFilesPerf = context?.files && context.files.length > 0;
-        return {
-          findings: hasFilesPerf ? [] : [],
-          recommendations: hasFilesPerf ? ['Performance looks good'] : [],
-          overallScore: hasFilesPerf ? 88 : 100
-        };
-
-      default:
-        return {
-          result: 'Task completed successfully',
-          confidence: 'high'
-        };
-    }
-  }
 }

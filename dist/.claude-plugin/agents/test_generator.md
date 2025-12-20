@@ -7,6 +7,7 @@ tools:
   read: true
   write: true
   bash: true
+category: quality-testing
 permission: {}
 ---
 
@@ -15,7 +16,6 @@ Take a deep breath and approach this task systematically.
 **primary_objective**: Automated test generation specialist for comprehensive coverage.
 **anti_objectives**: Perform actions outside defined scope, Modify source code without explicit approval
 **tags**: testing, automation, test-generation
-**category**: quality-testing
 **allowed_directories**: ${WORKSPACE}
 
 # Role Definition

@@ -15,9 +15,25 @@ import type {
   SessionMetadata,
   Task,
   Decision,
-  ContextConfig,
-  DEFAULT_CONFIG
+  ContextConfig
 } from "./types"
+import type { ContextEnvelope, AgentType, ConfidenceLevel, MemoryEntry } from "../agents/types"
+
+/**
+ * Audit record for handoff operations
+ */
+interface HandoffAuditRecord {
+  id: string
+  correlationId: string
+  fromAgent: string
+  toAgent: string
+  timestamp: Date
+  contextSize: number
+  success: boolean
+  reason?: string
+  sessionId: string
+}
+import { DEFAULT_CONFIG } from "./types"
 
 export class SessionManager {
   private config: ContextConfig
@@ -25,6 +41,7 @@ export class SessionManager {
   private sessionsDir: string
   private currentSessionPath: string
   private archiveDir: string
+  private auditLog: HandoffAuditRecord[] = []
 
   constructor(config: Partial<ContextConfig> = {}) {
     this.config = { ...DEFAULT_CONFIG, ...config }
@@ -172,6 +189,241 @@ export class SessionManager {
   // ========================================================================
   // Task Operations
   // ========================================================================
+
+  /**
+   * Archive the current session
+   */
+  async archiveCurrentSession(): Promise<void> {
+    if (!this.currentSession) {
+      throw new Error("No active session to archive")
+    }
+
+    const archivePath = join(this.archiveDir, `${this.currentSession.id}.json`)
+    await writeFile(archivePath, JSON.stringify(this.currentSession, null, 2))
+
+    // Clear current session
+    this.currentSession = null
+    if (existsSync(this.currentSessionPath)) {
+      await writeFile(this.currentSessionPath, "")
+    }
+  }
+
+  /**
+   * Build a context envelope for agent handoffs
+   */
+  buildContextEnvelope(
+    requestId: string,
+    depth: number = 0,
+    previousResults: ContextEnvelope['previousResults'] = [],
+    taskContext: Record<string, any> = {},
+    memoryManager?: { searchMemories: (query: string) => Promise<MemoryEntry[]> }
+  ): ContextEnvelope {
+    if (!this.currentSession) {
+      throw new Error("No active session for context envelope")
+    }
+
+    // Get relevant memories if memory manager available
+    const memories = memoryManager ? {
+      declarative: [], // TODO: Filter by type
+      procedural: [],
+      episodic: []
+    } : {
+      declarative: [],
+      procedural: [],
+      episodic: []
+    }
+
+    return {
+      session: {
+        id: this.currentSession.id,
+        parentID: this.currentSession.parentID,
+        activeFiles: [], // TODO: Get from session state if available
+        pendingTasks: [], // TODO: Get from session state if available
+        decisions: [] // TODO: Get from session state if available
+      },
+      memories,
+      previousResults,
+      taskContext,
+      meta: {
+        requestId,
+        timestamp: new Date(),
+        depth
+      }
+    }
+  }
+
+  /**
+   * Record a handoff operation for auditing
+   */
+  recordHandoff(
+    correlationId: string,
+    fromAgent: string,
+    toAgent: string,
+    contextSize: number,
+    success: boolean,
+    reason?: string
+  ): void {
+    if (!this.currentSession) return
+
+    const record: HandoffAuditRecord = {
+      id: `handoff-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      correlationId,
+      fromAgent,
+      toAgent,
+      timestamp: new Date(),
+      contextSize,
+      success,
+      reason,
+      sessionId: this.currentSession.id
+    }
+
+    this.auditLog.push(record)
+
+    // Keep only last 100 records to prevent memory bloat
+    if (this.auditLog.length > 100) {
+      this.auditLog = this.auditLog.slice(-100)
+    }
+  }
+
+  /**
+   * Get audit trail for correlation ID
+   */
+  getAuditTrail(correlationId: string): HandoffAuditRecord[] {
+    return this.auditLog.filter(record => record.correlationId === correlationId)
+  }
+
+  /**
+   * Get all audit records
+   */
+  getAllAuditRecords(): HandoffAuditRecord[] {
+    return [...this.auditLog]
+  }
+
+  /**
+   * Generate correlation ID for handoff chain
+   */
+  generateCorrelationId(): string {
+    return `corr-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+  }
+
+  /**
+   * Serialize context envelope for prompt injection
+   */
+  serializeContextEnvelope(envelope: ContextEnvelope): string {
+    // Limit sizes to prevent token explosion
+    const limitedEnvelope = {
+      ...envelope,
+      session: {
+        ...envelope.session,
+        activeFiles: envelope.session.activeFiles.slice(0, 10),
+        pendingTasks: envelope.session.pendingTasks.slice(0, 5),
+        decisions: envelope.session.decisions.slice(0, 5)
+      },
+      memories: {
+        declarative: envelope.memories.declarative.slice(0, 3),
+        procedural: envelope.memories.procedural.slice(0, 3),
+        episodic: envelope.memories.episodic.slice(0, 3)
+      },
+      previousResults: envelope.previousResults.slice(0, 3)
+    }
+
+    return JSON.stringify(limitedEnvelope, null, 2)
+  }
+
+  /**
+   * Merge context envelopes with conflict resolution
+   */
+  mergeContextEnvelopes(envelopes: ContextEnvelope[], strategy: 'last-wins' | 'consensus' | 'priority' = 'last-wins'): ContextEnvelope {
+    if (envelopes.length === 0) {
+      throw new Error("Cannot merge empty envelope array")
+    }
+    if (envelopes.length === 1) {
+      return envelopes[0]
+    }
+
+    const baseEnvelope = envelopes[0]
+
+    // Merge previous results
+    const allPreviousResults = envelopes.flatMap(e => e.previousResults)
+    const mergedPreviousResults = this.deduplicatePreviousResults(allPreviousResults)
+
+    // Merge task context with conflict resolution
+    const mergedTaskContext = this.mergeTaskContexts(envelopes.map(e => e.taskContext), strategy)
+
+    return {
+      ...baseEnvelope,
+      previousResults: mergedPreviousResults,
+      taskContext: mergedTaskContext,
+      meta: {
+        ...baseEnvelope.meta,
+        mergedFrom: envelopes.length,
+        mergeStrategy: strategy
+      }
+    }
+  }
+
+  /**
+   * Remove duplicate previous results based on agent type and output
+   */
+  private deduplicatePreviousResults(results: ContextEnvelope['previousResults']): ContextEnvelope['previousResults'] {
+    const seen = new Set<string>()
+    return results.filter(result => {
+      const key = `${result.agentType}-${JSON.stringify(result.output)}`
+      if (seen.has(key)) return false
+      seen.add(key)
+      return true
+    })
+  }
+
+  /**
+   * Merge task contexts with different strategies
+   */
+  private mergeTaskContexts(contexts: Record<string, any>[], strategy: string): Record<string, any> {
+    const merged: Record<string, any> = {}
+
+    // Collect all keys
+    const allKeys = new Set<string>()
+    contexts.forEach(ctx => {
+      if (ctx) Object.keys(ctx).forEach(key => allKeys.add(key))
+    })
+
+    // Merge each key
+    for (const key of allKeys) {
+      const values = contexts
+        .map(ctx => ctx?.[key])
+        .filter(val => val !== undefined)
+
+      if (values.length === 0) continue
+
+      switch (strategy) {
+        case 'last-wins':
+          merged[key] = values[values.length - 1]
+          break
+        case 'consensus':
+          // Use most common value
+          const counts = new Map<any, number>()
+          values.forEach(val => counts.set(val, (counts.get(val) || 0) + 1))
+          let maxCount = 0
+          let consensusValue = values[0]
+          counts.forEach((count, value) => {
+            if (count > maxCount) {
+              maxCount = count
+              consensusValue = value
+            }
+          })
+          merged[key] = consensusValue
+          break
+        case 'priority':
+          // Assume higher priority agents come later
+          merged[key] = values[values.length - 1]
+          break
+        default:
+          merged[key] = values[0]
+      }
+    }
+
+    return merged
+  }
 
   /**
    * Add a task to the session

@@ -8,6 +8,21 @@ agent: plan
 
 Create a structured, atomic implementation plan for: $ARGUMENTS
 
+## Usage
+
+```bash
+/ai-eng/plan [description] [options]
+```
+
+### Options
+
+- `--swarm`: Use Swarms multi-agent orchestration instead of legacy coordinator
+- `-s, --scope <scope>`: Plan scope (architecture|implementation|review|full) [default: full]
+- `-r, --requirements <reqs...>`: List of specific requirements
+- `-c, --constraints <constraints...>`: List of constraints to consider
+- `-o, --output <file>`: Output plan file [default: generated-plan.yaml]
+- `-v, --verbose`: Enable verbose output
+
 ## Planning Philosophy
 
 **Atomic Plans**: Every plan should be decomposed into small, independently completable chunks that:
@@ -19,6 +34,34 @@ Create a structured, atomic implementation plan for: $ARGUMENTS
 ## Process
 
 ### Phase 1: Discovery (Research Mode)
+
+#### Subagent Communication Protocol (Minimal)
+
+If you delegate discovery to subagents (recommended for large codebases), include a small Context Handoff Envelope in each Task prompt.
+
+Use:
+
+```text
+<CONTEXT_HANDOFF_V1>
+Goal: (1 sentence)
+Constraints: (bullets)
+Files / folders to focus: (bullets)
+Deliverable: (what you must return)
+Output format: RESULT_V1
+</CONTEXT_HANDOFF_V1>
+```
+
+And require:
+
+```text
+<RESULT_V1>
+RESULT:
+EVIDENCE:
+RISKS:
+NEXT_STEPS:
+CONFIDENCE: 0.0-1.0
+</RESULT_V1>
+```
 
 1. **Codebase Analysis**
    - Search for similar patterns and implementations

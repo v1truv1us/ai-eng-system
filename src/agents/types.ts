@@ -374,6 +374,65 @@ export interface ReviewResult {
 }
 
 /**
+ * Memory entry for context envelope
+ */
+export interface MemoryEntry {
+  id: string;
+  type: 'declarative' | 'procedural' | 'episodic';
+  content: string;
+  provenance: {
+    source: 'user' | 'agent' | 'inferred';
+    timestamp: string;
+    confidence: number;
+    context: string;
+    sessionId?: string;
+  };
+  tags: string[];
+  lastAccessed: string;
+  accessCount: number;
+}
+
+/**
+ * Context envelope for passing state between agents
+ */
+export interface ContextEnvelope {
+  // Session state
+  session: {
+    id: string;
+    parentID?: string;  // Parent session ID for nested subagent calls
+    activeFiles: string[];
+    pendingTasks: any[];  // Task objects from context/types
+    decisions: any[];     // Decision objects from context/types
+  };
+
+  // Relevant memories
+  memories: {
+    declarative: MemoryEntry[];  // Facts, patterns
+    procedural: MemoryEntry[];   // Workflows, procedures
+    episodic: MemoryEntry[];     // Past events
+  };
+
+  // Previous agent results (for handoffs)
+  previousResults: {
+    agentType: AgentType | string;
+    output: any;
+    confidence: ConfidenceLevel | string;
+  }[];
+
+  // Task-specific context
+  taskContext: Record<string, any>;
+
+  // Metadata
+  meta: {
+    requestId: string;
+    timestamp: Date;
+    depth: number;  // How many handoffs deep
+    mergedFrom?: number;  // Number of envelopes merged
+    mergeStrategy?: string;  // Strategy used for merging
+  };
+}
+
+/**
  * Local operation for file-based tasks
  */
 export interface LocalOperation {

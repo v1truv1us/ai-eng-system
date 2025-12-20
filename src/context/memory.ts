@@ -14,8 +14,9 @@ import type {
   MemorySource,
   MemoryStore,
   ContextConfig,
-  DEFAULT_CONFIG
+  CommandContextEnvelope
 } from "./types"
+import { DEFAULT_CONFIG } from "./types"
 
 export class MemoryManager {
   private config: ContextConfig
@@ -170,6 +171,51 @@ export class MemoryManager {
       }
     }
     return false
+  }
+
+  /**
+   * Store a command execution envelope as episodic memory.
+   */
+  async storeCommandEnvelope(
+    envelope: CommandContextEnvelope,
+    options?: {
+      source?: MemorySource
+      confidence?: number
+      context?: string
+    }
+  ): Promise<MemoryEntry> {
+    return this.addMemory('episodic', JSON.stringify(envelope, null, 2), {
+      source: options?.source ?? 'agent',
+      confidence: options?.confidence ?? 1.0,
+      context: options?.context ?? `Command envelope: ${envelope.commandName}`,
+      sessionId: envelope.sessionId,
+      tags: envelope.tags
+    })
+  }
+
+  /**
+   * Get the most recently added command envelope.
+   */
+  getLatestCommandEnvelope(filter?: {
+    commandName?: string
+    sessionId?: string
+  }): CommandContextEnvelope | null {
+    const episodic = this.getMemoriesByType('episodic')
+
+    const candidates = episodic
+      .filter(entry => entry.tags.includes('command-envelope'))
+      .filter(entry => (filter?.commandName ? entry.tags.includes(`command:${filter.commandName}`) : true))
+      .filter(entry => (filter?.sessionId ? entry.provenance.sessionId === filter.sessionId : true))
+      .sort((a, b) => new Date(b.provenance.timestamp).getTime() - new Date(a.provenance.timestamp).getTime())
+
+    const latest = candidates[0]
+    if (!latest) return null
+
+    try {
+      return JSON.parse(latest.content) as CommandContextEnvelope
+    } catch {
+      return null
+    }
   }
 
   /**

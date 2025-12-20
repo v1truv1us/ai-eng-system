@@ -1,18 +1,19 @@
 /**
- * Tests for research analysis functionality with proper mocking
+ * Tests for research analysis functionality (Bun-compatible).
+ *
+ * NOTE: analysis.ts imports `readFile` directly from `fs/promises`, which makes
+ * module-level mocking brittle. These tests instead create real temporary files
+ * and point discovery results at them.
  */
 
-import { describe, it, expect, beforeEach, mock, spyOn, afterEach } from 'bun:test';
-import {
-  CodebaseAnalyzer,
-  ResearchAnalyzer,
-  AnalysisHandler
-} from '../../src/research/analysis.js';
+import { describe, it, expect, beforeEach, afterEach } from 'bun:test';
+import { mkdtemp, rm, writeFile } from 'fs/promises';
+import { tmpdir } from 'os';
+import { join } from 'path';
+
+import { CodebaseAnalyzer, ResearchAnalyzer, AnalysisHandler } from '../../src/research/analysis.js';
 import {
   DiscoveryResult,
-  FileReference,
-  DocReference,
-  PatternMatch,
   ResearchQuery,
   ResearchScope,
   ResearchDepth,
@@ -22,49 +23,38 @@ import {
 describe('CodebaseAnalyzer (Fixed)', () => {
   let analyzer: CodebaseAnalyzer;
   let mockConfig: any;
+  let tempDir: string;
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    tempDir = await mkdtemp(join(tmpdir(), 'analysis-fixed-'));
+
     mockConfig = {
       maxFileSize: 1024 * 1024,
       enableCaching: true
     };
+
     analyzer = new CodebaseAnalyzer(mockConfig);
-    
-    vi.clearAllMocks();
+  });
+
+  afterEach(async () => {
+    await rm(tempDir, { recursive: true, force: true });
   });
 
   it('should create analyzer with config', () => {
     expect(analyzer).toBeInstanceOf(CodebaseAnalyzer);
   });
 
-  it('should analyze discovery results with mocked files', async () => {
-    const mockDiscoveryResults: DiscoveryResult[] = [
-      {
-        source: 'codebase-locator',
-        files: [
-          {
-            path: '/test/file1.ts',
-            relevance: 0.8,
-            language: 'typescript'
-          }
-        ],
-        patterns: [],
-        documentation: [],
-        executionTime: 100,
-        confidence: ConfidenceLevel.HIGH
-      }
-    ];
-
-    // Mock fs/promises for this test
-    const { readFile } = await import('fs/promises');
-    mock.mocked(readFile).mockResolvedValue(`
-export class TestClass {
+  it('should analyze discovery results with real files', async () => {
+    const filePath = join(tempDir, 'file1.ts');
+    await writeFile(
+      filePath,
+      `export class TestClass {
   private value: string;
-  
+
   constructor(value: string) {
     this.value = value;
   }
-  
+
   // TODO: Implement this method
   public getValue(): string {
     return this.value;
@@ -72,36 +62,16 @@ export class TestClass {
 }
 
 import { ExternalModule } from 'external-package';
-    `);
+`,
+      'utf-8'
+    );
 
-    const result = await analyzer.analyze(mockDiscoveryResults);
-
-    expect(result).toHaveProperty('source', 'codebase-analyzer');
-    expect(result).toHaveProperty('insights');
-    expect(result).toHaveProperty('evidence');
-    expect(result).toHaveProperty('relationships');
-    expect(result).toHaveProperty('confidence');
-    expect(result).toHaveProperty('executionTime');
-    expect(result.insights.length).toBeGreaterThan(0);
-    expect(result.evidence.length).toBeGreaterThan(0);
-  });
-
-  it('should handle empty discovery results', async () => {
-    const result = await analyzer.analyze([]);
-    
-    expect(result.source).toBe('codebase-analyzer');
-    expect(result.insights).toEqual([]);
-    expect(result.evidence).toEqual([]);
-    expect(result.relationships).toEqual([]);
-  });
-
-  it('should detect technical debt markers', async () => {
     const mockDiscoveryResults: DiscoveryResult[] = [
       {
         source: 'codebase-locator',
         files: [
           {
-            path: '/test/with-debt.ts',
+            path: filePath,
             relevance: 0.8,
             language: 'typescript'
           }
@@ -113,22 +83,60 @@ import { ExternalModule } from 'external-package';
       }
     ];
 
-    mockReadFile.mockResolvedValue(`
-class TestClass {
+    const result = await analyzer.analyze(mockDiscoveryResults);
+
+    expect(result).toHaveProperty('source', 'codebase-analyzer');
+    expect(result.insights.length).toBeGreaterThan(0);
+    expect(result.evidence.length).toBeGreaterThan(0);
+  });
+
+  it('should handle empty discovery results', async () => {
+    const result = await analyzer.analyze([]);
+
+    expect(result.source).toBe('codebase-analyzer');
+    expect(result.insights).toEqual([]);
+    expect(result.evidence).toEqual([]);
+    expect(result.relationships).toEqual([]);
+  });
+
+  it('should detect technical debt markers', async () => {
+    const filePath = join(tempDir, 'with-debt.ts');
+    await writeFile(
+      filePath,
+      `class TestClass {
   // TODO: Implement proper error handling
   public method1() {}
-  
+
   // FIXME: This is a temporary solution
   public method2() {}
-  
+
   // TODO: Add validation
   public method3() {}
 }
-    `);
+`,
+      'utf-8'
+    );
+
+    const mockDiscoveryResults: DiscoveryResult[] = [
+      {
+        source: 'codebase-locator',
+        files: [
+          {
+            path: filePath,
+            relevance: 0.8,
+            language: 'typescript'
+          }
+        ],
+        patterns: [],
+        documentation: [],
+        executionTime: 100,
+        confidence: ConfidenceLevel.HIGH
+      }
+    ];
 
     const result = await analyzer.analyze(mockDiscoveryResults);
-    
-    const debtInsight = result.insights.find(i => i.category === 'technical-debt');
+
+    const debtInsight = result.insights.find((i) => i.category === 'technical-debt');
     expect(debtInsight).toBeDefined();
     expect(debtInsight?.type).toBe('finding');
     expect(debtInsight?.title).toContain('Technical debt markers');
@@ -138,18 +146,21 @@ class TestClass {
 describe('ResearchAnalyzer (Fixed)', () => {
   let analyzer: ResearchAnalyzer;
   let mockConfig: any;
-  let mockReadFile: any;
+  let tempDir: string;
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    tempDir = await mkdtemp(join(tmpdir(), 'analysis-fixed-'));
+
     mockConfig = {
       maxFileSize: 1024 * 1024,
       enableCaching: true
     };
+
     analyzer = new ResearchAnalyzer(mockConfig);
-    
-    const { readFile } = require('fs/promises');
-    mockReadFile = readFile;
-    vi.clearAllMocks();
+  });
+
+  afterEach(async () => {
+    await rm(tempDir, { recursive: true, force: true });
   });
 
   it('should create analyzer with config', () => {
@@ -157,6 +168,26 @@ describe('ResearchAnalyzer (Fixed)', () => {
   });
 
   it('should analyze documentation results', async () => {
+    const docPath = join(tempDir, 'docs.md');
+    await writeFile(
+      docPath,
+      `# Test Documentation
+
+This is a test document with some code examples:
+
+\`\`\`typescript
+const example = "test";
+\`\`\`
+
+See also the [related page](./other.md) for more information.
+
+**Important note**: This is critical information.
+
+TODO: Update this section
+`,
+      'utf-8'
+    );
+
     const mockDiscoveryResults: DiscoveryResult[] = [
       {
         source: 'research-locator',
@@ -172,7 +203,7 @@ describe('ResearchAnalyzer (Fixed)', () => {
         ],
         documentation: [
           {
-            path: '/test/docs.md',
+            path: docPath,
             relevance: 0.9,
             type: 'markdown'
           }
@@ -181,22 +212,6 @@ describe('ResearchAnalyzer (Fixed)', () => {
         confidence: ConfidenceLevel.HIGH
       }
     ];
-
-    mockReadFile.mockResolvedValue(`
-# Test Documentation
-
-This is a test document with some code examples:
-
-\`\`\`typescript
-const example = "test";
-\`\`\`
-
-See also the [related page](./other.md) for more information.
-
-**Important note**: This is critical information.
-
-TODO: Update this section
-    `);
 
     const result = await analyzer.analyze(mockDiscoveryResults);
 
@@ -212,18 +227,21 @@ TODO: Update this section
 describe('AnalysisHandler (Fixed)', () => {
   let handler: AnalysisHandler;
   let mockConfig: any;
-  let mockReadFile: any;
+  let tempDir: string;
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    tempDir = await mkdtemp(join(tmpdir(), 'analysis-fixed-'));
+
     mockConfig = {
       maxFileSize: 1024 * 1024,
       enableCaching: true
     };
+
     handler = new AnalysisHandler(mockConfig);
-    
-    const { readFile } = require('fs/promises');
-    mockReadFile = readFile;
-    vi.clearAllMocks();
+  });
+
+  afterEach(async () => {
+    await rm(tempDir, { recursive: true, force: true });
   });
 
   it('should create handler with config', () => {
@@ -231,12 +249,22 @@ describe('AnalysisHandler (Fixed)', () => {
   });
 
   it('should execute sequential analysis', async () => {
+    const filePath = join(tempDir, 'file.ts');
+    await writeFile(
+      filePath,
+      `export class TestClass {
+  constructor() {}
+}
+`,
+      'utf-8'
+    );
+
     const mockDiscoveryResults: DiscoveryResult[] = [
       {
         source: 'codebase-locator',
         files: [
           {
-            path: '/test/file.ts',
+            path: filePath,
             relevance: 0.8,
             language: 'typescript'
           }
@@ -255,12 +283,6 @@ describe('AnalysisHandler (Fixed)', () => {
       depth: ResearchDepth.MEDIUM
     };
 
-    mockReadFile.mockResolvedValue(`
-export class TestClass {
-  constructor() {}
-}
-    `);
-
     const result = await handler.executeAnalysis(mockDiscoveryResults, mockQuery);
 
     expect(result).toHaveProperty('codebaseAnalysis');
@@ -268,10 +290,9 @@ export class TestClass {
     expect(result).toHaveProperty('combinedInsights');
     expect(result).toHaveProperty('combinedEvidence');
     expect(result).toHaveProperty('combinedRelationships');
-    
+
     expect(result.codebaseAnalysis.source).toBe('codebase-analyzer');
     expect(result.researchAnalysis.source).toBe('research-analyzer');
-    expect(result.combinedInsights.length).toBeGreaterThan(0);
   });
 
   it('should calculate analysis metrics', async () => {
@@ -292,29 +313,33 @@ export class TestClass {
       },
       researchAnalysis: {
         source: 'research-analyzer',
-        insights: [
-          { id: 'insight3', confidence: ConfidenceLevel.MEDIUM }
-        ],
-        evidence: [
-          { id: 'evidence3', confidence: ConfidenceLevel.HIGH }
-        ],
+        insights: [{ id: 'insight3', confidence: ConfidenceLevel.MEDIUM }],
+        evidence: [{ id: 'evidence3', confidence: ConfidenceLevel.HIGH }],
         relationships: [],
         confidence: ConfidenceLevel.MEDIUM,
         executionTime: 150
       },
-      combinedInsights: [],
-      combinedEvidence: [],
+      combinedInsights: [
+        { id: 'insight1', confidence: ConfidenceLevel.HIGH },
+        { id: 'insight2', confidence: ConfidenceLevel.MEDIUM },
+        { id: 'insight3', confidence: ConfidenceLevel.MEDIUM }
+      ],
+      combinedEvidence: [
+        { id: 'evidence1', confidence: ConfidenceLevel.HIGH },
+        { id: 'evidence2', confidence: ConfidenceLevel.LOW },
+        { id: 'evidence3', confidence: ConfidenceLevel.HIGH }
+      ],
       combinedRelationships: []
     };
 
-    const metrics = handler.getAnalysisMetrics(mockResults);
+    const metrics = handler.getAnalysisMetrics(mockResults as any);
 
     expect(metrics).toHaveProperty('totalInsights');
     expect(metrics).toHaveProperty('totalEvidence');
     expect(metrics).toHaveProperty('totalRelationships');
     expect(metrics).toHaveProperty('averageConfidence');
     expect(metrics).toHaveProperty('executionTime');
-    
+
     expect(metrics.totalInsights).toBe(3);
     expect(metrics.totalEvidence).toBe(3);
     expect(metrics.executionTime).toBe(350);

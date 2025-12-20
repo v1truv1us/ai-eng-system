@@ -67,7 +67,7 @@ Multi-phase research with parallel discovery:
 2. **Parallel Discovery** - Run discovery agents in parallel ✅
 3. **Evidence-Based Reporting** - Comprehensive research outputs ✅
 
-**Delivered**: v0.3.0-rc1 (Research system with 24 agents)
+**Delivered**: v0.3.0-rc1 (Research system with 29 agents)
 
 ### 🔄 Phase 4: Production Release (In Progress)
 Final testing, documentation, and release:

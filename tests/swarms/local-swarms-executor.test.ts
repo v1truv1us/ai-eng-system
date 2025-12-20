@@ -4,6 +4,24 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'bun:test';
+
+let previousSilentEnv: string | undefined;
+
+beforeEach(() => {
+  // Silence expected "Registered agent" logs during tests.
+  previousSilentEnv = process.env.AI_ENG_SILENT;
+  process.env.AI_ENG_SILENT = '1';
+});
+
+afterEach(() => {
+  if (previousSilentEnv === undefined) {
+    delete process.env.AI_ENG_SILENT;
+  } else {
+    process.env.AI_ENG_SILENT = previousSilentEnv;
+  }
+
+  previousSilentEnv = undefined;
+});
 import { 
   LocalSwarmsExecutor,
   createSwarmsClient,

@@ -90,7 +90,18 @@ export class AgentRegistry {
         prompt: prompt
       };
     } catch (error) {
-      console.error(`Error parsing ${filePath}:`, error);
+      // Avoid noisy logs during tests or when explicitly silenced.
+      const silent =
+        process.env.AI_ENG_SILENT === '1' ||
+        process.env.AI_ENG_SILENT === 'true' ||
+        process.env.NODE_ENV === 'test' ||
+        process.env.BUN_TEST === '1' ||
+        process.env.BUN_TEST === 'true';
+
+      if (!silent) {
+        console.error(`Error parsing ${filePath}:`, error);
+      }
+
       throw error; // Re-throw instead of returning null for tests
     }
   }

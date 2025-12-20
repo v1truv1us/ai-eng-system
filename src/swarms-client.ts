@@ -179,6 +179,19 @@ export function getSwarmsClient(options?: {
 }
 
 /**
+ * Get TypeScript-only swarms client (no Python required)
+ */
+export function getTypeScriptSwarmsClient(options?: {
+  timeout?: number;
+  maxConcurrency?: number;
+  model?: string;
+}): SwarmsClient {
+  // Import dynamically to avoid circular dependencies
+  const { createTypeScriptSwarmsClient } = require('./typescript-swarms-executor.js');
+  return createTypeScriptSwarmsClient(options);
+}
+
+/**
  * Utility function to check if Swarms backend is available
  */
 export async function checkSwarmsHealth(client?: SwarmsClient): Promise<boolean> {

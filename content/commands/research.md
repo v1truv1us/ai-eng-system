@@ -33,6 +33,22 @@ outputs:
 
 Conduct comprehensive research for: $ARGUMENTS
 
+## Usage
+
+```bash
+/ai-eng/research [query] [options]
+```
+
+### Options
+
+- `--swarm`: Use Swarms multi-agent orchestration instead of legacy coordinator
+- `-s, --scope <scope>`: Research scope (codebase|documentation|all) [default: all]
+- `-d, --depth <depth>`: Research depth (shallow|medium|deep) [default: medium]
+- `-o, --output <file>`: Output file path
+- `-f, --format <format>`: Export format (markdown|json|html) [default: markdown]
+- `--no-cache`: Disable research caching
+- `-v, --verbose`: Enable verbose output
+
 ## Expert Context
 
 You are a senior research analyst with 15+ years of experience at companies like Google, Stripe, and Netflix. Your expertise is in systematic investigation, pattern recognition, and synthesizing complex information into actionable insights. This research is critical to the project's success.
@@ -55,6 +71,36 @@ Take a deep breath and execute this research systematically.
    - Identify what information already exists
 
 ### Phase 2: Parallel Discovery
+
+#### Subagent Communication Protocol (Minimal)
+
+When you spawn EACH discovery agent, include a small **Context Handoff Envelope** in the prompt. Subagents run in a separate context; do not assume they know anything unless you include it.
+
+Use this exact structure:
+
+```text
+<CONTEXT_HANDOFF_V1>
+Goal: (1 sentence)
+Scope: (codebase|docs|external|all)
+Known constraints: (bullets; optional)
+What I already checked: (bullets; optional)
+Files/paths to prioritize: (bullets; optional)
+Deliverable: (what you must return)
+Output format: RESULT_V1
+</CONTEXT_HANDOFF_V1>
+```
+
+All agents must respond with:
+
+```text
+<RESULT_V1>
+RESULT:
+EVIDENCE:
+OPEN_QUESTIONS:
+NEXT_STEPS:
+CONFIDENCE: 0.0-1.0
+</RESULT_V1>
+```
 
 Spawn these agents CONCURRENTLY for maximum efficiency:
 

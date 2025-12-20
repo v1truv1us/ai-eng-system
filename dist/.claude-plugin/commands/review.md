@@ -25,6 +25,32 @@ Review current changes or a PR with multiple expert perspectives.
 
 ## Perspectives
 
+#### Subagent Communication Protocol (Minimal)
+
+If you spawn reviewer subagents in parallel, include:
+
+```text
+<CONTEXT_HANDOFF_V1>
+Goal: Review changes for (focus area)
+Files under review: (paths)
+Constraints: (e.g., no code changes; read-only)
+Deliverable: findings with file:line evidence
+Output format: RESULT_V1
+</CONTEXT_HANDOFF_V1>
+```
+
+Require:
+
+```text
+<RESULT_V1>
+RESULT:
+FINDINGS: (bullets with severity)
+EVIDENCE: (file:line)
+RECOMMENDATIONS:
+CONFIDENCE: 0.0-1.0
+</RESULT_V1>
+```
+
 - **Code Quality**: Clean code, SOLID principles, DRY
 - **Performance**: Time/space complexity, caching opportunities
 - **SEO**: Meta tags, structured data, Core Web Vitals impact

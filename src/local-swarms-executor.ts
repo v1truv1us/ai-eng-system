@@ -349,7 +349,19 @@ except ImportError:
     capabilities: string[];
   }): Promise<{ agent_id: string }> {
     const agentId = `agent_${Date.now()}`;
-    console.log(`Registered agent: ${agentConfig.name} (${agentId})`);
+
+    // Avoid noisy logs during tests or when explicitly silenced.
+    const silent =
+      process.env.AI_ENG_SILENT === '1' ||
+      process.env.AI_ENG_SILENT === 'true' ||
+      process.env.NODE_ENV === 'test' ||
+      process.env.BUN_TEST === '1' ||
+      process.env.BUN_TEST === 'true';
+
+    if (!silent) {
+      console.log(`Registered agent: ${agentConfig.name} (${agentId})`);
+    }
+
     return { agent_id: agentId };
   }
 }
@@ -358,11 +370,19 @@ except ImportError:
  * Factory function to create appropriate Swarms client
  */
 export function createSwarmsClient(options: {
-  mode?: 'local' | 'remote';
+  mode?: 'local' | 'remote' | 'typescript';
   remoteUrl?: string;
   apiKey?: string;
   localOptions?: LocalSwarmsOptions;
+  typescriptOptions?: {
+    timeout?: number;
+    maxConcurrency?: number;
+    model?: string;
+    executeTask?: (agentId: string, task: string, context?: any) => Promise<string>;
+  };
 } = {}): SwarmsClient {
+  // Default to local mode to preserve expected behavior in tests and
+  // ensure a zero-dependency baseline (TypeScript mode can be opted into).
   const { mode = 'local' } = options;
 
   if (mode === 'remote') {
@@ -370,6 +390,10 @@ export function createSwarmsClient(options: {
       baseUrl: options.remoteUrl,
       apiKey: options.apiKey
     });
+  } else if (mode === 'typescript') {
+    // Import dynamically to avoid circular dependencies
+    const { createTypeScriptSwarmsClient } = require('./typescript-swarms-executor.js');
+    return createTypeScriptSwarmsClient(options.typescriptOptions);
   } else {
     return new LocalSwarmsExecutor(options.localOptions);
   }
@@ -383,6 +407,18 @@ export async function checkLocalSwarmsAvailable(): Promise<boolean> {
     const executor = new LocalSwarmsExecutor();
     const health = await executor.getHealth();
     return health.status === 'healthy';
+  } catch (error) {
+    return false;
+  }
+}
+
+/**
+ * Check if TypeScript swarms are available
+ */
+export async function checkTypeScriptSwarmsAvailable(): Promise<boolean> {
+  try {
+    const { checkTypeScriptSwarmsAvailable } = require('./typescript-swarms-executor.js');
+    return checkTypeScriptSwarmsAvailable();
   } catch (error) {
     return false;
   }

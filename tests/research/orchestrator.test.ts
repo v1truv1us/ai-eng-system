@@ -1,5 +1,6 @@
-import { describe, it, expect, beforeEach, afterEach } from 'bun:test';
+import { describe, it, expect, beforeEach, afterEach, mock, spyOn } from 'bun:test';
 import { ResearchOrchestrator } from '../../src/research/orchestrator.js';
+import { DiscoveryHandler } from '../../src/research/discovery.js';
 import {
   ResearchQuery,
   ResearchScope,
@@ -139,8 +140,20 @@ describe('ResearchOrchestrator', () => {
         depth: ResearchDepth.SHALLOW
       };
 
-      // This will fail due to missing handlers
-      await expect(orchestrator.research(validQuery)).rejects.toThrow();
+      // Force an error in discovery; orchestrator should surface it as a ResearchError.
+      const spy = spyOn(DiscoveryHandler.prototype, 'discover').mockImplementation(async () => {
+        throw new Error('Discovery failed');
+      });
+
+      try {
+        await expect(orchestrator.research(validQuery)).rejects.toMatchObject({
+          phase: ResearchPhase.DISCOVERY,
+          error: 'Discovery failed'
+        });
+      } finally {
+        spy.mockRestore();
+        mock.restore();
+      }
     });
   });
 });

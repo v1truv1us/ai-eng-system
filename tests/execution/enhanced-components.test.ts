@@ -64,8 +64,13 @@ describe('Enhanced Task Executor', () => {
       expect(result).toBeDefined();
       expect(result.id).toBe(agentTask.id);
       expect(result.status).toBe(TaskStatus.COMPLETED);
-      expect(result.stdout).toContain('Mock result from code-reviewer agent');
-      expect(result.duration).toBeGreaterThan(0);
+      // Agent outputs are serialized JSON (see TaskExecutor.executeAgentTask)
+      const parsed = JSON.parse(result.stdout);
+      expect(parsed.type).toBe('code-reviewer');
+      expect(parsed.success).toBe(true);
+      expect(parsed.result).toBeDefined();
+      // Duration can be 0 on very fast machines / coarse timers
+      expect(result.duration).toBeGreaterThanOrEqual(0);
     });
 
     it('should handle agent task failures', async () => {
@@ -334,10 +339,8 @@ tasks:
     strategy: sequential
   `;
 
-      const plan = planParser.parseContent(planContent);
-
-      expect(plan.errors.length).toBeGreaterThan(0);
-      expect(plan.errors.some(e => e.message.includes('type'))).toBe(true);
+      // PlanParser throws on validation errors rather than returning errors on the plan
+      expect(() => planParser.parseContent(planContent)).toThrow(/input requires valid type/i);
     });
 
     it('should validate agent task execution strategy', () => {
@@ -561,7 +564,8 @@ describe('Integration Tests', () => {
       logLevel: 'error'
     };
     coordinator = new AgentCoordinator(config);
-    taskExecutor = new TaskExecutor({ verbose: false });
+    // Ensure plan execution continues after failures/skips inside tests
+    taskExecutor = new TaskExecutor({ verbose: false, continueOnError: true });
     taskExecutor.setAgentCoordinator(coordinator);
     planParser = new PlanParser();
   });

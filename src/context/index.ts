@@ -29,11 +29,13 @@ export type {
   ContextTrigger,
   AssembledContext,
   ContextConfig,
+  CommandContextEnvelope,
+  CommandExecutionStatus,
   ContextEvent,
   ContextEventHandler
 } from "./types"
 
-export { DEFAULT_CONFIG, loadConfig } from "./types"
+export { DEFAULT_CONFIG, loadConfig, createCommandEnvelope } from "./types"
 
 // Session Manager
 export { SessionManager, getSessionManager } from "./session"
@@ -64,6 +66,9 @@ export {
   type VectorStore,
   type SearchResult
 } from "./vector"
+
+// Exporters
+export { MarkdownContextExporter, type ContextExporter } from "./exporters"
 
 /**
  * Initialize the complete context engineering system

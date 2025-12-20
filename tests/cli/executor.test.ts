@@ -12,16 +12,28 @@ import { writeFileSync, unlinkSync, existsSync } from 'fs'
 import { join } from 'path'
 import { tmpdir } from 'os'
 
+let previousSilentEnv: string | undefined;
+
 describe('ExecutorCLI', () => {
   let cli: ExecutorCLI
   let tempDir: string
 
   beforeEach(() => {
+    previousSilentEnv = process.env.AI_ENG_SILENT;
+    process.env.AI_ENG_SILENT = '1';
+
     cli = new ExecutorCLI()
     tempDir = join(tmpdir(), `ai-eng-cli-test-${Date.now()}`)
   })
 
   afterEach(() => {
+    if (previousSilentEnv === undefined) {
+      delete process.env.AI_ENG_SILENT;
+    } else {
+      process.env.AI_ENG_SILENT = previousSilentEnv;
+    }
+    previousSilentEnv = undefined;
+
     // Cleanup temp files if they exist
     const tempPlan = join(tempDir, 'test-plan.yaml')
     if (existsSync(tempPlan)) {
@@ -234,80 +246,53 @@ async function runCLICommand(args: string[]): Promise<{ stdout: string; stderr: 
   })
 }
 
-describe('ExecutorCLI - Swarms Integration', () => {
+describe('ExecutorCLI - Swarms Removal', () => {
   let cli: ExecutorCLI
 
   beforeEach(() => {
     cli = new ExecutorCLI()
   })
 
-  describe('Swarm-Enabled Commands', () => {
-    it('should register generate-plan command', () => {
-      const program = cli.getProgram()
-      const generatePlanCommand = program.commands.find(cmd => cmd.name() === 'generate-plan')
-      
-      expect(generatePlanCommand).toBeDefined()
-      expect(generatePlanCommand?.description()).toContain('Generate implementation plan')
-    })
+  it('should not expose --swarm flag on generate-plan command', () => {
+    const program = cli.getProgram()
+    const generatePlanCommand = program.commands.find(cmd => cmd.name() === 'generate-plan')
+    const optionFlags = generatePlanCommand?.options.map(opt => opt.flags) || []
 
-    it('should have --swarm flag on generate-plan command', () => {
-      const program = cli.getProgram()
-      const generatePlanCommand = program.commands.find(cmd => cmd.name() === 'generate-plan')
-      const optionFlags = generatePlanCommand?.options.map(opt => opt.flags) || []
-      
-      expect(optionFlags).toContain('--swarm')
-    })
-
-    it('should register code-review command', () => {
-      const program = cli.getProgram()
-      const codeReviewCommand = program.commands.find(cmd => cmd.name() === 'code-review')
-      
-      expect(codeReviewCommand).toBeDefined()
-      expect(codeReviewCommand?.description()).toContain('multi-agent code review')
-    })
-
-    it('should have --swarm flag on code-review command', () => {
-      const program = cli.getProgram()
-      const codeReviewCommand = program.commands.find(cmd => cmd.name() === 'code-review')
-      const optionFlags = codeReviewCommand?.options.map(opt => opt.flags) || []
-      
-      expect(optionFlags).toContain('--swarm')
-    })
-
-    it('should register research command', () => {
-      const program = cli.getProgram()
-      const researchCommand = program.commands.find(cmd => cmd.name() === 'research')
-      
-      expect(researchCommand).toBeDefined()
-      expect(researchCommand?.description()).toContain('research')
-    })
-
-    it('should have --swarm flag on research command', () => {
-      const program = cli.getProgram()
-      const researchCommand = program.commands.find(cmd => cmd.name() === 'research')
-      const optionFlags = researchCommand?.options.map(opt => opt.flags) || []
-      
-      expect(optionFlags).toContain('--swarm')
-    })
+    expect(optionFlags).not.toContain('--swarm')
   })
 
-  describe('Swarm Status Command', () => {
-    it('should register swarm-status command', () => {
-      const program = cli.getProgram()
-      const swarmStatusCommand = program.commands.find(cmd => cmd.name() === 'swarm-status')
-      
-      expect(swarmStatusCommand).toBeDefined()
-      expect(swarmStatusCommand?.description()).toContain('Swarms integration status')
-    })
+  it('should not expose --swarm flag on code-review command', () => {
+    const program = cli.getProgram()
+    const codeReviewCommand = program.commands.find(cmd => cmd.name() === 'code-review')
+    const optionFlags = codeReviewCommand?.options.map(opt => opt.flags) || []
 
-    it('should have --json flag on swarm-status command', () => {
-      const program = cli.getProgram()
-      const swarmStatusCommand = program.commands.find(cmd => cmd.name() === 'swarm-status')
-      const optionFlags = swarmStatusCommand?.options.map(opt => opt.flags) || []
-      
-      expect(optionFlags).toContain('--json')
-    })
+    expect(optionFlags).not.toContain('--swarm')
   })
+
+  it('should not expose --swarm flag on research command', () => {
+    const program = cli.getProgram()
+    const researchCommand = program.commands.find(cmd => cmd.name() === 'research')
+    const optionFlags = researchCommand?.options.map(opt => opt.flags) || []
+
+    expect(optionFlags).not.toContain('--swarm')
+  })
+
+  it('should not register swarm-status command', () => {
+    const program = cli.getProgram()
+    const swarmStatusCommand = program.commands.find(cmd => cmd.name() === 'swarm-status')
+
+    expect(swarmStatusCommand).toBeUndefined()
+  })
+
+  it('should still register generate-plan, code-review, and research commands', () => {
+    const program = cli.getProgram()
+    const commandNames = program.commands.map(cmd => cmd.name())
+
+    expect(commandNames).toContain('generate-plan')
+    expect(commandNames).toContain('code-review')
+    expect(commandNames).toContain('research')
+  })
+
 
   describe('Agent Status Command', () => {
     it('should register agent-status command', () => {
@@ -332,12 +317,12 @@ describe('ExecutorCLI - Swarms Integration', () => {
       const program = cli.getProgram()
       const generatePlanCommand = program.commands.find(cmd => cmd.name() === 'generate-plan')
       const optionFlags = generatePlanCommand?.options.map(opt => opt.flags) || []
-      
+
       expect(optionFlags).toContain('-s, --scope <scope>')
       expect(optionFlags).toContain('-r, --requirements <reqs...>')
       expect(optionFlags).toContain('-c, --constraints <constraints...>')
       expect(optionFlags).toContain('-o, --output <file>')
-      expect(optionFlags).toContain('--swarm')
+      expect(optionFlags).not.toContain('--swarm')
       expect(optionFlags).toContain('-v, --verbose')
     })
 
@@ -345,12 +330,12 @@ describe('ExecutorCLI - Swarms Integration', () => {
       const program = cli.getProgram()
       const codeReviewCommand = program.commands.find(cmd => cmd.name() === 'code-review')
       const optionFlags = codeReviewCommand?.options.map(opt => opt.flags) || []
-      
+
       expect(optionFlags).toContain('-t, --type <type>')
       expect(optionFlags).toContain('-s, --severity <severity>')
       expect(optionFlags).toContain('-f, --focus <focus>')
       expect(optionFlags).toContain('-o, --output <file>')
-      expect(optionFlags).toContain('--swarm')
+      expect(optionFlags).not.toContain('--swarm')
       expect(optionFlags).toContain('-v, --verbose')
     })
 
@@ -358,12 +343,12 @@ describe('ExecutorCLI - Swarms Integration', () => {
       const program = cli.getProgram()
       const researchCommand = program.commands.find(cmd => cmd.name() === 'research')
       const optionFlags = researchCommand?.options.map(opt => opt.flags) || []
-      
+
       expect(optionFlags).toContain('-s, --scope <scope>')
       expect(optionFlags).toContain('-d, --depth <depth>')
       expect(optionFlags).toContain('-o, --output <file>')
       expect(optionFlags).toContain('-f, --format <format>')
-      expect(optionFlags).toContain('--swarm')
+      expect(optionFlags).not.toContain('--swarm')
       expect(optionFlags).toContain('-v, --verbose')
     })
   })
@@ -372,29 +357,29 @@ describe('ExecutorCLI - Swarms Integration', () => {
     it('should have all expected commands registered', () => {
       const program = cli.getProgram()
       const commandNames = program.commands.map(cmd => cmd.name())
-      
+
       // Core execution commands
       expect(commandNames).toContain('plan')
       expect(commandNames).toContain('gates')
       expect(commandNames).toContain('report')
       expect(commandNames).toContain('validate')
-      
+
       // Agent orchestration commands
       expect(commandNames).toContain('generate-plan')
       expect(commandNames).toContain('code-review')
       expect(commandNames).toContain('research')
       expect(commandNames).toContain('agent-status')
-      
-      // Swarms-specific commands
-      expect(commandNames).toContain('swarm-status')
+
+      // Swarms-specific commands (removed)
+      expect(commandNames).not.toContain('swarm-status')
     })
 
     it('should have correct total number of commands', () => {
       const program = cli.getProgram()
       const commandCount = program.commands.length
-      
-      // 4 core + 4 agent + 1 swarms = 9 commands
-      expect(commandCount).toBe(9)
+
+      // 4 core + 4 agent = 8 commands
+      expect(commandCount).toBe(8)
     })
   })
 })

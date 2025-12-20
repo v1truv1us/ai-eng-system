@@ -207,7 +207,7 @@ async function runSwarm(
 - `src/agents/coordinator.ts:40-74` - Current task execution flow (parallel/sequential/conditional)
 - `src/agents/coordinator.ts:274-300` - Agent execution (currently simulated)
 - `src/agents/coordinator.ts:328-367` - Topological sort for dependencies (keep this)
-- `src/agents/types.ts:9-18` - AgentType enum (needs expansion to 24 agents)
+- `src/agents/types.ts:9-18` - AgentType enum (needs expansion to 29 agents)
 - `src/agents/types.ts:122-127` - AggregationStrategy (good foundation for consensus)
 - `src/research/orchestrator.ts:75-113` - 3-phase research workflow (model for swarm workflows)
 - `src/research/discovery.ts:644-658` - Promise.allSettled pattern (reuse for parallel agents)
@@ -249,12 +249,12 @@ Current:                          Recommended:
 1. **Fix Code Quality Issues** (1-2 days)
    - Resolve `orchestrator.ts:235` undefined variable
    - Remove duplicate code in `retrieval.ts:287-312`
-   - Align AgentType enum with documented 24 agents
+   - Align AgentType enum with documented 29 agents
 
 2. **Create Agent Manifest Schema** (2-3 days)
    - Define TypeScript interface for agent capabilities
    - Generate manifests from existing markdown agent definitions
-   - Validate all 24 agents have complete manifests
+   - Validate all 29 agents have complete manifests
 
 3. **Prototype SwarmRegistry** (1 week)
    - In-memory registry with capability indexing

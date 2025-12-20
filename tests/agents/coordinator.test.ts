@@ -323,8 +323,12 @@ describe('AgentCoordinator', () => {
       });
 
       progress = coordinator.getProgress();
-      expect(progress.totalTasks).toBe(0); // Reset after execution
-      expect(progress.completedTasks).toBe(0);
+      // Coordinator retains completed task state after execution (cleared only via reset())
+      expect(progress.totalTasks).toBe(2);
+      expect(progress.completedTasks).toBe(2);
+      expect(progress.failedTasks).toBe(0);
+      expect(progress.runningTasks).toBe(0);
+      expect(progress.percentageComplete).toBe(100);
     });
   });
 

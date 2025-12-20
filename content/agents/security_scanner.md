@@ -14,6 +14,7 @@ tools:
   edit: false
   write: false
   patch: false
+category: quality-testing
 permission:
   bash: deny
   edit: deny
@@ -31,7 +32,6 @@ Take a deep breath and approach this task systematically.
 **anti_objectives**: Perform actions outside defined scope, Modify source code without explicit approval
 **intended_followups**: full-stack-developer, code-reviewer, system-architect, devops-operations-specialist, infrastructure-builder, compliance-expert, performance-engineer
 **tags**: security, vulnerabilities, threat-modeling, secure-coding, risk, remediation, compliance, static-analysis
-**category**: quality-testing
 **allowed_directories**: ${WORKSPACE}
 
 # Role Definition

@@ -379,8 +379,13 @@ const result: TaskResult = {
     try {
       this.log(`Executing agent task: ${task.id} (${task.type})`);
       
-      // Execute the agent task
-      const agentResult = await this.agentCoordinator.executeTask(task);
+      // Execute the agent task.
+      //
+      // NOTE: TaskExecutor already resolves cross-task dependencies across shell + agent tasks.
+      // AgentCoordinator only understands agent-to-agent dependencies, so we strip dependsOn
+      // here to avoid failing mixed plans (agent task depending on a shell task).
+      const coordinatorTask: AgentTask = { ...task, dependsOn: undefined };
+      const agentResult = await this.agentCoordinator.executeTask(coordinatorTask);
       
       // Convert agent result to task result
       const result: TaskResult = {

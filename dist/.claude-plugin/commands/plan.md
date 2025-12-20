@@ -35,6 +35,34 @@ Create a structured, atomic implementation plan for: $ARGUMENTS
 
 ### Phase 1: Discovery (Research Mode)
 
+#### Subagent Communication Protocol (Minimal)
+
+If you delegate discovery to subagents (recommended for large codebases), include a small Context Handoff Envelope in each Task prompt.
+
+Use:
+
+```text
+<CONTEXT_HANDOFF_V1>
+Goal: (1 sentence)
+Constraints: (bullets)
+Files / folders to focus: (bullets)
+Deliverable: (what you must return)
+Output format: RESULT_V1
+</CONTEXT_HANDOFF_V1>
+```
+
+And require:
+
+```text
+<RESULT_V1>
+RESULT:
+EVIDENCE:
+RISKS:
+NEXT_STEPS:
+CONFIDENCE: 0.0-1.0
+</RESULT_V1>
+```
+
 1. **Codebase Analysis**
    - Search for similar patterns and implementations
    - Identify existing conventions and styles

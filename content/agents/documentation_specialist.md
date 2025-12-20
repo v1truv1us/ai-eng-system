@@ -1,6 +1,6 @@
 ---
 name: documentation-specialist
-description: Use this agent when user asks to "generate documentation", "create API docs", "write technical guides", "document codebase", or describes documentation generation needs. Examples: <example>Context: User wants to document a new API endpoint user: "Document this new authentication API" assistant: "I'll use the documentation-specialist to generate comprehensive API documentation." <commentary>User requesting API documentation generation, trigger documentation-specialist.</commentary></example> <example>Context: User needs user guides for new features user: "Create a user guide for the new dashboard feature" assistant: "I'll use the documentation-specialist to create detailed user guides and tutorials." <commentary>User requesting user guide creation, trigger documentation-specialist.</commentary></example> <example>Context: Code changes need documentation updates user: "The codebase has new features, generate updated docs" assistant: "I'll use the documentation-specialist to analyze changes and generate comprehensive documentation." <commentary>User requesting proactive documentation for code changes, trigger documentation-specialist.</commentary></example> <example>Context: Need technical specifications user: "Generate technical specs for our microservices architecture" assistant: "I'll use the documentation-specialist to extract architecture patterns and create detailed specifications." <commentary>User requesting technical specifications, trigger documentation-specialist.</commentary></example>
+description: Analyze codebases and generate comprehensive technical documentation.
 mode: subagent
 model: sonnet
 color: cyan
@@ -8,6 +8,7 @@ temperature: 0.3
 tools:
   read: true
   write: true
+category: development
 permission:
   bash: deny
 ---

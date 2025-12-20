@@ -9,9 +9,9 @@ import type {
   ContextTrigger,
   AssembledContext,
   MemoryEntry,
-  ContextConfig,
-  DEFAULT_CONFIG
+  ContextConfig
 } from "./types"
+import { DEFAULT_CONFIG } from "./types"
 import { SessionManager } from "./session"
 import { MemoryManager } from "./memory"
 import { ProgressiveSkillLoader } from "./progressive"
@@ -167,89 +167,112 @@ export class ContextRetriever {
     const skills = []
     let tokenEstimate = 0
 
+    // Keep last user query (if any) for later ranking
+    let lastQuery: string | undefined
+
     // Process each trigger
     for (const trigger of triggers) {
       switch (trigger.type) {
-        case "session_start":
+        case "session_start": {
           // Load session context
           break
+        }
 
-        case "file_open":
+        case "file_open": {
           // Load relevant memories for file
-          const filePath = trigger.data.path as string
-          
+          const openedFilePath = trigger.data.path as string
+
           // Use semantic search for file-related memories
-          const fileMemories = await this.vectorManager.semanticSearch(filePath, {
+          const fileSemanticResults = await this.vectorManager.semanticSearch(openedFilePath, {
             limit: 5,
             minScore: 0.3,
             memoryType: "procedural"
           })
-          
+
           // Also do traditional search
-          const traditionalMemories = this.memoryManager.searchMemories(filePath, {
+          const traditionalMemories = this.memoryManager.searchMemories(openedFilePath, {
             minConfidence: 0.6
           })
-          
-          memories.push(...fileMemories, ...traditionalMemories)
-          break
 
-        case "command":
+          memories.push(...fileSemanticResults.map(r => r.memory), ...traditionalMemories)
+          break
+        }
+
+        case "command": {
           // Load memories related to command
-          const command = trigger.data.command as string
-          
-// Semantic search for command-related memories
-          const semanticMemories = await this.vectorManager.semanticSearch(command, {
+          const commandName = trigger.data.command as string
+
+          // Semantic search for command-related memories
+          const semanticResults = await this.vectorManager.semanticSearch(commandName, {
             limit: 3,
             minScore: 0.4,
             memoryType: "procedural"
           })
-          
+
           // Traditional search
-          const commandMemories = this.memoryManager.searchMemories(command, {
+          const commandMemories = this.memoryManager.searchMemories(commandName, {
             minConfidence: 0.5
           })
-          
-          memories.push(...semanticMemories, ...commandMemories)
-          break
 
-        case "query":
+          memories.push(...semanticResults.map(r => r.memory), ...commandMemories)
+          break
+        }
+
+        case "query": {
           // Search memories for query with enhanced ranking
-          const query = trigger.data.query as string
+          const userQuery = trigger.data.query as string
+          lastQuery = userQuery
 
           // Auto-infer context from query patterns
-          await this.inferContextFromQuery(query)
-          break
+          await this.inferContextFromQuery(userQuery)
 
-        case "conversation_turn":
+          // Pull relevant memories for the query
+          const semanticQueryResults = await this.vectorManager.semanticSearch(userQuery, {
+            limit: 5,
+            minScore: 0.35,
+            memoryType: "procedural"
+          })
+
+          const traditionalQueryMemories = this.memoryManager.searchMemories(userQuery, {
+            minConfidence: 0.5
+          })
+
+          memories.push(...semanticQueryResults.map(r => r.memory), ...traditionalQueryMemories)
+          break
+        }
+
+        case "conversation_turn": {
           // Analyze conversation for implicit context
           const message = trigger.data.message as string
           const response = trigger.data.response as string
 
           await this.inferContextFromConversation(message, response)
           break
+        }
 
-        case "file_edit":
+        case "file_edit": {
           // Learn from code patterns and changes
-          const filePath = trigger.data.filePath as string
-          const changes = trigger.data.changes as string
+          const editedFilePath = trigger.data.filePath as string
+          const codeChanges = trigger.data.changes as string
 
-          await this.inferContextFromCode(filePath, changes)
-          
+          await this.inferContextFromCode(editedFilePath, codeChanges)
+
           // Get all memories for ranking
           const allMemories = this.memoryManager.getAllMemories()
           const context = {
-            query,
+            query: lastQuery || "",
             activeFiles: this.sessionManager.getActiveFiles(),
             currentTask: this.sessionManager.getContext<string>("currentTask"),
             sessionType: this.sessionManager.getSession()?.metadata.mode
           }
-          
+
           // Rank memories by relevance
           const rankedMemories = ContextRanker.rankByRelevance(allMemories, context)
           memories.push(...rankedMemories.slice(0, 10))
           break
+        }
 
-        case "task":
+        case "task": {
           // Load memories related to task type
           const taskType = trigger.data.taskType as string
           const taskMemories = this.memoryManager.searchMemories(taskType, {
@@ -258,39 +281,12 @@ export class ContextRetriever {
           })
           memories.push(...taskMemories)
           break
+        }
       }
     }
 
     // Deduplicate memories
-    const uniqueMemories = Array.from(
-      new Map(memories.map(m => [m.id, m])).values()
-    )
-
-    // Calculate token estimate
-    for (const memory of uniqueMemories) {
-      tokenEstimate += Math.ceil(memory.content.length / 4)
-    }
-
-    const duration = Date.now() - startTime
-
-    return {
-      session: this.sessionManager.getSession() || undefined,
-      memories: uniqueMemories,
-      skills,
-      tokenEstimate,
-      meta: {
-        assembledAt: new Date().toISOString(),
-        triggers: triggers.map(t => t.type),
-        duration
-      }
-    }
-  }
-    }
-
-    // Deduplicate memories
-    const uniqueMemories = Array.from(
-      new Map(memories.map(m => [m.id, m])).values()
-    )
+    const uniqueMemories = Array.from(new Map(memories.map(m => [m.id, m])).values())
 
     // Calculate token estimate
     for (const memory of uniqueMemories) {
@@ -394,7 +390,7 @@ export class ContextRetriever {
       ""
     ]
 
-    if (Session) {
+    if (session) {
       lines.push("### Session")
       lines.push(this.sessionManager.getSessionSummary())
       lines.push("")

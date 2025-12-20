@@ -11,6 +11,7 @@
 
 export interface Session {
   id: string
+  parentID?: string  // Parent session ID for nested subagent calls
   createdAt: string  // ISO date string
   lastActive: string // ISO date string
   workbench: SessionWorkbench
@@ -161,6 +162,16 @@ export interface AssembledContext {
 // Configuration Types
 // ============================================================================
 
+export interface ContextExportConfig {
+  /** Enable exporting human-readable command envelopes. */
+  enabled?: boolean
+  /** Markdown export settings */
+  markdown?: {
+    /** Output directory for markdown exports */
+    outputDir?: string
+  }
+}
+
 export interface ContextConfig {
   /** Path to context storage directory */
   storagePath: string
@@ -176,6 +187,8 @@ export interface ContextConfig {
   defaultSkillTier: SkillTier
   /** Enable automatic context inference from conversations and actions */
   enableAutoInference: boolean
+  /** Optional human-readable exports */
+  export?: ContextExportConfig
 }
 
 export const DEFAULT_CONFIG: ContextConfig = {
@@ -185,14 +198,38 @@ export const DEFAULT_CONFIG: ContextConfig = {
   confidenceDecayRate: 0.05,
   enableEmbeddings: false,
   defaultSkillTier: 1,
-  enableAutoInference: true  // Enable automatic inference by default
+  enableAutoInference: true, // Enable automatic inference by default
+  export: {
+    enabled: false,
+    markdown: {
+      outputDir: '.ai-context/exports'
+    }
+  }
 }
 
 /**
  * Load configuration from .ai-context/config.json if it exists
  */
+function mergeContextConfig(base: ContextConfig, overrides?: Partial<ContextConfig>): ContextConfig {
+  const merged: ContextConfig = {
+    ...base,
+    ...overrides,
+    export: {
+      ...base.export,
+      ...overrides?.export,
+      markdown: {
+        ...base.export?.markdown,
+        ...overrides?.export?.markdown
+      }
+    }
+  }
+
+  return merged
+}
+
 export async function loadConfig(customConfig?: Partial<ContextConfig>): Promise<ContextConfig> {
-  const config = { ...DEFAULT_CONFIG, ...customConfig }
+  // Merge defaults + passed config first (so storagePath can influence where config.json is).
+  const baseConfig = mergeContextConfig(DEFAULT_CONFIG, customConfig)
 
   try {
     // Try to load project-specific config
@@ -200,18 +237,127 @@ export async function loadConfig(customConfig?: Partial<ContextConfig>): Promise
     const { existsSync } = await import("fs")
     const { join } = await import("path")
 
-    const configPath = join(config.storagePath, "config.json")
+    const configPath = join(baseConfig.storagePath, "config.json")
     if (existsSync(configPath)) {
       const configContent = await readFile(configPath, "utf-8")
-      const projectConfig = JSON.parse(configContent)
-      return { ...config, ...projectConfig }
+      const projectConfig = JSON.parse(configContent) as Partial<ContextConfig>
+      return mergeContextConfig(baseConfig, projectConfig)
     }
   } catch (error) {
     // Ignore config loading errors, use defaults
-    console.warn("Could not load context config, using defaults:", error)
+    const silent =
+      process.env.AI_ENG_SILENT === '1' ||
+      process.env.AI_ENG_SILENT === 'true' ||
+      process.env.NODE_ENV === 'test' ||
+      process.env.BUN_TEST === '1' ||
+      process.env.BUN_TEST === 'true'
+
+    if (!silent) {
+      console.warn("Could not load context config, using defaults:", error)
+    }
   }
 
-  return config
+  return baseConfig
+}
+
+// ============================================================================
+// Command Envelope Types
+// ============================================================================
+
+export type CommandExecutionStatus = 'success' | 'failure'
+
+export interface CommandContextEnvelope {
+  /** Unique id for this envelope */
+  id: string
+  /** ISO timestamp */
+  createdAt: string
+  /** CLI command name (e.g. 'plan', 'research') */
+  commandName: string
+  /** Success/failure */
+  status: CommandExecutionStatus
+  /** Duration in milliseconds */
+  durationMs: number
+
+  /** Best-effort inputs/options/args summary */
+  inputs?: Record<string, unknown>
+
+  /** Human-readable short summary of what happened */
+  outputSummary?: string
+
+  /** Best-effort list of files the command wrote/modified (may be empty) */
+  filesTouched?: string[]
+
+  /** Decisions captured during execution */
+  decisions?: string[]
+
+  /** Tags for retrieval */
+  tags: string[]
+
+  /** Optional session identifier */
+  sessionId?: string
+
+  /** Optional project identifier (path/repo name) */
+  project?: string
+
+  /** Error details (only when status === 'failure') */
+  error?: {
+    message: string
+    name?: string
+    stack?: string
+  }
+}
+
+export function createCommandEnvelope(input: {
+  commandName: string
+  status: CommandExecutionStatus
+  startTimeMs: number
+  endTimeMs: number
+  inputs?: Record<string, unknown>
+  outputSummary?: string
+  filesTouched?: string[]
+  decisions?: string[]
+  tags?: string[]
+  sessionId?: string
+  project?: string
+  error?: unknown
+}): CommandContextEnvelope {
+  const createdAt = new Date().toISOString()
+  const id = `env_${Date.now().toString(36)}_${Math.random().toString(36).substring(2, 8)}`
+
+  let errorPayload: CommandContextEnvelope['error']
+  if (input.error instanceof Error) {
+    errorPayload = {
+      message: input.error.message,
+      name: input.error.name,
+      stack: input.error.stack
+    }
+  } else if (input.error) {
+    errorPayload = {
+      message: String(input.error)
+    }
+  }
+
+  return {
+    id,
+    createdAt,
+    commandName: input.commandName,
+    status: input.status,
+    durationMs: Math.max(0, input.endTimeMs - input.startTimeMs),
+    inputs: input.inputs,
+    outputSummary: input.outputSummary,
+    filesTouched: input.filesTouched || [],
+    decisions: input.decisions || [],
+    tags: Array.from(
+      new Set([
+        'command-envelope',
+        `command:${input.commandName}`,
+        ...(input.tags || [])
+      ])
+    ),
+    sessionId: input.sessionId,
+    project: input.project,
+    error: input.status === 'failure' ? errorPayload : undefined
+  }
 }
 
 // ============================================================================

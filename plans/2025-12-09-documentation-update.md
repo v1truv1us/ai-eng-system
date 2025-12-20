@@ -12,7 +12,7 @@ Comprehensive update of all documentation files in the ai-eng-system repository 
 ## Success Criteria
 - [ ] All documentation references correct repository (`v1truv1us/ai-eng-system`)
 - [ ] All package names use `@v1truv1us/ai-eng-system`
-- [ ] Command counts match actual implementation (15 commands, 24 agents)
+- [ ] Command counts match actual implementation (15 commands, 29 agents)
 - [ ] Namespace references use `ai-eng/` consistently
 - [ ] Version numbers are current and consistent
 - [ ] File structure diagrams match actual directories
@@ -36,7 +36,7 @@ The documentation system uses a single-source-of-truth approach with content in 
    - [ ] Repository name corrected to `v1truv1us/ai-eng-system`
   - [ ] Package name updated to `@v1truv1us/ai-eng-system`
   - [ ] Command count updated to 15 commands
-  - [ ] Agent count updated to 24 agents
+  - [ ] Agent count updated to 29 agents
   - [ ] File structure diagram matches actual directories
   - [ ] Installation instructions verified working
 - **Time**: 2 hours
@@ -61,7 +61,7 @@ The documentation system uses a single-source-of-truth approach with content in 
 - **Files**:
   - `AGENTS.md` (update)
 - **Acceptance Criteria**:
-  - [ ] All 24 agents listed with descriptions
+  - [ ] All 29 agents listed with descriptions
   - [ ] All 15 commands documented
   - [ ] Agent coordination modes accurate
   - [ ] Skills section complete
@@ -137,7 +137,7 @@ The documentation system uses a single-source-of-truth approach with content in 
 - **Files**:
   - `content/AGENTS.md` (update)
 - **Acceptance Criteria**:
-  - [ ] All 24 agents properly categorized (original vs imported)
+  - [ ] All 29 agents properly categorized (original vs imported)
   - [ ] Agent descriptions accurate
   - [ ] Integration notes current
 - **Time**: 1 hour
@@ -226,7 +226,7 @@ The documentation system uses a single-source-of-truth approach with content in 
    - [ ] All repository URLs: `v1truv1us/ai-eng-system`
   - [ ] All namespaces: `ai-eng/`
   - [ ] All command counts: 15 commands
-  - [ ] All agent counts: 24 agents
+  - [ ] All agent counts: 29 agents
   - [ ] All build commands: `bun`
 - **Time**: 1 hour
 - **Complexity**: Medium

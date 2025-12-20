@@ -72,6 +72,36 @@ Take a deep breath and execute this research systematically.
 
 ### Phase 2: Parallel Discovery
 
+#### Subagent Communication Protocol (Minimal)
+
+When you spawn EACH discovery agent, include a small **Context Handoff Envelope** in the prompt. Subagents run in a separate context; do not assume they know anything unless you include it.
+
+Use this exact structure:
+
+```text
+<CONTEXT_HANDOFF_V1>
+Goal: (1 sentence)
+Scope: (codebase|docs|external|all)
+Known constraints: (bullets; optional)
+What I already checked: (bullets; optional)
+Files/paths to prioritize: (bullets; optional)
+Deliverable: (what you must return)
+Output format: RESULT_V1
+</CONTEXT_HANDOFF_V1>
+```
+
+All agents must respond with:
+
+```text
+<RESULT_V1>
+RESULT:
+EVIDENCE:
+OPEN_QUESTIONS:
+NEXT_STEPS:
+CONFIDENCE: 0.0-1.0
+</RESULT_V1>
+```
+
 Spawn these agents CONCURRENTLY for maximum efficiency:
 
 | Agent | Task |

@@ -2,7 +2,10 @@
  * Tests for research analysis functionality
  */
 
-import { describe, it, expect, beforeEach, mock } from 'bun:test';
+import { describe, it, expect, beforeEach } from 'bun:test';
+import { mkdtemp, writeFile, rm } from 'fs/promises';
+import { tmpdir } from 'os';
+import { join } from 'path';
 import {
   CodebaseAnalyzer,
   ResearchAnalyzer,
@@ -112,13 +115,20 @@ describe('CodebaseAnalyzer', () => {
 describe('ResearchAnalyzer', () => {
   let analyzer: ResearchAnalyzer;
   let mockConfig: any;
+  let tempDir: string | undefined;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     mockConfig = {
       maxFileSize: 1024 * 1024,
       enableCaching: true
     };
     analyzer = new ResearchAnalyzer(mockConfig);
+
+    // Create isolated temp dir for tests that need real files.
+    if (tempDir) {
+      await rm(tempDir, { recursive: true, force: true });
+    }
+    tempDir = await mkdtemp(join(tmpdir(), 'analysis-test-'));
   });
 
   it('should create analyzer with config', () => {
@@ -171,6 +181,25 @@ describe('ResearchAnalyzer', () => {
   });
 
   it('should detect poor documentation structure', async () => {
+    // Use a real temp markdown file (avoid fs/promises module mocks).
+    const docPath = join(tempDir!, 'poor-docs.md');
+    await writeFile(
+      docPath,
+      [
+        'This is a document without proper headings.',
+        '',
+        'It has some content but no structure.',
+        '```javascript',
+        'const code = "example";',
+        '```',
+        '',
+        'More text here.',
+        '',
+        'Another paragraph with information.'
+      ].join('\n'),
+      'utf-8'
+    );
+
     const mockDiscoveryResults: DiscoveryResult[] = [
       {
         source: 'research-locator',
@@ -178,7 +207,7 @@ describe('ResearchAnalyzer', () => {
         patterns: [],
         documentation: [
           {
-            path: '/test/poor-docs.md',
+            path: docPath,
             relevance: 0.8,
             type: 'markdown'
           }
@@ -188,32 +217,37 @@ describe('ResearchAnalyzer', () => {
       }
     ];
 
-    // Mock documentation without headings
-    mock.module('fs/promises', () => ({
-      readFile: mock(() => Promise.resolve(`
-This is a document without proper headings.
+    const result = await analyzer.analyze(mockDiscoveryResults);
 
-It has some content but no structure.
-\`\`\`javascript
-const code = "example";
-\`\`\`
-
-More text here.
-
-Another paragraph with information.
-       `)
-     });
-     const result = await analyzer.analyze(mockDiscoveryResults);
-    
     const structureInsight = result.insights.find(i => i.category === 'documentation-quality');
     if (structureInsight) {
       expect(structureInsight.type).toBe('finding');
       expect(structureInsight.title).toBeDefined();
     }
-});
-     });
+  });
 
   it('should detect code without explanation', async () => {
+    // Use a real temp markdown file (avoid template literal backtick parsing issues).
+    const docPath = join(tempDir!, 'code-only.md');
+    await writeFile(
+      docPath,
+      [
+        '```typescript',
+        'class Example {',
+        '  constructor() {}',
+        '  method() {}',
+        '}',
+        '```',
+        '',
+        '```javascript',
+        'const data = { key: "value" };',
+        '```',
+        '',
+        'Some text here.'
+      ].join('\n'),
+      'utf-8'
+    );
+
     const mockDiscoveryResults: DiscoveryResult[] = [
       {
         source: 'research-locator',
@@ -221,7 +255,7 @@ Another paragraph with information.
         patterns: [],
         documentation: [
           {
-            path: '/test/code-only.md',
+            path: docPath,
             relevance: 0.7,
             type: 'markdown'
           }
@@ -231,32 +265,13 @@ Another paragraph with information.
       }
     ];
 
-    // Mock documentation with code but no headings
-    mock.module('fs/promises', () => ({
-      readFile: mock(() => Promise.resolve(`
-\`\`\`typescript
-class Example {
-  constructor() {}
-  method() {}
-}
-\`\`\`
-
-\`\`\`javascript
-const data = { key: "value" };
-\`\`\`
-
-Some text here.
-      `)
-     }));
-
     const result = await analyzer.analyze(mockDiscoveryResults);
-    
-    const codeExplanationInsight = result.insights.find(i => 
+
+    const codeExplanationInsight = result.insights.find(i =>
       i.category === 'documentation-quality' && i.title.includes('Code without explanation')
     );
     expect(codeExplanationInsight).toBeDefined();
-   });
- });
+  });
 });
 
 describe('AnalysisHandler', () => {

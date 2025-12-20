@@ -43,7 +43,8 @@ describe('Ferg Engineering System - Integration Tests', () => {
       
       expect(result).toContain('Building ai-eng-system')
       expect(result).toContain('Build complete')
-      expect(result).toContain('Output: dist/')
+      // build.ts prints an absolute output path when TEST_ROOT is used
+      expect(result).toMatch(/Output:\s+.*\/dist\//)
     })
 
     it('should validate content without building', () => {
@@ -318,6 +319,7 @@ This is test agent ${i}.
 
   describe('Error Recovery and Edge Cases', () => {
     it('should handle missing required fields gracefully', async () => {
+      const invalidPath = join(TEST_ROOT, 'content', 'commands', 'invalid-command.md')
       const invalidCommand = `---
 name: invalid-command
 ---
@@ -326,13 +328,18 @@ name: invalid-command
 
 Missing description field.
 `
-      
-      await writeFile(join(TEST_ROOT, 'content', 'commands', 'invalid-command.md'), invalidCommand)
-      
-      // Validation should catch this
-      expect(() => {
-        execSync('bun run build --validate', { cwd: TEST_ROOT })
-      }).toThrow()
+
+      try {
+        await writeFile(invalidPath, invalidCommand)
+
+        // Validation should catch this
+        expect(() => {
+          execSync('bun run build --validate', { cwd: TEST_ROOT })
+        }).toThrow()
+      } finally {
+        // Prevent this fixture from polluting other validation-dependent tests
+        await rm(invalidPath, { force: true })
+      }
     })
 
     it('should handle malformed YAML', async () => {

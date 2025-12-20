@@ -8,7 +8,8 @@
 import { readFile, writeFile, mkdir } from "fs/promises"
 import { existsSync } from "fs"
 import { join } from "path"
-import type { MemoryEntry, ContextConfig, DEFAULT_CONFIG } from "./types"
+import type { MemoryEntry, ContextConfig } from "./types"
+import { DEFAULT_CONFIG } from "./types"
 
 export interface VectorEmbedding {
   id: string

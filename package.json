@@ -8,11 +8,11 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "bun run build.ts",
-    "build:watch": "bun run build.ts --watch",
+    "build": "bun build.ts",
+    "build:watch": "bun build.ts --watch",
     "clean": "rm -rf dist",
-    "validate": "bun run build.ts --validate",
-    "prepublishOnly": "bun run build",
+    "validate": "bun build.ts --validate",
+    "prepublishOnly": "bun build.ts",
     "test": "bun test tests/build.test.ts"
   },
   "publishConfig": {
@@ -37,7 +37,9 @@
     "cross-platform"
   ],
   "devDependencies": {
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "typescript": "^5.9.3",
+    "yaml": "^2.8.1"
   },
   "author": {
     "name": "v1truv1us",

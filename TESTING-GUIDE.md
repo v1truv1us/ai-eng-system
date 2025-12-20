@@ -399,7 +399,7 @@ ls -la ~/.config/opencode/command/ai-eng/
 # Check that agents are documented
 ls -la ~/.config/opencode/agent/ai-eng/
 ```
-**Expected**: All 26 agents have .md files
+**Expected**: All 29 agents have .md files
 
 #### Test 6.3: Skill Documentation
 ```bash
@@ -541,8 +541,8 @@ Use this template to document your test results:
 
 **Installed Components**:
 - ✅ 15 Commands
-- ✅ 24 Agents
-- ✅ 5 Skills
+- ✅ 29 Agents
+- ✅ 4 skill packs
 - ✅ Full Documentation
 
 **Ready to Test**: YES

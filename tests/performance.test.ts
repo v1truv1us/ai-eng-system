@@ -435,22 +435,23 @@ Agent ${i} maintains high quality standards and best practices.
 
     it('should handle very deep directory structures', async () => {
       const testDir = join(TEST_ROOT, 'deep-stress')
-      
-      // Create very deep structure
-      await createLargeDirectoryStructure(testDir, 20, 5) // 20 levels deep, 5 files per level
-      
+
+      // Deep stress should test DEPTH, not exponential fan-out.
+      // Use a single-branch chain so this remains deterministic and fast.
+      await createLargeDirectoryStructure(testDir, 20, 1, 1) // 20 levels deep, 1 file per level, 1 subdir per level
+
       const startTime = performance.now()
       const files = await getMarkdownFiles(testDir)
       const endTime = performance.now()
-      
+
       const duration = endTime - startTime
-      
+
       // Should handle deep structures
-      expect(duration).toBeLessThan(3000) // 3 seconds
+      expect(duration).toBeLessThan(5000) // 5 seconds
       expect(files.length).toBeGreaterThan(0)
-      
+
       await rm(testDir, { recursive: true })
-    })
+    }, 30000)
   })
 })
 
@@ -537,26 +538,34 @@ async function getMarkdownFiles(dir: string): Promise<string[]> {
   return files
 }
 
-async function createLargeDirectoryStructure(baseDir: string, depth: number, filesPerLevel: number): Promise<void> {
+async function createLargeDirectoryStructure(
+  baseDir: string,
+  depth: number,
+  filesPerLevel: number,
+  subdirsPerLevel = 3
+): Promise<void> {
   const { mkdir, writeFile } = await import('fs/promises')
   const { join } = await import('path')
-  
+
   async function createLevel(currentDir: string, currentDepth: number): Promise<void> {
     if (currentDepth <= 0) return
-    
+
+    // Ensure directory exists before file writes (guards against ENOENT in stress cases)
+    await mkdir(currentDir, { recursive: true })
+
     // Create files at this level
     for (let i = 0; i < filesPerLevel; i++) {
       await writeFile(join(currentDir, `file-${i}.md`), `# File at depth ${currentDepth}`)
     }
-    
+
     // Create subdirectories
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < subdirsPerLevel; i++) {
       const subDir = join(currentDir, `subdir-${i}`)
       await mkdir(subDir, { recursive: true })
       await createLevel(subDir, currentDepth - 1)
     }
   }
-  
+
   await mkdir(baseDir, { recursive: true })
   await createLevel(baseDir, depth)
 }

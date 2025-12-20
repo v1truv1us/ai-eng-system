@@ -2,6 +2,9 @@
 
 A compounding engineering system for UnFergettable-Designs and v1truv1us. Provides shared agents, commands, and skills for **Claude Code** and **OpenCode** (SST/OpenCode agentic platform).
 
+> Note: This repo also contains a `codeflow/` directory from the separate **CodeFlow** project (`@agentic-codeflow/cli`). Treat it as reference material; it is not part of `ai-eng-system` and its docs may use different package names/counts.
+
+
 ## 🚀 Easy Installation
 
 ### For Claude Code
@@ -124,7 +127,7 @@ dist/                      # 🚫 GENERATED - never edit directly
 
 **What was installed:**
 - ✅ **15 Commands** in `~/.config/opencode/command/ai-eng/`
-- ✅ **24 Agents** in `~/.config/opencode/agent/ai-eng/`
+- ✅ **29 Agents** in `~/.config/opencode/agent/ai-eng/`
 - ✅ **Skills** in `~/.config/opencode/skills/`
 
 **Available Commands:**
@@ -135,7 +138,7 @@ dist/                      # 🚫 GENERATED - never edit directly
 **Available Agents:**
 - `ai-eng/architect-advisor`, `ai-eng/frontend-reviewer`, `ai-eng/seo-specialist`, `ai-eng/prompt-optimizer`
 - `ai-eng/code-reviewer`, `ai-eng/database-optimizer`, `ai-eng/api-builder-enhanced`, `ai-eng/full-stack-developer`
-- And 18 more specialized agents...
+- And 23 more specialized agents...
 
 ## Quick Start
 

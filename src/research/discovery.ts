@@ -64,9 +64,9 @@ export class CodebaseLocator implements DiscoveryAgent {
     }
   }
 
-  private parseQueryToPatterns(query: ResearchQuery): string[] {
+  private parseQueryToPatterns(query: string): string[] {
     // Extract keywords and create file patterns
-    const keywords = query.query.toLowerCase()
+    const keywords = query.toLowerCase()
       .split(/\s+/)
       .filter(word => word.length > 2)
       .slice(0, 5); // Limit to top 5 keywords
@@ -267,7 +267,7 @@ export class ResearchLocator implements DiscoveryAgent {
       const indexedDocs = await this.indexDocuments(docs);
       
       // 3. Search for query matches
-      const matches = this.searchIndex(indexedDocs, query);
+      const matches = this.searchIndex(indexedDocs, query.query);
       
       const executionTime = Date.now() - startTime;
       
@@ -426,7 +426,7 @@ export class ResearchLocator implements DiscoveryAgent {
     return true;
   }
 
-  private calculateConfidence(docs: DocReference[], query: ResearchQuery): ConfidenceLevel {
+  private calculateConfidence(docs: DocReference[], _query: string): ConfidenceLevel {
     if (docs.length === 0) return ConfidenceLevel.LOW;
     
     const avgRelevance = docs.reduce((sum, doc) => sum + doc.relevance, 0) / docs.length;
@@ -479,7 +479,7 @@ export class PatternFinder implements DiscoveryAgent {
     }
   }
 
-  private identifyPatterns(query: ResearchQuery): string[] {
+  private identifyPatterns(query: string): string[] {
     // Extract potential patterns from query
     const patterns: string[] = [];
     
@@ -492,7 +492,7 @@ export class PatternFinder implements DiscoveryAgent {
       'config', 'settings', 'options', 'parameters'
     ];
     
-    const queryLower = query.query.toLowerCase();
+    const queryLower = query.toLowerCase();
     for (const pattern of commonPatterns) {
       if (queryLower.includes(pattern)) {
         patterns.push(pattern);
@@ -609,7 +609,7 @@ export class PatternFinder implements DiscoveryAgent {
     return languageMap[ext] || 'unknown';
   }
 
-  private calculateConfidence(patterns: PatternMatch[], query: ResearchQuery): ConfidenceLevel {
+  private calculateConfidence(patterns: PatternMatch[], _query: string): ConfidenceLevel {
     if (patterns.length === 0) return ConfidenceLevel.LOW;
     
     const totalMatches = patterns.reduce((sum, p) => sum + p.frequency, 0);

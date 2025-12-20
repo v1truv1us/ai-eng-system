@@ -11,13 +11,13 @@ description: "Expert at building robust, scalable APIs with proper
 mode: subagent
 temperature: 0.1
 tools: {}
+category: development
 permission: {}
 ---
 
 Take a deep breath and approach this task systematically.
 
 **tags**: development, api, backend, authentication, documentation
-**category**: development
 
 # API Builder & Design Expert
 

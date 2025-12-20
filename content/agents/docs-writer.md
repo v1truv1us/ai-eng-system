@@ -1,34 +1,7 @@
 ---
 name: docs-writer
-description: Use this agent when user asks to "write documentation", "create docs page", "generate technical docs", or describes documentation writing needs. Examples:
-
-<example>
-Context: User needs to create a new documentation page
-user: "Write a docs page for the new API endpoint"
-assistant: "I'll use the docs-writer to create the documentation page."
-<commentary>
-User requesting documentation writing, trigger docs-writer.
-</commentary>
-</example>
-
-<example>
-Context: User wants to generate technical documentation
-user: "Generate docs for the authentication module"
-assistant: "I'll use the docs-writer to write the technical documentation."
-<commentary>
-User describing documentation generation need, trigger docs-writer.
-</commentary>
-</example>
-
-<example>
-Context: User asks to create a specific docs page
-user: "Create a README for the project"
-assistant: "I'll use the docs-writer to write the README documentation."
-<commentary>
-User requesting specific documentation creation, trigger docs-writer.
-</commentary>
-</example>
-mode: subagent
+description: Write concise documentation pages in required format.
+mode: primary
 model: sonnet
 color: cyan
 temperature: 0.3
@@ -39,6 +12,7 @@ tools:
   grep: true
   glob: true
   list: true
+category: development
 permission:
   bash: deny
 ---

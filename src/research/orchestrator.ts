@@ -16,7 +16,9 @@ import {
   AnalysisResult,
   SynthesisReport,
   ResearchError,
-  ResearchMetrics
+  ResearchMetrics,
+  ResearchScope,
+  ResearchDepth
 } from './types.js';
 import { DiscoveryHandler } from './discovery.js';
 import { AnalysisHandler } from './analysis.js';
@@ -34,6 +36,7 @@ export class ResearchOrchestrator extends EventEmitter {
   private startTime?: Date;
   private currentPhase: ResearchPhase = ResearchPhase.DISCOVERY;
   private progress: ResearchProgress;
+  private anyEventListeners: Array<(event: ResearchEvent['type'], data?: any) => void> = [];
 
   constructor(config: ResearchConfig) {
     super();
@@ -84,7 +87,7 @@ export class ResearchOrchestrator extends EventEmitter {
       const discoveryResults = await this.executeDiscoveryPhase(query);
       
       // Phase 2: Analysis (sequential)
-      const analysisResults = await this.executeAnalysisPhase(discoveryResults);
+      const analysisResults = await this.executeAnalysisPhase(discoveryResults, query);
       
       // Phase 3: Synthesis
       const report = await this.executeSynthesisPhase(query, analysisResults);
@@ -110,6 +113,13 @@ export class ResearchOrchestrator extends EventEmitter {
       this.emitEvent('research_failed', { error: researchError });
       throw researchError;
     }
+  }
+
+  /**
+   * Subscribe to all emitted research events (convenience API for tests/UI)
+   */
+  public onAny(handler: (event: ResearchEvent['type'], data?: any) => void): void {
+    this.anyEventListeners.push(handler);
   }
 
   /**
@@ -220,15 +230,17 @@ export class ResearchOrchestrator extends EventEmitter {
   /**
    * Execute analysis phase
    */
-  private async executeAnalysisPhase(discoveryResults: DiscoveryResult[]): Promise<AnalysisResult[]> {
+  private async executeAnalysisPhase(discoveryResults: DiscoveryResult[], query: ResearchQuery): Promise<AnalysisResult[]> {
     this.currentPhase = ResearchPhase.ANALYSIS;
     this.updateProgress('Analysis Phase', 'Starting analysis agents');
     
     this.emitEvent('phase_started', { phase: ResearchPhase.ANALYSIS });
     
     try {
-      // Execute analysis
-      const results = await this.analysisHandler.executeAnalysis(discoveryResults, query);
+      // Execute analysis. AnalysisHandler returns a composite object, but the
+      // synthesis phase expects an iterable of AnalysisResult.
+      const analysis = await this.analysisHandler.executeAnalysis(discoveryResults, query);
+      const results: AnalysisResult[] = [analysis.codebaseAnalysis, analysis.researchAnalysis];
       
       this.updateProgress('Analysis Phase', 'Analysis completed');
       this.emitEvent('phase_completed', { 
@@ -367,6 +379,16 @@ export class ResearchOrchestrator extends EventEmitter {
       phase: this.currentPhase,
       data
     };
+
+    // Fire "any" listeners first so observers see events even if they don't
+    // subscribe to the EventEmitter interface.
+    for (const handler of this.anyEventListeners) {
+      try {
+        handler(type, data);
+      } catch {
+        // Never let listeners break research execution
+      }
+    }
     
     this.emit('research_event', event);
   }
