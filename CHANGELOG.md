@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.4] - 2025-12-21
+
+### Fixed
+- Command registration fixes - all 15 commands now properly available
+- NPM publishing workflow implementation
+- Removed GitHub Packages configuration for cleaner publishing
+- Build artifacts preservation and formatting improvements
+- OpenCode agent categories corrected to avoid namespace collision
+- Anthropic marketplace pattern implementation with embedded plugin
+- Build system fixes for marketplace compliance and mirror validation
+
 ### Added
 - **documentation-specialist Agent**: Comprehensive technical documentation generation
   - Senior technical documentation specialist with 15+ years experience
