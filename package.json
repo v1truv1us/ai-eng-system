@@ -1,61 +1,77 @@
 {
-  "name": "@v1truv1us/ai-eng-system",
-  "version": "0.3.5",
-  "description": "Compounding engineering system for Claude Code and OpenCode. Shared agents, commands, skills, and plugin development tools.",
-  "files": [
-    "dist/",
-    "README.md",
-    "LICENSE"
-  ],
-  "scripts": {
-    "build": "bun build.ts",
-    "build:watch": "bun build.ts --watch",
-    "clean": "rm -rf dist",
-    "validate": "bun build.ts --validate",
-    "prepublishOnly": "bun build.ts",
-    "test": "bun test tests/build.test.ts"
-  },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://npm.pkg.github.com"
-  },
-  "keywords": [
-    "engineering",
-    "workflow",
-    "agents",
-    "claude-code",
-    "opencode",
-    "code-review",
-    "planning",
-    "deployment",
-    "seo",
-    "optimization",
-    "productivity",
-    "plugin-development",
-    "extension-tools",
-    "ai-assistance",
-    "cross-platform"
-  ],
-  "devDependencies": {
-    "bun-types": "latest",
-    "typescript": "^5.9.3",
-    "yaml": "^2.8.1"
-  },
-  "author": {
-    "name": "v1truv1us",
-    "email": "contact@v1truv1us.dev",
-    "url": "https://github.com/v1truv1us"
-  },
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/v1truv1us/ai-eng-system"
-  },
-  "bugs": {
-    "url": "https://github.com/v1truv1us/ai-eng-system/issues"
-  },
-  "homepage": "https://github.com/v1truv1us/ai-eng-system#readme",
-  "engines": {
-    "bun": ">=1.0.0"
-  }
+    "name": "ai-eng-system",
+    "version": "0.0.2",
+    "description": "Compounding engineering system for Claude Code and OpenCode. Shared agents, commands, skills, and plugin development tools.",
+    "type": "module",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+        }
+    },
+    "files": [
+        "dist/",
+        "index.js",
+        "index.d.ts",
+        "README.md",
+        "LICENSE"
+    ],
+    "scripts": {
+        "build": "bun build.ts",
+        "build:watch": "bun build.ts --watch",
+        "clean": "rm -rf dist",
+        "validate": "bun build.ts --validate",
+        "typecheck": "tsc --noEmit",
+        "typecheck:plugin": "tsc -p tsconfig.plugin.json",
+        "prepublishOnly": "bun build.ts",
+        "test": "bun test tests/build.test.ts"
+    },
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://registry.npmjs.org"
+    },
+    "keywords": [
+        "engineering",
+        "workflow",
+        "agents",
+        "claude-code",
+        "opencode",
+        "code-review",
+        "planning",
+        "deployment",
+        "seo",
+        "optimization",
+        "productivity",
+        "plugin-development",
+        "extension-tools",
+        "ai-assistance",
+        "cross-platform"
+    ],
+    "devDependencies": {
+        "bun-types": "latest",
+        "typescript": "^5.9.3",
+        "yaml": "^2.8.1"
+    },
+    "author": {
+        "name": "v1truv1us",
+        "email": "contact@v1truv1us.dev",
+        "url": "https://github.com/v1truv1us"
+    },
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/v1truv1us/ai-eng-system"
+    },
+    "bugs": {
+        "url": "https://github.com/v1truv1us/ai-eng-system/issues"
+    },
+    "homepage": "https://github.com/v1truv1us/ai-eng-system#readme",
+    "engines": {
+        "bun": ">=1.0.0"
+    },
+    "dependencies": {
+        "@opencode-ai/plugin": "^1.0.184"
+    }
 }
