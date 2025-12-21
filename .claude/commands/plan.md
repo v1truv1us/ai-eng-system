@@ -1,1 +1,1 @@
-/home/vitruvius/git/ferg-engineering-system/dist/.claude-plugin/commands/plan.md
+/home/vitruvius/git/ai-eng-system/dist/.claude-plugin/commands/plan.md

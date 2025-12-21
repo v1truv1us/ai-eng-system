@@ -1,1 +1,1 @@
-/home/vitruvius/git/ferg-engineering-system/dist/.claude-plugin/commands/optimize.md
+/home/vitruvius/git/ai-eng-system/dist/.claude-plugin/commands/optimize.md

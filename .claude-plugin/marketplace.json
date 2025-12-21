@@ -14,7 +14,7 @@
       "name": "ai-eng-system",
       "source": "./plugins/ai-eng-system",
       "description": "AI Engineering System with context engineering, research orchestration, 15 commands, 29 specialized agents, and 4 skill packs for Claude Code & OpenCode",
-      "version": "0.3.4",
+      "version": "0.0.3",
       "author": {
         "name": "v1truv1us",
         "email": "contact@v1truv1us.dev"

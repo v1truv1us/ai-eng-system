@@ -5,6 +5,10 @@
  * under .opencode/command and .opencode/agent in the built distribution.
  */
 
-export const aiEngSystem = async () => {
-  return {}
-}
+import type { Plugin } from "@opencode-ai/plugin";
+
+const plugin: Plugin = async (input) => {
+  return {};
+};
+
+export default plugin;
