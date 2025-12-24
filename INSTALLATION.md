@@ -4,89 +4,56 @@ This guide covers installation methods for the AI Engineering System across Clau
 
 ## 🚀 Quick Start
 
-| Platform | Recommended Method | Commands |
-|----------|-------------------|----------|
-| **Claude Code** | Marketplace | `/plugin marketplace add v1truv1us/ai-eng-system`<br>`/plugin install ai-eng-system@ai-eng-marketplace` |
-| **OpenCode** | Shell Script | `bun scripts/install.js` |
-
-## 📋 Detailed Installation Methods
-
-### Claude Code
-
-#### Option 1: Marketplace (Recommended)
 ```bash
-/plugin marketplace add v1truv1us/ai-eng-system
-/plugin install ai-eng-system@ai-eng-marketplace
+npm install -g ai-eng-system
+```
+
+This single command installs the AI Engineering System for both **Claude Code** and **OpenCode**.
+
+## 📋 Detailed Installation
+
+### Global Installation
+
+```bash
+npm install -g ai-eng-system
+```
+
+**What gets installed:**
+- ✅ Commands for both Claude Code and OpenCode
+- ✅ 29 specialized agents
+- ✅ 4 skill packages (devops, prompting, research, plugin-dev)
+- ✅ Automatic version management
+
+**Benefits:**
+- ✅ One command for both platforms
+- ✅ Automatic updates with `npm update`
+- ✅ Version pinning support
+- ✅ Works with any Node.js package manager
+
+### Local Installation
+
+For project-specific installation:
+
+```bash
+npm install --save-dev ai-eng-system
 ```
 
 **Benefits:**
-- ✅ Automatic updates
-- ✅ Centralized discovery
-- ✅ Version management
-- ✅ Team distribution support
-
-#### Option 2: Direct Plugin Install (Testing)
-```bash
-/plugin install ./plugins/ai-eng-system
-```
-
-**Benefits:**
-- ✅ Simple one-liner for development
-- ✅ Test embedded plugin directly
-- ❌ Manual updates required
-
-### OpenCode
-
-#### Option 1: Shell Script (Recommended)
-```bash
-# Clone the repository
-git clone https://github.com/v1truv1us/ai-eng-system
-cd ai-eng-system
-
-# Global install (recommended)
-bun scripts/install.js
-
-# Or local install
-bun scripts/install.js --local
-```
-
-**Benefits:**
-- ✅ No npm required
-- ✅ Full control over installation
-- ✅ Can modify source if needed
-- ✅ Works offline after initial clone
-
-#### Option 2: GitHub Packages (Alternative)
-```bash
-npm install -g @v1truv1us/ai-eng-system --registry https://npm.pkg.github.com
-```
-
-**Benefits:**
-- ✅ Integrated with GitHub authentication
-- ✅ Automatic provenance and security
-- ✅ Version management
-- ❌ Requires npm setup
-
-## 🔧 Installation Comparison
-
-| Method | Platform | Setup Complexity | Update Process | Version Management | Global/Local |
-|--------|----------|------------------|----------------|-------------------|---------------|
-| **Marketplace** | Claude Code | Medium (2 steps) | Automatic | ✅ | Global |
-| **Direct Plugin** | Claude Code | Low (1 step) | Manual | ❌ | Global |
-| **Shell Script** | OpenCode | Medium (clone+run) | Re-run script | ❌ | Global/Local |
-| **GitHub Packages** | OpenCode | Low (1 command) | `npm update` | ✅ | Global |
+- ✅ Project-local commands and agents
+- ✅ Version locked per project
+- ✅ Team consistency
 
 ## 📦 What Gets Installed
 
 ### Claude Code
-- **Commands:** 15 namespaced slash commands (`/ai-eng/plan`, `/ai-eng/review`, `/ai-eng/optimize`, `/ai-eng/research`, etc.)
+- **Commands:** 16 slash commands (`/ai-eng/plan`, `/ai-eng/review`, `/ai-eng/optimize`, `/ai-eng/clean`, `/ai-eng/research`, etc.)
 - **Agents:** 29 specialized agents
 - **Skills:** 4 skill packages (devops, prompting, research, plugin-dev)
 - **Location:** `~/.claude/plugins/ai-eng-system/`
 - **Format:** Markdown files with YAML frontmatter
 
 ### OpenCode
-- **Commands:** 15 namespaced commands (`/ai-eng/plan`, `/ai-eng/review`, etc.)
+- **Commands:** 16 commands (`/ai-eng/plan`, `/ai-eng/review`, `/ai-eng/optimize`, `/ai-eng/clean`, `/ai-eng/research`, etc.)
 - **Agents:** 29 specialized agents (`ai-eng/architect-advisor`, etc.)
 - **Skills:** 4 skill packages (devops, prompting, research, plugin-dev)
 - **Location:** `~/.config/opencode/` (global) or `.opencode/` (local)
@@ -102,40 +69,37 @@ npm install -g @v1truv1us/ai-eng-system --registry https://npm.pkg.github.com
 /plugin list
 
 # Reinstall if needed
-/plugin uninstall ai-eng-system
-/plugin install ai-eng-system@ai-eng-marketplace
+npm uninstall -g ai-eng-system
+npm install -g ai-eng-system
 ```
 
 **"Command not found" in OpenCode**
+
+Verify installation:
 ```bash
-# Verify installation
+# Check commands are available
 ls ~/.config/opencode/command/ai-eng/
+
+# Check agents are available
 ls ~/.config/opencode/agent/ai-eng/
 
 # Test a command
 /ai-eng/plan "test installation"
 
 # Reinstall if needed
-cd /path/to/ai-eng-system
-bun scripts/install.js
+npm uninstall -g ai-eng-system
+npm install -g ai-eng-system
 ```
 
 **Permission errors**
 ```bash
-# For npm global installs
-npm install -g @v1truv1us/ai-eng-system --unsafe-perm --registry https://npm.pkg.github.com
+# Use sudo for global installs
+sudo npm install -g ai-eng-system
 
-# For shell scripts
-chmod +x scripts/install.js
-```
-
-**Bun not found**
-```bash
-# Install Bun
-curl -fsSL https://bun.sh/install | bash
-
-# Or use npm instead
-npm install -g @v1truv1us/ai-eng-system --registry https://npm.pkg.github.com
+# Or fix npm permissions
+mkdir -p ~/.npm-global
+npm config set prefix '~/.npm-global'
+echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.bashrc
 ```
 
 ### Verification
@@ -145,7 +109,7 @@ After installation, verify everything works:
 **Claude Code:**
 ```bash
 # Test a command
-/ai-eng/plan "test installation"
+/plan "test installation"
 
 # List plugins
 /plugin list
@@ -159,22 +123,11 @@ After installation, verify everything works:
 
 ## 🔄 Updates
 
-### Claude Code (Marketplace)
 ```bash
-/plugin update ai-eng-system@ai-eng-marketplace
+npm update -g ai-eng-system
 ```
 
-### OpenCode (Shell Script)
-```bash
-cd /path/to/ai-eng-system
-git pull origin main
-bun scripts/install.js
-```
-
-### OpenCode (GitHub Packages)
-```bash
-npm update -g @v1truv1us/ai-eng-system --registry https://npm.pkg.github.com
-```
+This updates the system for both Claude Code and OpenCode simultaneously.
 
 ## 🏢 Enterprise Distribution
 

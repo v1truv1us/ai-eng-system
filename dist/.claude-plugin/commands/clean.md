@@ -11,10 +11,45 @@ Router command for removing AI-generated verbosity and redundancy from various c
 ## Usage
 
 ```bash
-/clean <content-or-file> --type=<type> [options]
-/clean slop <content> [options]                # Shortcut for --type=slop
-/clean comments <file-or-dir> [options]        # Shortcut for --type=comments  
-/clean docs <file-or-dir> [options]            # Shortcut for --type=docs
+/clean --help                         # Show help and available types
+/clean <content-or-file>             # Auto-detect and clean content
+/clean <content> --slop              # Remove AI filler patterns
+/clean <file-or-dir> --comments      # Optimize code comments (recursive)
+/clean <file-or-dir> --docs          # Clean documentation (recursive)
+/clean <content> --type=<type>       # Explicit type flag
+```
+
+## Help
+
+When `--help` is passed, display:
+
+```
+CLEAN COMMAND - Remove AI-generated verbosity
+
+USAGE:
+  /clean <content-or-file> [--type]   Auto-detect and clean content
+  /clean <content> --slop             Remove AI conversational filler
+  /clean <path> --comments            Optimize code comments (recursive)
+  /clean <path> --docs                Clean documentation verbosity (recursive)
+
+TYPES:
+  --slop          AI filler: "Certainly!", "I'd be happy to help", hedging
+  --comments      Code comments: redundant, verbose, obvious explanations
+  --docs          Documentation: conversational tone, excessive politeness
+  --all           Apply all cleanup techniques
+
+OPTIONS:
+  -m, --mode      Aggressiveness: conservative | moderate | aggressive
+  -p, --preview   Show changes without applying
+  -a, --apply     Apply confirmed changes
+  -v, --verbose   Show detailed analysis
+  --help          Show this help
+
+EXAMPLES:
+  /clean "Certainly! I'd be happy to help..." --slop --preview
+  /clean src/ --comments --apply
+  /clean docs/README.md --docs --mode=aggressive
+  /clean ./docs --docs --recursive
 ```
 
 ## Types

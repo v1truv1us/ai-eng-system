@@ -30,7 +30,7 @@ claude plugin link .
 ### Verification
 
 After installation, verify in Claude Code:
-- **15 Commands available**: `/ai-eng/plan`, `/ai-eng/review`, `/ai-eng/seo`, `/ai-eng/work`, `/ai-eng/compound`, `/ai-eng/deploy`, `/ai-eng/optimize`, `/ai-eng/recursive-init`, `/ai-eng/research`, `/ai-eng/context`, `/ai-eng/create-plugin`, `/ai-eng/create-agent`, `/ai-eng/create-command`, `/ai-eng/create-skill`, `/ai-eng/create-tool`
+- **16 Commands available**: `/plan`, `/review`, `/seo`, `/work`, `/compound`, `/deploy`, `/optimize`, `/clean`, `/recursive-init`, `/research`, `/context`, `/create-plugin`, `/create-agent`, `/create-command`, `/create-skill`, `/create-tool`
 - **29 Agents available**: All specialized agents for development, testing, deployment, and architecture
 - **Skills**: DevOps, prompting, and research skills
 
@@ -81,8 +81,8 @@ After installation, verify in OpenCode:
 Expected output shows all available commands and agents:
 
 ```
-Available commands (15): /ai-eng/plan, /ai-eng/review, /ai-eng/seo, /ai-eng/work,
-/ai-eng/compound, /ai-eng/deploy, /ai-eng/optimize, /ai-eng/recursive-init,
+Available commands (16): /ai-eng/plan, /ai-eng/review, /ai-eng/seo, /ai-eng/work,
+/ai-eng/compound, /ai-eng/deploy, /ai-eng/optimize, /ai-eng/clean, /ai-eng/recursive-init,
 /ai-eng/research, /ai-eng/context, /ai-eng/create-plugin, /ai-eng/create-agent,
 /ai-eng/create-command, /ai-eng/create-skill, /ai-eng/create-tool
 
@@ -124,28 +124,28 @@ Both Claude Code and OpenCode share the same command and agent definitions:
 - Breaks tasks into todos with progress tracking
 - Runs 6 quality gates: Lint → Types → Tests → Build → Integration → Deploy
 
-**`/ai-eng/review`**
+**`/ai-eng-review`**
 - Multi-perspective code review with 24 specialized agents
 - Evaluates: code quality, performance, SEO, security, architecture, testing
 - Output: severity, location, issue, recommendation with fix suggestions
 
-**`/ai-eng/research [query]`**
+**`/ai-eng-research [query]`**
 - Multi-phase research orchestration with parallel discovery
 - Searches codebase, documentation, and external sources
 - Provides evidence-based findings with file:line references
 - Supports scope filtering and depth control
 
-**`/ai-eng/seo [page or site URL]`**
+**`/ai-eng-seo [page or site URL]`**
 - Comprehensive SEO audit with Core Web Vitals analysis
 - Checks: meta tags, structured data, accessibility, performance, mobile-friendliness
 - Invokes seo-specialist agent with prioritized recommendations
 
-**`/ai-eng/deploy`**
+**`/ai-eng-deploy`**
 - Pre-deployment checklist for Coolify and other platforms
 - Validates tests, types, lint, build, env vars, migrations
 - Provides deployment instructions and post-deploy health checks
 
-**`/ai-eng/optimize [prompt]`**
+**`/ai-eng-optimize [prompt]`**
 - Enhances prompts using research-backed incentive techniques
 - Applies expert personas, step-by-step reasoning, and stakes language
 - +45% quality improvement based on MBZUAI, DeepMind, ICLR 2024 research
@@ -201,10 +201,10 @@ Both Claude Code and OpenCode share the same command and agent definitions:
 
 ### OpenCode
 
-- **Global Installation**: `~/.config/opencode/` (ai-eng/ namespace)
-  - Commands: `~/.config/opencode/command/ai-eng/`
-  - Agents: `~/.config/opencode/agent/ai-eng/`
-  - Skills: `~/.config/opencode/skills/`
+- **Global Installation**: `~/.config/opencode/` (ai-eng- namespace)
+   - Commands: `~/.config/opencode/command/ai-eng-*`
+   - Agents: `~/.config/opencode/agent/ai-eng/`
+   - Skills: `~/.config/opencode/skills/`
 - **Project-Local**: `.opencode/` directory in project root
 - **Configuration**: `~/.config/opencode/opencode.jsonc`
 
@@ -230,9 +230,9 @@ ai-eng-system/
 │   │   ├── skills/           # All skills
 │   │   ├── plugin.json       # Plugin metadata
 │   │   └── marketplace.json  # Marketplace configuration
-│   └── .opencode/            # OpenCode format (ai-eng/ namespace)
-│       ├── command/ai-eng/   # 15 commands
-│       └── agent/ai-eng/     # 29 agents
+│   └── .opencode/            # OpenCode format (ai-eng- namespace)
+│       ├── command/           # 15 commands (ai-eng-*.md)
+│       └── agent/ai-eng/     # 29 agents (nested by category)
 ├── scripts/                  # Build and installation utilities
 │   ├── install.js            # Global/local installation
 │   └── build.ts              # Build system
@@ -290,8 +290,8 @@ Both Claude Code and OpenCode enforce this through:
 **Plugin not loading?**
 ```bash
 # Check installation
-ls -la ~/.config/opencode/command/ai-eng/
-ls -la ~/.config/opencode/agent/ai-eng/
+ls ~/.config/opencode/command/ai-eng-*
+ls ~/.config/opencode/agent/ai-eng/
 
 # Reinstall globally
 npm install -g @v1truv1us/ai-eng-system --registry https://npm.pkg.github.com
@@ -300,10 +300,10 @@ npm install -g @v1truv1us/ai-eng-system --registry https://npm.pkg.github.com
 **Command not found?**
 ```bash
 # Test with namespace
-/ai-eng/plan "test command"
+/ai-eng-plan "test command"
 
 # Check if namespace is required
-# Commands are available as /ai-eng/[command]
+# Commands are available as /ai-eng-[command]
 ```
 
 **Permission issues with npm?**

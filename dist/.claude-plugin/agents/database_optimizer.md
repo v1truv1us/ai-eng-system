@@ -18,7 +18,6 @@ tools:
   list: true
   webfetch: true
 category: development
-permission: {}
 ---
 
 **primary_objective**: Expert database optimizer specializing in modern performance tuning, query optimization, and scalable architectures.

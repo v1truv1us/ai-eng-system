@@ -108,6 +108,7 @@ Use the architect-advisor to evaluate: Should we use microservices or a monolith
 | /seo | SEO audit with Core Web Vitals | read-only |
 | /deploy | Pre-deployment checklist for Coolify | build |
 | /optimize | Prompt enhancement (+45% quality) | build |
+| /clean | Remove AI-generated verbosity and redundant content | build |
 | /recursive-init | Initialize AGENTS.md across directories | read-only |
 | /context | Context management and retrieval | read-only |
 | /create-plugin | Guided plugin creation workflow | build |

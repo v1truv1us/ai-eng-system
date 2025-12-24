@@ -12,14 +12,17 @@ Advanced development tools with context engineering, research orchestration, and
 
 ### OpenCode
 ```bash
-bun scripts/install.js  # Global install (default)
-# or
-bun scripts/install.js --local  # Local install
-```
+# Add to opencode.jsonc:
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": ["opencode-skills", "ai-eng-system"]
+}
 
+# Run OpenCode - plugin auto-installs commands, agents, and skills
+```
 ## 📋 What's Included
 
-### Commands (15 total)
+### Commands (16 total)
 - `/ai-eng/plan` - Create detailed implementation plans
 - `/ai-eng/review` - Multi-perspective code review (29 agents)
 - `/ai-eng/seo` - SEO audits with Core Web Vitals
@@ -35,6 +38,7 @@ bun scripts/install.js --local  # Local install
 - `/ai-eng/create-tool` - AI-assisted custom tool creation
 - `/ai-eng/research` - Multi-phase research orchestration
 - `/ai-eng/context` - Context management and retrieval
+- `/ai-eng/clean` - Remove build artifacts and generated files
 
 ### Agents (29 total)
 - **Architecture & Planning**: `architect-advisor`, `backend-architect`, `infrastructure-builder`
@@ -45,11 +49,12 @@ bun scripts/install.js --local  # Local install
 - **Content & SEO**: `seo-specialist`, `prompt-optimizer`
 - **Plugin Development**: `agent-creator`, `command-creator`, `skill-creator`, `tool-creator`, `plugin-validator`
 
-### Skills (4 packs)
+### Skills (13 files)
 - `devops` - Coolify deployment, Git worktree workflows
 - `prompting` - Research-backed incentive prompting techniques
 - `research` - Comprehensive multi-phase research orchestration
 - `plugin-dev` - Plugin development knowledge base and references
+- `text-cleanup` - Pattern-based text cleanup (slop, comments)
 
 ## 🏗️ Architecture
 
@@ -59,6 +64,8 @@ This repo follows Anthropic's official Claude Code marketplace pattern:
 - **Embedded plugin**: `plugins/ai-eng-system/` with standard plugin layout
 - **Build system**: Transforms canonical `content/` sources into platform-specific outputs
 - **OpenCode support**: Pre-built distributions in `dist/.opencode/`
+- **Auto-installation**: Plugin automatically installs files when loaded by OpenCode or via npm postinstall
+
 
 ## 🔧 Development
 
@@ -111,5 +118,49 @@ bun test             # Run test suite
 - [Research Guide](docs/research-command-guide.md) - Research orchestration usage
 
 ---
+## 💻 Usage Example
+
+### OpenCode Setup
+
+```bash
+# 1. Create opencode.jsonc in your project
+cat > opencode.jsonc << 'EOF'
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": ["opencode-skills", "ai-eng-system"]
+}
+EOF
+
+# 2. Install package (optional - auto-installs via plugin)
+npm install ai-eng-system
+
+# 3. Run OpenCode
+# Commands and agents are automatically available!
+```
+
+**When OpenCode loads the plugin**, it automatically:
+- ✅ Installs 16 commands to `.opencode/command/ai-eng/`
+- ✅ Installs 30 agents to `.opencode/agent/ai-eng/`
+- ✅ Installs 13 skill files to `.opencode/skills/`
+
+### Using Commands
+
+```bash
+/ai-eng/plan              # Create implementation plan
+/ai-eng/review             # Multi-agent code review
+/ai-eng/work               # Execute implementation plan
+/ai-eng/seo                # SEO audit
+/ai-eng/create-agent       # Generate new agent
+# ... and 11 more
+```
+
+### Using Agents
+
+Commands reference specialized agents automatically:
+```bash
+/ai-eng/review --agent=code-reviewer     # Quality-focused review
+/ai-eng/review --agent=frontend-reviewer # Frontend review
+/ai-eng/review --agent=backend-architect  # Architecture review
+```
 
 **Built with research-backed prompting techniques** (+45-115% quality improvement)

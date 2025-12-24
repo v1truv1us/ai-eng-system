@@ -255,7 +255,9 @@ async function buildClaude(): Promise<void> {
 }
 
 async function buildOpenCode(): Promise<void> {
+    // Commands: MD-first, copy to ai-eng subdirectory
     const commandsDir = join(OPENCODE_DIR, "command", NAMESPACE_PREFIX);
+    // Agents: MD-first but strip `name` and nest by category.
     const agentsDir = join(OPENCODE_DIR, "agent", NAMESPACE_PREFIX);
 
     await mkdir(commandsDir, { recursive: true });
@@ -278,22 +280,10 @@ async function buildOpenCode(): Promise<void> {
         await writeFile(join(categoryDir, basename(src)), transformed.markdown);
     }
 
-    // Copy OpenCode config + plugin if present.
+    // Copy OpenCode config
     const opencodeConfigSrc = join(ROOT, ".opencode", "opencode.jsonc");
     if (existsSync(opencodeConfigSrc)) {
         await copyFile(opencodeConfigSrc, join(OPENCODE_DIR, "opencode.jsonc"));
-    }
-
-    const opencodePluginSrc = join(
-        ROOT,
-        ".opencode",
-        "plugin",
-        "ai-eng-system.ts",
-    );
-    if (existsSync(opencodePluginSrc)) {
-        const pluginDest = join(OPENCODE_DIR, "plugin", "ai-eng-system.ts");
-        await ensureDirForFile(pluginDest);
-        await copyFile(opencodePluginSrc, pluginDest);
     }
 
     await validateOpenCodeOutput(OPENCODE_DIR);

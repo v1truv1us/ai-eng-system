@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.7] - 2025-12-24
+
+### Added
+- **OpenCode Plugin Auto-Installation**: Plugin now automatically installs commands, agents, and skills when loaded
+- **Dual Installation**: Works via plugin initialization OR npm postinstall
+- **Postinstall Script**: Automatically detects `opencode.jsonc` and installs to project directory
+- **16 Commands**: All commands in `ai-eng` namespace for OpenCode
+- **30 Agents**: 5 categories of specialized agents
+- **13 Skill Files**: Complete skill pack including devops, prompting, research, and plugin-dev
+- **Usage Examples**: Added comprehensive usage documentation in README.md
+
+### Fixed
+- **Installation Path Resolution**: Plugin correctly detects if running from `dist/` or package root
+- **Auto-detection**: postinstall script finds `opencode.jsonc` by traversing up directories
+- **Documentation**: Updated command count to 16, skills to 13 files
+
+### Changed
+- **Plugin Implementation**: Moved from TypeScript file to pure markdown-based installation
+- **Configuration**: `.opencode/opencode.jsonc` template includes `opencode-skills` dependency
+
+
+
 ## [0.0.4] - 2025-12-21
 
 ### Fixed

@@ -48,7 +48,7 @@ echo ""
 echo "🔗 Setting up OpenCode..."
 mkdir -p .opencode/command/ai-eng .opencode/agent/ai-eng .opencode/plugin
 
-# Link commands
+# Link commands (ai-eng subdirectory)
 for cmd in "$DIST_DIR/.opencode/command/ai-eng/"*.md; do
   if [ -f "$cmd" ]; then
     name="$(basename "$cmd")"

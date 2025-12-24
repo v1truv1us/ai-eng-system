@@ -196,8 +196,6 @@ Closes #123
 fix: correct package name references
 
 - Update all @ferg-cod3s/ references to @v1truv1us/
-- Fix namespace from /ferg/ to /ai-eng/
-- Update documentation and installation guides
 ```
 
 ## 🔄 Pull Request Process

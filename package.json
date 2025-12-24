@@ -1,6 +1,6 @@
 {
     "name": "ai-eng-system",
-    "version": "0.0.5",
+    "version": "0.0.7",
     "description": "Compounding engineering system for Claude Code and OpenCode. Shared agents, commands, skills, and plugin development tools.",
     "type": "module",
     "main": "./dist/index.js",
@@ -13,6 +13,7 @@
     },
     "files": [
         "dist/",
+        "scripts/install.js",
         "index.js",
         "index.d.ts",
         "README.md",
@@ -26,6 +27,7 @@
         "typecheck": "tsc --noEmit",
         "typecheck:plugin": "tsc -p tsconfig.plugin.json",
         "prepublishOnly": "bun build.ts",
+        "postinstall": "node scripts/install.js",
         "test": "bun test tests/build.test.ts"
     },
     "publishConfig": {

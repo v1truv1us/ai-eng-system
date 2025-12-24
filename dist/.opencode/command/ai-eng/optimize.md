@@ -11,11 +11,55 @@ Interactive optimization tool that enhances content using research-backed techni
 ## Usage
 
 ```bash
-/optimize <content> --type=<type> [options]
-/optimize "Help me debug this slow query" --prompt
-/optimize "SELECT * FROM users WHERE active = true" --query  
-/optimize "function to calculate total" --code
-/optimize "Fix authentication bug in production" --commit
+/optimize --help                         # Show help and available types
+/optimize <content-or-file>              # Auto-detect type and optimize
+/optimize <content> --prompt             # Optimize AI prompts
+/optimize <content> --query              # Enhance database/search queries
+/optimize <content> --code               # Improve code quality
+/optimize <content> --commit             # Optimize commit messages
+/optimize <content> --docs               # Enhance documentation
+/optimize <content> --email              # Improve communication
+/optimize <content> --type=<type>        # Explicit type flag
+```
+
+## Help
+
+When `--help` is passed, display:
+
+```
+OPTIMIZE COMMAND - Enhance content using research-backed techniques
+
+USAGE:
+  /optimize <content-or-file> [--type]   Auto-detect and optimize content
+  /optimize <content> --prompt           Optimize AI prompts
+  /optimize <content> --query            Enhance database/search queries
+  /optimize <content> --code             Improve code quality
+  /optimize <content> --commit           Optimize commit messages
+  /optimize <content> --docs             Enhance documentation
+  /optimize <content> --email            Improve communication
+
+TYPES:
+  --prompt        AI prompts: structure, personas, reasoning chains
+  --query         Database/search: indexes, execution plans, caching
+  --code          Source code: performance, readability, error handling
+  --commit        Git messages: clarity, conventional format
+  --docs          Documentation: structure, examples, clarity
+  --email         Communication: tone, clarity, call-to-action
+
+OPTIONS:
+  -m, --mode      Approach: conservative | moderate | aggressive
+  -p, --preview   Show changes without applying
+  -a, --apply     Apply confirmed optimizations
+  -i, --interactive   Enable clarifying questions
+  -s, --source    Research sources: anthropic | openai | opencode | all
+  -v, --verbose   Show detailed process
+  --help          Show this help
+
+EXAMPLES:
+  /optimize "Help me debug auth" --prompt --interactive
+  /optimize "SELECT * FROM users" --query --preview
+  /optimize src/auth.js --code --apply
+  /optimize "fix: resolve login bug" --commit
 ```
 
 ## Types

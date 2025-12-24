@@ -12,7 +12,6 @@ mode: subagent
 temperature: 0.1
 tools: {}
 category: development
-permission: {}
 ---
 
 Take a deep breath and approach this task systematically.
