@@ -2,6 +2,9 @@ import fs from "node:fs";
 import path from "node:path";
 import type { Plugin } from "@opencode-ai/plugin";
 
+// Re-export common types for use by other modules
+export * from "./types/common.js";
+
 /**
  * Copy a directory recursively
  */

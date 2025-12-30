@@ -20,7 +20,7 @@ export interface AgentMessage {
         | "handoff"
         | "notification"
         | "collaboration";
-    content: any;
+    content: unknown;
     timestamp: Date;
     correlationId?: string;
     priority: "low" | "medium" | "high" | "urgent";
@@ -53,7 +53,7 @@ export interface CollaborationSession {
     startTime: Date;
     endTime?: Date;
     messages: AgentMessage[];
-    outcome?: any;
+    outcome?: unknown;
 }
 
 /**

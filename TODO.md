@@ -1,7 +1,7 @@
 # TODO: AI Engineering System
 
-**Current Version**: 0.0.10
-**Last Updated**: 2025-12-26
+**Current Version**: 0.0.12
+**Last Updated**: 2025-12-30
 
 ## High Priority
 
@@ -16,12 +16,18 @@
 - [x] Update docs/research/2025-12-11-agent-swarm-execution-strategies.md (remove version-specific references)
 - [x] Update plans/2025-01-05-phase3-research-orchestration.md (remove version-specific references)
 - [x] Update docs/PHASE-3-USAGE.md (remove version reference)
-- [ ] Review plan files (phase1.md, phase2.md) and decide whether to archive them as historical records
+ - [x] Review plan files (phase1.md, phase2.md) and decide whether to archive them as historical records
 
 ### Version Consistency
-- [ ] Audit all documentation for version consistency (should reflect v0.0.x)
-- [ ] Update CHANGELOG.md to properly reflect v0.0.x history
-- [ ] Verify package.json version is current (currently 0.0.10)
+- [x] Audit all documentation for version consistency (should reflect v0.0.x)
+- [x] Update CHANGELOG.md to properly reflect v0.0.x history
+- [x] Verify package.json version is current (currently 0.0.10)
+
+### Plan Cleanup (2025-12-30)
+- [x] Archived all outdated plans to archive/plans/
+- [x] Removed plans/ directory
+- [x] Updated CHANGELOG.md to remove v0.3.x and v0.4.0 entries
+- [x] Fixed package.json version from 0.4.0 to 0.0.10
 
 ## Medium Priority
 
@@ -39,7 +45,7 @@
 
 ### Documentation
 - [ ] Update README.md with latest features and improvements
-- [ ] Verify all command references are accurate (currently 16 commands)
+- [ ] Verify all command references are accurate (currently 17 commands)
 - [ ] Verify all agent references are accurate (currently 29 agents)
 - [ ] Update installation guides if needed
 
@@ -70,7 +76,7 @@
 ### Version 0.0.10 (2025-12-26)
 - [x] Released version 0.0.10 to npm
 - [x] Auto-installation plugin working
-- [x] 16 commands, 29 agents, 13 skill files deployed
+- [x] 17 commands, 29 agents, 13 skill files deployed
 
 ### Previous Versions
 - [x] v0.0.7 - OpenCode Plugin Auto-Installation
@@ -82,7 +88,37 @@
 
 - The project has reverted to v0.0.x versioning for current development
 - All v0.2.x, v0.3.x, and v0.4.x references in documentation are outdated
-- Documentation cleanup is in progress - key documentation files have been updated
+- Documentation cleanup completed - all version references now reflect v0.0.x
 - Outdated release notes (v0.3.0, v0.3.1, v0.3.0-rc1) have been archived
+- All outdated plans have been archived to archive/plans/ directory
 - Build system is working well with <200ms build times
-- Historical plan files (phase1.md, phase2.md) may be archived in the future but kept for now as reference
+
+## Spec-Driven Development Methodology
+
+This toolkit follows **spec-driven development methodology** from GitHub's official blog post:
+- **Source**: [Spec-driven development with AI: Get started with a new open source toolkit](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/)
+
+### Complete Workflow (Research → Specify → Plan → Work → Review)
+
+| Phase | Command | Purpose |
+|-------|---------|---------|
+| 1. Research | `/ai-eng/research` | Multi-phase research with codebase and external context |
+| 2. Specify | `/ai-eng/specify` | Create detailed specifications with TCRO framework |
+| 3. Plan | `/ai-eng/plan` | Generate implementation plans from specs |
+| 4. Work | `/ai-eng/work` | Execute tasks with quality gates and validation |
+| 5. Review | `/ai-eng/review` | Multi-perspective code review (29 agents) |
+
+This approach ensures specifications are your "source of truth" for what gets built, reducing guesswork and enabling reliable AI-assisted development.
+
+### Commands Following This Methodology
+- ✅ `/ai-eng/research` - Multi-phase research orchestration
+- ✅ `/ai-eng/specify` - Specification creation with TCRO framework
+- ✅ `/ai-eng/plan` - Technical planning from specifications
+- ✅ `/ai-eng/work` - Task execution with quality gates and validation
+- ✅ `/ai-eng/review` - Multi-perspective code review
+- ✅ All spec-driven commands properly implement the workflow
+
+### Workflow Guide
+
+For visual workflow diagrams and complete examples, see:
+- **[docs/spec-driven-workflow.md](./docs/spec-driven-workflow.md)** - Complete workflow guide with Mermaid diagrams

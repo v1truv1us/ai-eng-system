@@ -1,13 +1,15 @@
 # Implementation Roadmap
 
-**Status**: Ongoing  
-**Current Release**: v0.0.10  
-**Versioning**: v0.0.x (development)  
-**Priority**: Documentation Cleanup & Consistency
+**Status**: Stable - Maintenance Mode  
+**Current Release**: v0.0.12  
+**Versioning**: v0.0.x (stable)  
+**Priority**: Testing & Quality Assurance
 
 ## Executive Summary
 
 The ai-eng-system is an advanced development toolkit with context engineering, research orchestration, and 29 specialized agents for Claude Code & OpenCode.
+
+**Development Philosophy**: This toolkit follows **spec-driven development methodology** from GitHub's official blog post: [Spec-driven development with AI: Get started with a new open source toolkit](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/). The complete workflow (Research → Specify → Plan → Work → Review) ensures specifications become the "source of truth" for what gets built.
 
 Current focus is on cleaning up documentation and ensuring version consistency across all files. The system is fully functional and deployed with auto-installation capabilities.
 
@@ -106,25 +108,69 @@ Current focus is on cleaning up documentation and ensuring version consistency a
 
 All core functionality has been implemented and verified:
 
-✅ **16 Commands**: Including /plan, /work, /research, /review, /optimize, /deploy, /compound, /clean, and creation commands
+✅ **17 Commands**: Core spec-driven workflow (research, specify, plan, work, review) plus utility commands
 ✅ **29 Specialized Agents**: Across architecture, development, quality, devops, AI/ML, content, and plugin development
 ✅ **13 Skill Files**: DevOps, prompting, research, and plugin-development skill packs
 ✅ **Auto-Installation**: Plugin automatically installs commands, agents, and skills when loaded
 ✅ **Marketplace Integration**: Available on Claude Code marketplace as v1truv1us/ai-eng-marketplace
 
+### Spec-Driven Development Workflow
+
+This toolkit implements the complete **Research → Specify → Plan → Work → Review** workflow:
+
+| Phase | Command | Output |
+|-------|---------|--------|
+| 1. Research | `/ai-eng/research` | Multi-phase discovery with codebase and external context |
+| 2. Specify | `/ai-eng/specify` | Detailed specifications with user stories and acceptance criteria |
+| 3. Plan | `/ai-eng/plan` | Implementation plan with atomic tasks |
+| 4. Work | `/ai-eng/work` | Quality-gated task execution |
+| 5. Review | `/ai-eng/review` | Multi-perspective code review (29 agents) |
+
+**Methodology**: Based on [GitHub's spec-driven development approach](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/)
+
 ### Active Focus
 
-Currently focused on documentation cleanup and version consistency:
-- Removing outdated version references (v0.3.x, v0.4.0)
-- Ensuring all documentation reflects v0.0.x versioning
-- Archiving outdated release notes
-- Creating comprehensive TODO.md for task tracking
+**Documentation Cleanup ✅ Completed** (2025-12-26 to 2025-12-30)
+- Removed outdated version references (v0.3.x, v0.4.0) from all files
+- Ensured all documentation reflects v0.0.x versioning
+- Archived outdated release notes to archive/ directory
+- Archived all outdated plans to archive/plans/ directory
+- Created comprehensive TODO.md for task tracking (see [TODO.md](./TODO.md))
+- Updated CHANGELOG.md to reflect correct v0.0.x history
+- Fixed package.json version consistency (0.4.0 → 0.0.10)
+
+**Current Focus: Testing & Quality Assurance** (see [TODO.md](./TODO.md) for full task list)
+- Running full test suite and verifying all tests pass
+- Reviewing test coverage and adding tests if needed
+- Validating build process completes successfully
+- Checking for TypeScript errors or warnings
+
+---
+
+## ✅ Phase 5: Documentation Cleanup (COMPLETED)
+
+### 5.1 Version Consistency
+**Status**: ✅ Completed (2025-12-30)
+- Fixed package.json version to 0.0.10
+- Updated CHANGELOG.md to remove v0.3.x and v0.4.0 entries
+- All documentation files now reflect v0.0.x versioning
+
+### 5.2 Plan Archival
+**Status**: ✅ Completed (2025-12-30)
+- Archived 7 outdated plans to archive/plans/
+- Removed plans/ directory entirely
+- All historical documentation properly archived
+
+### 5.3 Task Tracking
+**Status**: ✅ Completed (2025-12-30)
+- Created comprehensive TODO.md for ongoing work tracking
+- TODO.md is current source of truth for all active tasks
 
 ---
 
 ## Future Enhancements
 
-Potential future improvements (no timeline set):
+Potential future improvements (see [TODO.md](./TODO.md) for current priorities):
 
 1. **Performance Optimization**
    - Caching research results
@@ -132,6 +178,16 @@ Potential future improvements (no timeline set):
    - Parallelizing independent tasks
 
 2. **Advanced Features**
-   - Enhanced swarm coordination
-   - Interactive CLI improvements
-   - Additional agent specializations
+    - Enhanced swarm coordination
+    - Interactive CLI improvements
+    - Additional agent specializations
+
+---
+
+## References
+
+- **[docs/spec-driven-workflow.md](./docs/spec-driven-workflow.md)** - Complete workflow guide with visual diagrams
+- **[TODO.md](./TODO.md)** - Current task tracking and ongoing work (source of truth)
+- **[CHANGELOG.md](./CHANGELOG.md)** - Version history and release notes
+- **[AGENTS.md](./AGENTS.md)** - Complete agent documentation
+- **[README.md](./README.md)** - Getting started and usage guide

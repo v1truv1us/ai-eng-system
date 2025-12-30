@@ -5,7 +5,7 @@
 
 import { readFile, stat } from "node:fs/promises";
 import { extname, join } from "node:path";
-import { glob } from "glob";
+import { Glob } from "bun";
 import {
     ConfidenceLevel,
     type DiscoveryAgent,
@@ -96,14 +96,24 @@ export class CodebaseLocator implements DiscoveryAgent {
         const allFiles: FileReference[] = [];
 
         for (const pattern of patterns) {
-            const files = await glob(pattern, {
-                ignore: [
-                    "**/node_modules/**",
-                    "**/dist/**",
-                    "**/.git/**",
-                    "**/coverage/**",
-                ],
-                nodir: true,
+            const globber = new Glob(pattern);
+            const ignorePatterns = [
+                "**/node_modules/**",
+                "**/dist/**",
+                "**/.git/**",
+                "**/coverage/**",
+            ];
+
+            const files = Array.from(globber.scanSync()).filter((filePath) => {
+                return !ignorePatterns.some((ignorePattern) =>
+                    filePath.match(
+                        new RegExp(
+                            ignorePattern
+                                .replace(/\*/g, ".*")
+                                .replace(/\?/g, "."),
+                        ),
+                    ),
+                );
             });
 
             for (const filePath of files) {
@@ -155,7 +165,7 @@ export class CodebaseLocator implements DiscoveryAgent {
                 }
 
                 // Boost relevance based on language
-                if (this.isSourceCode(file.language)) {
+                if (file.language && this.isSourceCode(file.language)) {
                     relevance += 0.1;
                 }
 
@@ -346,9 +356,23 @@ export class ResearchLocator implements DiscoveryAgent {
         const allDocs: DocReference[] = [];
 
         for (const pattern of docPatterns) {
-            const files = await glob(pattern, {
-                ignore: ["**/node_modules/**", "**/dist/**", "**/.git/**"],
-                nodir: true,
+            const globber = new Glob(pattern);
+            const ignorePatterns = [
+                "**/node_modules/**",
+                "**/dist/**",
+                "**/.git/**",
+            ];
+
+            const files = Array.from(globber.scanSync()).filter((filePath) => {
+                return !ignorePatterns.some((ignorePattern) =>
+                    filePath.match(
+                        new RegExp(
+                            ignorePattern
+                                .replace(/\*/g, ".*")
+                                .replace(/\?/g, "."),
+                        ),
+                    ),
+                );
             });
 
             for (const filePath of files) {
@@ -598,15 +622,24 @@ export class PatternFinder implements DiscoveryAgent {
     ): Promise<PatternMatch[]> {
         const matches: PatternMatch[] = [];
 
-        for (const pattern of patterns) {
-            const codeFiles = await glob(
-                "**/*.{ts,js,tsx,jsx,py,java,cpp,c,h,hpp}",
-                {
-                    ignore: ["**/node_modules/**", "**/dist/**", "**/.git/**"],
-                    nodir: true,
-                },
-            );
+        const globber = new Glob("**/*.{ts,js,tsx,jsx,py,java,cpp,c,h,hpp}");
+        const ignorePatterns = [
+            "**/node_modules/**",
+            "**/dist/**",
+            "**/.git/**",
+        ];
 
+        const codeFiles = Array.from(globber.scanSync()).filter((filePath) => {
+            return !ignorePatterns.some((ignorePattern) =>
+                filePath.match(
+                    new RegExp(
+                        ignorePattern.replace(/\*/g, ".*").replace(/\?/g, "."),
+                    ),
+                ),
+            );
+        });
+
+        for (const pattern of patterns) {
             const patternFiles: FileReference[] = [];
 
             for (const filePath of codeFiles) {

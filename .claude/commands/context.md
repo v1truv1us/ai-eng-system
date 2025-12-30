@@ -1,6 +1,8 @@
-| description | agent |
-|---|---|
-| Manage session state, memories, and context engineering | build |
+---
+name: ai-eng/context
+description: Manage session state, memories, and context engineering
+agent: build
+---
 
 # Context Command
 
@@ -314,4 +316,3 @@ All context data is stored locally in `.ai-context/` directory:
 - Fully under your control
 
 Add `.ai-context/` to `.gitignore` to keep it out of version control.
-$ARGUMENTS

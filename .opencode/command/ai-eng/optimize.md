@@ -94,6 +94,44 @@ EXAMPLES:
 3. **Quality Evaluation**: Identify areas for improvement (clarity, performance, effectiveness)
 4. **Research Planning**: Determine best sources and techniques to apply
 
+### Phase 1.5: Prompt Refinement (for --prompt mode)
+
+When `--prompt` flag is used:
+
+Use skill: `prompt-refinement`
+Phase: [auto-detect or specified]
+
+The prompt-refinement skill provides:
+- TCRO structuring (Task, Context, Requirements, Output)
+- Phase-specific clarifying questions (research, specify, plan, work)
+- Integration with incentive-prompting techniques
+
+**Workflow:**
+1. Load prompt-refinement skill
+2. Detect phase based on prompt content or explicit `--phase` flag
+3. Apply phase-specific template (research, specify, plan, or work)
+4. Structure prompt into TCRO format
+5. Enhance with incentive-prompting techniques
+6. Present refined prompt for user confirmation
+
+**Example:**
+```bash
+# User provides vague prompt
+/ai-eng/optimize "help me debug auth" --prompt
+
+# System:
+1. Invokes prompt-refinement skill
+2. Detects "work" phase (debugging)
+3. Loads work.md template
+4. Asks clarifying questions:
+   - What error are you seeing?
+   - Where in the flow does it happen?
+   - What's your tech stack?
+5. Structures into TCRO format
+6. Applies expert persona, stakes language, step-by-step reasoning
+7. Presents refined prompt for approval
+```
+
 ### Phase 2: Research & Best Practices
 Based on type and sources, research:
 
@@ -102,6 +140,7 @@ Based on type and sources, research:
 - **OpenAI Guides**: Prompt engineering for GPT models
 - **OpenCode/Crush**: Community-tested optimization patterns
 - **Academic Research**: Latest papers on prompt optimization
+- **prompt-refinement skill**: TCRO framework and phase-specific templates
 
 #### For Code
 - **Language-Specific**: Performance patterns for target language

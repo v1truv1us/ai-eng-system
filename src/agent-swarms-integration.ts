@@ -812,7 +812,8 @@ export class AgentSwarmsIntegration {
         swarmType:
             | "MultiAgentRouter"
             | "SequentialWorkflow"
-            | "AgentRearrange" = "MultiAgentRouter",
+            | "AgentRearrange"
+            | "ConcurrentWorkflow" = "MultiAgentRouter",
     ): Promise<string> {
         const agents = this.findAgentsByCapabilities(capabilities);
 
@@ -850,7 +851,8 @@ export class AgentSwarmsIntegration {
             swarmType?:
                 | "MultiAgentRouter"
                 | "SequentialWorkflow"
-                | "AgentRearrange";
+                | "AgentRearrange"
+                | "ConcurrentWorkflow";
             timeout?: number;
         } = {},
     ): Promise<TaskResult> {

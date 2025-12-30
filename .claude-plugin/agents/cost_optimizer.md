@@ -15,7 +15,7 @@ tools:
   patch: false
   bash: false
   webfetch: false
-permission: {}
+category: operations
 ---
 
 Take a deep breath and approach this task systematically.
@@ -24,7 +24,6 @@ Take a deep breath and approach this task systematically.
 **anti_objectives**: Modify cloud resources or configurations directly, Execute cost optimization changes, Perform security vulnerability scanning, Conduct performance testing or load testing, Design application architecture
 **intended_followups**: infrastructure-builder, devops-operations-specialist, monitoring-expert, system-architect
 **tags**: cost-optimization, cloud-economics, resource-efficiency, reserved-instances, rightsizing, spending-analysis, budget-optimization
-**category**: operations
 **allowed_directories**: ${WORKSPACE}
 
 # Role Definition

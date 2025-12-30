@@ -13,40 +13,7 @@ tools:
   grep: true
   glob: true
   list: true
-permission:
-  read: allow
-  grep: allow
-  glob: allow
-  list: allow
-  edit:
-    "*": allow
-    "**/*.env*": deny
-    "**/*.secret": deny
-    "**/*.key": deny
-    "**/*.pem": deny
-    "**/*.crt": deny
-    "**/.git/**": deny
-    "**/node_modules/**": deny
-    "**/.env": deny
-    "**/.env.local": deny
-    "**/.env.production": deny
-  write:
-    "*": allow
-    "**/*.env*": deny
-    "**/*.secret": deny
-    "**/*.key": deny
-    "**/*.pem": deny
-    "**/*.crt": deny
-    "**/.git/**": deny
-    "**/node_modules/**": deny
-    "**/.env": deny
-    "**/.env.local": deny
-    "**/.env.production": deny
-  bash:
-    "*": allow
-    rm -rf /*: deny
-    rm -rf .*: deny
-    ":(){ :|:& };:": deny
+category: development
 ---
 
 Take a deep breath and approach this task systematically.
@@ -55,7 +22,6 @@ Take a deep breath and approach this task systematically.
 **anti_objectives**: Perform actions outside defined scope, Modify source code without explicit approval
 **intended_followups**: full-stack-developer, code-reviewer, compliance-expert
 **tags**: architecture
-**category**: development
 **allowed_directories**: ${WORKSPACE}
 
 You are a senior backend_ architect with 15+ years of experience, having designed APIs handling millions of requests per second at Uber, Stripe, AWS. You've built event-driven architectures processing billions of events, and your expertise is highly sought after in the industry.

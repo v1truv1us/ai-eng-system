@@ -1,6 +1,6 @@
 ---
 name: ai-eng/work
-description: Execute a plan or task with systematic tracking
+description: Execute a plan or task with systematic tracking, quality gates, and comprehensive validation.
 agent: build
 ---
 
@@ -21,13 +21,37 @@ Execute a plan or task with systematic tracking, quality gates, and comprehensiv
 
 **Quality-First Development**: Every implementation must pass quality gates before moving to the next task. No shortcuts, no technical debt accumulation.
 
+**Spec-Driven Execution**: When specification exists, validate task completion against spec acceptance criteria throughout implementation.
+
+## Phase 0: Prompt Refinement
+
+Use skill: `prompt-refinement`
+Phase: `work`
+
+[The prompt-refinement skill will transform your input into a structured TCRO format by asking clarifying questions about task context, quality requirements, acceptance criteria, and output format.]
+
 ## Phase 1: Setup & Planning
 
-### 1.1 Load Plan or Task
-- If argument is a file path: Load from `plans/[filename].md`
-- If argument is a task ID: Find in current plan or recent plans
+### 1.1 Load Plan and Spec
+
+**Load Plan:**
+- If argument is a file path: Load from `specs/[feature]/plan.md`
+- If argument is a task ID: Find in `specs/[feature]/plan.md` or recent plans
 - If `--continue`: Resume from last incomplete task
 - Extract all tasks with dependencies and time estimates
+
+**Load Specification (if exists):**
+- Check for `specs/[feature]/spec.md` alongside to plan
+- Extract user stories and acceptance criteria from spec
+- Extract non-functional requirements
+- Cross-reference with tasks to ensure all spec requirements are covered
+
+**Example paths:**
+```
+specs/auth/
+├── spec.md          # Load for validation
+└── plan.md          # Load for tasks
+```
 
 ### 1.2 Create Feature Branch
 ```bash
@@ -41,6 +65,7 @@ git worktree add --detach .worktrees/[feature-slug]
 Use skill: `skills_devops_git_worktree`
 
 ### 1.4 Initialize Todo Tracking
+
 Create a todo list from plan tasks:
 - Map each task to a todo item
 - Set status to `pending`
@@ -83,6 +108,7 @@ todo --mark-in-progress [TASK-ID]
 - [ ] Comments explain "why", not "what"
 
 ### 2.3 Write/Update Tests
+
 For each file modified:
 
 **Unit Tests** (if applicable):
@@ -115,11 +141,15 @@ bun run lint
 ```
 **Must Pass**: No warnings or errors
 
+If fails: Fix lint violations, re-commit
+
 #### Gate 2: Type Checking
 ```bash
 bun run type-check
 ```
 **Must Pass**: No TypeScript errors
+
+If fails: Fix type errors, re-commit
 
 #### Gate 3: Unit Tests
 ```bash
@@ -127,17 +157,25 @@ bun run test:unit
 ```
 **Must Pass**: All tests pass, coverage ≥80%
 
+If fails: Fix tests or code, re-commit
+
 #### Gate 4: Build
 ```bash
 bun run build
 ```
 **Must Pass**: No build errors or warnings
 
+If fails: Fix build errors, re-commit
+
 #### Gate 5: Integration Tests (if applicable)
 ```bash
 bun run test:integration
 ```
 **Must Pass**: All integration tests pass
+
+If fails: Fix integration issues, re-commit
+
+**NO TASK IS COMPLETE UNTIL ALL GATES PASS.**
 
 ### 2.5 Commit Changes
 ```bash
@@ -217,6 +255,46 @@ bun run audit
 - Dependencies up to date
 - No security warnings
 
+### 3.7 Specification Validation (if spec exists)
+
+**Cross-Reference with Specification:**
+
+1. **Load spec**: Read `specs/[feature]/spec.md`
+2. **Verify coverage**: For each completed task, check:
+   - Are all task acceptance criteria met?
+   - Are related spec acceptance criteria satisfied?
+3. **Update spec**: Mark completed user stories/tasks in spec.md
+
+**Validation Checklist:**
+```markdown
+## Spec Validation
+
+### Task → Spec Acceptance Criteria Mapping
+
+| Task ID | Task AC Met | Spec AC Met | Notes |
+|----------|--------------|--------------|--------|
+| TASK-001 | [x] | [x] | All criteria verified |
+| TASK-002 | [x] | [ ] Missing AC-3, needs follow-up |
+
+
+### User Story Status Update
+
+Update spec.md to mark completed user stories:
+```markdown
+### US-001: User Registration
+**Status**: ✅ COMPLETED (TASK-001, TASK-002, TASK-003 done)
+```
+
+4. **Identify Gaps**: If spec acceptance criteria are not met:
+   - Note which criteria are missing
+   - Create follow-up tasks to address gaps
+   - Update plan with new tasks if needed
+
+**If validation fails:**
+- Note which acceptance criteria are not met
+- Determine if existing task can be enhanced or new task needed
+- Create follow-up task(s) to address gaps
+
 ---
 
 ## Phase 4: Documentation & Review
@@ -271,7 +349,7 @@ EOF
 | Integration | `bun run test:integration` | Yes | Fix integration issues, re-commit |
 | Full Suite | `bun run test` | Yes | Fix all failures, re-commit |
 
-**No task is complete until ALL gates pass.**
+**NO TASK IS COMPLETE UNTIL ALL GATES PASS.**
 
 ---
 
@@ -458,5 +536,3 @@ A work session is successful when:
 - ✅ Build succeeds
 - ✅ PR created and reviewed
 - ✅ Code merged to main
-
-$ARGUMENTS

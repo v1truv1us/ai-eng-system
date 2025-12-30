@@ -14,6 +14,7 @@ import {
     type AggregationStrategy,
 } from "../agents/types.js";
 import {
+    type ExecutableTask,
     type ExecutionOptions,
     type Plan,
     type Task,
@@ -75,7 +76,7 @@ export class TaskExecutor {
     /**
      * Execute a single task
      */
-    public async executeTask(task: Task): Promise<TaskResult> {
+    public async executeTask(task: ExecutableTask): Promise<TaskResult> {
         if (this.runningTasks.has(task.id)) {
             throw new Error(`Task ${task.id} is already running`);
         }
@@ -94,7 +95,8 @@ export class TaskExecutor {
                     status: TaskStatus.SKIPPED,
                     exitCode: -1,
                     stdout: "",
-                    stderr: dependencyResult.error,
+                    stderr:
+                        dependencyResult.error ?? "Unknown dependency error",
                     duration: 0,
                     startTime,
                     endTime: new Date(),
@@ -181,10 +183,10 @@ export class TaskExecutor {
         this.taskResults.clear();
     }
 
-    private resolveExecutionOrder(tasks: Task[]): Task[] {
+    private resolveExecutionOrder(tasks: ExecutableTask[]): ExecutableTask[] {
         const visited = new Set<string>();
         const visiting = new Set<string>();
-        const sorted: Task[] = [];
+        const sorted: ExecutableTask[] = [];
         const taskMap = new Map(tasks.map((t) => [t.id, t]));
 
         const visit = (taskId: string): void => {
@@ -224,7 +226,7 @@ export class TaskExecutor {
         return sorted;
     }
 
-    private checkDependencies(task: Task): {
+    private checkDependencies(task: ExecutableTask): {
         success: boolean;
         error?: string;
     } {
@@ -260,10 +262,19 @@ export class TaskExecutor {
         return { success: true };
     }
 
-    private async executeWithRetry(task: Task): Promise<TaskResult> {
-        const maxAttempts = task.retry?.maxAttempts || 1;
-        const baseDelay = task.retry?.delay || 0;
-        const backoffMultiplier = task.retry?.backoffMultiplier || 1;
+    private async executeWithRetry(task: ExecutableTask): Promise<TaskResult> {
+        // executeWithRetry should only be called with regular Tasks, not AgentTasks
+        // AgentTasks are handled separately in executeAgentTask
+        if (this.isAgentTask(task)) {
+            throw new Error(
+                `executeWithRetry should not be called with agent task: ${task.id}`,
+            );
+        }
+
+        const shellTask = task as Task;
+        const maxAttempts = shellTask.retry?.maxAttempts || 1;
+        const baseDelay = shellTask.retry?.delay || 0;
+        const backoffMultiplier = shellTask.retry?.backoffMultiplier || 1;
 
         let lastResult: TaskResult | null = null;
 
@@ -271,12 +282,12 @@ export class TaskExecutor {
             if (attempt > 1) {
                 const delay = baseDelay * backoffMultiplier ** (attempt - 2);
                 this.log(
-                    `Retrying task ${task.id} in ${delay}s (attempt ${attempt}/${maxAttempts})`,
+                    `Retrying task ${shellTask.id} in ${delay}s (attempt ${attempt}/${maxAttempts})`,
                 );
                 await this.sleep(delay * 1000);
             }
 
-            const result = await this.executeCommand(task);
+            const result = await this.executeCommand(shellTask);
 
             if (result.status === TaskStatus.COMPLETED) {
                 return result;
@@ -294,27 +305,39 @@ export class TaskExecutor {
         return lastResult!;
     }
 
-    private async executeCommand(task: Task): Promise<TaskResult> {
+    private async executeCommand(task: ExecutableTask): Promise<TaskResult> {
+        // executeCommand should only be called with regular Tasks, not AgentTasks
+        if (this.isAgentTask(task)) {
+            throw new Error(
+                `executeCommand should not be called with agent task: ${task.id}`,
+            );
+        }
+
+        const shellTask = task as Task;
+
         return new Promise((resolve) => {
             const startTime = new Date();
-            const timeout = task.timeout ? task.timeout * 1000 : 300000; // Default 5 minutes
+            const timeout = shellTask.timeout
+                ? shellTask.timeout * 1000
+                : 300000; // Default 5 minutes
 
-            this.log(`Executing command: ${task.command}`);
+            this.log(`Executing command: ${shellTask.command}`);
 
-            const child = spawn(task.command, [], {
+            const child = spawn(shellTask.command, [], {
                 shell: true,
-                cwd: task.workingDirectory ?? this.options.workingDirectory,
+                cwd:
+                    shellTask.workingDirectory ?? this.options.workingDirectory,
                 env: {
                     ...process.env,
                     ...this.options.environment,
-                    ...task.environment,
+                    ...shellTask.environment,
                 },
             });
 
             let stdout = "";
             let stderr = "";
 
-            child.stdout?.on("data", (data) => {
+            child.stdout?.on("data", (data: Buffer) => {
                 const chunk = data.toString();
                 stdout += chunk;
                 if (this.options.verbose) {
@@ -322,7 +345,7 @@ export class TaskExecutor {
                 }
             });
 
-            child.stderr?.on("data", (data) => {
+            child.stderr?.on("data", (data: Buffer) => {
                 const chunk = data.toString();
                 stderr += chunk;
                 if (this.options.verbose) {
@@ -332,39 +355,46 @@ export class TaskExecutor {
 
             const timeoutId = setTimeout(() => {
                 child.kill("SIGTERM");
-                this.log(`Task ${task.id} timed out after ${task.timeout}s`);
+                this.log(
+                    `Task ${shellTask.id} timed out after ${shellTask.timeout}s`,
+                );
             }, timeout);
 
-            child.on("close", (code, signal) => {
+            child.on(
+                "close",
+                (code: number | null, signal: NodeJS.Signals | null) => {
+                    clearTimeout(timeoutId);
+                    const endTime = new Date();
+                    const duration = endTime.getTime() - startTime.getTime();
+
+                    const result: TaskResult = {
+                        id: shellTask.id,
+                        status:
+                            code === 0
+                                ? TaskStatus.COMPLETED
+                                : TaskStatus.FAILED,
+                        exitCode: code || (signal ? -1 : 0),
+                        stdout,
+                        stderr,
+                        duration,
+                        startTime,
+                        endTime,
+                        error: signal
+                            ? `Process terminated by signal: ${signal}`
+                            : undefined,
+                    };
+
+                    resolve(result);
+                },
+            );
+
+            child.on("error", (error: Error) => {
                 clearTimeout(timeoutId);
                 const endTime = new Date();
                 const duration = endTime.getTime() - startTime.getTime();
 
                 const result: TaskResult = {
-                    id: task.id,
-                    status:
-                        code === 0 ? TaskStatus.COMPLETED : TaskStatus.FAILED,
-                    exitCode: code || (signal ? -1 : 0),
-                    stdout,
-                    stderr,
-                    duration,
-                    startTime,
-                    endTime,
-                    error: signal
-                        ? `Process terminated by signal: ${signal}`
-                        : undefined,
-                };
-
-                resolve(result);
-            });
-
-            child.on("error", (error) => {
-                clearTimeout(timeoutId);
-                const endTime = new Date();
-                const duration = endTime.getTime() - startTime.getTime();
-
-                const result: TaskResult = {
-                    id: task.id,
+                    id: shellTask.id,
                     status: TaskStatus.FAILED,
                     exitCode: -1,
                     stdout,
@@ -387,7 +417,7 @@ export class TaskExecutor {
     /**
      * Check if a task is an agent task
      */
-    private isAgentTask(task: Task): task is AgentTask {
+    private isAgentTask(task: ExecutableTask): task is AgentTask {
         return "type" in task && "input" in task && "strategy" in task;
     }
 

@@ -4,6 +4,31 @@ Advanced development tools with context engineering, research orchestration, and
 
 ## 🚀 Quick Start
 
+### Spec-Driven Development (Recommended)
+
+This toolkit follows the **spec-driven development methodology** from GitHub's official blog post: [Spec-driven development with AI: Get started with a new open source toolkit](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/).
+
+**The 5-Phase Workflow** (always in this order):
+
+```mermaid
+flowchart LR
+    A[🎯 Research] --> B[📋 Specify] --> C[📝 Plan] --> D[🔨 Work] --> E[🔍 Review]
+    D -.->|If changes needed| E
+    E -.->|Repeat| D
+```
+
+| Phase | Command | Output |
+|-------|---------|--------|
+| 1. Research | `/ai-eng/research` | Context and findings |
+| 2. Specify | `/ai-eng/specify` | Feature specification |
+| 3. Plan | `/ai-eng/plan` | Implementation plan |
+| 4. Work | `/ai-eng/work` | Quality-gated code |
+| 5. Review | `/ai-eng/review` | Multi-agent approval |
+
+This approach ensures specifications are your "source of truth" for what gets built, reducing guesswork and enabling more reliable AI-assisted development.
+
+See [docs/spec-driven-workflow.md](./docs/spec-driven-workflow.md) for complete workflow guide with examples.
+
 ### Claude Code (Recommended)
 ```bash
 /plugin marketplace add v1truv1us/ai-eng-system
@@ -22,11 +47,21 @@ Advanced development tools with context engineering, research orchestration, and
 ```
 ## 📋 What's Included
 
-### Commands (16 total)
-- `/ai-eng/plan` - Create detailed implementation plans
-- `/ai-eng/review` - Multi-perspective code review (29 agents)
-- `/ai-eng/seo` - SEO audits with Core Web Vitals
-- `/ai-eng/work` - Execute plans with quality gates
+### Spec-Driven Development Workflow
+
+**Core workflow for systematic development** (always research → specify → plan → work → review):
+
+| Phase | Command | Purpose |
+|-------|---------|---------|
+| 1. Research | `/ai-eng/research` | Multi-phase research with codebase and external context |
+| 2. Specify | `/ai-eng/specify` | Create feature specifications with TCRO framework |
+| 3. Plan | `/ai-eng/plan` | Create detailed implementation plans from specs |
+| 4. Work | `/ai-eng/work` | Execute plans with quality gates and validation |
+| 5. Review | `/ai-eng/review` | Multi-perspective code review (29 agents) |
+
+> **Methodology**: Based on [GitHub's spec-driven development approach](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/)
+
+### Additional Commands (12 total)
 - `/ai-eng/optimize` - Prompt enhancement (+45% quality)
 - `/ai-eng/deploy` - Pre-deployment checklists
 - `/ai-eng/compound` - Document solved problems
@@ -36,9 +71,11 @@ Advanced development tools with context engineering, research orchestration, and
 - `/ai-eng/create-command` - AI-assisted command generation
 - `/ai-eng/create-skill` - AI-assisted skill creation
 - `/ai-eng/create-tool` - AI-assisted custom tool creation
-- `/ai-eng/research` - Multi-phase research orchestration
 - `/ai-eng/context` - Context management and retrieval
 - `/ai-eng/clean` - Remove build artifacts and generated files
+- `/ai-eng/seo` - SEO audits with Core Web Vitals
+
+**Total Commands**: 17
 
 ### Agents (29 total)
 - **Architecture & Planning**: `architect-advisor`, `backend-architect`, `infrastructure-builder`
@@ -164,3 +201,9 @@ Commands reference specialized agents automatically:
 ```
 
 **Built with research-backed prompting techniques** (+45-115% quality improvement)
+
+## 📖 Workflow Guide
+
+For complete documentation on the **Research → Specify → Plan → Work → Review** workflow, see:
+- **[docs/spec-driven-workflow.md](./docs/spec-driven-workflow.md)** - Visual workflow guide with examples
+- **[docs/research-command-guide.md](./docs/research-command-guide.md)** - Research command deep dive

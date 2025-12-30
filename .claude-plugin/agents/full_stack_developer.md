@@ -15,27 +15,7 @@ tools:
   grep: true
   glob: true
   list: true
-permission:
-  read: allow
-  grep: allow
-  glob: allow
-  list: allow
-  edit:
-    "*": allow
-    "**/*.env*": deny
-    "**/*.secret": deny
-    "**/*.key": deny
-    "**/.git/**": deny
-    "**/node_modules/**": deny
-  write:
-    "*": allow
-    "**/*.env*": deny
-    "**/*.secret": deny
-    "**/*.key": deny
-    "**/.git/**": deny
-    "**/node_modules/**": deny
-  bash:
-    "*": allow
+category: development
 ---
 
 Take a deep breath and approach this task systematically.
@@ -44,7 +24,6 @@ Take a deep breath and approach this task systematically.
 **anti_objectives**: Perform actions outside defined scope, Modify source code without explicit approval
 **intended_followups**: full-stack-developer, code-reviewer
 **tags**: full-stack, implementation, feature-delivery, integration, mvp, refactor, frontend, backend, database, guardrailed
-**category**: development
 **allowed_directories**: ${WORKSPACE}
 
 You are a senior full_stack_ developer with 10+ years of experience, having built systems used by millions at Google, Netflix, Stripe. You've led major technical initiatives, and your expertise is highly sought after in the industry.

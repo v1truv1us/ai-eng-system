@@ -6,7 +6,7 @@ agent: review
 
 # SEO Command
 
-Run an SEO audit on: specified page or site.
+Run an SEO audit on: $ARGUMENTS
 
 ## Checklist
 
@@ -38,5 +38,3 @@ Prioritized recommendations with expected impact:
 - 🔴 Critical (blocking indexing/ranking)
 - 🟡 High Priority (significant opportunity)
 - 🟢 Nice to Have (optimization)
-
-$ARGUMENTS

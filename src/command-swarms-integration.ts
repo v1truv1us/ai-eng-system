@@ -12,7 +12,11 @@ export interface CommandSwarmMapping {
     command: string;
     description: string;
     capabilities: string[];
-    swarmType: "MultiAgentRouter" | "SequentialWorkflow" | "AgentRearrange";
+    swarmType:
+        | "MultiAgentRouter"
+        | "SequentialWorkflow"
+        | "AgentRearrange"
+        | "ConcurrentWorkflow";
     flow?: string;
     maxLoops?: number;
 }
@@ -60,7 +64,7 @@ export class CommandSwarmsIntegration {
                     "performance",
                     "frontend",
                 ],
-                swarmType: "SequentialWorkflow" as any,
+                swarmType: "ConcurrentWorkflow",
             },
 
             research: {
@@ -72,8 +76,7 @@ export class CommandSwarmsIntegration {
 
             deploy: {
                 command: "deploy",
-                description:
-                    "Prepare deployment checklist for: ${baseTask}. Ensure all prerequisites are met, configurations are correct, and monitoring is in place.",
+                description: "Pre-deployment checklist for Coolify",
                 capabilities: ["deployment", "devops", "monitoring"],
                 swarmType: "SequentialWorkflow",
             },
@@ -88,6 +91,21 @@ export class CommandSwarmsIntegration {
                     "content-optimization",
                 ],
                 swarmType: "MultiAgentRouter",
+            },
+
+            optimize: {
+                command: "optimize",
+                description:
+                    "Prompt enhancement with research-backed techniques",
+                capabilities: ["prompt-engineering", "optimization"],
+                swarmType: "MultiAgentRouter",
+            },
+
+            seo: {
+                command: "seo",
+                description: "SEO audit with Core Web Vitals",
+                capabilities: ["seo", "technical-seo", "performance"],
+                swarmType: "SequentialWorkflow",
             },
 
             create: {
@@ -249,7 +267,8 @@ export class CommandSwarmsIntegration {
         swarmType:
             | "MultiAgentRouter"
             | "SequentialWorkflow"
-            | "AgentRearrange" = "MultiAgentRouter",
+            | "AgentRearrange"
+            | "ConcurrentWorkflow" = "MultiAgentRouter",
         flow?: string,
     ): Promise<string> {
         return this.agents.createCapabilitySwarm(

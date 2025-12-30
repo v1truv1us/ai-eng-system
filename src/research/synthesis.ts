@@ -355,7 +355,10 @@ export class SynthesisHandlerImpl implements SynthesisHandler {
 
                 codeReferences.push({
                     path: file,
-                    lines: lines.length === 1 ? lines[0] : [minLine, maxLine],
+                    lines:
+                        lines.length === 1
+                            ? String(lines[0])
+                            : [minLine, maxLine],
                     description: this.generateCodeDescription(fileEvidence),
                     relevance: Math.max(
                         ...fileEvidence.map((e) => e.relevance),

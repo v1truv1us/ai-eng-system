@@ -353,7 +353,7 @@ export class AgentCoordinator extends EventEmitter {
 
         // Merge outputs
         const mergedOutput: any = {};
-        const allFindings: any[] = [];
+        const allFindings: unknown[] = [];
         const allRecommendations: string[] = [];
         let totalConfidence = 0;
 

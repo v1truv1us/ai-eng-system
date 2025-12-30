@@ -1404,7 +1404,7 @@ export class TypeScriptSwarmsExecutor extends SwarmsClient {
     /**
      * Get functions/tools for a specific agent
      */
-    private getAgentFunctions(agentName: string): any[] {
+    private getAgentFunctions(agentName: string): unknown[] {
         // For now, return empty array - can be extended with specific tools
         return [];
     }

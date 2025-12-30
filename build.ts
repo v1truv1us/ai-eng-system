@@ -36,6 +36,11 @@ const CLAUDE_DIR = join(DIST_DIR, ".claude-plugin");
 const DIST_OPENCODE_DIR = join(DIST_DIR, ".opencode");
 const ROOT_OPENCODE_DIR = join(ROOT, ".opencode");
 
+// Sync target directories (committed, required for marketplace)
+const ROOT_CLAUDE_DIR = join(ROOT, ".claude");
+const ROOT_CLAUDE_PLUGIN_DIR = join(ROOT, ".claude-plugin");
+const MARKETPLACE_PLUGIN_DIR = join(ROOT, "plugins", "ai-eng-system");
+
 const NAMESPACE_PREFIX = "ai-eng";
 
 // Valid OpenCode permission keys
@@ -441,11 +446,13 @@ async function buildClaude(): Promise<void> {
             SessionStart: [
                 {
                     description: "Initialize ai-eng-system on session start",
+                    config: {},
                     hooks: [
                         {
                             type: "notification",
+                            config: {},
                             message:
-                                "🔧 Ferg Engineering System loaded. Commands: /ai-eng/plan, /ai-eng/view, /ai-eng/seo, /ai-eng/work, /ai-eng/compound, /ai-eng/deploy, /ai-eng/optimize, /ai-eng/recursive-init, /ai-eng/create-plugin, /ai-eng/create-agent, /ai-eng/create-command, /ai-eng/create-skill, /ai-eng/create-tool, /ai-eng/research, /ai-eng/context",
+                                "🔧 Ferg Engineering System loaded. Commands: /ai-eng/plan, /ai-eng/review, /ai-eng/seo, /ai-eng/work, /ai-eng/compound, /ai-eng/deploy, /ai-eng/optimize, /ai-eng/recursive-init, /ai-eng/create-plugin, /ai-eng/create-agent, /ai-eng/create-command, /ai-eng/create-skill, /ai-eng/create-tool, /ai-eng/research, /ai-eng/context",
                         },
                     ],
                 },
@@ -549,6 +556,91 @@ async function copyDirRecursive(
 
 async function copySkillsToDist(): Promise<void> {
     await copyDirRecursive(SKILLS_DIR, join(DIST_DIR, "skills"));
+}
+
+/**
+ * Clean a directory by removing all contents and recreating it
+ */
+async function cleanDirectory(dir: string): Promise<void> {
+    if (existsSync(dir)) {
+        await rm(dir, { recursive: true, force: true });
+    }
+    await mkdir(dir, { recursive: true });
+}
+
+/**
+ * Copy markdown files from source to destination directory
+ */
+async function copyMarkdownFiles(
+    srcDir: string,
+    destDir: string,
+): Promise<void> {
+    const files = await getMarkdownFiles(srcDir);
+    for (const src of files) {
+        await copyFile(src, join(destDir, basename(src)));
+    }
+}
+
+/**
+ * Sync commands and skills to .claude/ directory (local development + marketplace)
+ * This is required for Claude Code's native skill tool to discover skills
+ */
+async function syncToLocalClaude(): Promise<void> {
+    // Sync commands
+    const claudeCommandsDir = join(ROOT_CLAUDE_DIR, "commands");
+    await cleanDirectory(claudeCommandsDir);
+    await copyMarkdownFiles(join(CONTENT_DIR, "commands"), claudeCommandsDir);
+
+    // Sync skills (flat structure for Claude Code)
+    const claudeSkillsDir = join(ROOT_CLAUDE_DIR, "skills");
+    await cleanDirectory(claudeSkillsDir);
+    await copySkillsFlat(SKILLS_DIR, claudeSkillsDir);
+
+    console.log("  ✓ Synced to .claude/");
+}
+
+/**
+ * Sync commands, agents, and skills to .claude-plugin/ directory (marketplace validation)
+ */
+async function syncToClaudePlugin(): Promise<void> {
+    // Sync commands
+    const pluginCommandsDir = join(ROOT_CLAUDE_PLUGIN_DIR, "commands");
+    await cleanDirectory(pluginCommandsDir);
+    await copyMarkdownFiles(join(CONTENT_DIR, "commands"), pluginCommandsDir);
+
+    // Sync agents
+    const pluginAgentsDir = join(ROOT_CLAUDE_PLUGIN_DIR, "agents");
+    await cleanDirectory(pluginAgentsDir);
+    await copyMarkdownFiles(join(CONTENT_DIR, "agents"), pluginAgentsDir);
+
+    // Sync skills
+    const pluginSkillsDir = join(ROOT_CLAUDE_PLUGIN_DIR, "skills");
+    await cleanDirectory(pluginSkillsDir);
+    await copySkillsFlat(SKILLS_DIR, pluginSkillsDir);
+
+    console.log("  ✓ Synced to .claude-plugin/");
+}
+
+/**
+ * Sync commands, agents, and skills to plugins/ai-eng-system/ (marketplace source)
+ */
+async function syncToMarketplacePlugin(): Promise<void> {
+    // Sync commands
+    const mpCommandsDir = join(MARKETPLACE_PLUGIN_DIR, "commands");
+    await cleanDirectory(mpCommandsDir);
+    await copyMarkdownFiles(join(CONTENT_DIR, "commands"), mpCommandsDir);
+
+    // Sync agents
+    const mpAgentsDir = join(MARKETPLACE_PLUGIN_DIR, "agents");
+    await cleanDirectory(mpAgentsDir);
+    await copyMarkdownFiles(join(CONTENT_DIR, "agents"), mpAgentsDir);
+
+    // Sync skills
+    const mpSkillsDir = join(MARKETPLACE_PLUGIN_DIR, "skills");
+    await cleanDirectory(mpSkillsDir);
+    await copySkillsFlat(SKILLS_DIR, mpSkillsDir);
+
+    console.log("  ✓ Synced to plugins/ai-eng-system/");
 }
 
 async function buildNpmEntrypoint(): Promise<void> {
@@ -714,10 +806,17 @@ async function buildAll(): Promise<void> {
         throw new Error("content/ directory not found");
     }
 
+    // Build to dist/
     await buildClaude();
     await buildOpenCode();
     await copySkillsToDist();
     await buildNpmEntrypoint();
+
+    // Sync to committed directories (required for marketplace)
+    console.log("\n📦 Syncing to marketplace directories...");
+    await syncToLocalClaude();
+    await syncToClaudePlugin();
+    await syncToMarketplacePlugin();
 
     // Validate agents after build
     await validateAgents();

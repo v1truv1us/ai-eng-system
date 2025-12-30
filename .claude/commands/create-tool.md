@@ -51,4 +51,3 @@ Tool will be saved to:
 ```
 
 The tool-creator will handle TypeScript compilation, Zod validation, error handling, and OpenCode tool integration patterns.
-$ARGUMENTS

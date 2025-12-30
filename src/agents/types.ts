@@ -3,6 +3,8 @@
  * Defines the core abstractions for agent coordination and execution.
  */
 
+import type { Decision, Task } from "../context/types.js";
+
 /**
  * Represents different types of agents available in the system
  */
@@ -70,8 +72,8 @@ export enum ConfidenceLevel {
  */
 export interface AgentInput {
     type: AgentType;
-    context: Record<string, any>;
-    parameters?: Record<string, any>;
+    context: Record<string, unknown>;
+    parameters?: Record<string, unknown>;
     timeout?: number;
 }
 
@@ -81,7 +83,7 @@ export interface AgentInput {
 export interface AgentOutput {
     type: AgentType;
     success: boolean;
-    result: Record<string, any>;
+    result: Record<string, unknown>;
     confidence: ConfidenceLevel;
     reasoning?: string;
     executionTime: number;
@@ -171,7 +173,7 @@ export interface PlanGenerationInput {
     scope?: string;
     requirements?: string[];
     constraints?: string[];
-    context?: Record<string, any>;
+    context?: Record<string, unknown>;
 }
 
 export interface PlanGenerationOutput {
@@ -193,7 +195,7 @@ export interface CodeReviewInput {
     files: string[];
     reviewType: "full" | "incremental" | "security" | "performance";
     severity: "low" | "medium" | "high" | "critical";
-    context?: Record<string, any>;
+    context?: Record<string, unknown>;
 }
 
 export interface CodeReviewFinding {
@@ -226,7 +228,7 @@ export interface AgentExecutionContext {
     taskId: string;
     workingDirectory: string;
     environment: Record<string, string>;
-    metadata: Record<string, any>;
+    metadata: Record<string, unknown>;
 }
 
 /**
@@ -243,7 +245,7 @@ export interface AgentEvent {
     taskId: string;
     agentType: AgentType;
     timestamp: Date;
-    data?: Record<string, any>;
+    data?: Record<string, unknown>;
 }
 
 /**
@@ -316,8 +318,8 @@ export interface AgentDefinition {
 export interface AgentExecution {
     taskId: string;
     agentType: AgentType;
-    input?: Record<string, any>;
-    output?: Record<string, any>;
+    input?: Record<string, unknown>;
+    output?: Record<string, unknown>;
     success: boolean;
     confidence?: ConfidenceLevel;
     executionTime: number;
@@ -347,7 +349,7 @@ export interface HandoffRecord {
     fromAgent: AgentType;
     toAgent: AgentType;
     reason: string;
-    context?: Record<string, any>;
+    context?: Record<string, unknown>;
     success: boolean;
     timestamp: Date;
 }
@@ -416,8 +418,8 @@ export interface ContextEnvelope {
         id: string;
         parentID?: string; // Parent session ID for nested subagent calls
         activeFiles: string[];
-        pendingTasks: any[]; // Task objects from context/types
-        decisions: any[]; // Decision objects from context/types
+        pendingTasks: Task[]; // Task objects from context/types
+        decisions: Decision[]; // Decision objects from context/types
     };
 
     // Relevant memories
@@ -430,12 +432,12 @@ export interface ContextEnvelope {
     // Previous agent results (for handoffs)
     previousResults: {
         agentType: AgentType | string;
-        output: any;
+        output: unknown;
         confidence: ConfidenceLevel | string;
     }[];
 
     // Task-specific context
-    taskContext: Record<string, any>;
+    taskContext: Record<string, unknown>;
 
     // Metadata
     meta: {
@@ -455,7 +457,7 @@ export interface LocalOperation {
     pattern?: string;
     include?: string;
     cwd?: string;
-    options?: Record<string, any>;
+    options?: Record<string, unknown>;
 }
 
 /**
@@ -463,7 +465,7 @@ export interface LocalOperation {
  */
 export interface LocalResult {
     success: boolean;
-    data?: any;
+    data?: unknown;
     error?: string;
     executionTime: number;
 }

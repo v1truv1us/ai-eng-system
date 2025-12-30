@@ -3,17 +3,22 @@
  * Provides comprehensive type safety for plan parsing, task execution, and quality gates.
  */
 
+import type { AgentTask } from "../agents/types.js";
+
+/** Union type for both regular tasks and agent tasks */
+export type ExecutableTask = Task | AgentTask;
+
 export interface Plan {
     /** Plan metadata and configuration */
     metadata: PlanMetadata;
     /** Array of tasks to be executed */
-    tasks: Task[];
+    tasks: ExecutableTask[];
     /** Quality gate configurations */
     qualityGates?: QualityGateConfig[];
     /** Validation errors if any */
     errors?: ValidationError[];
     /** Validation warnings if any */
-    warnings?: ValidationError[];
+    warnings?: string[];
 }
 
 export interface PlanMetadata {
@@ -134,7 +139,7 @@ export interface QualityGateConfig {
     /** Whether this gate is required */
     required: boolean;
     /** Gate-specific configuration */
-    config?: Record<string, any>;
+    config?: Record<string, unknown>;
     /** Task ID associated with this gate */
     taskId?: string;
 }
@@ -166,7 +171,7 @@ export interface QualityGateResult {
     /** Result message */
     message: string;
     /** Detailed results */
-    details?: any;
+    details?: unknown;
     /** Execution timestamp */
     timestamp: Date;
 }
@@ -230,7 +235,7 @@ export interface ValidationError {
     /** Path to the problematic field */
     path?: string;
     /** Invalid value */
-    value?: any;
+    value?: unknown;
 }
 
 export enum ValidationErrorType {

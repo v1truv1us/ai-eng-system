@@ -1,7 +1,7 @@
 {
     "name": "ai-eng-system",
-    "version": "0.3.4",
-    "description": "AI Engineering System with context engineering, research orchestration, and 15 commands, 29 specialized agents, and 4 skill packs for Claude Code",
+    "version": "0.4.0",
+    "description": "AI Engineering System with context engineering, research orchestration, native skill integration, 17 commands, 29 specialized agents, and 7 skill packs for Claude Code",
     "author": {
         "name": "v1truv1us",
         "email": "contact@v1truv1us.dev"
@@ -23,6 +23,36 @@
         "seo",
         "optimization",
         "atomic-tasks",
-        "quality-gates"
+        "quality-gates",
+        "skills",
+        "prompt-refinement"
+    ],
+    "commands": [
+        "./commands/clean.md",
+        "./commands/compound.md",
+        "./commands/context.md",
+        "./commands/create-agent.md",
+        "./commands/create-command.md",
+        "./commands/create-plugin.md",
+        "./commands/create-skill.md",
+        "./commands/create-tool.md",
+        "./commands/deploy.md",
+        "./commands/optimize.md",
+        "./commands/plan.md",
+        "./commands/recursive-init.md",
+        "./commands/research.md",
+        "./commands/review.md",
+        "./commands/seo.md",
+        "./commands/specify.md",
+        "./commands/work.md"
+    ],
+    "skills": [
+        "./skills/comprehensive-research",
+        "./skills/coolify-deploy",
+        "./skills/git-worktree",
+        "./skills/incentive-prompting",
+        "./skills/plugin-dev",
+        "./skills/prompt-refinement",
+        "./skills/text-cleanup"
     ]
 }

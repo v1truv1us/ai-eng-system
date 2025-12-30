@@ -1,6 +1,41 @@
 // src/index.ts
 import fs from "node:fs";
 import path from "node:path";
+
+// src/types/common.ts
+function isRecord(value) {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+function isStringRecord(value) {
+  if (!isRecord(value))
+    return false;
+  return Object.values(value).every((v) => typeof v === "string");
+}
+function isObject(value) {
+  return typeof value === "object" && value !== null;
+}
+function hasProperty(obj, key) {
+  return isRecord(obj) && key in obj;
+}
+function isArray(value) {
+  return Array.isArray(value);
+}
+function isString(value) {
+  return typeof value === "string";
+}
+function isNumber(value) {
+  return typeof value === "number" && !Number.isNaN(value);
+}
+function isBoolean(value) {
+  return typeof value === "boolean";
+}
+function getProperty(obj, key, defaultValue) {
+  if (!isRecord(obj))
+    return defaultValue;
+  return key in obj ? obj[key] : defaultValue;
+}
+
+// src/index.ts
 function copyRecursive(src, dest) {
   const stat = fs.statSync(src);
   if (stat.isDirectory()) {
@@ -47,5 +82,14 @@ var AiEngSystem = async ({ directory }) => {
   return {};
 };
 export {
+  isStringRecord,
+  isString,
+  isRecord,
+  isObject,
+  isNumber,
+  isBoolean,
+  isArray,
+  hasProperty,
+  getProperty,
   AiEngSystem
 };

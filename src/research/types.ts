@@ -45,7 +45,7 @@ export interface ResearchQuery {
     scope: ResearchScope;
     depth: ResearchDepth;
     constraints?: ResearchConstraints;
-    context?: Record<string, any>;
+    context?: Record<string, unknown>;
     metadata?: {
         source?: string;
         ticket?: string;
@@ -340,7 +340,7 @@ export interface ResearchEvent {
         | "research_completed"
         | "research_failed";
     timestamp: Date;
-    data?: Record<string, any>;
+    data?: Record<string, unknown>;
     phase?: ResearchPhase;
     agent?: string;
 }

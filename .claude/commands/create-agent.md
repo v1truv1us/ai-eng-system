@@ -46,4 +46,3 @@ Agent will be saved to:
 ```
 
 The agent-creator will handle platform-specific formatting and ensure the agent follows best practices for triggering, expertise, and integration.
-$ARGUMENTS

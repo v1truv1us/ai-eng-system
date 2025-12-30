@@ -33,6 +33,9 @@ outputs:
 
 Conduct comprehensive research for: $ARGUMENTS
 
+> **Phase 1 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Review  
+> See: [GitHub's spec-driven development methodology](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/)
+
 ## Usage
 
 ```bash

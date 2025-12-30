@@ -46,4 +46,3 @@ Skill will be saved to:
 ```
 
 The skill-creator will handle progressive disclosure, proper frontmatter, and ensure compatibility with opencode-skills plugin.
-$ARGUMENTS

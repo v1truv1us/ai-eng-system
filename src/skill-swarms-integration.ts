@@ -22,7 +22,7 @@ export interface SkillParameter {
     type: "string" | "number" | "boolean" | "object";
     description: string;
     required: boolean;
-    default?: any;
+    default?: unknown;
 }
 
 export interface SwarmTool {

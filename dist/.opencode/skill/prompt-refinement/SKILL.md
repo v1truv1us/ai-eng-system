@@ -1,6 +1,6 @@
 ---
 name: prompt-refinement
-description: Transform vague prompts into structured TCRO specifications with phase-specific clarification
+description: Transform prompts into structured TCRO format with phase-specific clarification. Automatically invoked by /ai-eng/research, /ai-eng/plan, /ai-eng/work, and /ai-eng/specify commands. Use when refining vague prompts, structuring requirements, or enhancing user input quality before execution.
 version: 1.0.0
 tags: [prompting, clarification, structuring, tcro]
 ---
@@ -141,7 +141,7 @@ Phase: [research|specify|plan|work]
 Phase-specific templates are located in `templates/`:
 
 ```
-skills/prompting/prompt-refinement/
+skills/prompt-refinement/
 ├── SKILL.md
 └── templates/
     ├── research.md

@@ -31,7 +31,35 @@ outputs:
 
 # Research Command
 
-Conduct comprehensive research for: provided query or topic.
+Conduct comprehensive research for: $ARGUMENTS
+
+> **Phase 1 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Review  
+> See: [GitHub's spec-driven development methodology](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/)
+
+## Usage
+
+```bash
+/ai-eng/research [query] [options]
+```
+
+### Options
+
+- `--swarm`: Use Swarms multi-agent orchestration instead of legacy coordinator
+- `-s, --scope <scope>`: Research scope (codebase|documentation|all) [default: all]
+- `-d, --depth <depth>`: Research depth (shallow|medium|deep) [default: medium]
+- `-o, --output <file>`: Output file path
+- `-f, --format <format>`: Export format (markdown|json|html) [default: markdown]
+- `--no-cache`: Disable research caching
+- `--feed-into <command>`: After research, invoke specified command with research context (specify|plan)
+- `-v, --verbose`: Enable verbose output
+
+## Process
+
+### Phase 0: Prompt Refinement
+Use skill: `prompt-refinement`
+Phase: `research`
+
+[The prompt-refinement skill will transform your input into a structured TCRO format by asking clarifying questions about research scope, sources, depth, and deliverable format.]
 
 ## Expert Context
 
@@ -55,6 +83,36 @@ Take a deep breath and execute this research systematically.
    - Identify what information already exists
 
 ### Phase 2: Parallel Discovery
+
+#### Subagent Communication Protocol (Minimal)
+
+When you spawn EACH discovery agent, include a small **Context Handoff Envelope** in the prompt. Subagents run in a separate context; do not assume they know anything unless you include it.
+
+Use this exact structure:
+
+```text
+<CONTEXT_HANDOFF_V1>
+Goal: (1 sentence)
+Scope: (codebase|docs|external|all)
+Known constraints: (bullets; optional)
+What I already checked: (bullets; optional)
+Files/paths to prioritize: (bullets; optional)
+Deliverable: (what you must return)
+Output format: RESULT_V1
+</CONTEXT_HANDOFF_V1>
+```
+
+All agents must respond with:
+
+```text
+<RESULT_V1>
+RESULT:
+EVIDENCE:
+OPEN_QUESTIONS:
+NEXT_STEPS:
+CONFIDENCE: 0.0-1.0
+</RESULT_V1>
+```
 
 Spawn these agents CONCURRENTLY for maximum efficiency:
 
@@ -147,6 +205,35 @@ Before finalizing, verify:
 ## Output
 
 Save research document to `docs/research/[date]-[topic-slug].md`
+
+Rate your confidence in the research findings (0-1) and identify any assumptions or limitations.
+
+## Integration
+
+### Feeds Into
+- `/ai-eng/specify` - Use `--feed-into=specify` to pass research findings to specification phase
+- `/ai-eng/plan` - Use `--feed-into=plan` to pass research findings directly to planning
+
+### Feed-Into Workflow
+
+When `--feed-into` is used:
+
+1. **Save research document** to standard location
+2. **Load research findings** as context for target command
+3. **Pass research path** to target command automatically
+
+Example:
+```bash
+# Research that feeds into specification
+/ai-eng/research "authentication patterns" --feed-into=specify
+
+# This:
+# 1. Completes research phase
+# 2. Saves to docs/research/[date]-auth-patterns.md
+# 3. Automatically invokes /ai-eng/specify --from-research=docs/research/[date]-auth-patterns.md
+```
+
+The target command will receive the research findings in its context, eliminating the need to manually copy-paste research results.
 
 Rate your confidence in the research findings (0-1) and identify any assumptions or limitations.
 

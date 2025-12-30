@@ -15,7 +15,11 @@ import { existsSync, mkdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-import type { AgentType, ConfidenceLevel } from "../../src/agents/types";
+import type {
+    AgentType,
+    ConfidenceLevel,
+    ContextEnvelope,
+} from "../../src/agents/types";
 import { MemoryManager } from "../../src/context/memory";
 import { ProgressiveSkillLoader } from "../../src/context/progressive";
 import { ContextRetriever } from "../../src/context/retrieval";
@@ -265,17 +269,26 @@ describe("Context Engineering (current)", () => {
 
         it("should build context envelope with session state", async () => {
             const session = await sessionManager.startSession({
-                title: "Test Session",
+                project: "test-project",
             });
             session.workbench.activeFiles = ["file1.ts", "file2.ts"];
             session.workbench.pendingTasks = [
-                { id: "task1", description: "Test task", status: "pending" },
+                {
+                    id: "task1",
+                    content: "Test task",
+                    status: "pending",
+                    priority: "medium",
+                    createdAt: new Date().toISOString(),
+                },
             ];
             session.workbench.decisions = [
                 {
                     id: "dec1",
-                    description: "Test decision",
+                    title: "Test decision",
+                    description: "Test description",
                     rationale: "Test rationale",
+                    createdAt: new Date().toISOString(),
+                    tags: ["test"],
                 },
             ];
 
@@ -295,7 +308,7 @@ describe("Context Engineering (current)", () => {
         });
 
         it("should include previous results and task context", async () => {
-            await sessionManager.startSession({ title: "Test Session" });
+            await sessionManager.startSession({ project: "test-project" });
 
             const previousResults = [
                 {
@@ -321,7 +334,7 @@ describe("Context Engineering (current)", () => {
 
         it("should serialize envelope with size limits", async () => {
             const session = await sessionManager.startSession({
-                title: "Test Session",
+                project: "test-project",
             });
 
             // Add many files to test limiting
@@ -335,7 +348,11 @@ describe("Context Engineering (current)", () => {
                 sessionManager.serializeContextEnvelope(envelope);
 
             expect(serialized).toContain("req-789");
-            expect(envelope.session.activeFiles).toHaveLength(10); // Limited to 10
+            // The envelope contains all files, but serialization limits to 10
+            expect(envelope.session.activeFiles).toHaveLength(15);
+            // Verify the serialized version is limited
+            const parsed = JSON.parse(serialized);
+            expect(parsed.session.activeFiles).toHaveLength(10);
         });
 
         it("should throw error when no active session", () => {
@@ -345,7 +362,7 @@ describe("Context Engineering (current)", () => {
         });
 
         it("should merge context envelopes with conflict resolution", async () => {
-            await sessionManager.startSession({ title: "Test Session" });
+            await sessionManager.startSession({ project: "test-project" });
 
             const envelope1: ContextEnvelope = {
                 session: {
@@ -397,7 +414,7 @@ describe("Context Engineering (current)", () => {
         });
 
         it("should resolve conflicts using consensus strategy", async () => {
-            await sessionManager.startSession({ title: "Test Session" });
+            await sessionManager.startSession({ project: "test-project" });
 
             const envelope1: ContextEnvelope = {
                 session: {
@@ -448,7 +465,7 @@ describe("Context Engineering (current)", () => {
 
         it("should record and retrieve handoff audit records", async () => {
             const session = await sessionManager.startSession({
-                title: "Test Session",
+                project: "test-project",
             });
             const correlationId = sessionManager.generateCorrelationId();
 
@@ -470,7 +487,7 @@ describe("Context Engineering (current)", () => {
         });
 
         it("should maintain audit log with size limits", async () => {
-            await sessionManager.startSession({ title: "Test Session" });
+            await sessionManager.startSession({ project: "test-project" });
 
             // Add more than 100 records
             for (let i = 0; i < 105; i++) {

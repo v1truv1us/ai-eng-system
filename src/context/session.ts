@@ -228,7 +228,7 @@ export class SessionManager {
         requestId: string,
         depth = 0,
         previousResults: ContextEnvelope["previousResults"] = [],
-        taskContext: Record<string, any> = {},
+        taskContext: Record<string, unknown> = {},
         memoryManager?: {
             searchMemories: (query: string) => Promise<MemoryEntry[]>;
         },
@@ -254,9 +254,9 @@ export class SessionManager {
             session: {
                 id: this.currentSession.id,
                 parentID: this.currentSession.parentID,
-                activeFiles: [], // TODO: Get from session state if available
-                pendingTasks: [], // TODO: Get from session state if available
-                decisions: [], // TODO: Get from session state if available
+                activeFiles: this.currentSession.workbench.activeFiles,
+                pendingTasks: this.currentSession.workbench.pendingTasks,
+                decisions: this.currentSession.workbench.decisions,
             },
             memories,
             previousResults,
@@ -407,10 +407,10 @@ export class SessionManager {
      * Merge task contexts with different strategies
      */
     private mergeTaskContexts(
-        contexts: Record<string, any>[],
+        contexts: Record<string, unknown>[],
         strategy: string,
-    ): Record<string, any> {
-        const merged: Record<string, any> = {};
+    ): Record<string, unknown> {
+        const merged: Record<string, unknown> = {};
 
         // Collect all keys
         const allKeys = new Set<string>();

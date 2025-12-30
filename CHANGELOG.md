@@ -7,6 +7,55 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.12] - 2025-12-30
+
+### Added
+- **Spec-Driven Development Workflow**: Complete 5-phase workflow (Research → Specify → Plan → Work → Review)
+- **Visual Workflow Diagrams**: Mermaid diagrams in README.md showing the workflow
+- **Workflow Guide** (`docs/spec-driven-workflow.md`): Comprehensive guide with examples and checklist
+- **17 Commands**: Added `/ai-eng/research` as primary workflow command (now 17 total)
+- **GitHub Methodology Reference**: Added link to [GitHub's spec-driven development blog post](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/)
+
+### Changed
+- **Documentation Cleanup**: Removed outdated v0.3.x and v0.4.0 references from all files
+- **Version Alignment**: All documentation now reflects v0.0.x versioning consistently
+- **Command Structure**: Reorganized commands into primary workflow (5) and additional (12)
+- **Build Optimization**: Build time now under 500ms
+
+### Fixed
+- **Plan Archival**: Archived 7 outdated plans to `archive/plans/`
+- **Version Consistency**: Fixed package.json (0.4.0 → 0.0.12), CHANGELOG, TODO.md, IMPLEMENTATION-ROADMAP.md
+- **Test Suite**: All 457 tests passing with no failures
+
+### Removed
+- **Outdated Plans**: Removed plans/ directory, consolidated to IMPLEMENTATION-ROADMAP.md
+
+### Infrastructure
+- **Build**: 475ms build time
+- **Tests**: 457 pass, 0 fail
+- **TypeScript**: No errors
+- **Commands**: 17 total (5 primary + 12 additional)
+- **Agents**: 29 total
+- **Skills**: 13 files
+
+## [0.0.10] - 2025-12-26
+
+### Added
+- **Auto-Installation Plugin Working**: Plugin automatically installs commands, agents, and skills when loaded
+- **16 Commands**: Complete command suite including /plan, /work, /research, /review, /optimize, /deploy, and creation commands
+- **29 Agents**: Comprehensive agent ecosystem across architecture, development, quality, devops, AI/ML, content, and plugin development
+- **13 Skill Files**: DevOps, prompting, research, and plugin-development skill packs
+
+### Changed
+- **Documentation Cleanup**: Removed outdated v0.3.x and v0.4.0 references
+- **Version Alignment**: All documentation now reflects v0.0.x versioning
+- **Archived Release Notes**: Outdated release notes moved to archive/ directory
+- **Archived Plans**: All outdated plans moved to archive/plans/ directory
+
+### Fixed
+- **Version Consistency**: All documentation files updated to reflect v0.0.x versioning
+- **TODO.md Tracking**: Created comprehensive TODO.md for task tracking and documentation cleanup
+
 ## [0.0.7] - 2025-12-24
 
 ### Added
@@ -27,8 +76,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Plugin Implementation**: Moved from TypeScript file to pure markdown-based installation
 - **Configuration**: `.opencode/opencode.jsonc` template includes `opencode-skills` dependency
 
-
-
 ## [0.0.4] - 2025-12-21
 
 ### Fixed
@@ -48,98 +95,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Proactive documentation needs identification for code changes and new features
 - Updated agent registry to include all 26 specialized agents
 - Fixed swarm integration tests to reflect correct agent count
-
-## [0.3.1] - 2025-12-12
-
-### Added
-- **docs-writer Agent**: Specialized documentation page writer
-  - Expert technical documentation writer with 15+ years experience
-  - Specific formatting rules: 1-3 word titles, 5-10 word descriptions
-  - Text chunks ≤2 sentences, sections separated by ---
-  - Imperative section titles, JS/TS code formatting (no semicolons/commas)
-  - Complements documentation-specialist for individual page writing
-- Documentation update plan and comprehensive fixes
-- CHANGELOG.md for version tracking
-
-### Fixed
-- Repository references updated from `ferg-cod3s` to `v1truv1us`
-- Package names corrected to `@v1truv1us/ai-eng-system`
-- Command counts updated to reflect 15 total commands
-- Agent counts updated to reflect 25 total agents (added docs-writer)
-- Namespace references updated to `ai-eng/`
-- Build commands updated from `npm` to `bun`
-
-## [0.3.0-rc1] - 2025-01-05
-
-### Added
-- **Research Orchestration System**: Multi-phase research with parallel discovery
-  - 3-phase workflow: Discovery → Analysis → Synthesis
-  - Parallel agent execution for maximum efficiency
-  - Evidence-based reporting with file:line references
-  - Configurable scope (codebase/documentation/external/all) and depth (shallow/medium/deep)
-- **24 Specialized Agents**: Complete agent ecosystem
-  - Architecture & Planning: architect-advisor, backend-architect, infrastructure-builder
-  - Development & Coding: frontend-reviewer, full-stack-developer, api-builder-enhanced, database-optimizer, java-pro
-  - Quality & Testing: code-reviewer, test-generator, security-scanner, performance-engineer
-  - DevOps & Deployment: deployment-engineer, monitoring-expert, cost-optimizer
-  - AI & ML: ai-engineer, ml-engineer
-  - Content & SEO: seo-specialist, prompt-optimizer
-  - Plugin Development: agent-creator, command-creator, skill-creator, tool-creator, plugin-validator
-- **Enhanced /research Command**: Comprehensive research capabilities
-- **4 Skill Packages**: DevOps, prompting, research, and plugin-dev skills
-
-### Changed
-- Research command mode changed from `build` to `plan` (read-only operation)
-- Test framework migrated from Vitest to bun:test
-- Default research depth changed from `shallow` to `medium`
-
-### Technical
-- Parallel agent coordination with 3 concurrent discovery agents
-- Evidence-based reporting system with confidence scoring
-- Caching system with 1-hour TTL for research queries
-- Memory-efficient file processing with streaming support
-
-## [0.2.1] - 2025-12-09
-
-### Fixed
-- Package version updated to reflect current state
-- Documentation consistency improvements
-
-## [0.2.0] - 2025-12-05
-
-### Added
-- **Enhanced /plan Command**: Atomic task decomposition with 5-phase planning
-  - Discovery phase with codebase analysis
-  - Task decomposition into 15-60 minute chunks
-  - Risk assessment with impact × likelihood matrix
-  - Testing strategy definition
-  - SEO and performance considerations
-- **Enhanced /work Command**: Systematic execution with quality gates
-  - 4-phase execution: Setup → Task Loop → Validation → Documentation
-  - 6 sequential quality gates: Lint → Types → Tests → Build → Integration → Deploy
-  - Todo management and progress tracking
-  - Multiple execution modes: --continue, --validate-only, --dry-run
-- **Comprehensive Testing**: 80%+ test coverage
-  - Unit tests, integration tests, performance tests
-  - Build validation and error handling
-- **Documentation System**: Complete documentation infrastructure
-  - COMMAND-ENHANCEMENTS.md with detailed command references
-  - TESTING.md with comprehensive test suite documentation
-  - TEST-SUMMARY.md with test reports and metrics
-
-### Changed
-- Command architecture enhanced with atomic task management
-- Quality assurance pipeline with 6-gate validation
-- Documentation structure with cross-referenced guides
-
-## [0.1.0] - 2025-12-05
-
-### Added
-- **Context Engineering System**: Core context management
-- **Initial Agent Coordination**: plan, build, review agent modes
-- **Basic Command Set**: /plan, /review, /seo, /work, /compound, /deploy
-- **Skill System**: DevOps and prompting skills
-- **Documentation Framework**: AGENTS.md hierarchy system
 
 ## [0.0.2] - 2025-11-30
 

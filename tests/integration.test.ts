@@ -11,7 +11,14 @@
  * - Performance under load
  */
 
-import { afterAll, beforeAll, describe, expect, it } from "bun:test";
+import {
+    afterAll,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+} from "bun:test";
 import { execSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
@@ -198,24 +205,43 @@ describe("Ferg Engineering System - Integration Tests", () => {
 
             for (const file of agentFiles) {
                 if (file.endsWith(".md")) {
-                    // Check OpenCode transformation
-                    const opencodePath = join(opencodeAgentsDir, file);
+                    // Check Claude Code preservation first (agents are directly in agents/)
+                    const claudePath = join(claudeAgentsDir, file);
+                    expect(existsSync(claudePath)).toBe(true);
+
+                    const claudeContent = await readFile(claudePath, "utf-8");
+                    expect(claudeContent).toContain("---");
+
+                    // OpenCode agents are organized by category subdirectories
+                    // Find which category the agent belongs to by reading its frontmatter
+                    const agentContent = await readFile(
+                        join(contentAgentsDir, file),
+                        "utf-8",
+                    );
+                    const categoryMatch =
+                        agentContent.match(/category:\s*([^\n]+)/);
+                    const category = categoryMatch
+                        ? categoryMatch[1]
+                              .trim()
+                              .toLowerCase()
+                              .replace(/\s+/g, "-")
+                        : "general";
+
+                    // Check OpenCode transformation in category subdirectory
+                    const opencodeCategoryDir = join(
+                        opencodeAgentsDir,
+                        category,
+                    );
+                    const opencodePath = join(opencodeCategoryDir, file);
                     expect(existsSync(opencodePath)).toBe(true);
 
                     const opencodeContent = await readFile(
                         opencodePath,
                         "utf-8",
                     );
-                    // Agents use YAML frontmatter with mode field, not table format
+                    // Agents use YAML frontmatter with mode field
                     expect(opencodeContent).toContain("---");
                     expect(opencodeContent).toContain("mode:");
-
-                    // Check Claude Code preservation
-                    const claudePath = join(claudeAgentsDir, file);
-                    expect(existsSync(claudePath)).toBe(true);
-
-                    const claudeContent = await readFile(claudePath, "utf-8");
-                    expect(claudeContent).toContain("---");
                 }
             }
         });

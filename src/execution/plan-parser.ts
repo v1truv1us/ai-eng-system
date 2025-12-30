@@ -12,6 +12,7 @@ import {
     ExecutionStrategy,
 } from "../agents/types.js";
 import {
+    type ExecutableTask,
     type Plan,
     type PlanMetadata,
     type QualityGateConfig,
@@ -197,8 +198,8 @@ export class PlanParser {
         };
     }
 
-    private parseTasks(tasks: any[]): Task[] {
-        const parsedTasks: Task[] = [];
+    private parseTasks(tasks: any[]): ExecutableTask[] {
+        const parsedTasks: ExecutableTask[] = [];
         const taskIds = new Set<string>();
 
         for (let i = 0; i < tasks.length; i++) {
@@ -235,7 +236,7 @@ export class PlanParser {
         return parsedTasks;
     }
 
-    private parseTask(taskData: any, index: number): Task | null {
+    private parseTask(taskData: any, index: number): ExecutableTask | null {
         // Required fields
         if (!taskData.id || typeof taskData.id !== "string") {
             this.errors.push({
@@ -431,7 +432,7 @@ export class PlanParser {
         };
     }
 
-    private validateTaskDependencies(tasks: Task[]): void {
+    private validateTaskDependencies(tasks: ExecutableTask[]): void {
         const taskIds = new Set(tasks.map((t) => t.id));
 
         for (const task of tasks) {
@@ -453,7 +454,7 @@ export class PlanParser {
         this.detectCircularDependencies(tasks);
     }
 
-    private detectCircularDependencies(tasks: Task[]): void {
+    private detectCircularDependencies(tasks: ExecutableTask[]): void {
         const visited = new Set<string>();
         const recursionStack = new Set<string>();
         const taskMap = new Map(tasks.map((t) => [t.id, t]));
