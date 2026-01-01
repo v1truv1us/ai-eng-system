@@ -61,7 +61,7 @@ See [docs/spec-driven-workflow.md](./docs/spec-driven-workflow.md) for complete 
 
 > **Methodology**: Based on [GitHub's spec-driven development approach](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/)
 
-### Additional Commands (12 total)
+### Additional Commands (13 total)
 - `/ai-eng/optimize` - Prompt enhancement (+45% quality)
 - `/ai-eng/deploy` - Pre-deployment checklists
 - `/ai-eng/compound` - Document solved problems
@@ -92,6 +92,25 @@ See [docs/spec-driven-workflow.md](./docs/spec-driven-workflow.md) for complete 
 - `research` - Comprehensive multi-phase research orchestration
 - `plugin-dev` - Plugin development knowledge base and references
 - `text-cleanup` - Pattern-based text cleanup (slop, comments)
+
+## 🔄 Subagent Orchestrator Configuration
+
+**New!** [docs/subagent-orchestration-guide.md](./docs/subagent-orchestration-guide.md) - Configure automatic agent routing for ai-eng-system
+
+Learn how to configure subagent orchestration when using ai-eng-system with OpenCode or Claude Code:
+
+- **For OpenCode**: Inject orchestration into primary agent's prompt for zero-latency routing
+- **For Claude Code**: Use UserPromptSubmit hook for dynamic, per-prompt routing
+- **Platform-specific configurations** for both OpenCode and Claude Code
+- **Three-layer approach**: Base instructions + dynamic enhancement + detailed knowledge
+- **Complete examples** and troubleshooting for reliable agent delegation
+
+**Quick Answer**: How does orchestrator always work?
+
+- **OpenCode**: Orchestrator is injected into primary agent's prompt (part of agent identity)
+- **Claude Code**: UserPromptSubmit Hook runs before every prompt and adds routing guidance
+
+Both ensure reliable routing to ai-eng-system's 29 specialized agents!
 
 ## 🏗️ Architecture
 
