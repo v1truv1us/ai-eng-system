@@ -1,13 +1,13 @@
 # Implementation Roadmap
 
 **Status**: Stable - Maintenance Mode  
-**Current Release**: v0.0.12  
+**Current Release**: v0.0.14  
 **Versioning**: v0.0.x (stable)  
-**Priority**: Testing & Quality Assurance
+**Priority**: Documentation & Count Cleanup
 
 ## Executive Summary
 
-The ai-eng-system is an advanced development toolkit with context engineering, research orchestration, and 29 specialized agents for Claude Code & OpenCode.
+The ai-eng-system is an advanced development toolkit with context engineering, research orchestration, and 28 specialized agents for Claude Code & OpenCode.
 
 **Development Philosophy**: This toolkit follows **spec-driven development methodology** from GitHub's official blog post: [Spec-driven development with AI: Get started with a new open source toolkit](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/). The complete workflow (Research → Specify → Plan → Work → Review) ensures specifications become the "source of truth" for what gets built.
 
@@ -109,7 +109,7 @@ Current focus is on cleaning up documentation and ensuring version consistency a
 All core functionality has been implemented and verified:
 
 ✅ **17 Commands**: Core spec-driven workflow (research, specify, plan, work, review) plus utility commands
-✅ **29 Specialized Agents**: Across architecture, development, quality, devops, AI/ML, content, and plugin development
+✅ **28 Specialized Agents**: Across architecture, development, quality, devops, AI/ML, content, and plugin development
 ✅ **13 Skill Files**: DevOps, prompting, research, and plugin-development skill packs
 ✅ **Auto-Installation**: Plugin automatically installs commands, agents, and skills when loaded
 ✅ **Marketplace Integration**: Available on Claude Code marketplace as v1truv1us/ai-eng-marketplace
@@ -124,7 +124,7 @@ This toolkit implements the complete **Research → Specify → Plan → Work �
 | 2. Specify | `/ai-eng/specify` | Detailed specifications with user stories and acceptance criteria |
 | 3. Plan | `/ai-eng/plan` | Implementation plan with atomic tasks |
 | 4. Work | `/ai-eng/work` | Quality-gated task execution |
-| 5. Review | `/ai-eng/review` | Multi-perspective code review (29 agents) |
+| 5. Review | `/ai-eng/review` | Multi-perspective code review (28 agents) |
 
 **Methodology**: Based on [GitHub's spec-driven development approach](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/)
 

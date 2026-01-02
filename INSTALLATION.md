@@ -20,7 +20,7 @@ npm install -g ai-eng-system
 
 **What gets installed:**
 - ✅ Commands for both Claude Code and OpenCode
-- ✅ 29 specialized agents
+- ✅ 28 specialized agents
 - ✅ 4 skill packages (devops, prompting, research, plugin-dev)
 - ✅ Automatic version management
 
@@ -47,14 +47,14 @@ npm install --save-dev ai-eng-system
 
 ### Claude Code
 - **Commands:** 16 slash commands (`/ai-eng/plan`, `/ai-eng/review`, `/ai-eng/optimize`, `/ai-eng/clean`, `/ai-eng/research`, etc.)
-- **Agents:** 29 specialized agents
+- **Agents:** 28 specialized agents
 - **Skills:** 4 skill packages (devops, prompting, research, plugin-dev)
 - **Location:** `~/.claude/plugins/ai-eng-system/`
 - **Format:** Markdown files with YAML frontmatter
 
 ### OpenCode
 - **Commands:** 16 commands (`/ai-eng/plan`, `/ai-eng/review`, `/ai-eng/optimize`, `/ai-eng/clean`, `/ai-eng/research`, etc.)
-- **Agents:** 29 specialized agents (`ai-eng/architect-advisor`, etc.)
+- **Agents:** 28 specialized agents (`ai-eng/architect-advisor`, etc.)
 - **Skills:** 4 skill packages (devops, prompting, research, plugin-dev)
 - **Location:** `~/.config/opencode/` (global) or `.opencode/` (local)
 - **Namespace:** `ai-eng/`

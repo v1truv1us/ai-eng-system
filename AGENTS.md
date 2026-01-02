@@ -14,7 +14,7 @@ This document defines the **agents and tools** available in this system. For the
 | build | edit | Implements changes |
 | review | read-only | Code review |
 
-## Specialized Agents (24 Total)
+## Specialized Agents (28 Total)
 
 ### Architecture & Planning
 - `architect-advisor` - System architecture decisions and trade-off analysis
@@ -123,7 +123,7 @@ Use the architect-advisor to evaluate: Should we use microservices or a monolith
 | /specify | Create feature specifications | read-only |
 | /plan | Create detailed implementation plans | read-only |
 | /work | Execute plans with quality gates and tracking | build |
-| /review | Multi-perspective code review (29 agents) | read-only |
+| /review | Multi-perspective code review (28 agents) | read-only |
 | /seo | SEO audit with Core Web Vitals | read-only |
 | /deploy | Pre-deployment checklist for Coolify | build |
 | /optimize | Prompt enhancement (+45% quality) | build |

@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-This document verifies the ai-eng-system implementation. The system has evolved into a fully functional development toolkit with context engineering, research orchestration, and 29 specialized agents for Claude Code & OpenCode.
+This document verifies the ai-eng-system implementation. The system has evolved into a fully functional development toolkit with context engineering, research orchestration, and 28 specialized agents for Claude Code & OpenCode.
 
 **Note**: This document has historical references to v0.3.0. The project has reverted to v0.0.x versioning for ongoing development.
 
@@ -19,7 +19,7 @@ This document verifies the ai-eng-system implementation. The system has evolved 
 
 ### 1. Installation & Deployment
 
-**Claim**: "15 Commands, 29 Agents, 4 skill packs installed globally"
+**Claim**: "15 Commands, 28 Agents, 4 skill packs installed globally"
 
 **Verification**:
 ```bash
@@ -29,7 +29,7 @@ ls ~/.config/opencode/command/ai-eng/ | wc -l
 
 **Status**: ✅ VERIFIED
 - All 15 commands are installed
-- All 29 agents are installed
+- All 28 agents are installed
 - All 4 skill packs are installed
 - Global installation path: ~/.config/opencode/
 

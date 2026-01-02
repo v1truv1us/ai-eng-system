@@ -1,33 +1,11 @@
 # TODO: AI Engineering System
 
-**Current Version**: 0.0.12
-**Last Updated**: 2025-12-30
+**Current Version**: 0.0.14
+**Last Updated**: 2026-01-01
 
 ## High Priority
 
-### Documentation Cleanup
-- [x] Remove outdated v0.3.0/v0.4.0 references from IMPLEMENTATION-ROADMAP.md
-- [x] Remove outdated v0.3.0/v0.4.0 references from IMPLEMENTATION-VERIFICATION.md
-- [x] Archive outdated release notes:
-  - RELEASE-v0.3.0.md
-  - RELEASE-v0.3.1.md
-  - RELEASE-v0.3.0-rc1.md
-- [x] Update docs/decisions/2025-12-11-local-vs-cloud-execution.md (remove version-specific references)
-- [x] Update docs/research/2025-12-11-agent-swarm-execution-strategies.md (remove version-specific references)
-- [x] Update plans/2025-01-05-phase3-research-orchestration.md (remove version-specific references)
-- [x] Update docs/PHASE-3-USAGE.md (remove version reference)
- - [x] Review plan files (phase1.md, phase2.md) and decide whether to archive them as historical records
-
-### Version Consistency
-- [x] Audit all documentation for version consistency (should reflect v0.0.x)
-- [x] Update CHANGELOG.md to properly reflect v0.0.x history
-- [x] Verify package.json version is current (currently 0.0.10)
-
-### Plan Cleanup (2025-12-30)
-- [x] Archived all outdated plans to archive/plans/
-- [x] Removed plans/ directory
-- [x] Updated CHANGELOG.md to remove v0.3.x and v0.4.0 entries
-- [x] Fixed package.json version from 0.4.0 to 0.0.10
+*All High Priority documentation cleanup and count fixes completed. See Completed Tasks for details.*
 
 ## Medium Priority
 
@@ -46,7 +24,7 @@
 ### Documentation
 - [ ] Update README.md with latest features and improvements
 - [ ] Verify all command references are accurate (currently 17 commands)
-- [ ] Verify all agent references are accurate (currently 29 agents)
+- [ ] Verify all agent references are accurate (currently 28 agents)
 - [ ] Update installation guides if needed
 
 ## Low Priority
@@ -63,6 +41,37 @@
 
 ## Completed Tasks
 
+### Documentation & Count Fix (2026-01-01)
+- [x] Updated TODO.md version from 0.0.12 to 0.0.14
+- [x] Corrected agent count from 29 to 28 across all documentation
+- [x] Corrected skill count from 13 to 7 (SKILL.md files only)
+- [x] Reorganized completed High Priority items to Completed Tasks section
+- [x] Updated CHANGELOG.md with missing v0.0.13 and v0.0.14 entries
+
+### Documentation Cleanup (2025-12-30)
+- [x] Remove outdated v0.3.0/v0.4.0 references from IMPLEMENTATION-ROADMAP.md
+- [x] Remove outdated v0.3.0/v0.4.0 references from IMPLEMENTATION-VERIFICATION.md
+- [x] Archive outdated release notes:
+  - RELEASE-v0.3.0.md
+  - RELEASE-v0.3.1.md
+  - RELEASE-v0.3.0-rc1.md
+- [x] Update docs/decisions/2025-12-11-local-vs-cloud-execution.md (remove version-specific references)
+- [x] Update docs/research/2025-12-11-agent-swarm-execution-strategies.md (remove version-specific references)
+- [x] Update plans/2025-01-05-phase3-research-orchestration.md (remove version-specific references)
+- [x] Update docs/PHASE-3-USAGE.md (remove version reference)
+- [x] Review plan files (phase1.md, phase2.md) and archive as historical records
+
+### Version Consistency (2025-12-30)
+- [x] Audit all documentation for version consistency (v0.0.x)
+- [x] Update CHANGELOG.md to properly reflect v0.0.x history
+- [x] Verify package.json version is current
+
+### Plan Cleanup (2025-12-30)
+- [x] Archived all outdated plans to archive/plans/
+- [x] Removed plans/ directory
+- [x] Updated CHANGELOG.md to remove v0.3.x and v0.4.0 entries
+- [x] Fixed package.json version from 0.4.0 to 0.0.10
+
 ### Documentation Cleanup (2025-12-26)
 - [x] Created comprehensive TODO.md for task tracking
 - [x] Updated IMPLEMENTATION-ROADMAP.md (removed v0.3.0/v0.4.0 references, updated status)
@@ -76,7 +85,7 @@
 ### Version 0.0.10 (2025-12-26)
 - [x] Released version 0.0.10 to npm
 - [x] Auto-installation plugin working
-- [x] 17 commands, 29 agents, 13 skill files deployed
+- [x] 17 commands, 28 agents, 7 skill files deployed
 
 ### Previous Versions
 - [x] v0.0.7 - OpenCode Plugin Auto-Installation
@@ -106,7 +115,7 @@ This toolkit follows **spec-driven development methodology** from GitHub's offic
 | 2. Specify | `/ai-eng/specify` | Create detailed specifications with TCRO framework |
 | 3. Plan | `/ai-eng/plan` | Generate implementation plans from specs |
 | 4. Work | `/ai-eng/work` | Execute tasks with quality gates and validation |
-| 5. Review | `/ai-eng/review` | Multi-perspective code review (29 agents) |
+| 5. Review | `/ai-eng/review` | Multi-perspective code review (28 agents) |
 
 This approach ensures specifications are your "source of truth" for what gets built, reducing guesswork and enabling reliable AI-assisted development.
 

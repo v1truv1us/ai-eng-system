@@ -11,8 +11,8 @@
 This guide explains how to **configure subagent orchestration** when using ai-eng-system with OpenCode or Claude Code. 
 
 **ai-eng-system provides**:
-- ✅ 29 specialized agents (code-reviewer, architect-advisor, etc.)
-- ✅ 13 agent skills (prompt-refinement, text-cleanup, etc.)
+- ✅ 28 specialized agents (code-reviewer, architect-advisor, etc.)
+- ✅ 7 agent skills (prompt-refinement, text-cleanup, etc.)
 - ✅ 17 custom commands
 
 **This guide explains**:
@@ -490,8 +490,8 @@ You are working in a project that uses **ai-eng-system**, an advanced engineerin
 ## What is ai-eng-system?
 
 ai-eng-system provides:
-- **29 specialized agents** for engineering workflows
-- **13 agent skills** for enhanced prompting
+- **28 specialized agents** for engineering workflows
+- **7 agent skills** for enhanced prompting
 - **17 custom commands** for common tasks
 - Research-backed prompting techniques (+45-115% quality improvement)
 

@@ -226,13 +226,13 @@ ai-eng-system/
 ├── dist/                     # 🚫 Auto-generated platform outputs
 │   ├── .claude-plugin/       # Claude Code format
 │   │   ├── commands/         # 15 commands
-│   │   ├── agents/           # 29 agents
+│   │   ├── agents/           # 28 agents
 │   │   ├── skills/           # All skills
 │   │   ├── plugin.json       # Plugin metadata
 │   │   └── marketplace.json  # Marketplace configuration
 │   └── .opencode/            # OpenCode format (ai-eng- namespace)
 │       ├── command/           # 15 commands (ai-eng-*.md)
-│       └── agent/ai-eng/     # 29 agents (nested by category)
+│       └── agent/ai-eng/     # 28 agents (nested by category)
 ├── scripts/                  # Build and installation utilities
 │   ├── install.js            # Global/local installation
 │   └── build.ts              # Build system

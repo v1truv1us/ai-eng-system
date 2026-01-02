@@ -1,6 +1,6 @@
 # AI Engineering System
 
-Advanced development tools with context engineering, research orchestration, and 29 specialized agents for Claude Code & OpenCode.
+Advanced development tools with context engineering, research orchestration, and 28 specialized agents for Claude Code & OpenCode.
 
 ## 🚀 Quick Start
 
@@ -57,7 +57,7 @@ See [docs/spec-driven-workflow.md](./docs/spec-driven-workflow.md) for complete 
 | 2. Specify | `/ai-eng/specify` | Create feature specifications with TCRO framework |
 | 3. Plan | `/ai-eng/plan` | Create detailed implementation plans from specs |
 | 4. Work | `/ai-eng/work` | Execute plans with quality gates and validation |
-| 5. Review | `/ai-eng/review` | Multi-perspective code review (29 agents) |
+| 5. Review | `/ai-eng/review` | Multi-perspective code review (28 agents) |
 
 > **Methodology**: Based on [GitHub's spec-driven development approach](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/)
 
@@ -86,7 +86,7 @@ See [docs/spec-driven-workflow.md](./docs/spec-driven-workflow.md) for complete 
 - **Content & SEO**: `seo-specialist`, `prompt-optimizer`
 - **Plugin Development**: `agent-creator`, `command-creator`, `skill-creator`, `tool-creator`, `plugin-validator`
 
-### Skills (13 files)
+### Skills (7 files)
 - `devops` - Coolify deployment, Git worktree workflows
 - `prompting` - Research-backed incentive prompting techniques
 - `research` - Comprehensive multi-phase research orchestration
@@ -110,7 +110,7 @@ Learn how to configure subagent orchestration when using ai-eng-system with Open
 - **OpenCode**: Orchestrator is injected into primary agent's prompt (part of agent identity)
 - **Claude Code**: UserPromptSubmit Hook runs before every prompt and adds routing guidance
 
-Both ensure reliable routing to ai-eng-system's 29 specialized agents!
+Both ensure reliable routing to ai-eng-system's 28 specialized agents!
 
 ## 🏗️ Architecture
 
@@ -197,7 +197,7 @@ npm install ai-eng-system
 **When OpenCode loads the plugin**, it automatically:
 - ✅ Installs 16 commands to `.opencode/command/ai-eng/`
 - ✅ Installs 30 agents to `.opencode/agent/ai-eng/`
-- ✅ Installs 13 skill files to `.opencode/skills/`
+- ✅ Installs 7 skill files to `.opencode/skills/`
 
 ### Using Commands
 

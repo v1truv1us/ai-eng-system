@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.14] - 2026-01-01
+
+### Fixed
+- **Documentation Accuracy**: Corrected agent count from 29 to 28 across all documentation
+- **Skill Count**: Corrected skill file count from 13 to 7 (SKILL.md files only)
+- **TODO.md Cleanup**: Reorganized completed tasks, updated version references
+
+### Changed
+- **Version Consistency**: All documentation now reflects accurate counts
+- **TODO.md**: Moved completed High Priority items to Completed Tasks section
+
+### Infrastructure
+- **Build**: Stable
+- **Commands**: 17 total
+- **Agents**: 28 total
+- **Skills**: 7 SKILL.md files
+
+## [0.0.13] - 2025-12-31
+
+### Added
+- **Research Document**: Added thinking signature error analysis (`docs/research/2026-01-01-thinking-signature-error.md`)
+
+### Infrastructure
+- **Build**: Stable
+- **Commands**: 17 total
+- **Agents**: 28 total
+- **Skills**: 7 SKILL.md files
+
 ## [0.0.12] - 2025-12-30
 
 ### Added
@@ -35,8 +63,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Tests**: 457 pass, 0 fail
 - **TypeScript**: No errors
 - **Commands**: 17 total (5 primary + 12 additional)
-- **Agents**: 29 total
-- **Skills**: 13 files
+- **Agents**: 28 total
+- **Skills**: 7 files
 
 ## [0.0.10] - 2025-12-26
 
