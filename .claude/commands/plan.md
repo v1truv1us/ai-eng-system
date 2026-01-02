@@ -1,52 +1,68 @@
 ---
 name: ai-eng/plan
-description: Create a detailed implementation plan for a feature with spec-driven support
+description: Create detailed implementation plans from specifications
 agent: plan
+version: 2.0.0
+inputs:
+  - name: description
+    type: string
+    required: false
+    description: Natural language description of what to implement
+  - name: fromSpec
+    type: string
+    required: false
+    description: Path to specification file (alternative to description)
+  - name: fromResearch
+    type: string
+    required: false
+    description: Path to research document (for research-backed planning)
+outputs:
+  - name: plan_file
+    type: file
+    format: YAML
+    description: Implementation plan saved to plans/ directory
 ---
 
 # Plan Command
 
-Create a structured, atomic implementation plan for: $ARGUMENTS
+Create a detailed implementation plan for: $ARGUMENTS
 
-## Usage
+> **Phase 3 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Review
+
+## Quick Start
 
 ```bash
-/ai-eng/plan [description] [options]
-/ai-eng/plan --from-spec=<path> [options]
+# From description
+/ai-eng/plan "implement user authentication with JWT"
+
+# From specification
+/ai-eng/plan --from-spec=specs/auth/spec.md
+
+# From research
+/ai-eng/plan --from-research=docs/research/2026-01-01-auth-patterns.md
 ```
 
-### Options
+## Options
 
-- `--from-spec <path>`: Load specification from file (e.g., `specs/auth/spec.md`)
-- `--swarm`: Use Swarms multi-agent orchestration instead of legacy coordinator
-- `-s, --scope <scope>`: Plan scope (architecture|implementation|review|full) [default: full]
-- `-r, --requirements <reqs...>`: List of specific requirements
-- `-c, --constraints <constraints...>`: List of constraints to consider
-- `-o, --output <file>`: Output plan file [default: `specs/[feature]/plan.md`]
-- `-v, --verbose`: Enable verbose output
+| Option | Description |
+|--------|-------------|
+| `--swarm` | Use Swarms multi-agent orchestration |
+| `-s, --scope <scope>` | Plan scope (architecture\|implementation\|review\|full) [default: full] |
+| `-r, --requirements <reqs...>` | List of requirements |
+| `-c, --constraints <constraints...>` | List of constraints |
+| `-o, --output <file>` | Output plan file [default: generated-plan.yaml] |
+| `--from-spec <file>` | Create plan from specification file |
+| `--from-research <file>` | Create plan from research document |
+| `-v, --verbose` | Enable verbose output |
 
-## Planning Philosophy
+## Phase 0: Prompt Refinement (CRITICAL - Do First)
 
-**Atomic Plans**: Every plan should be decomposed into small, independently completable chunks that:
-- Can be implemented in a single focused session (15-60 minutes)
-- Have clear start and end states
-- Are testable in isolation
-- Don't require context from unfinished sibling tasks
+**You MUST invoke the `prompt-refinement` skill before proceeding.**
 
-**Spec-Driven**: When specification exists, plan is derived from spec requirements:
-- Each user story maps to one or more tasks
-- All spec acceptance criteria must be covered by plan
-- Non-functional requirements become technical constraints
-
-## Process
-
-### Phase 0: Prompt Refinement
-Use skill: `prompt-refinement`
-Phase: `plan`
-
-[The prompt-refinement skill will transform your input into a structured TCRO format by asking clarifying questions about task, context, requirements, and output format.]
-
-### Phase 1: Load Specification (if exists)
+**How to invoke:**
+1. Load the skill from: `skills/prompt-refinement/SKILL.md`
+2. Use phase: `plan`
+3. Follow the TCRO framework: Task, Context, Requirements, Output
 
 If `--from-spec` flag is provided:
 1. **Read specification** from `specs/[feature]/spec.md`
@@ -474,3 +490,17 @@ Successful planning achieves:
 - ✅ Risk assessment completed
 - ✅ Testing strategy defined
 - ✅ Ready to feed into `/ai-eng/work`
+
+## Execution
+
+After planning, execute the plan using:
+
+```bash
+bun run scripts/run-command.ts plan "$ARGUMENTS" [options]
+```
+
+For example:
+- `bun run scripts/run-command.ts plan "implement auth" --from-spec=specs/auth/spec.md --output=plans/auth.yaml`
+- `bun run scripts/run-command.ts plan --from-research=docs/research/auth.md --scope=implementation`
+
+$ARGUMENTS

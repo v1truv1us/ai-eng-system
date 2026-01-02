@@ -1,41 +1,6 @@
 // src/index.ts
 import fs from "node:fs";
 import path from "node:path";
-
-// src/types/common.ts
-function isRecord(value) {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-}
-function isStringRecord(value) {
-  if (!isRecord(value))
-    return false;
-  return Object.values(value).every((v) => typeof v === "string");
-}
-function isObject(value) {
-  return typeof value === "object" && value !== null;
-}
-function hasProperty(obj, key) {
-  return isRecord(obj) && key in obj;
-}
-function isArray(value) {
-  return Array.isArray(value);
-}
-function isString(value) {
-  return typeof value === "string";
-}
-function isNumber(value) {
-  return typeof value === "number" && !Number.isNaN(value);
-}
-function isBoolean(value) {
-  return typeof value === "boolean";
-}
-function getProperty(obj, key, defaultValue) {
-  if (!isRecord(obj))
-    return defaultValue;
-  return key in obj ? obj[key] : defaultValue;
-}
-
-// src/index.ts
 function copyRecursive(src, dest) {
   const stat = fs.statSync(src);
   if (stat.isDirectory()) {
@@ -72,24 +37,25 @@ function installToProject(pluginDir, projectDir) {
     copyRecursive(distSkillDir, skillDest);
   }
 }
-var AiEngSystem = async ({ directory }) => {
+var AiEngSystem = async ({
+  project,
+  client,
+  $,
+  directory,
+  worktree
+}) => {
   const pluginDir = path.dirname(new URL(import.meta.url).pathname);
   try {
     installToProject(pluginDir, directory);
   } catch (error) {
     console.error(`[ai-eng-system] Installation warning: ${error instanceof Error ? error.message : String(error)}`);
   }
-  return {};
+  return {
+    config: async (input) => {}
+  };
 };
+var src_default = AiEngSystem;
 export {
-  isStringRecord,
-  isString,
-  isRecord,
-  isObject,
-  isNumber,
-  isBoolean,
-  isArray,
-  hasProperty,
-  getProperty,
+  src_default as default,
   AiEngSystem
 };

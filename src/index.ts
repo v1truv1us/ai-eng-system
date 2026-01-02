@@ -2,9 +2,6 @@ import fs from "node:fs";
 import path from "node:path";
 import type { Plugin } from "@opencode-ai/plugin";
 
-// Re-export common types for use by other modules
-export * from "./types/common.js";
-
 /**
  * Copy a directory recursively
  */
@@ -80,8 +77,16 @@ function installToProject(pluginDir: string, projectDir: string): void {
  *
  * All files are copied from the plugin's dist/ directory to the project's
  * .opencode/ directory where opencode.jsonc is located.
+ *
+ * Plugin format follows OpenCode docs: https://opencode.ai/docs/plugins
  */
-export const AiEngSystem: Plugin = async ({ directory }) => {
+export const AiEngSystem: Plugin = async ({
+    project,
+    client,
+    $,
+    directory,
+    worktree,
+}) => {
     // Get the plugin directory (where this package is installed)
     const pluginDir = path.dirname(new URL(import.meta.url).pathname);
 
@@ -95,7 +100,13 @@ export const AiEngSystem: Plugin = async ({ directory }) => {
         );
     }
 
+    // Return hooks object with config function - OpenCode calls hook.config during init
     return {
-        // No hooks needed - the plugin's value is in the installed files
+        config: async (input: Record<string, unknown>) => {
+            // No-op config hook
+        },
     };
 };
+
+// Default export for plugin loaders that expect `export default`
+export default AiEngSystem;

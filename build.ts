@@ -618,6 +618,23 @@ async function syncToClaudePlugin(): Promise<void> {
     await cleanDirectory(pluginSkillsDir);
     await copySkillsFlat(SKILLS_DIR, pluginSkillsDir);
 
+    // Sync plugin.json and hooks.json from dist/.claude-plugin/
+    const distPluginJson = join(CLAUDE_DIR, "plugin.json");
+    if (existsSync(distPluginJson)) {
+        await copyFile(
+            distPluginJson,
+            join(ROOT_CLAUDE_PLUGIN_DIR, "plugin.json"),
+        );
+    }
+
+    const distHooksJson = join(CLAUDE_DIR, "hooks.json");
+    if (existsSync(distHooksJson)) {
+        await copyFile(
+            distHooksJson,
+            join(ROOT_CLAUDE_PLUGIN_DIR, "hooks.json"),
+        );
+    }
+
     console.log("  ✓ Synced to .claude-plugin/");
 }
 
@@ -639,6 +656,23 @@ async function syncToMarketplacePlugin(): Promise<void> {
     const mpSkillsDir = join(MARKETPLACE_PLUGIN_DIR, "skills");
     await cleanDirectory(mpSkillsDir);
     await copySkillsFlat(SKILLS_DIR, mpSkillsDir);
+
+    // Sync plugin.json and hooks.json from dist/.claude-plugin/
+    const distPluginJson = join(CLAUDE_DIR, "plugin.json");
+    if (existsSync(distPluginJson)) {
+        await copyFile(
+            distPluginJson,
+            join(MARKETPLACE_PLUGIN_DIR, "plugin.json"),
+        );
+    }
+
+    const distHooksJson = join(CLAUDE_DIR, "hooks.json");
+    if (existsSync(distHooksJson)) {
+        await copyFile(
+            distHooksJson,
+            join(MARKETPLACE_PLUGIN_DIR, "hooks.json"),
+        );
+    }
 
     console.log("  ✓ Synced to plugins/ai-eng-system/");
 }

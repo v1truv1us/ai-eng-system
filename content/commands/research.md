@@ -2,7 +2,7 @@
 name: ai-eng/research
 description: Conduct comprehensive multi-phase research across codebase, documentation, and external sources
 agent: plan
-version: 1.0.0
+version: 2.0.0
 inputs:
   - name: query
     type: string
@@ -12,16 +12,6 @@ inputs:
     type: string
     required: false
     description: Path to ticket file (optional if query provided)
-  - name: scope
-    type: string
-    required: false
-    description: Research scope (codebase|documentation|external|all)
-    default: all
-  - name: depth
-    type: string
-    required: false
-    description: Research depth (shallow|medium|deep)
-    default: medium
 outputs:
   - name: research_document
     type: structured
@@ -33,43 +23,60 @@ outputs:
 
 Conduct comprehensive research for: $ARGUMENTS
 
-> **Phase 1 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Review  
-> See: [GitHub's spec-driven development methodology](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/)
+> **Phase 1 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Review
 
-## Usage
+## Quick Start
 
 ```bash
-/ai-eng/research [query] [options]
+# Basic research
+/ai-eng/research "authentication patterns"
+
+# With options
+/ai-eng/research "api design" --scope codebase --depth deep --verbose
+
+# Feed results into planning
+/ai-eng/research "caching strategies" --feed-into plan
 ```
 
-### Options
+## Options
 
-- `--swarm`: Use Swarms multi-agent orchestration instead of legacy coordinator
-- `-s, --scope <scope>`: Research scope (codebase|documentation|all) [default: all]
-- `-d, --depth <depth>`: Research depth (shallow|medium|deep) [default: medium]
-- `-o, --output <file>`: Output file path
-- `-f, --format <format>`: Export format (markdown|json|html) [default: markdown]
-- `--no-cache`: Disable research caching
-- `--feed-into <command>`: After research, invoke specified command with research context (specify|plan)
-- `-v, --verbose`: Enable verbose output
+| Option | Description |
+|--------|-------------|
+| `--swarm` | Use Swarms multi-agent orchestration |
+| `-s, --scope <scope>` | Research scope (codebase\|documentation\|external\|all) [default: all] |
+| `-d, --depth <depth>` | Research depth (shallow\|medium\|deep) [default: medium] |
+| `-o, --output <file>` | Output file path |
+| `-f, --format <format>` | Export format (markdown\|json\|html) [default: markdown] |
+| `--no-cache` | Disable research caching |
+| `--feed-into <command>` | After research, invoke specified command (specify\|plan) |
+| `-v, --verbose` | Enable verbose output |
 
-## Process
+## Phase 0: Prompt Refinement (CRITICAL - Do First)
 
-### Phase 0: Prompt Refinement
-Use skill: `prompt-refinement`
-Phase: `research`
+You MUST invoke the `prompt-refinement` skill before proceeding. This transforms vague prompts into structured TCRO format.
 
-[The prompt-refinement skill will transform your input into a structured TCRO format by asking clarifying questions about research scope, sources, depth, and deliverable format.]
+**How to invoke the skill:**
+1. Load the skill from: `skills/prompt-refinement/SKILL.md`
+2. Use phase: `research`
+3. Follow the TCRO framework: Task, Context, Requirements, Output
 
-## Expert Context
+**TCRO Framework:**
 
-You are a senior research analyst with 15+ years of experience at companies like Google, Stripe, and Netflix. Your expertise is in systematic investigation, pattern recognition, and synthesizing complex information into actionable insights. This research is critical to the project's success.
+| Element | Purpose | Key Question |
+|---------|---------|--------------|
+| **Task** | What's the job to be done? | "What specific outcome do you need?" |
+| **Context** | Why does this matter? | "What's the broader system/goal?" |
+| **Requirements** | What are the constraints? | "Must-haves vs nice-to-haves?" |
+| **Output** | What format is needed? | "What should the deliverable look like?" |
 
-## Research Methodology
+**Process:**
+1. Load CLAUDE.md from project root
+2. Ask clarifying questions if needed
+3. Structure into TCRO format
+4. Apply incentive prompting (expert persona, stakes language, step-by-step reasoning)
+5. Confirm with user before proceeding
 
-Take a deep breath and execute this research systematically.
-
-### Phase 1: Context & Scope Definition (CRITICAL - Do First)
+## Phase 1: Context & Scope Definition
 
 1. **Parse the Research Request**
    - Identify the primary research question
@@ -82,15 +89,11 @@ Take a deep breath and execute this research systematically.
    - Read any referenced tickets or documents completely
    - Identify what information already exists
 
-### Phase 2: Parallel Discovery
+## Phase 2: Parallel Discovery
 
-#### Subagent Communication Protocol (Minimal)
+When spawning discovery agents, include a **Context Handoff Envelope**:
 
-When you spawn EACH discovery agent, include a small **Context Handoff Envelope** in the prompt. Subagents run in a separate context; do not assume they know anything unless you include it.
-
-Use this exact structure:
-
-```text
+```
 <CONTEXT_HANDOFF_V1>
 Goal: (1 sentence)
 Scope: (codebase|docs|external|all)
@@ -104,7 +107,7 @@ Output format: RESULT_V1
 
 All agents must respond with:
 
-```text
+```
 <RESULT_V1>
 RESULT:
 EVIDENCE:
@@ -114,7 +117,7 @@ CONFIDENCE: 0.0-1.0
 </RESULT_V1>
 ```
 
-Spawn these agents CONCURRENTLY for maximum efficiency:
+**Spawn these agents CONCURRENTLY:**
 
 | Agent | Task |
 |-------|------|
@@ -124,7 +127,7 @@ Spawn these agents CONCURRENTLY for maximum efficiency:
 
 Wait for all discovery agents to complete before proceeding.
 
-### Phase 3: Sequential Deep Analysis
+## Phase 3: Sequential Deep Analysis
 
 Based on discovery results, run analyzers SEQUENTIALLY:
 
@@ -137,9 +140,9 @@ For complex research, consider adding:
 - `database-expert` - Data layer concerns
 - `security-scanner` - Security assessment
 
-### Phase 4: Synthesis & Documentation
+## Phase 4: Synthesis & Documentation
 
-Create a comprehensive research document with:
+Create a comprehensive research document saved to `docs/research/[date]-[topic-slug].md`:
 
 ```markdown
 ---
@@ -179,6 +182,7 @@ agents_used: [list of agents]
 [Patterns, design decisions, relationships]
 
 ## Recommendations
+
 ### Immediate Actions
 1. [Priority action]
 
@@ -190,6 +194,11 @@ agents_used: [list of agents]
 
 ## Open Questions
 - [ ] [Unresolved questions]
+
+## Confidence Assessment
+Confidence: 0.X
+Assumptions: [List assumptions]
+Limitations: [List limitations]
 ```
 
 ## Quality Checklist
@@ -208,33 +217,28 @@ Save research document to `docs/research/[date]-[topic-slug].md`
 
 Rate your confidence in the research findings (0-1) and identify any assumptions or limitations.
 
-## Integration
-
-### Feeds Into
-- `/ai-eng/specify` - Use `--feed-into=specify` to pass research findings to specification phase
-- `/ai-eng/plan` - Use `--feed-into=plan` to pass research findings directly to planning
-
-### Feed-Into Workflow
+## Integration: --feed-into Workflow
 
 When `--feed-into` is used:
 
 1. **Save research document** to standard location
 2. **Load research findings** as context for target command
-3. **Pass research path** to target command automatically
+3. **Automatically invoke** the next command with research context
 
 Example:
 ```bash
-# Research that feeds into specification
 /ai-eng/research "authentication patterns" --feed-into=specify
-
-# This:
-# 1. Completes research phase
-# 2. Saves to docs/research/[date]-auth-patterns.md
-# 3. Automatically invokes /ai-eng/specify --from-research=docs/research/[date]-auth-patterns.md
 ```
 
-The target command will receive the research findings in its context, eliminating the need to manually copy-paste research results.
+This:
+1. Completes research phase
+2. Saves to `docs/research/[date]-auth-patterns.md`
+3. Invokes `/ai-eng/specify --from-research=docs/research/[date]-auth-patterns.md`
 
-Rate your confidence in the research findings (0-1) and identify any assumptions or limitations.
+## Expert Context
+
+You are a senior research analyst with 15+ years of experience at companies like Google, Stripe, and Netflix. Your expertise is in systematic investigation, pattern recognition, and synthesizing complex information into actionable insights.
+
+**Take a deep breath and execute this research systematically.**
 
 $ARGUMENTS

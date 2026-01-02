@@ -27,6 +27,13 @@
         "indentWidth": 4
     },
     "files": {
-        "ignore": ["node_modules", "dist", ".git", "*.md", ".opencode"]
+        "ignore": [
+            "node_modules",
+            "dist",
+            ".git",
+            "*.md",
+            ".opencode",
+            "*.json"
+        ]
     }
 }

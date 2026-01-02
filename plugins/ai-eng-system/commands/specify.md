@@ -2,36 +2,55 @@
 name: ai-eng/specify
 description: Create a feature specification using structured requirements gathering
 agent: plan
+version: 2.0.0
+inputs:
+  - name: feature
+    type: string
+    required: false
+    description: Feature description or name
+  - name: fromResearch
+    type: string
+    required: false
+    description: Path to research document
+outputs:
+  - name: spec_file
+    type: file
+    format: Markdown
+    description: Specification saved to specs/[feature]/spec.md
 ---
 
 # Specify Command
 
-Create a comprehensive feature specification by gathering requirements
-through structured clarification using the TCRO framework.
+Create a comprehensive feature specification: $ARGUMENTS
 
-## Usage
+> **Phase 2 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Review
+
+## Quick Start
 
 ```bash
-/ai-eng/specify [feature-description]
-/ai-eng/specify [feature] --from-research=<path>
-/ai-eng/specify [feature] --template=<template-name>
+/ai-eng/specify "user authentication system"
+/ai-eng/specify "payment integration" --from-research=docs/research/payment.md
+/ai-eng/specify "api design" --template=api
 ```
 
 ## Options
 
-- `--from-research <path>`: Use existing research document as context
-- `--template <name>`: Use a specific specification template
-- `--output <path>`: Custom output path (default: `specs/[feature]/spec.md`)
-- `--no-confirmation`: Skip confirmation prompts
-- `--verbose`: Show detailed process
+| Option | Description |
+|--------|-------------|
+| `--from-research <path>` | Use existing research document as context |
+| `--template <name>` | Use a specific specification template |
+| `--output <path>` | Custom output path [default: `specs/[feature]/spec.md`] |
+| `--no-confirmation` | Skip confirmation prompts |
+| `--verbose` | Show detailed process |
 
-## Process
+## Phase 0: Prompt Refinement (CRITICAL - Do First)
 
-### Step 0: Prompt Refinement
-Use skill: `prompt-refinement`
-Phase: `specify`
+**You MUST invoke the `prompt-refinement` skill before proceeding.**
 
-[The prompt-refinement skill will transform your input into a structured TCRO format by asking clarifying questions about: task, context, requirements, and output format.]
+**How to invoke:**
+1. Load the skill from: `skills/prompt-refinement/SKILL.md`
+2. Use phase: `specify`
+3. Follow the TCRO framework: Task, Context, Requirements, Output
 
 ### Step 1: Read Project Context
 
@@ -443,3 +462,22 @@ Successful specification achieves:
 - ✅ Aligned with project philosophy (CLAUDE.md)
 - ✅ Ready to feed into `/ai-eng/plan`
 - ✅ User reviewed and approved
+
+## Execution
+
+After specification, create a plan using:
+
+```bash
+bun run scripts/run-command.ts specify "$ARGUMENTS" [options]
+```
+
+For example:
+- `bun run scripts/run-command.ts specify "user auth" --from-research=docs/research/auth.md --output=specs/auth/spec.md`
+- `bun run scripts/run-command.ts specify "payment system" --template=api --verbose`
+
+## Integration
+
+- Can use output from `/ai-eng/research` via `--from-research`
+- Feeds into `/ai-eng/plan` for implementation planning
+
+$ARGUMENTS

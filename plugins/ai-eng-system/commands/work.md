@@ -2,33 +2,55 @@
 name: ai-eng/work
 description: Execute a plan or task with systematic tracking, quality gates, and comprehensive validation.
 agent: build
+version: 2.0.0
+inputs:
+  - name: plan
+    type: string
+    required: false
+    description: Plan file path or task ID
+  - name: fromPlan
+    type: string
+    required: false
+    description: Path to plan file to execute
+outputs:
+  - name: execution_report
+    type: structured
+    format: JSON
+    description: Execution report with task results and quality gate outcomes
 ---
 
 # Work Command
 
-Execute a plan or task with systematic tracking, quality gates, and comprehensive validation.
+Execute a plan or task: $ARGUMENTS
 
-## Usage
+> **Phase 4 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Review
+
+## Quick Start
 
 ```bash
-/work [plan-file-or-task-id]
-/work --continue              # Resume interrupted work
-/work --validate-only         # Run validation without implementation
-/work --dry-run               # Show what would be done
+/ai-eng/work "specs/auth/plan.yaml"
+/ai-eng/work --from-plan=plans/auth.yaml --continue
+/ai-eng/work "FEAT-001" --dry-run
 ```
 
-## Execution Philosophy
+## Options
 
-**Quality-First Development**: Every implementation must pass quality gates before moving to the next task. No shortcuts, no technical debt accumulation.
+| Option | Description |
+|--------|-------------|
+| `--from-plan <path>` | Path to plan file to execute |
+| `--continue` | Resume interrupted work |
+| `--validate-only` | Run validation without implementation |
+| `--dry-run` | Show what would be done without executing |
+| `-v, --verbose` | Enable verbose output |
 
-**Spec-Driven Execution**: When specification exists, validate task completion against spec acceptance criteria throughout implementation.
+## Phase 0: Prompt Refinement (CRITICAL - Do First)
 
-## Phase 0: Prompt Refinement
+**You MUST invoke the `prompt-refinement` skill before proceeding.**
 
-Use skill: `prompt-refinement`
-Phase: `work`
-
-[The prompt-refinement skill will transform your input into a structured TCRO format by asking clarifying questions about task context, quality requirements, acceptance criteria, and output format.]
+**How to invoke:**
+1. Load the skill from: `skills/prompt-refinement/SKILL.md`
+2. Use phase: `work`
+3. Follow the TCRO framework: Task, Context, Requirements, Output
 
 ## Phase 1: Setup & Planning
 
@@ -536,3 +558,24 @@ A work session is successful when:
 - ✅ Build succeeds
 - ✅ PR created and reviewed
 - ✅ Code merged to main
+
+## Execution
+
+Execute a plan using:
+
+```bash
+bun run scripts/run-command.ts work "$ARGUMENTS" [options]
+```
+
+For example:
+- `bun run scripts/run-command.ts work "specs/auth/plan.yaml" --verbose`
+- `bun run scripts/run-command.ts work --from-plan=plans/auth.yaml --continue`
+- `bun run scripts/run-command.ts work "FEAT-001" --dry-run`
+
+## Integration
+
+- Reads from `/ai-eng/plan` output (plan.yaml)
+- Validates against `/ai-eng/specify` output (spec.md)
+- Feeds into `/ai-eng/review` for code review
+
+$ARGUMENTS
