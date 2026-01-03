@@ -204,7 +204,7 @@ Both Claude Code and OpenCode share the same command and agent definitions:
 - **Global Installation**: `~/.config/opencode/` (ai-eng- namespace)
    - Commands: `~/.config/opencode/command/ai-eng-*`
    - Agents: `~/.config/opencode/agent/ai-eng/`
-   - Skills: `~/.config/opencode/skills/`
+   - Skills: `~/.config/opencode/skill/`
 - **Project-Local**: `.opencode/` directory in project root
 - **Configuration**: `~/.config/opencode/opencode.jsonc`
 

@@ -1,7 +1,6 @@
 ---
 description: Write concise documentation pages in required format.
 mode: primary
-model: sonnet
 color: "#00FFFF"
 temperature: 0.3
 tools:

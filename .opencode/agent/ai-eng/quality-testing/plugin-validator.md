@@ -116,7 +116,6 @@ export default (async ({ project, client, $, directory, worktree }) => {
 #   name: agent-name
 #   description: Agent description
 #   mode: subagent
-#   model: sonnet
 #   color: cyan
 ```
 

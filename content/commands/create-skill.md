@@ -24,8 +24,8 @@ Create a new OpenCode skill using AI assistance.
 ## Output Location
 
 Skill will be saved to:
-- Project-local: `.opencode/skills/[skill-name]/SKILL.md`
-- Global: `~/.config/opencode/skills/[skill-name]/SKILL.md`
+- Project-local: `.opencode/skill/[skill-name]/SKILL.md`
+- Global: `~/.config/opencode/skill/[skill-name]/SKILL.md`
 - Ferg content: `content/skills/[skill-name]/SKILL.md`
 
 ## Examples

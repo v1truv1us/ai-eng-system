@@ -12,10 +12,10 @@ Every OpenCode extension follows this organizational pattern:
 project/
 ├── .opencode/
 │   ├── plugin/              # Plugin code (TypeScript)
-│   ├── command/              # Slash commands (.md files)
-│   ├── agent/                # Agent definitions (.md files)
-│   └── tool/                 # Custom tools (TypeScript files)
-├── .opencode/skills/           # Skills (auto-discovered)
+│   ├── command/             # Commands
+│   ├── agent/               # Agents
+│   └── tool/                # Custom tools
+├── .opencode/skill/           # Skills (auto-discovered)
 └── opencode.json             # Configuration (optional)
 ```
 
@@ -23,7 +23,7 @@ project/
 
 1. **Plugin Code**: TypeScript files in `.opencode/plugin/`
 2. **Component Locations**: Commands, agents in `.opencode/` with table format
-3. **Skills**: Auto-discovered by opencode-skills plugin from `.opencode/skills/`
+3. **Skills**: Auto-discovered by opencode-skills plugin from `.opencode/skill/`
 4. **Naming Convention**: Use kebab-case for all file names
 
 ## Plugin System
@@ -199,8 +199,8 @@ skill-name/
 
 ### Skill Discovery
 
-Skills are auto-discovered by the opencode-skills plugin:
-- Scans `.opencode/skills/`, `~/.opencode/skills/`, `~/.config/opencode/skills/`
+Skills are auto-discovered by opencode-skills plugin:
+- Scans `.opencode/skill/`, `~/.opencode/skill/`, `~/.config/opencode/skill/`
 - Registers tools named `skills_{{skill_name}}`
 - Validates YAML frontmatter
 - Loads skill content on demand

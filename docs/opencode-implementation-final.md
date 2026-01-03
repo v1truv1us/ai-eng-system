@@ -64,7 +64,7 @@ npm runs: postinstall script
   - Finds opencode.jsonc by traversing up directories
   - Installs to .opencode/command/ai-eng/
   - Installs to .opencode/agent/ai-eng/
-  - Installs to .opencode/skills/
+  - Installs to .opencode/skill/
 
 User runs: opencode
 
@@ -86,7 +86,7 @@ your-project/
     │   └── ai-eng/            # 16 commands
     ├── agent/
     │   └── ai-eng/            # 30 agents (5 categories)
-    └── skills/                # 15 skill files
+    └── skill/                 # 15 skill files
 ```
 
 ## Files Modified
@@ -166,7 +166,7 @@ Expected output:
 🔧 Installing AI Engineering System to /tmp/test-npm-install
   ✓ command/ai-eng/ (16 commands)
   ✓ agent/ai-eng/ (30 agents)
-  ✓ skills/
+  ✓ skill/
 
 ✅ Installation complete!
    Namespace: ai-eng

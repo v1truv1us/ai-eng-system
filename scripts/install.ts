@@ -23,18 +23,53 @@ const packageRoot = path.dirname(__dirname);
 const NAMESPACE_PREFIX = "ai-eng";
 
 /**
- * Find the nearest opencode.jsonc by traversing up from current directory
+ * Check if ai-eng-system plugin is referenced in opencode.jsonc
  */
-function findOpenCodeConfig(startDir: string): string | null {
-    let currentDir = startDir;
-    const root = path.parse(startDir).root;
+function isPluginReferenced(configPath: string): boolean {
+    try {
+        const configContent = fs.readFileSync(configPath, "utf-8");
+        const config: any = JSON.parse(configContent);
 
-    while (currentDir !== root) {
-        const configPath = path.join(currentDir, "opencode.jsonc");
-        if (fs.existsSync(configPath)) {
-            return configPath;
+        // Check if plugin array contains ai-eng-system
+        if (Array.isArray(config.plugin)) {
+            return config.plugin.includes("ai-eng-system");
         }
-        currentDir = path.dirname(currentDir);
+
+        return false;
+    } catch (error) {
+        // Invalid JSON or read error - not referenced
+        return false;
+    }
+}
+
+/**
+ * Find OpenCode config in supported locations
+ * Priority: project .opencode/ → global ~/.config/opencode/
+ */
+function findOpenCodeConfig(
+    startDir: string,
+): { path: string; scope: "project" | "global" } | null {
+    const homeDir = process.env.HOME || process.env.USERPROFILE || "";
+
+    // 1. Check project-local: <project>/.opencode/opencode.jsonc
+    const projectConfigPath = path.join(
+        startDir,
+        ".opencode",
+        "opencode.jsonc",
+    );
+    if (fs.existsSync(projectConfigPath)) {
+        return { path: projectConfigPath, scope: "project" };
+    }
+
+    // 2. Check global: ~/.config/opencode/opencode.jsonc
+    const globalConfigPath = path.join(
+        homeDir,
+        ".config",
+        "opencode",
+        "opencode.jsonc",
+    );
+    if (fs.existsSync(globalConfigPath)) {
+        return { path: globalConfigPath, scope: "global" };
     }
 
     return null;
@@ -222,10 +257,11 @@ async function install(targetDir: string, silent = false): Promise<void> {
 
     const distDir = path.join(packageRoot, "dist");
     const distOpenCodeDir = path.join(distDir, ".opencode");
-    const distSkillsDir = path.join(distDir, "skills");
 
-    // Target directories
-    const targetOpenCodeDir = path.join(targetDir, ".opencode");
+    // Target directory is already the .opencode directory's parent
+    // targetDir should be the directory containing opencode.jsonc
+    // which is either <project>/.opencode/ or ~/.config/opencode/
+    const targetOpenCodeDir = targetDir;
 
     // Verify dist directory exists
     if (!fs.existsSync(distOpenCodeDir)) {
@@ -237,12 +273,15 @@ async function install(targetDir: string, silent = false): Promise<void> {
         process.exit(1);
     }
 
-    // Copy opencode.jsonc config if it exists (only if not already present)
-    const configSrc = path.join(distOpenCodeDir, "opencode.jsonc");
-    const configDest = path.join(targetDir, "opencode.jsonc");
-    if (fs.existsSync(configSrc) && !fs.existsSync(configDest)) {
-        fs.copyFileSync(configSrc, configDest);
-        if (!silent) console.log("  ✓ opencode.jsonc");
+    // Prevent nested .opencode/.opencode creation
+    // If targetDir already contains an .opencode directory, that would be nested
+    const nestedOpencodeDir = path.join(targetDir, ".opencode");
+    if (fs.existsSync(nestedOpencodeDir)) {
+        if (!silent) {
+            console.log(
+                "  ℹ️  .opencode/ directory already exists in target, skipping creation",
+            );
+        }
     }
 
     // Copy commands (namespaced under ai-eng/)
@@ -295,9 +334,9 @@ async function install(targetDir: string, silent = false): Promise<void> {
             );
     }
 
-    // Copy skills (to .opencode/skill/)
-    // OpenCode expects skills at .opencode/skill/ (singular, per https://opencode.ai/docs/skills)
-    const distSkillDir = path.join(distDir, ".opencode", "skill");
+    // Copy skills (to skill/ - SINGULAR, matching OpenCode docs)
+    // OpenCode expects skills at skill/ (singular, per https://opencode.ai/docs/skills)
+    const distSkillDir = path.join(distOpenCodeDir, "skill");
     if (fs.existsSync(distSkillDir)) {
         const skillDest = path.join(targetOpenCodeDir, "skill");
         copyRecursive(distSkillDir, skillDest);
@@ -310,7 +349,18 @@ async function install(targetDir: string, silent = false): Promise<void> {
 
     // Install Claude Code hooks (async operation)
     try {
-        await installClaudeHooks(targetDir, silent);
+        // Determine hooks target directory
+        // If installing globally, hooks go to ~/.claude/
+        // If installing to project, hooks go to <project>/.claude/
+        const isGlobal = targetDir.includes(".config");
+        const hooksTargetDir = isGlobal
+            ? path.join(
+                  process.env.HOME || process.env.USERPROFILE || "",
+                  ".claude",
+              )
+            : path.join(path.dirname(targetDir), ".claude");
+
+        await installClaudeHooks(hooksTargetDir, silent);
     } catch (error) {
         // Log error but don't fail the entire installation
         const message = error instanceof Error ? error.message : String(error);
@@ -332,31 +382,48 @@ async function main(): Promise<void> {
     if (isPostInstall) {
         // During npm install, find opencode.jsonc and install there
         const cwd = process.cwd();
-        const configPath = findOpenCodeConfig(cwd);
+        const configResult = findOpenCodeConfig(cwd);
 
-        if (!configPath) {
-            // Silent exit - no OpenCode project found
+        if (!configResult) {
+            // Silent exit - no OpenCode config found
             return;
         }
 
-        const targetDir = path.dirname(configPath);
+        // Check if plugin is referenced
+        if (!isPluginReferenced(configResult.path)) {
+            // Silent exit - plugin not referenced
+            return;
+        }
+
+        const targetDir = path.dirname(configResult.path);
         await install(targetDir, true); // Silent mode
     } else {
         // Manual invocation
         const cwd = process.cwd();
-        const configPath = findOpenCodeConfig(cwd);
+        const configResult = findOpenCodeConfig(cwd);
 
-        if (!configPath) {
+        if (!configResult) {
             console.error(
-                "❌ Error: opencode.jsonc not found in current directory or parent directories",
+                "❌ Error: opencode.jsonc not found in .opencode/ or ~/.config/opencode/",
             );
             console.error(
-                "   Please run this script from a project containing opencode.jsonc",
+                "   Create .opencode/opencode.jsonc in your project, or use ~/.config/opencode/opencode.jsonc for global installation",
             );
             process.exit(1);
         }
 
-        const targetDir = path.dirname(configPath);
+        // Check if plugin is referenced
+        if (!isPluginReferenced(configResult.path)) {
+            console.error(
+                "❌ Error: ai-eng-system is not referenced in opencode.jsonc plugin list",
+            );
+            console.error(
+                "   Add 'ai-eng-system' to the plugin array in opencode.jsonc",
+            );
+            process.exit(1);
+        }
+
+        const targetDir = path.dirname(configResult.path);
         await install(targetDir, false); // Verbose mode
     }
 }

@@ -14,7 +14,6 @@ Commands are the primary way to provide reusable workflows in both Claude Code a
 | **File References** | `@file.txt` | `@file.txt` | `@file.txt` |
 | **Shell Output** | Triple backticks | Exclamation marks | Exclamation marks |
 | **Agent Specification** | `agent: name` | `agent: name` | `agent: name` |
-| **Model Override** | `model: sonnet` | `model: sonnet` | `model: sonnet` |
 | **Tool Restrictions** | `allowed-tools: [...]` | `tools: { read: true }` | `tools: { read: true }` |
 
 ## Canonical Format (content/)
@@ -27,7 +26,6 @@ name: my-command
 description: Brief description of what this command does
 agent: build           # Optional: which agent handles this
 subtask: true          # Optional: run as subtask
-model: sonnet         # Optional: override model
 temperature: 0.3      # Optional: override temperature
 tools:                 # Optional: tool restrictions
   read: true
@@ -45,7 +43,6 @@ name: my-command
 description: Brief description of what this command does
 agent: build
 subtask: true
-model: sonnet
 temperature: 0.3
 tools:
   read: true

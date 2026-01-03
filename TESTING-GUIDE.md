@@ -14,7 +14,7 @@
 ~/.config/opencode/
 ├── command/ai-eng/          # All ai-eng commands
 ├── agent/ai-eng/            # All ai-eng agents
-├── skills/                  # ai-eng skills
+├── skill/                  # ai-eng skills
 └── opencode.jsonc           # Configuration
 ```
 

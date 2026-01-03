@@ -11,8 +11,7 @@ Agents are specialized AI assistants that provide focused expertise for specific
 | **Frontmatter** | YAML block | YAML block | YAML block |
 | **File Extension** | `.md` | `.md` | `.md` |
 | **Mode Specification** | `mode: subagent` | `mode: subagent` | `mode: subagent` |
-| **Model Override** | `model: sonnet` | `model: sonnet` | `model: sonnet` |
-| **Tool Control** | `tools: [...]` | `tools: { read: true }` | `tools: { read: true }` |
+| **Tool Control** | `tools: { read: true }` | `tools: { read: true }` | `tools: { read: true }` |
 | **Color Coding** | Named colors OK | Hex format only (e.g., `#00FFFF`) | Named colors OK (auto-converted to hex) |
 | **Temperature** | `temperature: 0.3` | `temperature: 0.3` | `temperature: 0.3` |
 | **Permissions** | N/A | `permission: { bash: deny }` | `permission: { bash: deny }` |
@@ -26,14 +25,11 @@ Use this format in `content/agents/` for maximum compatibility:
 name: my-agent
 description: Use this agent when user asks to "specific trigger phrases" or describes agent functionality. Examples: <example>...</example>
 mode: subagent
-model: sonnet
 color: cyan
 temperature: 0.3
 tools:
   read: true
   write: true
-permission:
-  bash: deny
 ---
 ```
 
@@ -46,7 +42,6 @@ Build.ts transforms canonical to Claude Code format (YAML frontmatter):
 name: my-agent
 description: Use this agent when user asks to "specific trigger phrases" or describes agent functionality. Examples: <example>...</example>
 mode: subagent
-model: sonnet
 color: cyan
 temperature: 0.3
 tools:

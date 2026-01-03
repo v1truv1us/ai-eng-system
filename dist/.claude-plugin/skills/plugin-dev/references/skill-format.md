@@ -77,7 +77,7 @@ version: 1.0.0
 ### Auto-Discovery
 
 The opencode-skills plugin automatically:
-1. Scans `.opencode/skills/`, `~/.opencode/skills/`, `~/.config/opencode/skills/`
+1. Scans `.opencode/skill/`, `~/.opencode/skill/`, `~/.config/opencode/skill/`
 2. Validates YAML frontmatter
 3. Registers tools as `skills_{{skill_name}}`
 4. Loads skill content via silent message insertion

@@ -2,7 +2,6 @@
 name: docs-writer
 description: Write concise documentation pages in required format.
 mode: primary
-model: sonnet
 color: cyan
 temperature: 0.3
 tools:

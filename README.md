@@ -197,7 +197,7 @@ npm install ai-eng-system
 **When OpenCode loads the plugin**, it automatically:
 - ✅ Installs 16 commands to `.opencode/command/ai-eng/`
 - ✅ Installs 30 agents to `.opencode/agent/ai-eng/`
-- ✅ Installs 7 skill files to `.opencode/skills/`
+- ✅ Installs 7 skill files to `.opencode/skill/`
 
 ### Using Commands
 

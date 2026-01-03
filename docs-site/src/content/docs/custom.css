@@ -1,0 +1,40 @@
+/* Custom styles for ai-eng-system documentation */
+
+/* Custom accent color */
+:root {
+    --sl-color-accent: hsl(240, 100%, 66%);
+    --sl-color-accent-low: hsl(240, 100%, 90%);
+    --sl-color-accent-high: hsl(240, 100%, 25%);
+}
+
+/* Better spacing for code blocks */
+pre {
+    margin: 1.5em 0;
+}
+
+/* Enhance card grid layout */
+.card-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+/* Custom scrollbar for code blocks */
+pre code {
+    scrollbar-width: thin;
+    scrollbar-color: var(--sl-color-text) var(--sl-color-bg);
+}
+
+pre code::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+pre code::-webkit-scrollbar-track {
+    background: var(--sl-color-bg);
+}
+
+pre code::-webkit-scrollbar-thumb {
+    background-color: var(--sl-color-text);
+    border-radius: 4px;
+}

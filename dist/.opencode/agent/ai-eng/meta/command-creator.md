@@ -66,7 +66,6 @@ Analyze user's description to understand:
 #   description: Brief description of what this command does
 #   agent: build           # Optional: which agent handles this
 #   subtask: true          # Optional: run as subtask
-#   model: sonnet         # Optional: override model
 #   temperature: 0.3      # Optional: override temperature
 #   tools:                 # Optional: tool restrictions
 #     read: true

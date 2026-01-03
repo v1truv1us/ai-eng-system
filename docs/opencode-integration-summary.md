@@ -25,7 +25,7 @@ The plugin (`src/index.ts`) automatically copies:
 
 - **Commands** → `{projectDir}/.opencode/command/ai-eng/`
 - **Agents** → `{projectDir}/.opencode/agent/ai-eng/`
-- **Skills** → `{projectDir}/.opencode/skills/`
+- **Skills** → `{projectDir}/.opencode/skill/`
 
 Files are copied from the package's `dist/` directory to the project's `.opencode/` directory.
 

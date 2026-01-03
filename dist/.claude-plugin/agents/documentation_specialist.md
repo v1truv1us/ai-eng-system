@@ -2,7 +2,6 @@
 name: documentation-specialist
 description: Analyze codebases and generate comprehensive technical documentation.
 mode: subagent
-model: sonnet
 color: cyan
 temperature: 0.3
 tools:

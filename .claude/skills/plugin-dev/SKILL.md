@@ -60,7 +60,6 @@ name: my-command
 description: What this command does
 agent: build           # Optional: which agent handles this
 subtask: true          # Optional: run as subtask
-model: sonnet         # Optional: override model
 temperature: 0.3      # Optional: temperature
 tools:                 # Optional: tool restrictions
   read: true
@@ -85,7 +84,6 @@ tools:                 # Optional: tool restrictions
 name: my-agent
 description: Use this agent when... <example>...</example>
 mode: subagent
-model: sonnet
 color: cyan
 temperature: 0.3
 tools:

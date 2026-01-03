@@ -1,7 +1,6 @@
 ---
 description: Analyze codebases and generate comprehensive technical documentation.
 mode: subagent
-model: sonnet
 color: "#00FFFF"
 temperature: 0.3
 tools:

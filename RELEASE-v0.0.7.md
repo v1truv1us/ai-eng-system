@@ -9,7 +9,7 @@ The plugin now **automatically installs** when loaded by OpenCode:
 - Receives `{ directory }` parameter pointing to where `opencode.jsonc` is located
 - Copies 16 commands to `.opencode/command/ai-eng/`
 - Copies 30 agents to `.opencode/agent/ai-eng/`
-- Copies 13 skill files to `.opencode/skills/`
+- Copies 13 skill files to `.opencode/skill/`
 
 #### Dual Installation System
 Two methods ensure files are always available:
@@ -131,7 +131,7 @@ your-project/
     │       ├── meta/                     # Plugin dev agents
     │       ├── operations/                # DevOps agents
     │       └── quality-testing/           # QA/Testing agents
-    └── skills/                            # 13 skill files
+    └── skill/                             # 13 skill files
         ├── AGENTS.md
         ├── devops/
         ├── plugin-dev/

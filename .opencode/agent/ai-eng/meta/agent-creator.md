@@ -74,7 +74,7 @@ Analyze user's description to understand:
 name: agent-identifier
 description: Use this agent when user asks to "specific trigger phrases" or describes agent functionality. Examples: <example>...</example>
 mode: subagent
-model: sonnet
+model: opencode/glm-4.7-free
 color: cyan
 temperature: 0.3
 tools:
