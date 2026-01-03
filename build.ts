@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+/// <reference types="bun-types" />
 /**
  * Build script for ai-eng-system
  *
@@ -6,12 +7,20 @@
  * - content/commands/*.md
  * - content/agents/*.md
  * - skills/<skill-pack>/SKILL.md
+ * - .claude/hooks/          (Claude Code prompt optimization hooks)
  * - .opencode/opencode.jsonc + .opencode/plugin/ai-eng-system.ts (optional)
+ * - src/opencode-tool-prompt-optimize.ts (OpenCode prompt optimization tool)
+ * - src/prompt-optimization/* (shared prompt optimization library)
  *
- * Outputs:
+ * Derived outputs:
  * - dist/.claude-plugin/   (for CI validation + tests)
  * - dist/.opencode/        (for OpenCode installs)
+ * - dist/prompt-optimization/ (shared library for npm package consumers)
  * - dist/skills/           (shared skill packs)
+ * - .claude/               (local development runtime)
+ * - .claude-plugin/        (local development runtime)
+ * - .opencode/             (local development runtime)
+ * - plugins/ai-eng-system/ (marketplace source)
  */
 
 import { existsSync, watch } from "node:fs";
@@ -30,13 +39,12 @@ import YAML from "yaml";
 const ROOT = process.env.TEST_ROOT ?? dirname(fileURLToPath(import.meta.url));
 const CONTENT_DIR = join(ROOT, "content");
 const SKILLS_DIR = join(ROOT, "skills");
+const PROMPT_OPT_DIR = join(ROOT, "src", "prompt-optimization");
 const DIST_DIR = join(ROOT, "dist");
 
 const CLAUDE_DIR = join(DIST_DIR, ".claude-plugin");
 const DIST_OPENCODE_DIR = join(DIST_DIR, ".opencode");
 const ROOT_OPENCODE_DIR = join(ROOT, ".opencode");
-
-// Sync target directories (committed, required for marketplace)
 const ROOT_CLAUDE_DIR = join(ROOT, ".claude");
 const ROOT_CLAUDE_PLUGIN_DIR = join(ROOT, ".claude-plugin");
 const MARKETPLACE_PLUGIN_DIR = join(ROOT, "plugins", "ai-eng-system");
@@ -440,30 +448,11 @@ async function buildClaude(): Promise<void> {
         JSON.stringify(pluginJson, null, 2),
     );
 
-    // hooks.json (for CI/tests)
-    const hooksJson = {
-        hooks: {
-            SessionStart: [
-                {
-                    description: "Initialize ai-eng-system on session start",
-                    config: {},
-                    hooks: [
-                        {
-                            type: "notification",
-                            config: {},
-                            message:
-                                "🔧 Ferg Engineering System loaded. Commands: /ai-eng/plan, /ai-eng/review, /ai-eng/seo, /ai-eng/work, /ai-eng/compound, /ai-eng/deploy, /ai-eng/optimize, /ai-eng/recursive-init, /ai-eng/create-plugin, /ai-eng/create-agent, /ai-eng/create-command, /ai-eng/create-skill, /ai-eng/create-tool, /ai-eng/research, /ai-eng/context",
-                        },
-                    ],
-                },
-            ],
-        },
-    };
-
-    await writeFile(
-        join(CLAUDE_DIR, "hooks.json"),
-        JSON.stringify(hooksJson, null, 2),
-    );
+    // Copy hooks from canonical source (.claude/hooks/) to dist/.claude-plugin/hooks/
+    const canonicalHooksDir = join(ROOT_CLAUDE_DIR, "hooks");
+    if (existsSync(canonicalHooksDir)) {
+        await copyDirRecursive(canonicalHooksDir, join(CLAUDE_DIR, "hooks"));
+    }
 
     // Optional: copy marketplace.json for dist validation convenience
     const marketplaceSrc = join(ROOT, ".claude-plugin", "marketplace.json");
@@ -492,6 +481,22 @@ async function buildOpenCode(): Promise<void> {
 
         await mkdir(commandsDir, { recursive: true });
         await mkdir(agentsDir, { recursive: true });
+        await mkdir(skillsDir, { recursive: true });
+
+        // Copy prompt optimization tool
+        const opencodeToolSrc = join(
+            ROOT,
+            "src",
+            "opencode-tool-prompt-optimize.ts",
+        );
+        const opencodeToolDir = join(targetDir, "tool");
+        if (existsSync(opencodeToolSrc)) {
+            await mkdir(opencodeToolDir, { recursive: true });
+            await copyFile(
+                opencodeToolSrc,
+                join(opencodeToolDir, "prompt-optimize.ts"),
+            );
+        }
 
         // Commands: MD-first, copy as-is.
         const commandFiles = await getMarkdownFiles(
@@ -558,6 +563,13 @@ async function copySkillsToDist(): Promise<void> {
     await copyDirRecursive(SKILLS_DIR, join(DIST_DIR, "skills"));
 }
 
+async function copyPromptOptimization(): Promise<void> {
+    await copyDirRecursive(
+        PROMPT_OPT_DIR,
+        join(DIST_DIR, "prompt-optimization"),
+    );
+}
+
 /**
  * Clean a directory by removing all contents and recreating it
  */
@@ -596,43 +608,84 @@ async function syncToLocalClaude(): Promise<void> {
     await cleanDirectory(claudeSkillsDir);
     await copySkillsFlat(SKILLS_DIR, claudeSkillsDir);
 
+    // Sync hooks to .claude/hooks/ directory
+    const claudeHooksDir = join(ROOT_CLAUDE_DIR, "hooks");
+    const hookFiles = [
+        ".claude/hooks/prompt-optimizer-hook.py",
+        ".claude/hooks/hooks.json",
+    ];
+    for (const hookFile of hookFiles) {
+        const src = join(ROOT, hookFile);
+        if (existsSync(src)) {
+            await mkdir(claudeHooksDir, { recursive: true });
+            await copyFile(src, join(claudeHooksDir, basename(hookFile)));
+        }
+    }
+
+    // Sync prompt optimization library to dist/ (for npm package consumers)
+    const promptOptFiles = [
+        "src/prompt-optimization/types.ts",
+        "src/prompt-optimization/analyzer.ts",
+        "src/prompt-optimization/techniques.ts",
+        "src/prompt-optimization/optimizer.ts",
+        "src/prompt-optimization/formatter.ts",
+        "src/prompt-optimization/index.ts",
+    ];
+    for (const file of promptOptFiles) {
+        const src = join(ROOT, file);
+        if (existsSync(src)) {
+            const dest = join(DIST_DIR, "prompt-optimization", basename(file));
+            await copyFile(src, dest);
+        }
+    }
+
     console.log("  ✓ Synced to .claude/");
 }
 
 /**
- * Sync commands, agents, and skills to .claude-plugin/ directory (marketplace validation)
+ * Sync prompt optimization library to dist/.claude-plugin/
+ * Note: Hooks are copied directly by buildClaude() from canonical source
  */
+async function syncPromptOptimizationLibrary(): Promise<void> {
+    // Copy prompt optimization library files (but not hooks - those are handled by buildClaude)
+    const promptOptFiles = [
+        "src/prompt-optimization/types.ts",
+        "src/prompt-optimization/analyzer.ts",
+        "src/prompt-optimization/techniques.ts",
+        "src/prompt-optimization/optimizer.ts",
+        "src/prompt-optimization/formatter.ts",
+        "src/prompt-optimization/index.ts",
+    ];
+
+    for (const file of promptOptFiles) {
+        const src = join(ROOT, file);
+        if (existsSync(src)) {
+            const dest = join(CLAUDE_DIR, basename(file));
+            await copyFile(src, dest);
+        }
+    }
+
+    console.log("  ✓ Synced prompt optimization library");
+}
+
 async function syncToClaudePlugin(): Promise<void> {
-    // Sync commands
-    const pluginCommandsDir = join(ROOT_CLAUDE_PLUGIN_DIR, "commands");
-    await cleanDirectory(pluginCommandsDir);
-    await copyMarkdownFiles(join(CONTENT_DIR, "commands"), pluginCommandsDir);
+    // Sync prompt optimization library
+    await syncPromptOptimizationLibrary();
 
-    // Sync agents
-    const pluginAgentsDir = join(ROOT_CLAUDE_PLUGIN_DIR, "agents");
-    await cleanDirectory(pluginAgentsDir);
-    await copyMarkdownFiles(join(CONTENT_DIR, "agents"), pluginAgentsDir);
-
-    // Sync skills
-    const pluginSkillsDir = join(ROOT_CLAUDE_PLUGIN_DIR, "skills");
-    await cleanDirectory(pluginSkillsDir);
-    await copySkillsFlat(SKILLS_DIR, pluginSkillsDir);
-
-    // Sync plugin.json and hooks.json from dist/.claude-plugin/
+    // Sync plugin.json and hooks directory from dist/.claude-plugin/
     const distPluginJson = join(CLAUDE_DIR, "plugin.json");
     if (existsSync(distPluginJson)) {
         await copyFile(
             distPluginJson,
-            join(ROOT_CLAUDE_PLUGIN_DIR, "plugin.json"),
+            join(MARKETPLACE_PLUGIN_DIR, "plugin.json"),
         );
     }
 
-    const distHooksJson = join(CLAUDE_DIR, "hooks.json");
-    if (existsSync(distHooksJson)) {
-        await copyFile(
-            distHooksJson,
-            join(ROOT_CLAUDE_PLUGIN_DIR, "hooks.json"),
-        );
+    // Copy hooks directory from dist/.claude-plugin/hooks/ to .claude-plugin/hooks/
+    const distHooksDir = join(CLAUDE_DIR, "hooks");
+    const rootClaudePluginHooksDir = join(ROOT_CLAUDE_PLUGIN_DIR, "hooks");
+    if (existsSync(distHooksDir)) {
+        await copyDirRecursive(distHooksDir, rootClaudePluginHooksDir);
     }
 
     console.log("  ✓ Synced to .claude-plugin/");
@@ -657,7 +710,7 @@ async function syncToMarketplacePlugin(): Promise<void> {
     await cleanDirectory(mpSkillsDir);
     await copySkillsFlat(SKILLS_DIR, mpSkillsDir);
 
-    // Sync plugin.json and hooks.json from dist/.claude-plugin/
+    // Sync plugin.json and hooks directory from dist/.claude-plugin/
     const distPluginJson = join(CLAUDE_DIR, "plugin.json");
     if (existsSync(distPluginJson)) {
         await copyFile(
@@ -666,12 +719,11 @@ async function syncToMarketplacePlugin(): Promise<void> {
         );
     }
 
-    const distHooksJson = join(CLAUDE_DIR, "hooks.json");
-    if (existsSync(distHooksJson)) {
-        await copyFile(
-            distHooksJson,
-            join(MARKETPLACE_PLUGIN_DIR, "hooks.json"),
-        );
+    // Copy hooks directory from dist/.claude-plugin/hooks/ to plugins/ai-eng-system/hooks/
+    const distHooksDir = join(CLAUDE_DIR, "hooks");
+    const marketplaceHooksDir = join(MARKETPLACE_PLUGIN_DIR, "hooks");
+    if (existsSync(distHooksDir)) {
+        await copyDirRecursive(distHooksDir, marketplaceHooksDir);
     }
 
     console.log("  ✓ Synced to plugins/ai-eng-system/");
@@ -844,6 +896,7 @@ async function buildAll(): Promise<void> {
     await buildClaude();
     await buildOpenCode();
     await copySkillsToDist();
+    await copyPromptOptimization();
     await buildNpmEntrypoint();
 
     // Sync to committed directories (required for marketplace)
