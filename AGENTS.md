@@ -1,6 +1,8 @@
 # Ferg Engineering Agents
 
-Context: UnFergettable-Designs (client web dev) and ferg-cod3s (personal projects).
+## Agent Coordination
+
+See **[CLAUDE.md](./CLAUDE.md)** — Project philosophy and core guidelines that guide all agent behavior.
 
 **See also:** [CLAUDE.md](./CLAUDE.md) — Project philosophy and core guidelines that guide all agent behavior.
 

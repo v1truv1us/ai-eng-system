@@ -1,7 +1,7 @@
 # Ferg Engineering System
 
 ## Who I Am
-I'm an architect leading AI-assisted development across UnFergettable-Designs (client web dev) and ferg-cod3s (personal projects).
+I'm an architect leading AI-assisted development across UnFergettable-Designs (client web dev) and personal projects.
 
 ## Philosophy: Compounding Engineering
 Each unit of work should make future work easier: Plan → Build → Review → Codify.
