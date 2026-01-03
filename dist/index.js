@@ -51,7 +51,8 @@ var AiEngSystem = async ({
     console.error(`[ai-eng-system] Installation warning: ${error instanceof Error ? error.message : String(error)}`);
   }
   return {
-    config: async (input) => {}
+    config: async (input) => {
+    }
   };
 };
 var src_default = AiEngSystem;

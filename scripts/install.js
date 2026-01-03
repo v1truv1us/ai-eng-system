@@ -1,16 +1,34 @@
 #!/usr/bin/env node
 
-// scripts/install.ts
+/**
+ * AI Engineering System Post-Install Script
+ *
+ * Runs when package is installed via npm/bun.
+ * Installs commands, agents, and skills to the project's .opencode directory.
+ * Installs hooks to the project's .claude/hooks/ directory for Claude Code.
+ *
+ * Usage:
+ * - Automatic: Runs during npm install
+ * - Manual: bun run install
+ */
+
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-const __filename2 = fileURLToPath(import.meta.url);
-const __dirname2 = path.dirname(__filename2);
-const packageRoot = path.dirname(__dirname2);
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const packageRoot = path.dirname(__dirname);
+
 const NAMESPACE_PREFIX = "ai-eng";
+
+/**
+ * Find the nearest opencode.jsonc by traversing up from current directory
+ */
 function findOpenCodeConfig(startDir) {
     let currentDir = startDir;
     const root = path.parse(startDir).root;
+
     while (currentDir !== root) {
         const configPath = path.join(currentDir, "opencode.jsonc");
         if (fs.existsSync(configPath)) {
@@ -18,10 +36,35 @@ function findOpenCodeConfig(startDir) {
         }
         currentDir = path.dirname(currentDir);
     }
+
     return null;
 }
+
+/**
+ * Check if target directory is a Claude Code project
+ */
+function isClaudeCodeProject(targetDir) {
+    // Check for .claude/ directory
+    if (fs.existsSync(path.join(targetDir, ".claude"))) {
+        return true;
+    }
+
+    // Check for CLAUDE_PROJECT_DIR environment variable pointing here
+    const projectDir = process.env.CLAUDE_PROJECT_DIR;
+    if (projectDir && path.resolve(projectDir) === path.resolve(targetDir)) {
+        return true;
+    }
+
+    // Install hooks anyway for users who might use Claude Code
+    return true;
+}
+
+/**
+ * Copy a directory recursively (sync version for OpenCode)
+ */
 function copyRecursive(src, dest) {
     const stat = fs.statSync(src);
+
     if (stat.isDirectory()) {
         fs.mkdirSync(dest, { recursive: true });
         const entries = fs.readdirSync(src);
@@ -33,16 +76,152 @@ function copyRecursive(src, dest) {
         fs.copyFileSync(src, dest);
     }
 }
-function install(targetDir, silent = false) {
-    if (!silent) {
-        console.log(
-            `\uD83D\uDD27 Installing AI Engineering System to ${targetDir}`,
+
+/**
+ * Copy a directory recursively (async version for Claude Code hooks)
+ */
+async function copyDirRecursive(src, dest) {
+    const stat = await fs.promises.stat(src);
+
+    if (stat.isDirectory()) {
+        await fs.promises.mkdir(dest, { recursive: true });
+        const entries = await fs.promises.readdir(src);
+        for (const entry of entries) {
+            await copyDirRecursive(
+                path.join(src, entry),
+                path.join(dest, entry),
+            );
+        }
+    } else {
+        await fs.promises.mkdir(path.dirname(dest), { recursive: true });
+        await fs.promises.copyFile(src, dest);
+    }
+}
+
+/**
+ * Backup existing hooks directory with timestamp
+ */
+async function backupHooksDir(hooksDir) {
+    if (!fs.existsSync(hooksDir)) {
+        return null;
+    }
+
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const backupDir = `${hooksDir}.backup-${timestamp}`;
+
+    try {
+        await copyDirRecursive(hooksDir, backupDir);
+        return backupDir;
+    } catch (error) {
+        throw new Error(
+            `Failed to backup existing hooks: ${error.message || String(error)}`,
         );
     }
+}
+
+/**
+ * Install Claude Code hooks from canonical marketplace source
+ */
+async function installClaudeHooks(targetDir, silent = false) {
+    const canonicalHooksDir = path.join(
+        packageRoot,
+        "plugins",
+        "ai-eng-system",
+        "hooks",
+    );
+    const targetHooksDir = path.join(targetDir, ".claude", "hooks");
+
+    // Verify canonical hooks directory exists
+    if (!fs.existsSync(canonicalHooksDir)) {
+        if (!silent) {
+            console.log(
+                "  ℹ️  No hooks found in plugins/ai-eng-system/hooks/ (skip)",
+            );
+        }
+        return;
+    }
+
+    // Check if target is a Claude Code project
+    const isClaudeProject = isClaudeCodeProject(targetDir);
+    if (!isClaudeProject && !silent) {
+        console.log(
+            "  ℹ️  Not a Claude Code project, installing hooks anyway...",
+        );
+    }
+
+    // Backup existing hooks if they exist
+    if (fs.existsSync(targetHooksDir)) {
+        if (!silent) {
+            console.log("  📦 Backing up existing hooks...");
+        }
+        const backupDir = await backupHooksDir(targetHooksDir);
+        if (backupDir && !silent) {
+            console.log(`    ✓ Backed up to: ${path.basename(backupDir)}`);
+        }
+    }
+
+    // Create target hooks directory (including .claude/ if needed)
+    await fs.promises.mkdir(targetHooksDir, { recursive: true });
+
+    // Copy hooks from canonical source
+    try {
+        await copyDirRecursive(canonicalHooksDir, targetHooksDir);
+    } catch (error) {
+        throw new Error(
+            `Failed to copy hooks: ${error.message || String(error)}`,
+        );
+    }
+
+    // Count copied files
+    const copiedFiles = [];
+    async function countFiles(dir, baseDir = dir) {
+        const entries = await fs.promises.readdir(dir, { withFileTypes: true });
+        for (const entry of entries) {
+            const fullPath = path.join(dir, entry.name);
+            if (entry.isDirectory()) {
+                await countFiles(fullPath, baseDir);
+            } else if (entry.isFile()) {
+                const relPath = path.relative(baseDir, fullPath);
+                copiedFiles.push(relPath);
+            }
+        }
+    }
+    await countFiles(targetHooksDir);
+
+    if (!silent) {
+        console.log(
+            `  ✓ Installed ${copiedFiles.length} hook file(s) to .claude/hooks/`,
+        );
+        if (copiedFiles.length > 0 && !silent) {
+            // Show file details
+            for (const file of copiedFiles) {
+                console.log(`    - ${file}`);
+            }
+        }
+        console.log(
+            "    📝 Hooks enable automatic prompt optimization (+45-115% quality)",
+        );
+        console.log(
+            "    🚫 Use '!' prefix to skip optimization for specific prompts",
+        );
+    }
+}
+
+/**
+ * Install AI Engineering System files
+ */
+async function install(targetDir, silent = false) {
+    if (!silent) {
+        console.log(`🔧 Installing AI Engineering System to ${targetDir}`);
+    }
+
     const distDir = path.join(packageRoot, "dist");
     const distOpenCodeDir = path.join(distDir, ".opencode");
-    const distSkillsDir = path.join(distDir, "skills");
+
+    // Target directories
     const targetOpenCodeDir = path.join(targetDir, ".opencode");
+
+    // Verify dist directory exists
     if (!fs.existsSync(distOpenCodeDir)) {
         if (!silent) {
             console.error(
@@ -51,12 +230,16 @@ function install(targetDir, silent = false) {
         }
         process.exit(1);
     }
+
+    // Copy opencode.jsonc config if it exists (only if not already present)
     const configSrc = path.join(distOpenCodeDir, "opencode.jsonc");
     const configDest = path.join(targetDir, "opencode.jsonc");
     if (fs.existsSync(configSrc) && !fs.existsSync(configDest)) {
         fs.copyFileSync(configSrc, configDest);
         if (!silent) console.log("  ✓ opencode.jsonc");
     }
+
+    // Copy commands (namespaced under ai-eng/)
     const commandsSrc = path.join(distOpenCodeDir, "command", NAMESPACE_PREFIX);
     if (fs.existsSync(commandsSrc)) {
         const commandsDest = path.join(
@@ -65,6 +248,7 @@ function install(targetDir, silent = false) {
             NAMESPACE_PREFIX,
         );
         copyRecursive(commandsSrc, commandsDest);
+
         const commandCount = fs
             .readdirSync(commandsSrc)
             .filter((f) => f.endsWith(".md")).length;
@@ -73,9 +257,18 @@ function install(targetDir, silent = false) {
                 `  ✓ command/${NAMESPACE_PREFIX}/ (${commandCount} commands)`,
             );
     }
+
+    // Copy agents (namespaced under ai-eng/)
     const agentsSrc = path.join(distOpenCodeDir, "agent", NAMESPACE_PREFIX);
     if (fs.existsSync(agentsSrc)) {
-        const countMarkdownFiles = (dir) => {
+        const agentsDest = path.join(
+            targetOpenCodeDir,
+            "agent",
+            NAMESPACE_PREFIX,
+        );
+        copyRecursive(agentsSrc, agentsDest);
+
+        function countMarkdownFiles(dir) {
             let count = 0;
             const entries = fs.readdirSync(dir);
             for (const entry of entries) {
@@ -88,43 +281,63 @@ function install(targetDir, silent = false) {
                 }
             }
             return count;
-        };
-        const agentsDest = path.join(
-            targetOpenCodeDir,
-            "agent",
-            NAMESPACE_PREFIX,
-        );
-        copyRecursive(agentsSrc, agentsDest);
+        }
         const agentCount = countMarkdownFiles(agentsSrc);
         if (!silent)
             console.log(
                 `  ✓ agent/${NAMESPACE_PREFIX}/ (${agentCount} agents)`,
             );
     }
-    if (fs.existsSync(distSkillsDir)) {
-        const skillsDest = path.join(targetOpenCodeDir, "skills");
-        copyRecursive(distSkillsDir, skillsDest);
-        if (!silent) console.log("  ✓ skills/");
+
+    // Copy skills (to .opencode/skill/)
+    const distSkillDir = path.join(distDir, ".opencode", "skill");
+    if (fs.existsSync(distSkillDir)) {
+        const skillDest = path.join(targetOpenCodeDir, "skill");
+        copyRecursive(distSkillDir, skillDest);
+
+        const skillDirs = fs.readdirSync(distSkillDir);
+        const skillCount = skillDirs.length;
+        if (!silent) console.log(`  ✓ skill/ (${skillCount} skills)`);
     }
+
+    // Install Claude Code hooks (async operation)
+    try {
+        await installClaudeHooks(targetDir, silent);
+    } catch (error) {
+        // Log error but don't fail the entire installation
+        const message = error.message || String(error);
+        console.error(`  ⚠️  Failed to install Claude Code hooks: ${message}`);
+    }
+
     if (!silent) {
-        console.log(`
-✅ Installation complete!`);
+        console.log("\n✅ Installation complete!");
         console.log(`   Namespace: ${NAMESPACE_PREFIX}`);
     }
 }
-function main() {
+
+/**
+ * Entry point
+ */
+async function main() {
     const isPostInstall = process.env.npm_lifecycle_event === "postinstall";
+
     if (isPostInstall) {
+        // During npm install, find opencode.jsonc and install there
         const cwd = process.cwd();
         const configPath = findOpenCodeConfig(cwd);
+
         if (!configPath) {
+            // Silent exit - no OpenCode project found
             return;
         }
+
         const targetDir = path.dirname(configPath);
-        install(targetDir, true);
+        await install(targetDir, true); // Silent mode
     } else {
+        // Manual invocation
         const cwd = process.cwd();
         const configPath = findOpenCodeConfig(cwd);
+
         if (!configPath) {
             console.error(
                 "❌ Error: opencode.jsonc not found in current directory or parent directories",
@@ -134,8 +347,14 @@ function main() {
             );
             process.exit(1);
         }
+
         const targetDir = path.dirname(configPath);
-        install(targetDir, false);
+        await install(targetDir, false); // Verbose mode
     }
 }
-main();
+
+main().catch((error) => {
+    const message = error.message || String(error);
+    console.error(`\n❌ Installation failed: ${message}`);
+    process.exit(1);
+});

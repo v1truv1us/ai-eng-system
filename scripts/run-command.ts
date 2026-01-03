@@ -6,11 +6,11 @@
  * It bridges OpenCode/Claude Code commands to the actual ai-eng-system CLI.
  */
 
-import { parseArgs, type ParsedOptions } from "./parse-command-options.js";
-import { existsSync, readdirSync, statSync } from "node:fs";
-import { join, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
 import { execSync, spawnSync } from "node:child_process";
+import { existsSync, readdirSync, statSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { type ParsedOptions, parseArgs } from "./parse-command-options.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

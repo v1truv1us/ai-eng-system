@@ -17,3 +17,6 @@ build.ts.tmp
 
 # Husky internal files
 .husky/
+
+# NPM tarballs
+*.tgz

@@ -75,7 +75,7 @@
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/v1truv1us/ai-eng-system"
+        "url": "git+https://github.com/v1truv1us/ai-eng-system.git"
     },
     "bugs": {
         "url": "https://github.com/v1truv1us/ai-eng-system/issues"
@@ -85,6 +85,8 @@
         "bun": ">=1.0.0"
     },
     "dependencies": {
+        "@astrojs/mdx": "^4.3.13",
+        "@astrojs/starlight": "^0.37.1",
         "@opencode-ai/plugin": "^1.0.218"
     }
 }

@@ -3,12 +3,23 @@
     "SessionStart": [
       {
         "description": "Initialize ai-eng-system on session start",
-        "config": {},
         "hooks": [
           {
             "type": "notification",
-            "config": {},
-            "message": "🔧 Ferg Engineering System loaded. Commands: /ai-eng/plan, /ai-eng/review, /ai-eng/seo, /ai-eng/work, /ai-eng/compound, /ai-eng/deploy, /ai-eng/optimize, /ai-eng/recursive-init, /ai-eng/create-plugin, /ai-eng/create-agent, /ai-eng/create-command, /ai-eng/create-skill, /ai-eng/create-tool, /ai-eng/research, /ai-eng/context"
+            "message": "🔧 AI Engineering System loaded. Prompt optimization active. Use ! prefix to skip optimization."
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "description": "Step-by-step prompt optimization with research-backed techniques",
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PROJECT_DIR}/.claude/hooks/prompt-optimizer-hook.py",
+            "timeout": 30
           }
         ]
       }
