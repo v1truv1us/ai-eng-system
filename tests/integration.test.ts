@@ -512,6 +512,7 @@ async function copyProjectStructure(): Promise<void> {
         "build.ts",
         "content/",
         "skills/",
+        ".claude-plugin/",
         "marketplace.json",
     ];
 

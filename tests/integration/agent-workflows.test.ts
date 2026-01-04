@@ -18,6 +18,7 @@ import {
 } from "../../src/agents/types.js";
 import { ExecutorCLI } from "../../src/cli/executor.js";
 import { PlanParser } from "../../src/execution/plan-parser.js";
+import { TaskExecutor } from "../../src/execution/task-executor.js";
 import { TaskStatus } from "../../src/execution/types.js";
 
 // Mock coordinator for testing - returns properly structured results
