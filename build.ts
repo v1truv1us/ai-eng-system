@@ -454,10 +454,15 @@ async function buildClaude(): Promise<void> {
         await copyDirRecursive(canonicalHooksDir, join(CLAUDE_DIR, "hooks"));
     }
 
-    // Optional: copy marketplace.json for dist validation convenience
+    // Optional: copy marketplace.json and hooks.json for dist validation convenience
     const marketplaceSrc = join(ROOT, ".claude-plugin", "marketplace.json");
     if (existsSync(marketplaceSrc)) {
         await copyFile(marketplaceSrc, join(CLAUDE_DIR, "marketplace.json"));
+    }
+
+    const hooksJsonSrc = join(ROOT, ".claude-plugin", "hooks.json");
+    if (existsSync(hooksJsonSrc)) {
+        await copyFile(hooksJsonSrc, join(CLAUDE_DIR, "hooks.json"));
     }
 }
 
@@ -675,16 +680,16 @@ async function syncToClaudePlugin(): Promise<void> {
     // Sync plugin.json and hooks directory from dist/.claude-plugin/
     const distPluginJson = join(CLAUDE_DIR, "plugin.json");
     if (existsSync(distPluginJson)) {
-        await copyFile(
-            distPluginJson,
-            join(MARKETPLACE_PLUGIN_DIR, "plugin.json"),
-        );
+        const destPluginJson = join(MARKETPLACE_PLUGIN_DIR, "plugin.json");
+        await ensureDirForFile(destPluginJson);
+        await copyFile(distPluginJson, destPluginJson);
     }
 
     // Copy hooks directory from dist/.claude-plugin/hooks/ to .claude-plugin/hooks/
     const distHooksDir = join(CLAUDE_DIR, "hooks");
     const rootClaudePluginHooksDir = join(ROOT_CLAUDE_PLUGIN_DIR, "hooks");
     if (existsSync(distHooksDir)) {
+        await mkdir(ROOT_CLAUDE_PLUGIN_DIR, { recursive: true });
         await copyDirRecursive(distHooksDir, rootClaudePluginHooksDir);
     }
 
@@ -713,16 +718,16 @@ async function syncToMarketplacePlugin(): Promise<void> {
     // Sync plugin.json and hooks directory from dist/.claude-plugin/
     const distPluginJson = join(CLAUDE_DIR, "plugin.json");
     if (existsSync(distPluginJson)) {
-        await copyFile(
-            distPluginJson,
-            join(MARKETPLACE_PLUGIN_DIR, "plugin.json"),
-        );
+        const destPluginJson = join(MARKETPLACE_PLUGIN_DIR, "plugin.json");
+        await ensureDirForFile(destPluginJson);
+        await copyFile(distPluginJson, destPluginJson);
     }
 
     // Copy hooks directory from dist/.claude-plugin/hooks/ to plugins/ai-eng-system/hooks/
     const distHooksDir = join(CLAUDE_DIR, "hooks");
     const marketplaceHooksDir = join(MARKETPLACE_PLUGIN_DIR, "hooks");
     if (existsSync(distHooksDir)) {
+        await mkdir(MARKETPLACE_PLUGIN_DIR, { recursive: true });
         await copyDirRecursive(distHooksDir, marketplaceHooksDir);
     }
 

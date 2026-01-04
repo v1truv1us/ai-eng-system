@@ -1,0 +1,22 @@
+{
+  "types": [
+    { "type": "feat", "section": "Added" },
+    { "type": "fix", "section": "Fixed" },
+    { "type": "docs", "section": "Documentation" },
+    { "type": "style", "hidden": true },
+    { "type": "refactor", "section": "Changed" },
+    { "type": "perf", "section": "Performance" },
+    { "type": "test", "hidden": true },
+    { "type": "build", "section": "Infrastructure" },
+    { "type": "ci", "section": "Infrastructure" },
+    { "type": "chore", "section": "Infrastructure" },
+    { "type": "revert", "section": "Reverted" }
+  ],
+  "preset": "conventionalcommits",
+  "scripts": {
+    "postchangelog": "git add CHANGELOG.md"
+  },
+  "commitUrlFormat": "https://github.com/v1truv1us/ai-eng-system/commits/{{hash}}",
+  "compareUrlFormat": "https://github.com/v1truv1us/ai-eng-system/compare/{{previousTag}}...{{currentTag}}",
+  "issueUrlFormat": "https://github.com/v1truv1us/ai-eng-system/issues/{{id}}"
+}
