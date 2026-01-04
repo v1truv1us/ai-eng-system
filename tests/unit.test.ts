@@ -224,7 +224,7 @@ describe("Global-Aware Installation", () => {
                 }),
             );
 
-            await mkdir(projectDir, ".opencode", { recursive: true });
+            await mkdir(join(projectDir, ".opencode"), { recursive: true });
             await writeFile(
                 join(projectDir, ".opencode", "opencode.jsonc"),
                 JSON.stringify({
@@ -244,7 +244,7 @@ describe("Global-Aware Installation", () => {
 
             // Don't create global config
             // Project config with plugin
-            await mkdir(projectDir, ".opencode", { recursive: true });
+            await mkdir(join(projectDir, ".opencode"), { recursive: true });
             await writeFile(
                 join(projectDir, ".opencode", "opencode.jsonc"),
                 JSON.stringify({
