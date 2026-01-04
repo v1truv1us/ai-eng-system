@@ -1,0 +1,32 @@
+# Dependencies
+node_modules
+bun.lockb
+
+# Build output
+dist
+.astro
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# IDE
+.vscode
+.idea
+
+# Git
+.git
+.gitignore
+
+# Documentation (not needed for build)
+README.md
+IMPLEMENTATION-COMPLETE.md
+COOLIFY-DEPLOYMENT.md
+
+# CI/CD
+.github
+
+# OS
+.DS_Store
+Thumbs.db

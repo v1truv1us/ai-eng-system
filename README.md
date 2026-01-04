@@ -168,10 +168,38 @@ bun test             # Run test suite
 - Tests: ✅ Passing (21/21)
 
 ## 📚 Documentation
+
+### Online Documentation
+**Deploy with Coolify** (recommended):
+- 📖 [Coolify Deployment Guide](docs-site/COOLIFY-DEPLOYMENT.md) - Complete deployment instructions
+- 🚀 Deploy to Coolify in 5 minutes
+
+**Built Site**: `docs-site/` directory
+
+### Developer Documentation
 - [Installation Guide](INSTALLATION.md) - Detailed setup instructions
 - [Agent Coordination](AGENTS.md) - Agent usage patterns and coordination
 - [Plugin Documentation](PLUGIN.md) - Technical plugin details
 - [Research Guide](docs/research-command-guide.md) - Research orchestration usage
+
+### Documentation Site
+
+The documentation site is built with **Astro + Starlight** and ready for deployment:
+
+```bash
+# Local development
+cd docs-site
+bun install
+bun run dev  # http://localhost:4321
+
+# Build for production
+bun run build
+
+# Deploy to Coolify
+# Repository path: docs-site/
+# Build command: bun install && bun run build
+# Output directory: dist
+```
 
 ---
 ## 💻 Usage Example

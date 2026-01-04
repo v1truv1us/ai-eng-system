@@ -2,9 +2,28 @@
 
 Official documentation site for ai-eng-system, built with [Astro](https://astro.build/) and [Starlight](https://starlight.astro.build/).
 
-## Quick Start
+## 🚀 Quick Deploy
 
-### Local Development
+### Deploy to Coolify (Recommended)
+
+1. Create service in Coolify
+2. Select your GitHub repository
+3. Set repository path: `docs-site/`
+4. Build command: `bun install && bun run build`
+5. Output directory: `dist`
+6. Deploy!
+
+📖 **Complete guide**: [COOLIFY-DEPLOYMENT.md](./COOLIFY-DEPLOYMENT.md)
+
+### Deploy to GitHub Pages
+
+Automatically deployed on push to `main` branch. Just enable GitHub Pages in repository settings.
+
+1. Go to **Settings** → **Pages**
+2. Select **GitHub Actions** as build source
+3. Push to `main` to deploy
+
+## 📝 Local Development
 
 ```bash
 # Install dependencies
@@ -48,7 +67,18 @@ docs-site/
 
 ## Deployment
 
-### GitHub Pages (Automatic)
+### 🟢 Coolify (Recommended)
+
+Fastest deployment with preview environments and custom domains.
+
+**Quick Deploy**:
+- Repository path: `docs-site/`
+- Build command: `bun install && bun run build`
+- Output directory: `dist`
+
+**Complete Guide**: [COOLIFY-DEPLOYMENT.md](./COOLIFY-DEPLOYMENT.md)
+
+### 🟡 GitHub Pages (Automatic)
 
 The site is automatically deployed to GitHub Pages on push to `main` branch.
 
@@ -59,6 +89,35 @@ To enable GitHub Pages in your repository:
 3. The `.github/workflows/deploy-docs.yml` workflow will handle deployment
 
 The site will be deployed to: `https://v1truv1us.github.io/ai-eng-system/`
+
+### 🐳 Docker
+
+Production-ready Dockerfile provided for containerized deployments.
+
+```bash
+# Build image
+docker build -t ai-eng-docs .
+
+# Run container
+docker run -p 8080:80 ai-eng-docs
+```
+
+### 🔵 Other Platforms
+
+Can be deployed to any static site hosting platform:
+- **Netlify**: Use static site deployment
+- **Vercel**: Use static site deployment
+- **Cloudflare Pages**: Use static site deployment
+
+## Deployment Comparison
+
+| Platform | Preview Deployments | Custom Domain | Environment Variables |
+|----------|-------------------|---------------|----------------------|
+| **Coolify** | ✅ Native | ✅ Easy | ✅ Full support |
+| **GitHub Pages** | ❌ | ✅ | ❌ Limited |
+| **Netlify** | ✅ | ✅ | ✅ |
+| **Vercel** | ✅ | ✅ | ✅ |
+| **Docker** | ✅ Manual | ✅ Manual | ✅ |
 
 ## Technologies
 
