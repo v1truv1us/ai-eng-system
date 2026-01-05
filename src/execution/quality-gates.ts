@@ -260,10 +260,16 @@ export class QualityGateRunner {
             name: `Quality Gate: ${gate.name}`,
             description: gate.description,
             type: this.mapGateTypeToTaskType(gate.type),
-            command: config.command || this.getDefaultCommandForGate(gate.type),
-            workingDirectory: config.workingDirectory,
-            environment: config.environment,
-            timeout: config.timeout || this.getDefaultTimeoutForGate(gate.type),
+            command:
+                (config.command as string | undefined) ||
+                this.getDefaultCommandForGate(gate.type),
+            workingDirectory: config.workingDirectory as string | undefined,
+            environment: config.environment as
+                | Record<string, string>
+                | undefined,
+            timeout:
+                (config.timeout as number | undefined) ||
+                this.getDefaultTimeoutForGate(gate.type),
             retry: {
                 maxAttempts: 1,
                 delay: 0,

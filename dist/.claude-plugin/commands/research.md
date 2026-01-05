@@ -36,6 +36,12 @@ Conduct comprehensive research for: $ARGUMENTS
 
 # Feed results into planning
 /ai-eng/research "caching strategies" --feed-into plan
+
+# Ralph Wiggum iteration for complex topics
+/ai-eng/research "microservices architecture patterns" --ralph --ralph-show-progress
+
+# Ralph Wiggum with custom iterations
+/ai-eng/research "database optimization techniques" --ralph --ralph-max-iterations 15 --ralph-verbose
 ```
 
 ## Options
@@ -50,6 +56,14 @@ Conduct comprehensive research for: $ARGUMENTS
 | `--no-cache` | Disable research caching |
 | `--feed-into <command>` | After research, invoke specified command (specify\|plan) |
 | `-v, --verbose` | Enable verbose output |
+| `--ralph` | Enable Ralph Wiggum iteration mode for persistent research refinement |
+| `--ralph-max-iterations <n>` | Maximum iterations for Ralph Wiggum mode [default: 10] |
+| `--ralph-completion-promise <text>` | Custom completion promise text [default: "Research is complete and comprehensive"] |
+| `--ralph-quality-gate <command>` | Command to run after each iteration for quality validation |
+| `--ralph-stop-on-gate-fail` | Stop iterations when quality gate fails [default: continue] |
+| `--ralph-show-progress` | Show detailed iteration progress |
+| `--ralph-log-history <file>` | Log iteration history to JSON file |
+| `--ralph-verbose` | Enable verbose Ralph Wiggum iteration output |
 
 ## Phase 0: Prompt Refinement (CRITICAL - Do First)
 

@@ -364,14 +364,15 @@ export class AgentCoordinator extends EventEmitter {
 
             // Collect findings if they exist
             if (result.output?.result?.findings) {
-                allFindings.push(...result.output.result.findings);
+                const findings = result.output.result.findings as unknown[];
+                allFindings.push(...findings);
             }
 
             // Collect recommendations if they exist
             if (result.output?.result?.recommendations) {
-                allRecommendations.push(
-                    ...result.output.result.recommendations,
-                );
+                const recommendations = result.output.result
+                    .recommendations as string[];
+                allRecommendations.push(...recommendations);
             }
 
             totalConfidence += this.getConfidenceValue(

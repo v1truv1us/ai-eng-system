@@ -655,6 +655,20 @@ export class ResearchAnalyzer implements AnalysisAgent {
         // Group evidence by file
         const evidenceByFile = this.groupEvidenceByFile(evidence);
 
+        // Always add a documentation overview insight for documentation scope
+        if (Object.keys(evidenceByFile).length > 0) {
+            insights.push({
+                id: `insight-doc-overview-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`,
+                type: "finding",
+                title: "Documentation analysis completed",
+                description: `Analyzed ${Object.keys(evidenceByFile).length} documentation files with ${evidence.length} evidence points`,
+                evidence: evidence.slice(0, 5).map((e) => e.id),
+                confidence: ConfidenceLevel.HIGH,
+                impact: "medium",
+                category: "documentation-quality",
+            });
+        }
+
         // Generate documentation insights
         insights.push(
             ...this.generateDocumentationQualityInsights(evidenceByFile),

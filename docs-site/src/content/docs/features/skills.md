@@ -24,6 +24,10 @@ text-cleanup: Removing AI-generated verbosity patterns
 
 plugin-dev: Plugin development knowledge base
 
+**ralph-wiggum**: Persistent iteration patterns for quality refinement (NEW!)
+
+> **🔄 Ralph Wiggum**: "Iteration > Perfection, Failures Are Data, Persistence Wins" - Now available across all phase commands with `--ralph` flag. [See detailed guide →](../features/ralph-wiggum/)
+
 ---
 
 ## Using Skills

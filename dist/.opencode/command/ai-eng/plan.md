@@ -40,6 +40,12 @@ Create a detailed implementation plan for: $ARGUMENTS
 
 # From research
 /ai-eng/plan --from-research=docs/research/2026-01-01-auth-patterns.md
+
+# Ralph Wiggum iteration for complex plans
+/ai-eng/plan "microservices migration" --ralph --ralph-show-progress
+
+# Ralph Wiggum with custom iterations and quality gate
+/ai-eng/plan --from-spec=specs/auth/spec.md --ralph --ralph-max-iterations 8 --ralph-quality-gate="rg 'Depends On:' specs/*/plan.md"
 ```
 
 ## Options
@@ -54,6 +60,14 @@ Create a detailed implementation plan for: $ARGUMENTS
 | `--from-spec <file>` | Create plan from specification file |
 | `--from-research <file>` | Create plan from research document |
 | `-v, --verbose` | Enable verbose output |
+| `--ralph` | Enable Ralph Wiggum iteration mode for persistent plan refinement |
+| `--ralph-max-iterations <n>` | Maximum iterations for Ralph Wiggum mode [default: 10] |
+| `--ralph-completion-promise <text>` | Custom completion promise text [default: "Plan is comprehensive and ready for execution"] |
+| `--ralph-quality-gate <command>` | Command to run after each iteration for quality validation |
+| `--ralph-stop-on-gate-fail` | Stop iterations when quality gate fails [default: continue] |
+| `--ralph-show-progress` | Show detailed iteration progress |
+| `--ralph-log-history <file>` | Log iteration history to JSON file |
+| `--ralph-verbose` | Enable verbose Ralph Wiggum iteration output |
 
 ## Phase 0: Prompt Refinement (CRITICAL - Do First)
 
@@ -76,6 +90,21 @@ If no spec is found:
 - Offer: "Proceed with inline requirements gathering? (y/n)"
 - If yes, gather requirements through clarifying questions
 - If no, exit and prompt user to run `/ai-eng/specify`
+
+### Ralph Wiggum Integration
+
+If `--ralph` flag is used, also invoke the `ralph-wiggum` skill:
+
+**Load Ralph Wiggum skill from:** `skills/workflow/ralph-wiggum/SKILL.md`
+
+**Ralph Wiggum Planning Cycle:**
+1. **Initial Plan** - Create comprehensive implementation plan
+2. **Gap Analysis** - Identify missing tasks, incomplete dependencies
+3. **Iterative Enhancement** - Add missing details, strengthen task definitions
+4. **Quality Validation** - Run quality gate if specified
+5. **Completion Check** - Continue until completion promise met or max iterations reached
+
+**Default Planning Completion Promise:** "Plan is comprehensive and ready for execution"
 
 ### Phase 2: Discovery (Research Mode)
 
@@ -502,5 +531,87 @@ bun run scripts/run-command.ts plan "$ARGUMENTS" [options]
 For example:
 - `bun run scripts/run-command.ts plan "implement auth" --from-spec=specs/auth/spec.md --output=plans/auth.yaml`
 - `bun run scripts/run-command.ts plan --from-research=docs/research/auth.md --scope=implementation`
+
+## Ralph Wiggum Iteration Mode
+
+When `--ralph` flag is enabled, the planning process follows a persistent refinement cycle:
+
+### Ralph Wiggum Planning Cycle
+
+**Iteration Process:**
+1. **Execute Planning Phases 1-7** - Run complete planning process
+2. **Gap Analysis** - Review plan for:
+   - Missing tasks or incomplete task definitions
+   - Unclear dependencies or integration points
+   - Insufficient testing coverage
+   - Incomplete risk assessment
+3. **Targeted Enhancement** - Focus next iteration on identified gaps:
+   - Add missing tasks or subtasks
+   - Strengthen dependency mapping
+   - Enhance testing strategy
+   - Improve risk mitigation strategies
+4. **Quality Gate** - Run quality gate command if specified
+5. **Progress Update** - Log iteration improvements and continue
+6. **Completion Check** - Stop when:
+   - Plan comprehensiveness promise is met
+   - Quality gates consistently pass
+   - Maximum iterations reached
+
+### Ralph Wiggum Quality Gates
+
+**Planning Quality Gate Examples:**
+```bash
+# Check task completeness
+rg "Acceptance Criteria:" specs/*/plan.md | wc -l
+
+# Validate dependencies mapping
+rg "Depends On:" specs/*/plan.md
+
+# Check risk assessment completeness
+rg "Impact.*Likelihood.*Mitigation" specs/*/plan.md
+```
+
+### Progress Tracking
+
+**Iteration Metrics:**
+- Iteration number and completion status
+- Tasks added or refined
+- Dependencies mapped or clarified
+- Risk mitigations added
+- Quality gate pass/fail status
+- Plan completeness score
+
+**Example Progress Output:**
+```
+🔄 Ralph Wiggum Planning Iteration 3/10
+📝 Tasks: 12 total (+2 this iteration)
+🔗 Dependencies: 8 mapped (+1 clarified this iteration)
+🛡️ Risk mitigations: 5 complete (+2 this iteration)
+🧪 Test coverage: 85% (+5% this iteration)
+✅ Quality gate: PASSED
+🎯 Plan completeness: 90% (improving)
+```
+
+### Ralph Wiggum Implementation Notes
+
+**Planning-Specific Considerations:**
+
+- **Task Atomicity**: Each iteration should ensure tasks are truly atomic
+- **Dependency Clarity**: Focus on making dependencies explicit and minimal
+- **Testing Integration**: Ensure comprehensive test coverage for all tasks
+- **Risk Coverage**: Each iteration should strengthen risk mitigation strategies
+
+**Default Settings:**
+- **Max Iterations**: 10 (sufficient for comprehensive planning refinement)
+- **Completion Promise**: "Plan is comprehensive and ready for execution"
+- **Quality Gate**: Check task completeness and dependency mapping
+- **Progress Tracking**: Always enabled in Ralph mode
+
+**Best Practices:**
+- Focus on making tasks more atomic each iteration
+- Strengthen dependency mapping to enable parallel execution
+- Enhance risk assessment with specific mitigations
+- Validate spec coverage (if spec exists) each iteration
+- Ensure all supporting artifacts are generated
 
 $ARGUMENTS

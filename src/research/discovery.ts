@@ -622,7 +622,9 @@ export class PatternFinder implements DiscoveryAgent {
     ): Promise<PatternMatch[]> {
         const matches: PatternMatch[] = [];
 
-        const globber = new Glob("**/*.{ts,js,tsx,jsx,py,java,cpp,c,h,hpp}");
+        const globber = new Glob(
+            "**/*.{ts,js,tsx,jsx,py,java,cpp,c,h,hpp,md,mdx}",
+        );
         const ignorePatterns = [
             "**/node_modules/**",
             "**/dist/**",
@@ -775,9 +777,42 @@ export class DiscoveryHandler {
         const startTime = Date.now();
 
         try {
-            // Execute all locators in parallel
+            // Filter locators based on research scope
+            let locatorsToRun = this.locators;
+
+            switch (query.scope) {
+                case ResearchScope.DOCUMENTATION:
+                    // Run ResearchLocator and PatternFinder for documentation scope
+                    // PatternFinder can identify patterns in documentation files too
+                    locatorsToRun = this.locators.filter(
+                        (l) =>
+                            l instanceof ResearchLocator ||
+                            l instanceof PatternFinder,
+                    );
+                    break;
+                case ResearchScope.CODEBASE:
+                    // Run CodebaseLocator and PatternFinder for codebase scope
+                    locatorsToRun = this.locators.filter(
+                        (l) =>
+                            l instanceof CodebaseLocator ||
+                            l instanceof PatternFinder,
+                    );
+                    break;
+                case ResearchScope.EXTERNAL:
+                    // Run ResearchLocator for external scope (documentation search)
+                    locatorsToRun = this.locators.filter(
+                        (l) => l instanceof ResearchLocator,
+                    );
+                    break;
+                default:
+                    // Run all locators for ALL scope
+                    locatorsToRun = this.locators;
+                    break;
+            }
+
+            // Execute filtered locators in parallel
             const results = await Promise.allSettled(
-                this.locators.map((locator) =>
+                locatorsToRun.map((locator) =>
                     this.executeWithTimeout(locator.discover(query)),
                 ),
             );

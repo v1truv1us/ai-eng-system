@@ -6,7 +6,7 @@ Advanced development tools with context engineering, research orchestration, and
 
 ### Spec-Driven Development (Recommended)
 
-This toolkit follows the **spec-driven development methodology** from GitHub's official blog post: [Spec-driven development with AI: Get started with a new open source toolkit](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/).
+This toolkit follows **spec-driven development methodology** from GitHub's official blog post: [Spec-driven development with AI: Get started with a new open source toolkit](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/).
 
 **The 5-Phase Workflow** (always in this order):
 
@@ -17,15 +17,17 @@ flowchart LR
     E -.->|Repeat| D
 ```
 
-| Phase | Command | Output |
-|-------|---------|--------|
-| 1. Research | `/ai-eng/research` | Context and findings |
-| 2. Specify | `/ai-eng/specify` | Feature specification |
-| 3. Plan | `/ai-eng/plan` | Implementation plan |
-| 4. Work | `/ai-eng/work` | Quality-gated code |
-| 5. Review | `/ai-eng/review` | Multi-agent approval |
+| Phase | Command | Output | Ralph Wiggum 🔄 |
+|-------|---------|--------|-----------------|
+| 1. Research | `/ai-eng/research` | Context and findings | `--ralph` for iterative deepening |
+| 2. Specify | `/ai-eng/specify` | Feature specification | `--ralph` for requirement refinement |
+| 3. Plan | `/ai-eng/plan` | Implementation plan | `--ralph` for task completeness |
+| 4. Work | `/ai-eng/work` | Quality-gated code | `--ralph` for TDD cycles |
+| 5. Review | `/ai-eng/review` | Multi-agent approval | `--ralph` for thorough analysis |
 
 This approach ensures specifications are your "source of truth" for what gets built, reducing guesswork and enabling more reliable AI-assisted development.
+
+🔄 **New: Ralph Wiggum Iteration** - Add `--ralph` flag to any phase command for persistent refinement until quality standards are met. See [Ralph Wiggum Integration Guide](./docs/ralph-wiggum-integration-complete.md).
 
 See [docs/spec-driven-workflow.md](./docs/spec-driven-workflow.md) for complete workflow guide with examples.
 
@@ -51,15 +53,17 @@ See [docs/spec-driven-workflow.md](./docs/spec-driven-workflow.md) for complete 
 
 **Core workflow for systematic development** (always research → specify → plan → work → review):
 
-| Phase | Command | Purpose |
-|-------|---------|---------|
-| 1. Research | `/ai-eng/research` | Multi-phase research with codebase and external context |
-| 2. Specify | `/ai-eng/specify` | Create feature specifications with TCRO framework |
-| 3. Plan | `/ai-eng/plan` | Create detailed implementation plans from specs |
-| 4. Work | `/ai-eng/work` | Execute plans with quality gates and validation |
-| 5. Review | `/ai-eng/review` | Multi-perspective code review (28 agents) |
+| Phase | Command | Purpose | Ralph Wiggum 🔄 |
+|-------|---------|---------|-----------------|
+| 1. Research | `/ai-eng/research` | Multi-phase research with codebase and external context | Iterative deepening, gap analysis |
+| 2. Specify | `/ai-eng/specify` | Create feature specifications with TCRO framework | Requirement refinement, completeness |
+| 3. Plan | `/ai-eng/plan` | Create detailed implementation plans from specs | Task atomicity, dependency mapping |
+| 4. Work | `/ai-eng/work` | Execute plans with quality gates and validation | TDD cycles, implementation refinement |
+| 5. Review | `/ai-eng/review` | Multi-perspective code review (28 agents) | Escalating focus, thorough analysis |
 
 > **Methodology**: Based on [GitHub's spec-driven development approach](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/)
+
+> **🔄 Ralph Wiggum**: Add `--ralph` flag to any phase command for persistent iteration. Perfect for complex tasks requiring multiple refinement cycles. [Learn more →](./docs/ralph-wiggum-integration-complete.md)
 
 ### Additional Commands (13 total)
 - `/ai-eng/optimize` - Prompt enhancement (+45% quality)
@@ -86,12 +90,15 @@ See [docs/spec-driven-workflow.md](./docs/spec-driven-workflow.md) for complete 
 - **Content & SEO**: `seo-specialist`, `prompt-optimizer`
 - **Plugin Development**: `agent-creator`, `command-creator`, `skill-creator`, `tool-creator`, `plugin-validator`
 
-### Skills (7 files)
+### Skills (8 files)
 - `devops` - Coolify deployment, Git worktree workflows
 - `prompting` - Research-backed incentive prompting techniques
 - `research` - Comprehensive multi-phase research orchestration
 - `plugin-dev` - Plugin development knowledge base and references
 - `text-cleanup` - Pattern-based text cleanup (slop, comments)
+- **`workflow/ralph-wiggum`** - Persistent iteration patterns for quality refinement (NEW!)
+
+> **🔄 Ralph Wiggum Philosophy**: "Iteration > Perfection, Failures Are Data, Persistence Wins" - Now available across all phase commands with `--ralph` flag
 
 ## 🔄 Subagent Orchestrator Configuration
 
@@ -181,6 +188,7 @@ bun test             # Run test suite
 - [Agent Coordination](AGENTS.md) - Agent usage patterns and coordination
 - [Plugin Documentation](PLUGIN.md) - Technical plugin details
 - [Research Guide](docs/research-command-guide.md) - Research orchestration usage
+- [Ralph Wiggum Integration](docs/ralph-wiggum-integration-complete.md) - Iterative refinement patterns (NEW!)
 
 ### Documentation Site
 
@@ -230,12 +238,21 @@ npm install ai-eng-system
 ### Using Commands
 
 ```bash
+# Basic workflow
 /ai-eng/plan              # Create implementation plan
 /ai-eng/review             # Multi-agent code review
 /ai-eng/work               # Execute implementation plan
 /ai-eng/seo                # SEO audit
 /ai-eng/create-agent       # Generate new agent
-# ... and 11 more
+
+# Ralph Wiggum iteration (NEW!)
+/ai-eng/work "feature" --ralph                    # TDD cycles until complete
+/ai-eng/research "topic" --ralph --ralph-max-iterations 15  # Deep research
+/ai-eng/specify "feature" --ralph --ralph-quality-gate="rg '\[NEEDS CLARIFICATION\]'"
+/ai-eng/plan --from-spec=specs/feature.md --ralph  # Enhanced planning
+/ai-eng/review src/ --ralph --ralph-focus=security # Thorough review
+
+# ... and 11 more commands
 ```
 
 ### Using Agents

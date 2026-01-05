@@ -9,6 +9,17 @@
 
 ## Medium Priority
 
+### Ralph Wiggum Integration - COMPLETED ✅
+
+- [x] `/ai-eng/research` command - Ralph Wiggum iteration for comprehensive research
+- [x] `/ai-eng/specify` command - Ralph Wiggum refinement for specifications
+- [x] `/ai-eng/plan` command - Ralph Wiggum enhancement for planning
+- [x] `/ai-eng/work` command - Ralph Wiggum iteration for TDD cycles
+- [x] `/ai-eng/review` command - Ralph Wiggum deepening for code reviews
+- [x] All 5 phase commands support `--ralph` flag with consistent options
+- [x] Documentation updated with Ralph Wiggum examples and guidance
+- [x] Documentation site includes Ralph Wiggum page and examples
+
 ### Feature Enhancements
 - [ ] Review and prioritize feature requests from GitHub issues
 - [ ] Implement any pending agent enhancements
@@ -22,10 +33,12 @@
 - [ ] Check for any TypeScript errors or warnings
 
 ### Documentation
-- [ ] Update README.md with latest features and improvements
-- [ ] Verify all command references are accurate (currently 17 commands)
-- [ ] Verify all agent references are accurate (currently 28 agents)
+- [x] Update README.md with latest features and improvements
+- [x] Verify all command references are accurate (currently 17 commands)
+- [x] Verify all agent references are accurate (currently 28 agents)
 - [ ] Update installation guides if needed
+- [x] Document Ralph Wiggum flag usage across all commands
+- [x] Add Ralph Wiggum examples to command documentation
 
 ## Low Priority
 
@@ -40,6 +53,18 @@
 - [ ] Consider additional platform integrations
 
 ## Completed Tasks
+
+### Ralph Wiggum Integration (2026-01-05)
+- [x] Added `--ralph` flag support to all 5 phase commands
+- [x] `/ai-eng/work` - Full TDD cycle with quality gates and progress tracking
+- [x] `/ai-eng/research` - Iterative research refinement with gap analysis
+- [x] `/ai-eng/specify` - Specification refinement with completeness tracking
+- [x] `/ai-eng/plan` - Planning enhancement with task atomicity focus
+- [x] `/ai-eng/review` - Multi-perspective review with escalating focus
+- [x] Consistent flag set across all commands (8 Ralph Wiggum options)
+- [x] Phase-specific completion promises and quality gates
+- [x] Progress tracking with iteration metrics and status updates
+- [x] Comprehensive documentation with examples and best practices
 
 ### Documentation & Count Fix (2026-01-01)
 - [x] Updated TODO.md version from 0.0.12 to 0.0.14

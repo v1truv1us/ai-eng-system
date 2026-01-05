@@ -513,7 +513,8 @@ ${contextStr || "No additional context provided"}`;
     }
 
     private async countLines(task: AgentTask): Promise<any> {
-        const files = task.input?.context?.files || [];
+        const files =
+            (task.input?.context?.files as string[] | undefined) || [];
         let totalLines = 0;
 
         for (const file of files) {
@@ -534,7 +535,8 @@ ${contextStr || "No additional context provided"}`;
 
     private async analyzeCode(task: AgentTask): Promise<any> {
         const hasFiles =
-            task.input?.context?.files && task.input.context.files.length > 0;
+            task.input?.context?.files &&
+            (task.input.context.files as string[]).length > 0;
         return {
             findings: hasFiles
                 ? [

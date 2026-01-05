@@ -10,15 +10,17 @@ All /ai-eng/* commands available.
 
 ## Core Commands
 
-/ai-eng/research - Multi-phase research orchestration
+/ai-eng/research - Multi-phase research orchestration (add `--ralph` for iterative deepening)
 
-/ai-eng/specify - Create feature specifications
+/ai-eng/specify - Create feature specifications (add `--ralph` for requirement refinement)
 
-/ai-eng/plan - Create implementation plans
+/ai-eng/plan - Create implementation plans (add `--ralph` for task completeness)
 
-/ai-eng/work - Execute plans with quality gates
+/ai-eng/work - Execute plans with quality gates (add `--ralph` for TDD cycles)
 
-/ai-eng/review - Multi-agent code review
+/ai-eng/review - Multi-agent code review (add `--ralph` for thorough analysis)
+
+> **🔄 Ralph Wiggum**: All core commands support `--ralph` flag for persistent iteration. See [Ralph Wiggum Integration](../features/ralph-wiggum/) for complete documentation.
 
 ---
 

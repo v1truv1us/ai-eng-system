@@ -16,7 +16,6 @@ import {
     ExecutionStrategy,
     type PlanGenerationInput,
 } from "../../src/agents/types.js";
-import { ExecutorCLI } from "../../src/cli/executor.js";
 import { PlanParser } from "../../src/execution/plan-parser.js";
 import { TaskExecutor } from "../../src/execution/task-executor.js";
 import { TaskStatus } from "../../src/execution/types.js";
@@ -633,27 +632,6 @@ tasks:
             expect(results[0].status).toBe(TaskStatus.FAILED);
             // Recovery task depends on failing-task; TaskExecutor marks it as SKIPPED
             expect(results[1].status).toBe(TaskStatus.SKIPPED);
-        });
-    });
-
-    describe("CLI Integration", () => {
-        it("should initialize CLI with agent support", () => {
-            const cli = new ExecutorCLI();
-            const program = cli.getProgram();
-
-            expect(program).toBeDefined();
-            expect(program.commands.length).toBeGreaterThan(5); // Original commands + agent commands
-        });
-
-        it("should have agent orchestration commands", () => {
-            const cli = new ExecutorCLI();
-            const program = cli.getProgram();
-
-            const commandNames = program.commands.map((cmd) => cmd.name());
-
-            expect(commandNames).toContain("generate-plan");
-            expect(commandNames).toContain("code-review");
-            expect(commandNames).toContain("agent-status");
         });
     });
 

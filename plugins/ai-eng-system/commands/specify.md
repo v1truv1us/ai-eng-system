@@ -31,6 +31,12 @@ Create a comprehensive feature specification: $ARGUMENTS
 /ai-eng/specify "user authentication system"
 /ai-eng/specify "payment integration" --from-research=docs/research/payment.md
 /ai-eng/specify "api design" --template=api
+
+# Ralph Wiggum iteration for complex features
+/ai-eng/specify "multi-tenant architecture" --ralph --ralph-show-progress
+
+# Ralph Wiggum with custom quality gate
+/ai-eng/specify "real-time collaboration" --ralph --ralph-quality-gate="rg '\[NEEDS CLARIFICATION\]' specs/*/spec.md" --ralph-stop-on-gate-fail
 ```
 
 ## Options
@@ -42,6 +48,14 @@ Create a comprehensive feature specification: $ARGUMENTS
 | `--output <path>` | Custom output path [default: `specs/[feature]/spec.md`] |
 | `--no-confirmation` | Skip confirmation prompts |
 | `--verbose` | Show detailed process |
+| `--ralph` | Enable Ralph Wiggum iteration mode for persistent specification refinement |
+| `--ralph-max-iterations <n>` | Maximum iterations for Ralph Wiggum mode [default: 10] |
+| `--ralph-completion-promise <text>` | Custom completion promise text [default: "Specification is complete and ready for implementation"] |
+| `--ralph-quality-gate <command>` | Command to run after each iteration for quality validation |
+| `--ralph-stop-on-gate-fail` | Stop iterations when quality gate fails [default: continue] |
+| `--ralph-show-progress` | Show detailed iteration progress |
+| `--ralph-log-history <file>` | Log iteration history to JSON file |
+| `--ralph-verbose` | Enable verbose Ralph Wiggum iteration output |
 
 ## Phase 0: Prompt Refinement (CRITICAL - Do First)
 

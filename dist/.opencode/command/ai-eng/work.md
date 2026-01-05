@@ -31,6 +31,12 @@ Execute a plan or task: $ARGUMENTS
 /ai-eng/work "specs/auth/plan.yaml"
 /ai-eng/work --from-plan=plans/auth.yaml --continue
 /ai-eng/work "FEAT-001" --dry-run
+
+# Ralph Wiggum iteration for complex implementation
+/ai-eng/work "implement feature" --ralph --ralph-show-progress
+
+# Ralph Wiggum with custom quality gates
+/ai-eng/work "auth system" --ralph --ralph-max-iterations 20 --ralph-quality-gate="npm test && npm run security-scan"
 ```
 
 ## Options
@@ -42,6 +48,14 @@ Execute a plan or task: $ARGUMENTS
 | `--validate-only` | Run validation without implementation |
 | `--dry-run` | Show what would be done without executing |
 | `-v, --verbose` | Enable verbose output |
+| `--ralph` | Enable Ralph Wiggum iteration mode for TDD-driven implementation |
+| `--ralph-max-iterations <n>` | Maximum iterations for Ralph Wiggum mode [default: 10] |
+| `--ralph-completion-promise <text>` | Custom completion promise text [default: "Implementation meets all acceptance criteria and passes quality gates"] |
+| `--ralph-quality-gate <command>` | Command to run after each iteration for quality validation |
+| `--ralph-stop-on-gate-fail` | Stop iterations when quality gate fails [default: continue] |
+| `--ralph-show-progress` | Show detailed iteration progress |
+| `--ralph-log-history <file>` | Log iteration history to JSON file |
+| `--ralph-verbose` | Enable verbose Ralph Wiggum iteration output |
 
 ## Phase 0: Prompt Refinement (CRITICAL - Do First)
 
@@ -51,6 +65,21 @@ Execute a plan or task: $ARGUMENTS
 1. Load the skill from: `skills/prompt-refinement/SKILL.md`
 2. Use phase: `work`
 3. Follow the TCRO framework: Task, Context, Requirements, Output
+
+### Ralph Wiggum Integration
+
+If `--ralph` flag is used, also invoke the `ralph-wiggum` skill:
+
+**Load Ralph Wiggum skill from:** `skills/workflow/ralph-wiggum/SKILL.md`
+
+**Ralph Wiggum Work Cycle:**
+1. **Initial Implementation** - Apply TDD cycle to first task
+2. **Gap Analysis** - Identify failing tests, incomplete features
+3. **Iterative Development** - Focus on fixing failures and completing implementation
+4. **Quality Validation** - Run quality gate after each iteration
+5. **Completion Check** - Continue until completion promise met or max iterations reached
+
+**Default Work Completion Promise:** "Implementation meets all acceptance criteria and passes quality gates"
 
 ## Phase 1: Setup & Planning
 
@@ -577,5 +606,89 @@ For example:
 - Reads from `/ai-eng/plan` output (plan.yaml)
 - Validates against `/ai-eng/specify` output (spec.md)
 - Feeds into `/ai-eng/review` for code review
+
+## Ralph Wiggum Iteration Mode
+
+When `--ralph` flag is enabled, the work execution follows a TDD-driven cycle:
+
+### Ralph Wiggum Work Cycle
+
+**Iteration Process:**
+1. **Execute Work Phase 1-6** - Run complete work process
+2. **Gap Analysis** - Review implementation for:
+   - Failing tests or incomplete test coverage
+   - Missing features or acceptance criteria
+   - Quality gate failures
+   - Insufficient implementation details
+3. **Targeted Development** - Focus next iteration on identified gaps:
+   - Fix failing tests
+   - Complete missing features
+   - Address quality gate failures
+   - Strengthen implementation
+4. **Quality Gate** - Run quality gate command if specified
+5. **Progress Update** - Log iteration improvements and continue
+6. **Completion Check** - Stop when:
+   - Implementation meets acceptance criteria
+   - Quality gates consistently pass
+   - Maximum iterations reached
+
+### Ralph Wiggum Quality Gates
+
+**Work Quality Gate Examples:**
+```bash
+# Check test execution
+npm test
+
+# Check linting
+npm run lint
+
+# Run security scans
+npm run security-scan
+
+# Check type checking
+bun tsc --noEmit
+```
+
+### Progress Tracking
+
+**Iteration Metrics:**
+- Iteration number and completion status
+- Tasks completed per iteration
+- Tests passing/total
+- Quality gate pass/fail status
+- Implementation progress
+- Confidence score
+
+**Example Progress Output:**
+```
+🔄 Ralph Wiggum Work Iteration 3/10
+✅ Tasks completed: 5 total (+2 this iteration)
+🧪 Tests passing: 18/20 (+3 this iteration)
+✅ Quality gate: PASSED (npm test && npm run lint)
+🎯 Implementation: 75% complete (+10% this iteration)
+📊 Confidence: 0.8 (improving)
+```
+
+### Ralph Wiggum Implementation Notes
+
+**Work-Specific Considerations:**
+
+- **TDD Cycle**: Each iteration follows Write Test → Implement → Test → Fix pattern
+- **Test Coverage**: Ensure all acceptance criteria have corresponding tests
+- **Quality Standards**: Run full quality suite after each iteration
+- **Progressive Development**: Each iteration should make measurable progress
+
+**Default Settings:**
+- **Max Iterations**: 10 (sufficient for most implementations)
+- **Completion Promise**: "Implementation meets all acceptance criteria and passes quality gates"
+- **Quality Gate**: Test execution + linting (recommended)
+- **Progress Tracking**: Always enabled in Ralph mode
+
+**Best Practices:**
+- Write failing tests before implementing features
+- Fix the immediate failing test, not hypothetical issues
+- Run quality gates after each iteration, not just at end
+- Track test coverage and improve it each iteration
+- Document any workarounds or temporary solutions for later cleanup
 
 $ARGUMENTS
