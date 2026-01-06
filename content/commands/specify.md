@@ -59,84 +59,9 @@ Create a comprehensive feature specification: $ARGUMENTS
 
 ## Phase 0: Prompt Refinement (CRITICAL - Do First)
 
-**You MUST invoke the `prompt-refinement` skill before proceeding.**
+Load `skills/prompt-refinement/SKILL.md` and use phase: `specify` to transform your prompt into structured TCRO format (Task, Context, Requirements, Output). See `templates/specification.md` for output structure.
 
-**How to invoke:**
-1. Load the skill from: `skills/prompt-refinement/SKILL.md`
-2. Use phase: `specify`
-3. Follow the TCRO framework: Task, Context, Requirements, Output
-
-### Step 1: Read Project Context
-
-Load `CLAUDE.md` from project root to understand:
-- Project philosophy and core principles
-- Tech stack preferences
-- Quality standards and conventions
-- Naming conventions
-- Architectural patterns
-
-If `CLAUDE.md` doesn't exist:
-- Proceed with generic defaults
-- Note in output: "No project constitution found, using generic defaults"
-
-### Step 2: Load Research (if specified)
-
-If `--from-research` flag is provided:
-1. Read the research document
-2. Extract key findings and recommendations
-3. Use findings to inform specification requirements
-4. Reference research in specification's "Context" section
-
-### Step 3: Gather Requirements
-
-Using the refined TCRO prompt from Step 0:
-
-#### Define User Stories
-
-Create user stories using the format:
-
-```markdown
-### US-001: [Story Title]
-**As a** [user type/role]
-**I want** [specific capability]
-**So that** [tangible benefit]
-
-#### Acceptance Criteria
-- [ ] [Specific, measurable criterion]
-- [ ] [Criterion 2]
-- [ ] [Criterion 3]
-```
-
-#### Define Non-Functional Requirements
-
-Document constraints for:
-- **Security**: Authentication, authorization, data privacy
-- **Performance**: Response times, throughput, latency targets
-- **Availability**: Uptime requirements, degradation handling
-- **Maintainability**: Logging, monitoring, documentation
-- **Compliance**: Regulatory requirements (GDPR, SOC2, HIPAA, etc.)
-- **Accessibility**: WCAG levels, screen reader support
-
-#### Mark Ambiguities
-
-Use `[NEEDS CLARIFICATION: question]` for any unclear requirements:
-
-```markdown
-## [NEEDS CLARIFICATION: Which OAuth providers?]
-The system should support social login integration.
-
-Options to clarify later:
-- Google OAuth
-- GitHub OAuth
-- Apple Sign in
-- Multiple providers
-```
-
-### Step 4: Generate Specification
-
-Output: `specs/[feature-name]/spec.md`
-
-#### Specification Structure
+## Specification Structure
 
 ```markdown
 # [Feature Name]

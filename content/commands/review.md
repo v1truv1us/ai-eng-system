@@ -56,27 +56,7 @@ Review code changes: $ARGUMENTS
 
 ## Phase 0: Prompt Refinement (CRITICAL - Do First)
 
-**You MUST invoke the `prompt-refinement` skill before proceeding.**
-
-**How to invoke:**
-1. Load the skill from: `skills/prompt-refinement/SKILL.md`
-2. Use phase: `review`
-3. Follow the TCRO framework: Task, Context, Requirements, Output
-
-### Ralph Wiggum Integration
-
-If `--ralph` flag is used, also invoke the `ralph-wiggum` skill:
-
-**Load Ralph Wiggum skill from:** `skills/workflow/ralph-wiggum/SKILL.md`
-
-**Ralph Wiggum Review Cycle:**
-1. **Initial Review** - Run comprehensive review with all perspectives
-2. **Gap Analysis** - Identify missed issues, insufficient coverage
-3. **Iterative Deepening** - Focus review on problematic areas or different perspectives
-4. **Quality Validation** - Run quality gate if specified
-5. **Completion Check** - Continue until completion promise met or max iterations reached
-
-**Default Review Completion Promise:** "Review is comprehensive and all findings addressed"
+Load `skills/prompt-refinement/SKILL.md` and use phase: `review` to transform your prompt into structured TCRO format (Task, Context, Requirements, Output). If using `--ralph`, also load `skills/workflow/ralph-wiggum/SKILL.md` for iterative review refinement.
 
 ## Perspectives
 
