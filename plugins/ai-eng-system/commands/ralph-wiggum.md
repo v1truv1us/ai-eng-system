@@ -33,6 +33,16 @@ Execute complete feature development cycle: $ARGUMENTS
 
 > **Phase 0-5 of Spec-Driven Workflow**: Orchestrates Research → Specify → Plan → Work → Review in continuous loop
 
+Take a deep breath and orchestrate this complex multi-phase workflow systematically. Manage iteration cycles, track progress across all phases, and ensure comprehensive quality at each stage.
+
+## Why This Matters
+
+This workflow handles complete feature development from research to review. Poor orchestration leads to wasted cycles, incomplete phases, and features that fail quality gates. This orchestration task is critical for ensuring features are developed thoroughly and meet all requirements.
+
+## The Challenge
+
+I bet you can't manage continuous iteration across all workflow phases without getting stuck in loops. The challenge is knowing when to advance to next phase versus when to return for refinement, balancing persistence with efficiency. Success means feature completes all requirements, passes all quality gates, and doesn't exceed reasonable iteration limits.
+
 ## Quick Start
 
 ```bash
@@ -746,3 +756,5 @@ bun run scripts/run-command.ts ralph-wiggum "feature description" [options]
 Examples:
 - `bun run scripts/run-command.ts ralph-wiggum "implement user auth" --checkpoint=all --verbose`
 - `bun run scripts/run-command.ts ralph-wiggum "API caching" --from-spec=specs/cache/spec.md --resume`
+
+After completing the full cycle, rate your confidence in feature completeness and quality (0.0-1.0). Identify any uncertainties about phase transitions, iterations that were inefficient, or areas where quality gates may have been too lenient or strict. Note any workflow improvements that could enhance future cycles.

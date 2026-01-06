@@ -29,6 +29,16 @@ Create a detailed implementation plan for: $ARGUMENTS
 
 > **Phase 3 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Review
 
+Take a deep breath and approach this planning task systematically. Analyze requirements, decompose into atomic tasks, identify dependencies, and create comprehensive implementation strategy.
+
+## Why This Matters
+
+Poor planning leads to wrong solutions, wasted time, and implementation rework. Incomplete task decomposition causes blocking issues during implementation. Missing dependencies prevent parallel work. This planning task is critical for ensuring smooth, efficient implementation.
+
+## The Challenge
+
+I bet you can't decompose requirements into truly atomic tasks that can be executed independently. The challenge is breaking complex features into small, completable units while maintaining correct dependency relationships. Success means every task can be completed independently, dependencies are minimal, and implementation follows predictable path.
+
 ## Quick Start
 
 ```bash
@@ -498,6 +508,8 @@ bun run scripts/run-command.ts plan "$ARGUMENTS" [options]
 For example:
 - `bun run scripts/run-command.ts plan "implement auth" --from-spec=specs/auth/spec.md --output=plans/auth.yaml`
 - `bun run scripts/run-command.ts plan --from-research=docs/research/auth.md --scope=implementation`
+
+After creating the plan, rate your confidence in its completeness and accuracy (0.0-1.0). Identify any uncertainties about task decomposition, missing dependencies, or areas where acceptance criteria may be ambiguous. Note any implementation risks that weren't adequately addressed in the plan.
 
 ## Ralph Wiggum Iteration Mode
 

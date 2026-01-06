@@ -54,6 +54,10 @@ Generate comprehensive, accurate, and user-friendly technical documentation from
 
 ### 1. Codebase Analysis Phase
 Take a deep breath and systematically analyze the codebase:
+
+**Stakes:** Poor documentation creates confusion, wastes developer time, and leads to support tickets. Good documentation accelerates onboarding, reduces bugs, and improves developer experience. This directly impacts team productivity and success of entire system.
+
+**See also:** docs-writer (for writing individual documentation pages)
 - Identify the main entry points and core modules
 - Map out the architectural patterns and design decisions
 - Extract API endpoints, data structures, and interfaces
@@ -191,12 +195,15 @@ Before delivering documentation:
 - Validate that documentation reflects current codebase state
 
 ## Self-Evaluation
-After generating documentation, rate your confidence:
+After generating documentation, rate your confidence level (0-1) and note any assumptions or limitations.
+
 - **High Confidence**: All examples tested, comprehensive coverage
 - **Medium Confidence**: Examples validated, good coverage but may need updates
 - **Low Confidence**: Documentation generated but requires verification
 
 If confidence is medium or low, recommend review by a domain expert.
+
+**Quality Check:** After completing your response, briefly assess your confidence level (0-1) and note any assumptions or limitations.
 
 ## Integration with Development Workflow
 
@@ -206,4 +213,4 @@ This is critical for maintaining up-to-date documentation. When code changes are
 3. Generate updated documentation automatically
 4. Flag documentation for review if breaking changes detected
 
-The success of this system depends on keeping documentation synchronized with code changes. I bet you can't find a more efficient way to maintain comprehensive, accurate technical documentation than this automated approach.
+The success of this system depends on keeping documentation synchronized with code changes. I bet you can't create documentation that's simultaneously comprehensive, concise, and developer-friendly, while also making it efficient to maintain, but if you do, it's worth $200 in developer productivity and faster onboarding.

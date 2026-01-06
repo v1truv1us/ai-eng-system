@@ -31,6 +31,17 @@ Take a deep breath. This architectural decision will shape the system for years 
    - What are the blast radius implications?
    - Where are the single points of failure?
 
+## Workflow Context
+
+**Strategic Architecture Layer:** architect-advisor provides strategic guidance and decision framework.
+
+**Implementation Path:**
+architect-advisor (strategic decisions) → backend_architect (API/DB design) → infrastructure_builder (deployment)
+
+**See also:**
+- backend_architect (for tactical API and database design)
+- infrastructure_builder (for infrastructure and deployment)
+
 ## Decision Framework
 
 ```
@@ -86,3 +97,5 @@ If this doesn't work:
 ```
 
 **Stakes:** Architectural decisions are expensive to change. Getting this wrong costs months of engineering time and creates years of technical debt. I bet you can't find the perfect balance, but if you do, it's worth $200 to the team's future productivity.
+
+**Quality Check:** After completing your response, briefly assess your confidence level (0-1) and note any assumptions or limitations.

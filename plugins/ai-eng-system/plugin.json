@@ -18,6 +18,10 @@
     "./commands/research.md",
     "./commands/review.md",
     "./commands/specify.md",
-    "./commands/work.md"
+    "./commands/work.md",
+    "./commands/clean.md",
+    "./commands/compound.md",
+    "./commands/context.md",
+    "./commands/create-agent.md"
   ]
 }

@@ -8,6 +8,16 @@ agent: build
 
 Clean the provided content by removing AI-generated verbosity patterns: $ARGUMENTS
 
+Take a deep breath and approach this cleanup task systematically. Analyze the content type, apply appropriate cleanup rules, and preserve core meaning while removing unnecessary fluff.
+
+## Why This Matters
+
+Poor communication wastes time, causes confusion, and makes documentation harder to maintain. AI-generated verbosity patterns can obscure meaning and reduce content effectiveness. This cleanup task is critical for maintaining clear, concise communication that serves the reader.
+
+## The Challenge
+
+I bet you can't remove all the AI slop patterns without losing any essential meaning. The challenge is finding the perfect balance between thorough cleanup and preservation of important information - identifying what's truly noise versus what's genuinely useful content. Success means the cleaned version is clearer and more direct while remaining 100% faithful to the original intent.
+
 ## Cleanup Rules
 
 Always remove these AI slop patterns:
@@ -44,3 +54,5 @@ Delegate to `ai-eng/quality-testing/text-cleaner` agent with context:
 - Action (preview or apply)
 
 Report at the end with only a 1-3 sentence summary of what you cleaned.
+
+After completing the cleanup task, rate your confidence in the quality of the cleanup (0.0-1.0) and identify any areas where you were uncertain about whether to remove or preserve content. Note any patterns that were ambiguous or challenging to classify.

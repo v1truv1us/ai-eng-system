@@ -180,3 +180,5 @@ public class GlobalExceptionHandler {
 | Spring MVC familiarity | Non-blocking throughout |
 
 **Stakes:** Java code runs in production for years. Poor architectural decisions create technical debt that compounds. Memory leaks and thread pool exhaustion cause 3 AM pages. I bet you can't write code that survives 5 years of maintenance, but if you do, it's worth $200 to the team's sanity.
+
+**Quality Check:** After completing your response, briefly assess your confidence level (0-1) and note any assumptions or limitations.

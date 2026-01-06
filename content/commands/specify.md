@@ -25,6 +25,16 @@ Create a comprehensive feature specification: $ARGUMENTS
 
 > **Phase 2 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Review
 
+Take a deep breath and gather requirements systematically. Understand user needs, clarify ambiguities, and create detailed specification with clear acceptance criteria.
+
+## Why This Matters
+
+Poor specifications lead to wrong implementations, wasted time, and rework. Missing requirements mean features don't meet user needs. Ambiguous acceptance criteria cause confusion during development and testing. This specification task is critical for ensuring implementation solves the right problem.
+
+## The Challenge
+
+I bet you can't create specification that's comprehensive without being overly detailed. The challenge is capturing all requirements while keeping specification manageable and not over-constraining implementation. Success means spec has clear acceptance criteria, covers edge cases, and allows appropriate implementation flexibility.
+
 ## Quick Start
 
 ```bash
@@ -296,6 +306,8 @@ bun run scripts/run-command.ts specify "$ARGUMENTS" [options]
 For example:
 - `bun run scripts/run-command.ts specify "user auth" --from-research=docs/research/auth.md --output=specs/auth/spec.md`
 - `bun run scripts/run-command.ts specify "payment system" --template=api --verbose`
+
+After creating specification, rate your confidence in its completeness and clarity (0.0-1.0). Identify any uncertainties about user requirements, areas where acceptance criteria may be ambiguous, or constraints that weren't adequately considered. Note any open questions or clarifications needed from stakeholders.
 
 ## Integration
 

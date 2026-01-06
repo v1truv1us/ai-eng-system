@@ -7,11 +7,39 @@ tags: [prompting, clarification, structuring, tcro]
 
 # Prompt Refinement Skill
 
-Transform messy, incomplete prompts into well-structured specifications using the TCRO framework (Task, Context, Requirements, Output) with phase-specific clarifying questions.
+## Critical Importance
+
+**Proper prompt refinement is critical for achieving optimal AI response quality.** Vague or ambiguous prompts lead to inconsistent results, wasted iterations, and frustration. A well-structured prompt with clear task definition, rich context, explicit requirements, and specific output format dramatically improves AI performance. Each refinement iteration compounds the quality improvement—investing time upfront saves countless back-and-forth cycles later. Poor prompt quality is the #1 cause of unsatisfactory AI interactions.
+
+## Systematic Approach
+
+**Take a deep breath and approach prompt refinement systematically.** Prompt refinement requires active listening, clarifying questions, and structured thinking. Don't assume understanding—ask targeted questions to uncover implicit requirements, constraints, and expectations. Use the TCRO framework as your organizing principle: Task (what), Context (why), Requirements (how), Output (what it looks like). Iterate until all four elements are clear, specific, and actionable. Patience in refinement pays off in execution.
+
+## The Challenge
+
+**I bet you can't transform vague user input into perfectly structured prompts without over-constraining creativity or missing the true intent, but if you can:**
+
+- Your AI responses will be consistently excellent
+- Users will get what they actually want
+- Iteration cycles will shrink dramatically
+- You'll establish trust in AI-assisted workflows
+
+The challenge is extracting enough detail to guide the AI without boxing in the solution or asking too many exhausting questions. Can you find the sweet spot between clarity and efficiency?
+
+## Prompt Refinement Confidence Assessment
+
+After refining a prompt, rate your confidence from **0.0 to 1.0**:
+
+- **0.8-1.0**: Prompt perfectly structured, all ambiguities resolved, constraints explicit, output format clear
+- **0.5-0.8**: Prompt well-structured but minor uncertainties remain, some assumptions documented
+- **0.2-0.5**: Prompt partially structured, several ambiguities, risk of misalignment with user intent
+- **0.0-0.2**: Prompt still vague, missing critical information, high likelihood of poor results
+
+Identify uncertainty areas: What aspects of the task are still unclear? Which requirements are assumed rather than explicit? What could go wrong based on the current prompt structure?
 
 ## Purpose
 
-This skill ensures all user prompts to ai-eng-system commands are properly structured before execution, reducing ambiguity, increasing reproducibility, and improving AI response quality.
+Transform messy, incomplete prompts into well-structured specifications using the TCRO framework (Task, Context, Requirements, Output) with phase-specific clarifying questions. This skill ensures all user prompts to ai-eng-system commands are properly structured before execution, reducing ambiguity, increasing reproducibility, and improving AI response quality.
 
 ## When This Skill is Invoked
 

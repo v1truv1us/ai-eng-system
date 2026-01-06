@@ -7,6 +7,38 @@ tags: [workflow, iteration, automation, continuous, looping]
 
 # Ralph Wiggum Continuous Iteration
 
+## Critical Importance
+
+**Proper use of Ralph Wiggum loops is critical for achieving automated development success.** Poorly configured loops waste tokens, run forever without progress, or break your codebase. Well-configured loops enable autonomous development, overnight progress, and frictionless iteration. The loop's power comes from disciplined setup: clear completion criteria, safety caps, and verification mechanisms. Rushing loop setup guarantees cost overruns and broken builds.
+
+## Systematic Approach
+
+**Take a deep breath and approach Ralph Wiggum loops systematically.** Loop setup requires careful planning: define the task precisely, set verifiable success criteria, establish safety limits, and plan verification steps. Don't let loops run blindly—monitor progress, detect stuck states, and implement cancellation mechanisms. The loop is a tool, not a substitute for clear thinking. Configure it thoughtfully, monitor it actively, and trust it to handle the repetitive work.
+
+## The Challenge
+
+**I bet you can't configure a loop that runs autonomously without getting stuck or burning excessive tokens, but if you can:**
+
+- You'll unlock overnight productivity
+- Features will complete while you sleep
+- Test failures will disappear automatically
+- You'll achieve continuous integration without babysitting
+
+The challenge is setting completion criteria that are objective and achievable, while preventing infinite loops or token waste. Can you balance automation with safety?
+
+## Loop Confidence Assessment
+
+Before starting a Ralph Wiggum loop, rate your confidence from **0.0 to 1.0**:
+
+- **0.8-1.0**: Task perfectly defined, completion criteria objective, safety measures in place, token budget acceptable
+- **0.5-0.8**: Task clear but completion criteria somewhat fuzzy, reasonable safety measures, token usage unclear
+- **0.2-0.5**: Task definition incomplete, completion criteria subjective, minimal safety measures, high token risk
+- **0.0-0.2**: Task ambiguous, no objective success criteria, no safety caps, guaranteed problems
+
+Identify uncertainty areas: Will the loop actually complete? What happens if it gets stuck? How many iterations will it need? What's the maximum token cost?
+
+## Methodology
+
 A while-loop pattern that keeps AI agents working on well-defined tasks until reaching a completion signal. Based on the proven technique from Claude Code community, adapted for ai-eng-system workflows.
 
 ## Core Philosophy

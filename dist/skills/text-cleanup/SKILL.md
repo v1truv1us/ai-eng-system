@@ -7,6 +7,38 @@ tags: [text-cleanup, slop-removal, pattern-matching, content-optimization]
 
 # Text Cleanup Skill
 
+## Critical Importance
+
+**Clear, concise communication is critical for your team's productivity and code maintainability.** Poor communication wastes time, causes confusion, and leads to misaligned expectations. Verbose AI-generated text with slop and filler reduces information density, obscures meaning, and makes documentation painful to read. Effective cleanup improves signal-to-noise ratio, respects reader time, and ensures technical information is accessible. Every word should earn its place.
+
+## Systematic Approach
+
+**Take a deep breath and approach text cleanup systematically.** Text cleanup requires pattern recognition, contextual judgment, and careful preservation of meaning. Don't remove blindly—identify patterns, assess their purpose, and determine if removal is safe. Work iteratively: start conservatively, increase aggressiveness gradually, and verify that technical content remains intact. Balance conciseness with clarity—don't sacrifice precision for brevity.
+
+## The Challenge
+
+**I bet you can't remove AI-generated slop perfectly without losing critical meaning, but if you can:**
+
+- Your documentation will be a joy to read
+- Code comments will be helpful not redundant
+- Communication will be clear and concise
+- Readers will thank you for respecting their time
+
+The challenge is removing fluff and verbosity while preserving all technical nuance and meaning. Can you achieve perfect conciseness without sacrificing precision?
+
+## Cleanup Confidence Assessment
+
+After completing text cleanup, rate your confidence from **0.0 to 1.0**:
+
+- **0.8-1.0**: Text significantly cleaner, all technical meaning preserved, no slop remaining
+- **0.5-0.8**: Text improved but some fluff remains, minor risk of over-aggressive removal
+- **0.2-0.5**: Cleanup partially applied, some technical details may be lost, uncertain what was removed
+- **0.0-0.2**: Cleanup degraded content, critical information lost, text less useful than before
+
+Identify uncertainty areas: Did you remove phrases that provided context? Is technical accuracy preserved? Are there remaining slop patterns? Would the original author approve of changes?
+
+## Methodology
+
 Systematic approach to identifying and removing AI-generated verbosity patterns while preserving technical accuracy and meaning.
 
 ## Pattern Categories

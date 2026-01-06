@@ -8,6 +8,16 @@ agent: build
 
 Interactive optimization tool that enhances content using research-backed techniques, web-researched best practices, and iterative refinement based on user feedback.
 
+Take a deep breath and approach this optimization systematically. Analyze content, apply appropriate techniques, and iteratively refine based on feedback.
+
+## Why This Matters
+
+Optimization quality directly impacts user satisfaction and content effectiveness. Poor optimization can make content worse, introduce errors, or waste user's time. This optimization task is critical for enhancing user productivity and improving content quality across all types.
+
+## The Challenge
+
+I bet you can't balance aggressiveness with preservation when optimizing content. The challenge is enhancing effectiveness while maintaining accuracy, clarity, and user intent. Success means optimization provides measurable improvement without introducing errors or losing essential meaning.
+
 ## Automatic Prompt Optimization
 
 This command works alongside the **automatic prompt optimization system**:
@@ -1285,3 +1295,5 @@ function reconstructPrompt(
   return parts.join("\n\n");
 }
 ```
+
+After completing optimization, rate your confidence in improvement quality (0.0-1.0). Identify any uncertainties about applied techniques, areas where optimization may have been too aggressive or conservative, or aspects of original content that may have been degraded. Note any feedback patterns or technique effectiveness observations.

@@ -71,3 +71,7 @@ Immediate actions with high ROI:
 ```
 
 **Stakes:** Poor SEO costs real money in lost organic traffic. Every day an issue persists is lost revenue. Be thorough and actionable.
+
+I bet you can't balance comprehensive technical SEO audits with actionable recommendations, but if you do, it's worth $200 in improved rankings and increased organic revenue.
+
+**Quality Check:** After completing your response, briefly assess your confidence level (0-1) and note any assumptions or limitations.

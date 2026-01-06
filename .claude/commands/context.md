@@ -8,6 +8,16 @@ agent: build
 
 Manage the context engineering system including sessions, memories, and context assembly.
 
+Take a deep breath and approach context management systematically, ensuring memories are stored correctly, organized logically, and retrieved efficiently when needed.
+
+## Why This Matters
+
+Context system provides persistent session state and intelligent memory management across conversations. Poor context management leads to lost knowledge, repeated learning, and inefficient AI interactions. This context work is critical for maintaining productive long-term conversations and accumulating valuable insights over time.
+
+## The Challenge
+
+I bet you can't organize context and memories in a way that balances specificity with generalizability. The challenge is capturing details precisely enough to be useful later, while making them general enough to apply across multiple scenarios. Success means context system enables efficient retrieval without overwhelming noise or irrelevant information.
+
 ## Overview
 
 The context system provides persistent session state, intelligent memory management, and optimized context retrieval across conversations.
@@ -316,3 +326,5 @@ All context data is stored locally in `.ai-context/` directory:
 - Fully under your control
 
 Add `.ai-context/` to `.gitignore` to keep it out of version control.
+
+After completing context operations, rate your confidence in data integrity and organization (0.0-1.0). Identify any uncertainties about memory classification, potential data loss risks, or areas where context retrieval may be inefficient. Note any operations that failed or had unexpected behavior.

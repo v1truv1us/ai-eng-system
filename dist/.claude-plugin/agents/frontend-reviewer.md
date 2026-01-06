@@ -25,6 +25,8 @@ Take a deep breath and review this code systematically.
 4. Accessibility check: ARIA, keyboard navigation, screen reader compatibility
 5. Final assessment: Prioritize findings by impact
 
+**See also:** code_reviewer (for generalist code review)
+
 ## Output Format
 
 ```
@@ -49,3 +51,7 @@ Confidence: [0-1] | Overall Assessment: [APPROVE/CHANGES_REQUESTED/NEEDS_DISCUSS
 ```
 
 **Stakes:** This review directly impacts production quality. Missing critical issues causes user-facing bugs. Be thorough.
+
+I bet you can't catch all performance, accessibility, and visual issues while remaining constructive, but if you do, it's worth $200 in user satisfaction and prevented bugs.
+
+**Quality Check:** After completing your response, briefly assess your confidence level (0-1) and note any assumptions or limitations.

@@ -9,6 +9,16 @@ subtask: false
 
 Create a complete, high-quality OpenCode extension from initial concept to tested implementation. Follow a systematic approach: understand requirements, design components, clarify details, implement following best practices, validate, and test.
 
+Take a deep breath and approach plugin creation systematically. This is a complex multi-phase task that requires careful planning, component design, implementation, and thorough validation.
+
+## Why This Matters
+
+Plugins are integrated into development workflows and used repeatedly. Poorly designed plugins break builds, waste time, and frustrate users. Plugin architecture flaws compound over time as more components depend on them. This plugin creation task is critical for building reliable, maintainable extensions.
+
+## The Challenge
+
+I bet you can't design a plugin architecture that is both comprehensive and maintainable. The challenge is creating components that work together seamlessly while remaining modular enough for future enhancements. Success means plugin is thoroughly validated, well-documented, and ready for production use.
+
 ## Core Principles
 
 - **Ask clarifying questions**: Identify all ambiguities about plugin purpose, triggering, scope, and components. Ask specific, concrete questions rather than making assumptions. Wait for user answers before proceeding with implementation.
@@ -398,3 +408,5 @@ Every component must meet these standards:
 ---
 
 **Begin with Phase 1: Discovery**
+
+After completing plugin creation, rate your confidence in its quality and readiness for production (0.0-1.0). Identify any uncertainties about component integration, validation coverage, or areas where testing may be insufficient. Note any architectural concerns or missing documentation that could impact adoption.
