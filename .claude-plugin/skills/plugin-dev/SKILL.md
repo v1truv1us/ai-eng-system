@@ -6,6 +6,36 @@ version: 1.0.0
 
 # Plugin Development for Claude Code & OpenCode
 
+## Critical Importance
+
+**Creating high-quality plugins is critical to your development workflow's long-term success.** Plugins are used repeatedly by yourself and others. Design flaws, poor documentation, or broken functionality compound over time and across users. A well-designed plugin becomes a trusted tool used daily; a poorly designed plugin becomes abandoned technical debt. Invest time in architecture, testing, and documentation—the returns multiply across all future uses.
+
+## Systematic Approach
+
+**Take a deep breath and approach plugin development systematically.** Plugins require careful planning: understand the problem, design the API, implement incrementally, test thoroughly, and document comprehensively. Don't rush to code—clarify requirements, define interfaces, and consider edge cases first. Build iteratively, validate frequently, and refactor continuously. Every design decision impacts maintainability and extensibility.
+
+## The Challenge
+
+**I bet you can't create a plugin that balances specificity with flexibility perfectly, but if you can:**
+
+- Your plugin will be a joy to use and extend
+- Others will build on top of your work
+- The plugin will remain useful as needs evolve
+- You'll establish patterns for future plugin development
+
+The challenge is designing plugins that solve specific problems while staying flexible enough for future use cases. Can you create focused, opinionated tools that don't paint yourself into corners?
+
+## Plugin Confidence Assessment
+
+After completing or reviewing plugin development, rate your confidence from **0.0 to 1.0**:
+
+- **0.8-1.0**: Plugin well-architected, fully tested, thoroughly documented, follows platform conventions
+- **0.5-0.8**: Plugin functional but missing some tests or documentation, some technical debt
+- **0.2-0.5**: Plugin works but design unclear, minimal testing, poor documentation
+- **0.0-0.2**: Plugin incomplete or broken, unclear purpose, significant rework needed
+
+Identify uncertainty areas: Is the plugin's purpose clear? Are there edge cases unhandled? Will the plugin work as requirements change? What's the maintenance burden?
+
 ## Overview
 
 The ai-eng-system supports extension development for both Claude Code and OpenCode through a unified content system with automated transformation. Understanding this system enables creating well-organized, maintainable extensions that integrate seamlessly with both platforms.
@@ -60,7 +90,6 @@ name: my-command
 description: What this command does
 agent: build           # Optional: which agent handles this
 subtask: true          # Optional: run as subtask
-model: sonnet         # Optional: override model
 temperature: 0.3      # Optional: temperature
 tools:                 # Optional: tool restrictions
   read: true
@@ -85,7 +114,6 @@ tools:                 # Optional: tool restrictions
 name: my-agent
 description: Use this agent when... <example>...</example>
 mode: subagent
-model: sonnet
 color: cyan
 temperature: 0.3
 tools:

@@ -7,6 +7,38 @@ tags: [research, analysis, discovery, documentation, synthesis, multi-agent]
 
 # Comprehensive Research Skill
 
+## Critical Importance
+
+**Thorough research is critical to solving complex problems correctly.** Poor or incomplete research leads to wrong solutions, wasted time building the wrong things, and repeating past mistakes. Missing a key file, misunderstanding historical decisions, or overlooking relevant patterns causes rework and frustration. Comprehensive research upfront saves orders of magnitude more time than it costs. Every implementation decision should be grounded in thorough understanding.
+
+## Systematic Approach
+
+**Take a deep breath and approach research systematically.** Research is not linear—it requires iterative discovery, parallel investigation, and constant refinement. Don't jump to conclusions—gather evidence from multiple sources, cross-reference findings, and validate assumptions. Use the multi-phase methodology: scope definition, parallel discovery, sequential analysis, and synthesis. Each phase builds on the previous one. Rushing research guarantees missing important information.
+
+## The Challenge
+
+**I bet you can't conduct truly comprehensive research without getting lost in the details or missing the big picture, but if you can:**
+
+- Your solutions will be well-founded and robust
+- You'll avoid repeating historical mistakes
+- Your documentation will be authoritative
+- Team members will trust your research
+
+The challenge is balancing breadth (covering everything relevant) with depth (understanding deeply) while staying focused on the research objective. Can you find the critical information efficiently without drowning in noise?
+
+## Research Confidence Assessment
+
+After completing research, rate your confidence from **0.0 to 1.0**:
+
+- **0.8-1.0**: Found comprehensive evidence, all claims documented, historical context understood, clear conclusions
+- **0.5-0.8**: Good coverage but some areas could use deeper investigation, minor uncertainty about certain findings
+- **0.2-0.5**: Basic investigation completed but likely missed important information, significant gaps remain
+- **0.0-0.2**: Research insufficient, critical areas uninvestigated, conclusions speculative
+
+Identify uncertainty areas: What evidence is weak or missing? Which sources are unreliable? What questions remain unanswered? What risks exist due to research limitations?
+
+## Methodology
+
 A systematic multi-phase research orchestration skill that coordinates specialized agents to conduct thorough investigations across codebases, documentation, and external sources. Based on proven patterns from codeflow research workflows with incentive-based prompting enhancements.
 
 ## How It Works

@@ -458,7 +458,9 @@ This is test agent ${i}.
             expect(pluginJson.description).toBe(
                 "AI Engineering System with context engineering and research orchestration for Claude Code",
             );
-            expect(pluginJson.author).toBe("v1truv1us");
+            expect(pluginJson.author).toEqual({
+                name: "v1truv1us",
+            });
             expect(pluginJson.license).toBe("MIT");
 
             // Version should match package.json

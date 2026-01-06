@@ -438,7 +438,9 @@ async function buildClaude(): Promise<void> {
         version: packageJson.version,
         description:
             "AI Engineering System with context engineering and research orchestration for Claude Code",
-        author: "v1truv1us",
+        author: {
+            name: "v1truv1us",
+        },
         license: "MIT",
         commands: commandFiles.map((f) => `./commands/${basename(f)}`),
     };
@@ -470,12 +472,14 @@ async function buildOpenCode(): Promise<void> {
     // Build to both dist/.opencode/ (for npm package) and .opencode/ (for local dev)
     for (const targetDir of [DIST_OPENCODE_DIR, ROOT_OPENCODE_DIR]) {
         // Clean target directories before building to remove stale files
+        const parentCommandsDir = join(targetDir, "command");
         const commandsDir = join(targetDir, "command", NAMESPACE_PREFIX);
         const agentsDir = join(targetDir, "agent", NAMESPACE_PREFIX);
         const skillsDir = join(targetDir, "skill"); // Note: singular, per OpenCode docs
 
-        if (existsSync(commandsDir)) {
-            await rm(commandsDir, { recursive: true, force: true });
+        // Clean parent command directory completely to prevent duplicates
+        if (existsSync(parentCommandsDir)) {
+            await rm(parentCommandsDir, { recursive: true, force: true });
         }
         if (existsSync(agentsDir)) {
             await rm(agentsDir, { recursive: true, force: true });
@@ -676,6 +680,28 @@ async function syncPromptOptimizationLibrary(): Promise<void> {
 async function syncToClaudePlugin(): Promise<void> {
     // Sync prompt optimization library
     await syncPromptOptimizationLibrary();
+
+    // Sync commands, agents, and skills from dist/.claude-plugin/ to .claude-plugin/
+    const distCommandsDir = join(CLAUDE_DIR, "commands");
+    const rootCommandsDir = join(ROOT_CLAUDE_PLUGIN_DIR, "commands");
+    if (existsSync(distCommandsDir)) {
+        await cleanDirectory(rootCommandsDir);
+        await copyDirRecursive(distCommandsDir, rootCommandsDir);
+    }
+
+    const distAgentsDir = join(CLAUDE_DIR, "agents");
+    const rootAgentsDir = join(ROOT_CLAUDE_PLUGIN_DIR, "agents");
+    if (existsSync(distAgentsDir)) {
+        await cleanDirectory(rootAgentsDir);
+        await copyDirRecursive(distAgentsDir, rootAgentsDir);
+    }
+
+    const distSkillsDir = join(CLAUDE_DIR, "skills");
+    const rootSkillsDir = join(ROOT_CLAUDE_PLUGIN_DIR, "skills");
+    if (existsSync(distSkillsDir)) {
+        await cleanDirectory(rootSkillsDir);
+        await copyDirRecursive(distSkillsDir, rootSkillsDir);
+    }
 
     // Sync plugin.json and hooks directory from dist/.claude-plugin/
     const distPluginJson = join(CLAUDE_DIR, "plugin.json");
