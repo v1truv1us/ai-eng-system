@@ -63,137 +63,20 @@ Load `skills/prompt-refinement/SKILL.md` and use phase: `specify` to transform y
 
 ## Specification Structure
 
-```markdown
-# [Feature Name]
+See `templates/specification.md` for complete template with:
+- Overview, Context (personas, system, research)
+- User Stories with acceptance criteria
+- Non-Functional Requirements (security, performance, availability, maintainability, compliance, accessibility)
+- Open Questions and Success Criteria
 
-## Overview
-[2-3 sentence summary of what this feature provides]
+Validate specification against:
+- All user stories have acceptance criteria
+- Non-functional requirements defined (security, performance, maintainability)
+- No unresolved [NEEDS CLARIFICATION] markers
+- All requirements are testable and unambiguous
+- Success criteria are specific and measurable
 
-## Context
-### User Personas
-- [Persona 1]: Description
-- [Persona 2]: Description
-
-### System Context
-- What system/module this is part of
-- Integration points with other systems
-- Existing patterns to follow
-
-### Research Context
-[If `--from-research` was used, summarize key findings]
-- Key finding 1
-- Key finding 2
-- Recommendation: [from research]
-
-## User Stories
-
-### US-001: [Story Title]
-**As a** [user type]
-**I want** [capability]
-**So that** [benefit]
-
-#### Acceptance Criteria
-- [ ] [Criterion 1]
-- [ ] [Criterion 2]
-
-### US-002: [Story Title]
-[... more user stories ...]
-
-## Non-Functional Requirements
-
-### Security
-- [Requirement 1]
-- [Requirement 2]
-
-### Performance
-- [Requirement 1]
-- [Requirement 2]
-
-### Availability & Reliability
-- [Requirement 1]
-
-### Maintainability
-- [Requirement 1]
-
-### Compliance
-[If applicable]
-- [Requirement 1]
-
-### Accessibility
-[If applicable]
-- [Requirement 1]
-
-## Open Questions
-[NEEDS CLARIFICATION markers and unresolved questions]
-
-## Success Criteria
-- [ ] All [NEEDS CLARIFICATION] markers resolved
-- [ ] All user stories have acceptance criteria
-- [ ] All non-functional requirements defined
-- [ ] Success criteria are measurable
-- [ ] Specification validated by user
-```
-
-### Step 5: Validate Specification
-
-Run validation checklist:
-
-```markdown
-## Specification Validation
-
-### Completeness
-- [ ] All user stories have acceptance criteria
-- [ ] Non-functional requirements are defined for:
-  - [ ] Security
-  - [ ] Performance
-  - [ ] Maintainability
-- [ ] Compliance requirements identified (if applicable)
-
-### Clarity
-- [ ] No unresolved [NEEDS CLARIFICATION] markers remain
-- [ ] All requirements are testable
-- [ ] All requirements are unambiguous
-
-### Alignment
-- [ ] Aligned with CLAUDE.md philosophy
-- [ ] Aligned with tech stack preferences
-- [ ] Aligned with quality standards
-
-### Measurability
-- [ ] Success criteria are specific and measurable
-- [ ] Acceptance criteria can be verified through testing
-- [ ] Performance requirements have concrete targets
-```
-
-If validation fails:
-- Ask clarifying questions to address gaps
-- Update specification with new information
-- Re-validate until all checks pass
-
-### Step 6: Confirm with User
-
-Display summary and ask for confirmation:
-
-```markdown
-## Specification Ready
-
-**Feature**: [Feature Name]
-**Location**: specs/[feature-name]/spec.md
-
-**User Stories**: N
-**Acceptance Criteria**: M total
-**Non-Functional Requirements**: N total
-**Open Questions**: N [NEEDS CLARIFICATION] markers
-
-## Summary
-[Brief overview of specification content]
-
-Proceed with creating this specification? (y/n/edit)
-```
-
-- **y**: Write specification to file
-- **n**: Ask more clarifying questions, refine specification
-- **edit**: Allow manual edits before finalizing
+Confirm with user before writing to file.
 
 ## Output Structure
 

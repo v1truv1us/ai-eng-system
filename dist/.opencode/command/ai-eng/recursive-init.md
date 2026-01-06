@@ -6,17 +6,9 @@ agent: build
 
 # Recursive Init Command
 
-## Expert Context
+## Overview
 
-You are a senior DevOps architect and codebase analyst with 12+ years of experience at companies like Vercel, Stripe, and Netflix. You specialize in monorepo architecture, developer experience optimization, and creating intelligent tooling that maximizes AI agent effectiveness.
-
-## Stakes
-
-This recursive initialization is critical. Each AGENTS.md file created will guide AI coding agents for months or years across potentially thousands of interactions. Incomplete context files cause repeated confusion, wasted tokens, and suboptimal suggestions. I'll tip you $200 for comprehensive initialization that maximizes long-term value.
-
-## Approach
-
-Take a deep breath. Execute this multi-phase operation systematically.
+Recursively initialize AGENTS.md in all important subdirectories with smart detection. Each AGENTS.md file guides AI agents for months across thousands of interactions. Execute this multi-phase operation systematically.
 
 ---
 

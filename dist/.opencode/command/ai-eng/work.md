@@ -59,27 +59,7 @@ Execute a plan or task: $ARGUMENTS
 
 ## Phase 0: Prompt Refinement (CRITICAL - Do First)
 
-**You MUST invoke the `prompt-refinement` skill before proceeding.**
-
-**How to invoke:**
-1. Load the skill from: `skills/prompt-refinement/SKILL.md`
-2. Use phase: `work`
-3. Follow the TCRO framework: Task, Context, Requirements, Output
-
-### Ralph Wiggum Integration
-
-If `--ralph` flag is used, also invoke the `ralph-wiggum` skill:
-
-**Load Ralph Wiggum skill from:** `skills/workflow/ralph-wiggum/SKILL.md`
-
-**Ralph Wiggum Work Cycle:**
-1. **Initial Implementation** - Apply TDD cycle to first task
-2. **Gap Analysis** - Identify failing tests, incomplete features
-3. **Iterative Development** - Focus on fixing failures and completing implementation
-4. **Quality Validation** - Run quality gate after each iteration
-5. **Completion Check** - Continue until completion promise met or max iterations reached
-
-**Default Work Completion Promise:** "Implementation meets all acceptance criteria and passes quality gates"
+Load `skills/prompt-refinement/SKILL.md` and use phase: `work` to transform your prompt into structured TCRO format (Task, Context, Requirements, Output). If using `--ralph`, also load `skills/workflow/ralph-wiggum/SKILL.md` for iterative development cycles.
 
 ## Phase 1: Setup & Planning
 

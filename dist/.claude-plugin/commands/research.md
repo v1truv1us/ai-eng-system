@@ -67,28 +67,7 @@ Conduct comprehensive research for: $ARGUMENTS
 
 ## Phase 0: Prompt Refinement (CRITICAL - Do First)
 
-You MUST invoke the `prompt-refinement` skill before proceeding. This transforms vague prompts into structured TCRO format.
-
-**How to invoke the skill:**
-1. Load the skill from: `skills/prompt-refinement/SKILL.md`
-2. Use phase: `research`
-3. Follow the TCRO framework: Task, Context, Requirements, Output
-
-**TCRO Framework:**
-
-| Element | Purpose | Key Question |
-|---------|---------|--------------|
-| **Task** | What's the job to be done? | "What specific outcome do you need?" |
-| **Context** | Why does this matter? | "What's the broader system/goal?" |
-| **Requirements** | What are the constraints? | "Must-haves vs nice-to-haves?" |
-| **Output** | What format is needed? | "What should the deliverable look like?" |
-
-**Process:**
-1. Load CLAUDE.md from project root
-2. Ask clarifying questions if needed
-3. Structure into TCRO format
-4. Apply incentive prompting (expert persona, stakes language, step-by-step reasoning)
-5. Confirm with user before proceeding
+Load `skills/prompt-refinement/SKILL.md` and use phase: `research` to transform your prompt into structured TCRO format (Task, Context, Requirements, Output).
 
 ## Phase 1: Context & Scope Definition
 

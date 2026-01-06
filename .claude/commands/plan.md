@@ -71,40 +71,7 @@ Create a detailed implementation plan for: $ARGUMENTS
 
 ## Phase 0: Prompt Refinement (CRITICAL - Do First)
 
-**You MUST invoke the `prompt-refinement` skill before proceeding.**
-
-**How to invoke:**
-1. Load the skill from: `skills/prompt-refinement/SKILL.md`
-2. Use phase: `plan`
-3. Follow the TCRO framework: Task, Context, Requirements, Output
-
-If `--from-spec` flag is provided:
-1. **Read specification** from `specs/[feature]/spec.md`
-2. **Extract user stories** and their acceptance criteria
-3. **Extract non-functional requirements** (security, performance, etc.)
-4. **Identify open questions** marked with `[NEEDS CLARIFICATION]`
-5. **Use as foundation** for technical planning
-
-If no spec is found:
-- Warn user: "No specification found. Consider running `/ai-eng/specify` first to create a detailed specification."
-- Offer: "Proceed with inline requirements gathering? (y/n)"
-- If yes, gather requirements through clarifying questions
-- If no, exit and prompt user to run `/ai-eng/specify`
-
-### Ralph Wiggum Integration
-
-If `--ralph` flag is used, also invoke the `ralph-wiggum` skill:
-
-**Load Ralph Wiggum skill from:** `skills/workflow/ralph-wiggum/SKILL.md`
-
-**Ralph Wiggum Planning Cycle:**
-1. **Initial Plan** - Create comprehensive implementation plan
-2. **Gap Analysis** - Identify missing tasks, incomplete dependencies
-3. **Iterative Enhancement** - Add missing details, strengthen task definitions
-4. **Quality Validation** - Run quality gate if specified
-5. **Completion Check** - Continue until completion promise met or max iterations reached
-
-**Default Planning Completion Promise:** "Plan is comprehensive and ready for execution"
+Load `skills/prompt-refinement/SKILL.md` and use phase: `plan` to transform your prompt into structured TCRO format (Task, Context, Requirements, Output). If using `--from-spec`, extract user stories and non-functional requirements from the specification. See `templates/plan.md` for output structure.
 
 ### Phase 2: Discovery (Research Mode)
 

@@ -83,25 +83,7 @@ Execute complete feature development cycle: $ARGUMENTS
 
 ## Phase 0: Prompt Refinement (CRITICAL - Do First)
 
-**You MUST invoke the `prompt-refinement` skill before proceeding.**
-
-**How to invoke:**
-1. Load the skill from: `skills/prompt-refinement/SKILL.md`
-2. Use phase: `plan`
-3. Follow the TCRO framework: Task, Context, Requirements, Output
-
-### Task: TCRO Framework
-
-**T (Task)**: What feature needs to be implemented?
-**C (Context)**: What system context exists? What are the constraints?
-**R (Requirements)**: What are the acceptance criteria, quality standards, and dependencies?
-**O (Output)**: What should be delivered (working code, tests, docs, PR)?
-
-Ask clarifying questions if:
-- Feature description is vague
-- Acceptance criteria are unclear
-- Technical approach is unspecified
-- Quality gates are not defined
+Load `skills/prompt-refinement/SKILL.md` and use phase: `plan` to transform your prompt into structured TCRO format (Task, Context, Requirements, Output). Ask clarifying questions if feature description, acceptance criteria, technical approach, or quality gates are unclear.
 
 ## Phase 1: Git Setup
 
@@ -732,72 +714,12 @@ This command orchestrates existing ai-eng-system commands:
 /ai-eng/review . --ralph --ralph-max-iterations $MAX
 ```
 
-## Best Practices
+## Best Practices & Troubleshooting
 
-### For Effective Builds
-
-1. **Clear Feature Descriptions**: Provide specific, actionable feature requirements
-2. **Start Small**: Use for well-defined features with clear acceptance criteria
-3. **Use Checkpoints**: Enable `--checkpoint` for complex features to review progress
-4. **Monitor Tokens**: Watch token usage to manage API costs
-5. **Set Appropriate Limits**: Adjust `--max-cycles` and `--max-phase-iterations` based on complexity
-
-### When to Use
-
-**Ideal Scenarios**:
-- Well-defined features with clear success criteria
-- Greenfield implementations (no complex legacy integration)
-- Overnight/weekend automation runs
-- TDD-driven features with comprehensive tests
-
-**When NOT to Use**:
-- Features requiring human design decisions
-- Ambiguous requirements without clear acceptance criteria
-- Critical production systems (use manual control)
-- Complex architectural migrations (use multi-phase approach)
-
-## Troubleshooting
-
-### "Build stuck in loop"
-
-**Symptoms**: Same phase repeating without progress
-
-**Actions**:
-1. Check stuck detection alert (should trigger after 3 cycles)
-2. Review gap analysis logs
-3. Use `--checkpoint=all` to inspect state
-4. Consider adjusting `--max-phase-iterations`
-5. Abort and manually review artifacts
-
-### "Token usage too high"
-
-**Symptoms**: Excessive API costs
-
-**Actions**:
-1. Reduce `--max-cycles`
-2. Reduce `--max-phase-iterations`
-3. Use `--verbose` to identify expensive phases
-4. Consider starting from existing artifacts (`--from-spec`, etc.)
-
-### "Quality gates failing"
-
-**Symptoms**: Build can't pass quality gates
-
-**Actions**:
-1. Check quality gate command output
-2. Use verbose mode to see specific failures
-3. Review work phase implementation
-4. Adjust quality gate if appropriate
-
-### "Resume fails"
-
-**Symptoms**: Can't resume from checkpoint
-
-**Actions**:
-1. Verify checkpoint file exists
-2. Check branch matches checkpoint.branch
-3. Review checkpoint.json for corruption
-4. Start fresh build if checkpoint is corrupted
+See `docs/ralph-wiggum-guide.md` for comprehensive guidance on:
+- Best practices for effective builds
+- When to use Ralph Wiggum (ideal vs. non-ideal scenarios)
+- Troubleshooting common issues (stuck loops, token usage, quality gates, resume failures, etc.)
 
 ## Success Criteria
 
