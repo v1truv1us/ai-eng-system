@@ -36,7 +36,6 @@ tests/integration/ - End-to-end workflows
 
 tests/research/ - Research and analysis tests
 
-tests/swarms/ - Agent coordination tests
 
 ---
 

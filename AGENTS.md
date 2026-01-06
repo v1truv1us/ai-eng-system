@@ -277,7 +277,7 @@ Use the architect-advisor to evaluate: Should we use microservices or a monolith
 
  | Command | Description | Agent Mode |
 |---------|-------------|------------|
-| /research | Multi-phase research orchestration | read-only |
+ | /research | Multi-phase research orchestration | read-only |
 | /specify | Create feature specifications | read-only |
 | /plan | Create detailed implementation plans | read-only |
 | /work | Execute plans with quality gates and tracking | build |
@@ -293,6 +293,7 @@ Use the architect-advisor to evaluate: Should we use microservices or a monolith
 | /create-command | AI-assisted command generation | build |
 | /create-skill | AI-assisted skill creation | build |
 | /create-tool | AI-assisted tool creation | build |
+| /ralph-wiggum | Full-cycle feature development with continuous iteration through all spec-driven workflow phases (Research → Specify → Plan → Work → Review) until feature is complete | build |
 | /compound | Document solved problems for team | build |
 
 ### Using /research

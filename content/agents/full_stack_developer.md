@@ -139,7 +139,6 @@ Do NOT perform: threat modeling, advanced performance profiling, distributed sys
 | Tool                        | Purpose                          | Allowed Actions                                | Guardrails                                        | Escalate When                                       |
 | --------------------------- | -------------------------------- | ---------------------------------------------- | ------------------------------------------------- | --------------------------------------------------- |
 | read / edit / write / patch | Inspect & modify code            | Modify only relevant files                     | Propose plan before multi-file edits (>3 files)   | Change spans multiple subsystems                    |
-| bash (execute)              | Run tests, type checks, build    | Only safe project scripts (npm/bun test, lint) | No network destructive ops, no package publishing | Need infra-level commands (terraform, docker swarm) |
 | str_replace_editor          | Targeted text replacements       | Small, reversible edits                        | Use diff explanation in output                    | Large semantic refactors                            |
 | computer_use                | Structured multi-step automation | Controlled sequences only                      | Confirm plan first                                | Requires access outside allowed directories         |
 
