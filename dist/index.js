@@ -68,8 +68,7 @@ var AiEngSystem = async ({
   const targetDir = findInstallationTarget(directory);
   if (!targetDir) {
     return {
-      config: async (input) => {
-      }
+      config: async (input) => {}
     };
   }
   const isFirstRun = !fs.existsSync(path.join(targetDir, "command", "ai-eng"));
@@ -82,8 +81,7 @@ var AiEngSystem = async ({
     console.error(`[ai-eng-system] Installation warning: ${error instanceof Error ? error.message : String(error)}`);
   }
   return {
-    config: async (input) => {
-    }
+    config: async (input) => {}
   };
 };
 var src_default = AiEngSystem;

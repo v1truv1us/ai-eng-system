@@ -85,6 +85,7 @@ I bet you can't manage continuous iteration across all workflow phases without g
 | `--dry-run` | boolean | false | Show plan without executing |
 | `--resume` | boolean | false | Resume from last checkpoint |
 | `--parallel` | boolean | false | Run phases in parallel where safe |
+| `--refine-each-phase` | boolean | false | Re-invoke prompt-refinement at each phase (interactive mode) |
 
 **Default Completion Promise:**
 ```
@@ -94,6 +95,18 @@ I bet you can't manage continuous iteration across all workflow phases without g
 ## Phase 0: Prompt Refinement (CRITICAL - Do First)
 
 Load `skills/prompt-refinement/SKILL.md` and use phase: `plan` to transform your prompt into structured TCRO format (Task, Context, Requirements, Output). Ask clarifying questions if feature description, acceptance criteria, technical approach, or quality gates are unclear.
+
+**Store the refined output as `$REFINED_CONTEXT`** - this will be used for ALL subsequent phases without re-invoking prompt-refinement.
+
+### Autonomous Execution Model
+
+After Phase 0 completes:
+1. **Context is locked**: The refined TCRO applies to ALL subsequent phases
+2. **No re-refinement**: Do NOT invoke prompt-refinement again (unless `--refine-each-phase` is set)
+3. **Continuous execution**: Proceed through phases without pausing for user input
+4. **Checkpoints are optional**: Only pause if `--checkpoint` flag is explicitly set
+
+This enables overnight/unattended execution as intended by the Ralph Wiggum pattern.
 
 ## Phase 1: Git Setup
 
@@ -137,7 +150,7 @@ This is the core Ralph Wiggum pattern - continuous iteration until completion.
 
 **Goal**: Gather context, patterns, and technical guidance
 
-**Load Ralph Wiggum skill**: `skills/workflow/ralph-wiggum/SKILL.md`
+**Context**: Use `$REFINED_CONTEXT` from Phase 0. Do NOT re-invoke prompt-refinement unless `--refine-each-phase` is set.
 
 **Execute**:
 ```bash
@@ -157,11 +170,13 @@ This is the core Ralph Wiggum pattern - continuous iteration until completion.
 
 **Checkpoint** (if `--checkpoint=all`): Pause and ask for approval before proceeding
 
+**→ CONTINUE**: Immediately proceed to Phase 2.3 (Specify) without waiting for user input.
+
 ### 2.3 Specify Phase (if not skipped)
 
 **Goal**: Create detailed specification with user stories and acceptance criteria
 
-**Load Ralph Wiggum skill**: `skills/workflow/ralph-wiggum/SKILL.md`
+**Context**: Use `$REFINED_CONTEXT` from Phase 0. Do NOT re-invoke prompt-refinement unless `--refine-each-phase` is set.
 
 **Execute**:
 ```bash
@@ -186,11 +201,13 @@ This is the core Ralph Wiggum pattern - continuous iteration until completion.
 
 **Checkpoint** (if `--checkpoint=all`): Pause and ask for approval
 
+**→ CONTINUE**: Immediately proceed to Phase 2.4 (Plan) without waiting for user input.
+
 ### 2.4 Plan Phase (if not skipped)
 
 **Goal**: Create implementation plan with tasks and dependencies
 
-**Load Ralph Wiggum skill**: `skills/workflow/ralph-wiggum/SKILL.md`
+**Context**: Use `$REFINED_CONTEXT` from Phase 0. Do NOT re-invoke prompt-refinement unless `--refine-each-phase` is set.
 
 **Execute**:
 ```bash
@@ -215,11 +232,13 @@ This is the core Ralph Wiggum pattern - continuous iteration until completion.
 
 **Checkpoint** (if `--checkpoint=all`): Pause and ask for approval
 
+**→ CONTINUE**: Immediately proceed to Phase 2.5 (Work) without waiting for user input.
+
 ### 2.5 Work Phase
 
 **Goal**: Implement feature with TDD, quality gates, and iterative refinement
 
-**Load Ralph Wiggum skill**: `skills/workflow/ralph-wiggum/SKILL.md`
+**Context**: Use `$REFINED_CONTEXT` from Phase 0. Do NOT re-invoke prompt-refinement unless `--refine-each-phase` is set.
 
 **Execute**:
 ```bash
@@ -248,11 +267,13 @@ npm test && npm run lint && npm run build
 
 **Checkpoint** (if `--checkpoint=all` or `--checkpoint=review`): Pause and ask for approval
 
+**→ CONTINUE**: Immediately proceed to Phase 2.6 (Review) without waiting for user input.
+
 ### 2.6 Review Phase
 
 **Goal**: Comprehensive multi-perspective code review
 
-**Load Ralph Wiggum skill**: `skills/workflow/ralph-wiggum/SKILL.md`
+**Context**: Use `$REFINED_CONTEXT` from Phase 0. Do NOT re-invoke prompt-refinement unless `--refine-each-phase` is set.
 
 **Execute**:
 ```bash
@@ -270,6 +291,8 @@ npm test && npm run lint && npm run build
 - [ ] All perspectives covered (security, performance, architecture, etc.)
 
 **Checkpoint** (if `--checkpoint=all` or `--checkpoint=review`): Pause and ask for approval
+
+**→ CONTINUE**: Immediately proceed to Phase 3 (Gap Analysis) without waiting for user input.
 
 ## Phase 3: Gap Analysis
 
@@ -354,6 +377,12 @@ Based on gap analysis from 3.1:
   "max_cycles": 5,
   "current_phase": "WORK",
   "completed_phases": ["RESEARCH", "SPECIFY", "PLAN"],
+  "refined_context": {
+    "task": "Specific, actionable task statement",
+    "context": "Broader system, goals, constraints from CLAUDE.md",
+    "requirements": ["Must-have requirement 1", "Must-have requirement 2"],
+    "output": "What should be delivered (working code, tests, docs, PR)"
+  },
   "artifacts": {
     "research": "docs/research/2026-01-05-user-authentication.md",
     "spec": "specs/user-authentication/spec.md",
