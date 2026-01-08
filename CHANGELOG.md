@@ -2,6 +2,38 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.2] - 2026-01-07
+
+### Fixed
+- **Ralph Wiggum Autonomous Looping**: Command no longer stops between workflow phases, ensuring continuous iteration
+- **Prompt Refinement Optimization**: Only performs prompt-refinement once at Phase 0, storing refined context for subsequent phases
+- **Checkpoint Compatibility**: Maintains full backward compatibility with existing checkpoint system
+- **Performance Enhancement**: Reduced redundant prompt processing, improving workflow execution speed
+
+### Added
+- **--refine-each-phase Flag**: New optional flag for interactive mode that refines prompts at each phase (default: disabled)
+- **Explicit Continuation Instructions**: Added clear phase transition guidance to prevent workflow interruption
+- **Context Persistence**: Refined context is now stored and reused across all phases for consistency
+
+### Changed
+- **Phase Transition Logic**: Improved flow between Research → Specify → Plan → Work → Review phases
+- **Documentation**: Updated ralph-wiggum.md with comprehensive usage examples and troubleshooting guide
+- **Command Structure**: Enhanced from 761 to 789 lines with additional error handling and edge case coverage
+
+### Technical Details
+The issue was caused by prompt-refinement being invoked at every phase transition, creating natural stopping points in the autonomous workflow. The fix involves:
+
+1. **Single Refinement**: Prompt-refinement occurs only once at initialization (Phase 0)
+2. **Context Storage**: Refined prompts are cached and reused for all subsequent phases
+3. **Continuation Signals**: Explicit "continue to next phase" instructions prevent workflow interruption
+4. **Fallback Mode**: `--refine-each-phase` flag allows original behavior for interactive use cases
+
+### Backward Compatibility
+- All existing ralph-wiggum usage patterns remain unchanged
+- Checkpoint system fully compatible with new workflow
+- Default behavior provides the fix, no configuration required
+- Optional flag available for users who prefer per-phase refinement
+
 ### [0.1.1](https://github.com/v1truv1us/ai-eng-system/compare/v0.0.15...v0.1.1) (2026-01-06)
 
 

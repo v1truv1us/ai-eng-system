@@ -65,6 +65,8 @@ See [docs/spec-driven-workflow.md](./docs/spec-driven-workflow.md) for complete 
 
 > **🔄 Ralph Wiggum**: Add `--ralph` flag to any phase command for persistent iteration. Perfect for complex tasks requiring multiple refinement cycles. [Learn more →](./docs/ralph-wiggum-integration-complete.md)
 
+> **🛠️ Fixed (v0.2.2)**: Ralph Wiggum now runs continuously without stopping between phases. Full backward compatibility maintained. [Fix details →](./docs/ralph-wiggum-autonomous-looping-fix.md)
+
 ### Additional Commands (13 total)
 - `/ai-eng/optimize` - Prompt enhancement (+45% quality)
 - `/ai-eng/deploy` - Pre-deployment checklists
