@@ -288,28 +288,14 @@ Always consider these categories:
 ## Success Criteria
 
 Successful specification achieves:
-- ✅ Well-structured user stories with acceptance criteria
-- ✅ All non-functional requirements defined
-- ✅ Ambiguities marked with [NEEDS CLARIFICATION]
-- ✅ Aligned with project philosophy (CLAUDE.md)
-- ✅ Ready to feed into `/ai-eng/plan`
-- ✅ User reviewed and approved
-
-## Execution
-
-After specification, create a plan using:
-
-```bash
-bun run scripts/run-command.ts specify "$ARGUMENTS" [options]
-```
-
-For example:
-- `bun run scripts/run-command.ts specify "user auth" --from-research=docs/research/auth.md --output=specs/auth/spec.md`
-- `bun run scripts/run-command.ts specify "payment system" --template=api --verbose`
-
-After creating specification, rate your confidence in its completeness and clarity (0.0-1.0). Identify any uncertainties about user requirements, areas where acceptance criteria may be ambiguous, or constraints that weren't adequately considered. Note any open questions or clarifications needed from stakeholders.
-
-## Integration
+ - ✅ Well-structured user stories with acceptance criteria
+ - ✅ All non-functional requirements defined
+ - ✅ Ambiguities marked with [NEEDS CLARIFICATION]
+ - ✅ Aligned with project philosophy (CLAUDE.md)
+ - ✅ Ready to feed into `/ai-eng/plan`
+ - ✅ User reviewed and approved
+ 
+ ## Integration
 
 - Can use output from `/ai-eng/research` via `--from-research`
 - Feeds into `/ai-eng/plan` for implementation planning

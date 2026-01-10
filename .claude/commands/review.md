@@ -115,24 +115,12 @@ For each finding provide:
 
 ## Summary
 
+
 End with overall assessment: APPROVE, CHANGES_REQUESTED, or NEEDS_DISCUSSION.
 
 After completing review, rate your confidence in findings comprehensiveness (0.0-1.0). Identify any uncertainties about severity classifications, areas where review coverage may have been insufficient, or assumptions about code context. Note any perspectives that should have been applied or findings that may be false positives.
-
-## Execution
-
-Run a review using:
-
-```bash
-bun run scripts/run-command.ts review "$ARGUMENTS" [options]
-```
-
-For example:
-- `bun run scripts/run-command.ts review "src/" --type=security --severity=high --output=security-review.json`
-- `bun run scripts/run-command.ts review "." --focus=performance --verbose`
-
-## Ralph Wiggum Iteration Mode
-
+ 
+ ## Ralph Wiggum Iteration Mode
 When `--ralph` flag is enabled, the review process follows a persistent refinement cycle:
 
 ### Ralph Wiggum Review Cycle

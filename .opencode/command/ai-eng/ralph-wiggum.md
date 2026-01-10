@@ -65,6 +65,21 @@ I bet you can't manage continuous iteration across all workflow phases without g
 /ai-eng/ralph-wiggum "user authentication" --dry-run
 ```
 
+## How This Command Works
+
+This command is a **self-orchestrating prompt** - when you invoke `/ai-eng/ralph-wiggum`, the AI reads these instructions and executes each phase directly within the conversation.
+
+**Execution Model:**
+1. **NOT a CLI script** - There is no external runner. The AI IS the executor.
+2. **Phase commands are internal** - When instructions say "Execute `/ai-eng/research`", the AI follows that command's instructions directly (not spawning a subprocess).
+3. **Continuous flow** - The AI proceeds through all phases autonomously unless checkpoints are set.
+
+**To run this command:**
+- Claude Code: Type `/ai-eng/ralph-wiggum "your feature description"`
+- OpenCode: Type `/ai-eng/ralph-wiggum "your feature description"`
+
+The AI will then follow all phases in this document from start to finish.
+
 ## Options
 
 | Option | Type | Default | Description |
@@ -768,22 +783,8 @@ Successful build achieves:
 - ✅ Checkpoints saved and can be loaded
 - ✅ Progress displayed at appropriate verbosity
 - ✅ Safety limits enforced (max cycles, stuck detection)
-- ✅ Token usage tracked and displayed
-- ✅ Draft PR created with comprehensive summary
-- ✅ Build report generated with all artifacts and metrics
+ - ✅ Token usage tracked and displayed
+ - ✅ Draft PR created with comprehensive summary
+ - ✅ Build report generated with all artifacts and metrics
 
----
-
-## Execution
-
-After creating this command, the agent can invoke it with:
-
-```bash
-bun run scripts/run-command.ts ralph-wiggum "feature description" [options]
-```
-
-Examples:
-- `bun run scripts/run-command.ts ralph-wiggum "implement user auth" --checkpoint=all --verbose`
-- `bun run scripts/run-command.ts ralph-wiggum "API caching" --from-spec=specs/cache/spec.md --resume`
-
-After completing the full cycle, rate your confidence in feature completeness and quality (0.0-1.0). Identify any uncertainties about phase transitions, iterations that were inefficient, or areas where quality gates may have been too lenient or strict. Note any workflow improvements that could enhance future cycles.
+ ---

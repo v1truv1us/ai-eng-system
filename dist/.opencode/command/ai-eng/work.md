@@ -573,29 +573,14 @@ This will:
 ## Success Criteria
 
 A work session is successful when:
-- ✅ All tasks completed
-- ✅ All quality gates passed
-- ✅ All tests passing
-- ✅ Build succeeds
-- ✅ PR created and reviewed
-- ✅ Code merged to main
-
-## Execution
-
-Execute a plan using:
-
-```bash
-bun run scripts/run-command.ts work "$ARGUMENTS" [options]
-```
-
-For example:
-- `bun run scripts/run-command.ts work "specs/auth/plan.yaml" --verbose`
-- `bun run scripts/run-command.ts work --from-plan=plans/auth.yaml --continue`
-- `bun run scripts/run-command.ts work "FEAT-001" --dry-run`
-
-After completing implementation, rate your confidence in code quality and completeness (0.0-1.0). Identify any uncertainties about test coverage, areas where quality gates may have been too lenient, or implementation details that may need follow-up. Note any technical debt or known issues that should be tracked.
-
-## Integration
+ - ✅ All tasks completed
+ - ✅ All quality gates passed
+ - ✅ All tests passing
+ - ✅ Build succeeds
+ - ✅ PR created and reviewed
+ - ✅ Code merged to main
+ 
+ ## Integration
 
 - Reads from `/ai-eng/plan` output (plan.yaml)
 - Validates against `/ai-eng/specify` output (spec.md)

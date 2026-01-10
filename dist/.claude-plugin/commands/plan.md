@@ -493,25 +493,11 @@ Successful planning achieves:
 - ✅ Dependencies are clearly documented
 - ✅ All spec acceptance criteria are covered (if spec exists)
 - ✅ Supporting artifacts generated (data-model, contracts)
-- ✅ Risk assessment completed
-- ✅ Testing strategy defined
-- ✅ Ready to feed into `/ai-eng/work`
-
-## Execution
-
-After planning, execute the plan using:
-
-```bash
-bun run scripts/run-command.ts plan "$ARGUMENTS" [options]
-```
-
-For example:
-- `bun run scripts/run-command.ts plan "implement auth" --from-spec=specs/auth/spec.md --output=plans/auth.yaml`
-- `bun run scripts/run-command.ts plan --from-research=docs/research/auth.md --scope=implementation`
-
-After creating the plan, rate your confidence in its completeness and accuracy (0.0-1.0). Identify any uncertainties about task decomposition, missing dependencies, or areas where acceptance criteria may be ambiguous. Note any implementation risks that weren't adequately addressed in the plan.
-
-## Ralph Wiggum Iteration Mode
+ - ✅ Risk assessment completed
+ - ✅ Testing strategy defined
+ - ✅ Ready to feed into `/ai-eng/work`
+ 
+ ## Ralph Wiggum Iteration Mode
 
 When `--ralph` flag is enabled, the planning process follows a persistent refinement cycle:
 
