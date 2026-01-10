@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.3](https://github.com/v1truv1us/ai-eng-system/compare/v0.2.0...v0.2.3) (2026-01-10)
+
+
+### ⚠ BREAKING CHANGES
+
+* Default behavior is now autonomous. Use --refine-each-phase for original interactive behavior.
+
+### Bug Fixes
+
+* ralph-wiggum autonomous execution between phases ([16f9c1c](https://github.com/v1truv1us/ai-eng-system/commit/16f9c1cc733dc190539f5538efbac70d0be50311))
+* ralph-wiggum autonomous looping issue with continuous phase execution ([53241c7](https://github.com/v1truv1us/ai-eng-system/commit/53241c7c681b1e3c0c37ba12b7d66e33ae36ee54))
+* resolve plugin installation issues and sync commands ([1bfc229](https://github.com/v1truv1us/ai-eng-system/commit/1bfc229af516d60c7d46ed0f36054d3cd23fc214))
+
 ## [0.2.2] - 2026-01-07
 
 ### Fixed
