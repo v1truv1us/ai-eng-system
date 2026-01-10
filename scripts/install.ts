@@ -4,8 +4,8 @@
  * AI Engineering System Post-Install Script
  *
  * Runs when package is installed via npm/bun.
- * Installs commands, agents, and skills to the project's .opencode directory.
- * Installs hooks to the project's .claude/hooks/ directory for Claude Code.
+ * Installs commands, agents, and skills to project's .opencode directory.
+ * Installs hooks to project's .claude/hooks/ directory for Claude Code.
  *
  * Usage:
  * - Automatic: Runs during npm install
@@ -21,6 +21,61 @@ const __dirname = path.dirname(__filename);
 const packageRoot = path.dirname(__dirname);
 
 const NAMESPACE_PREFIX = "ai-eng";
+
+/**
+ * Clean a namespaced directory before reinstallation.
+ * Only removes ai-eng namespace, preserving other user content.
+ */
+function cleanNamespacedDirectory(
+    baseDir: string,
+    subdir: string,
+    namespace: string,
+    silent = false,
+): void {
+    const dir = path.join(baseDir, subdir, namespace);
+    if (fs.existsSync(dir)) {
+        fs.rmSync(dir, { recursive: true, force: true });
+        if (!silent) {
+            console.log(`  🧹 Cleaned existing ${subdir}/${namespace}/`);
+        }
+    }
+}
+
+/**
+ * Clean ai-eng-system skills by reading skill names from dist.
+ * Only removes skills that are part of ai-eng-system, preserving user skills.
+ */
+function cleanAiEngSkills(
+    targetOpenCodeDir: string,
+    distOpenCodeDir: string,
+    silent = false,
+): void {
+    const targetSkillDir = path.join(targetOpenCodeDir, "skill");
+    const distSkillDir = path.join(distOpenCodeDir, "skill");
+
+    if (!fs.existsSync(distSkillDir)) return;
+
+    // Get list of ai-eng-system skill names from dist
+    const aiEngSkillNames = fs
+        .readdirSync(distSkillDir, { withFileTypes: true })
+        .filter((entry) => entry.isDirectory())
+        .map((entry) => entry.name);
+
+    if (aiEngSkillNames.length === 0) return;
+
+    let cleanedCount = 0;
+    for (const skillName of aiEngSkillNames) {
+        const skillPath = path.join(targetSkillDir, skillName);
+        if (fs.existsSync(skillPath)) {
+            fs.rmSync(skillPath, { recursive: true, force: true });
+            cleanedCount++;
+        }
+    }
+
+    if (!silent && cleanedCount > 0) {
+        console.log(`  🧹 Cleaned ${cleanedCount} existing ai-eng skills`);
+    }
+}
 
 /**
  * Check if ai-eng-system plugin is referenced in opencode.jsonc
@@ -92,7 +147,7 @@ function isClaudeCodeProject(targetDir: string): boolean {
     }
 
     // Even if neither exists, we should install hooks in case user wants to use Claude Code
-    // This ensures users get the hooks regardless of whether they've used Claude Code yet
+    // This ensures users get hooks regardless of whether they've used Claude Code yet
     return true;
 }
 
@@ -232,12 +287,6 @@ async function installClaudeHooks(
         console.log(
             `  ✓ Installed ${copiedFiles.length} hook file(s) to .claude/hooks/`,
         );
-        if (copiedFiles.length > 0 && !silent) {
-            // Only show file details in verbose mode
-            for (const file of copiedFiles) {
-                console.log(`    - ${file}`);
-            }
-        }
         console.log(
             "    📝 Hooks enable automatic prompt optimization (+45-115% quality)",
         );
@@ -257,10 +306,6 @@ async function install(targetDir: string, silent = false): Promise<void> {
 
     const distDir = path.join(packageRoot, "dist");
     const distOpenCodeDir = path.join(distDir, ".opencode");
-
-    // Target directory is already the .opencode directory's parent
-    // targetDir should be the directory containing opencode.jsonc
-    // which is either <project>/.opencode/ or ~/.config/opencode/
     const targetOpenCodeDir = targetDir;
 
     // Verify dist directory exists
@@ -273,16 +318,13 @@ async function install(targetDir: string, silent = false): Promise<void> {
         process.exit(1);
     }
 
-    // Prevent nested .opencode/.opencode creation
-    // If targetDir already contains an .opencode directory, that would be nested
-    const nestedOpencodeDir = path.join(targetDir, ".opencode");
-    if (fs.existsSync(nestedOpencodeDir)) {
-        if (!silent) {
-            console.log(
-                "  ℹ️  .opencode/ directory already exists in target, skipping creation",
-            );
-        }
-    }
+    // Clean existing ai-eng commands before copying
+    cleanNamespacedDirectory(
+        targetOpenCodeDir,
+        "command",
+        NAMESPACE_PREFIX,
+        silent,
+    );
 
     // Copy commands (namespaced under ai-eng/)
     const commandsSrc = path.join(distOpenCodeDir, "command", NAMESPACE_PREFIX);
@@ -303,6 +345,14 @@ async function install(targetDir: string, silent = false): Promise<void> {
             );
     }
 
+    // Clean existing ai-eng agents before copying
+    cleanNamespacedDirectory(
+        targetOpenCodeDir,
+        "agent",
+        NAMESPACE_PREFIX,
+        silent,
+    );
+
     // Copy agents (namespaced under ai-eng/)
     const agentsSrc = path.join(distOpenCodeDir, "agent", NAMESPACE_PREFIX);
     if (fs.existsSync(agentsSrc)) {
@@ -313,59 +363,37 @@ async function install(targetDir: string, silent = false): Promise<void> {
         );
         copyRecursive(agentsSrc, agentsDest);
 
-        function countMarkdownFiles(dir: string): number {
-            let count = 0;
-            const entries = fs.readdirSync(dir);
-            for (const entry of entries) {
-                const fullPath = path.join(dir, entry);
-                const stat = fs.statSync(fullPath);
-                if (stat.isDirectory()) {
-                    count += countMarkdownFiles(fullPath);
-                } else if (entry.endsWith(".md")) {
-                    count++;
-                }
+        let agentCount = 0;
+        const agentEntries = fs.readdirSync(agentsSrc);
+        for (const entry of agentEntries) {
+            const fullPath = path.join(agentsSrc, entry);
+            if (fs.statSync(fullPath).isDirectory()) {
+                agentCount++;
             }
-            return count;
         }
-        const agentCount = countMarkdownFiles(agentsSrc);
         if (!silent)
             console.log(
                 `  ✓ agent/${NAMESPACE_PREFIX}/ (${agentCount} agents)`,
             );
     }
 
+    // Clean existing ai-eng skills before copying
+    cleanAiEngSkills(targetOpenCodeDir, distDir, silent);
+
     // Copy skills (to skill/ - SINGULAR, matching OpenCode docs)
-    // OpenCode expects skills at skill/ (singular, per https://opencode.ai/docs/skills)
     const distSkillDir = path.join(distOpenCodeDir, "skill");
     if (fs.existsSync(distSkillDir)) {
         const skillDest = path.join(targetOpenCodeDir, "skill");
         copyRecursive(distSkillDir, skillDest);
 
-        // Count skills
         const skillDirs = fs.readdirSync(distSkillDir);
         const skillCount = skillDirs.length;
         if (!silent) console.log(`  ✓ skill/ (${skillCount} skills)`);
     }
 
-    // Install Claude Code hooks (async operation)
-    try {
-        // Determine hooks target directory
-        // If installing globally, hooks go to ~/.claude/
-        // If installing to project, hooks go to <project>/.claude/
-        const isGlobal = targetDir.includes(".config");
-        const hooksTargetDir = isGlobal
-            ? path.join(
-                  process.env.HOME || process.env.USERPROFILE || "",
-                  ".claude",
-              )
-            : path.join(path.dirname(targetDir), ".claude");
-
-        await installClaudeHooks(hooksTargetDir, silent);
-    } catch (error) {
-        // Log error but don't fail the entire installation
-        const message = error instanceof Error ? error.message : String(error);
-        console.error(`  ⚠️  Failed to install Claude Code hooks: ${message}`);
-    }
+    // Install Claude Code hooks (in parent directory of .opencode)
+    const projectRootDir = path.dirname(targetDir);
+    await installClaudeHooks(projectRootDir, silent);
 
     if (!silent) {
         console.log("\n✅ Installation complete!");
