@@ -271,7 +271,7 @@ export class OpenCodeClient {
                 const promptWithTimeout = Promise.race([
                     this.client.session.prompt({
                         body: {
-                            messageID: sessionId,
+                            messageID: this.generateMessageId(),
                             parts: [
                                 {
                                     type: "text",
@@ -383,6 +383,14 @@ export class OpenCodeClient {
      */
     private generateSessionId(): string {
         return `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    }
+
+    /**
+     * Generate a properly formatted message ID with msg_ prefix
+     * Format: msg_<timestamp>_<random>
+     */
+    private generateMessageId(): string {
+        return `msg_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
     }
 
     /**
