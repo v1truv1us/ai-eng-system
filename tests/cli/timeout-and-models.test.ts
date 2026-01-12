@@ -171,6 +171,44 @@ describe("Fix #2: Configurable Models", () => {
         expect(model).toBe("claude-3-5-sonnet-latest");
     });
 
+    it("should throw error when no model is configured", () => {
+        const config: AiEngConfig = {
+            version: 1,
+            runner: {
+                backend: "opencode",
+                review: "opencode",
+                artifactsDir: ".ai-eng/runs",
+                maxIters: 3,
+            },
+            opencode: {
+                model: "",
+                temperature: 0.2,
+            },
+            anthropic: {
+                enabled: false,
+                model: "",
+            },
+            gates: {
+                lint: "bun run lint",
+                typecheck: "bun run typecheck",
+                test: "bun run test",
+                build: "bun run build",
+            },
+            models: {
+                research: "",
+                planning: "",
+                exploration: "",
+                coding: "",
+                default: "",
+            },
+        };
+
+        expect(() => resolveModel(config)).toThrow("No model configured");
+        expect(() => resolveModel(config, "research")).toThrow(
+            "No model configured for task type 'research'",
+        );
+    });
+
     it("should get all configured models", () => {
         const config: AiEngConfig = {
             version: 1,
