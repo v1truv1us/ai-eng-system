@@ -9,8 +9,9 @@ import YAML from "yaml";
 import type { AiEngConfig, DEFAULT_CONFIG } from "./schema.js";
 import type { RalphFlags } from "../cli/flags.js";
 
-const ROOT =
-    process.env.TEST_ROOT ?? join(fileURLToPath(import.meta.url), "..", "..");
+// Use current working directory where command is called from
+// This ensures .ai-eng/config.yaml is loaded from user's project directory
+const ROOT = process.env.TEST_ROOT ?? process.cwd();
 
 /**
  * Load configuration from .ai-eng/config.yaml
