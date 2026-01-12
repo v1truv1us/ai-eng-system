@@ -14,6 +14,10 @@ export interface RunnerConfig {
     artifactsDir: string;
     /** Maximum iterations per run */
     maxIters: number;
+    /** Print logs to stderr */
+    printLogs?: boolean;
+    /** Log level */
+    logLevel?: "DEBUG" | "INFO" | "WARN" | "ERROR";
 }
 
 /**
@@ -94,6 +98,8 @@ export const DEFAULT_CONFIG: AiEngConfig = {
         review: "opencode",
         artifactsDir: ".ai-eng/runs",
         maxIters: 3,
+        printLogs: false,
+        logLevel: "INFO",
     },
     opencode: {
         model: "claude-3-5-sonnet-latest",

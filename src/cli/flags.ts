@@ -2,6 +2,8 @@
  * CLI Flag Types for ai-eng ralph
  */
 
+export type LogLevel = "DEBUG" | "INFO" | "WARN" | "ERROR";
+
 export interface RalphFlags {
     /** Workflow specification file path */
     workflow?: string;
@@ -21,4 +23,13 @@ export interface RalphFlags {
     ci?: boolean;
     /** Show help message */
     help?: boolean;
+
+    /** Print logs to stderr */
+    printLogs?: boolean;
+    /** Log level */
+    logLevel?: LogLevel;
+    /** Verbose output (alias for logLevel=DEBUG) */
+    verbose?: boolean;
+    /** Use TUI mode instead of CLI */
+    tui?: boolean;
 }

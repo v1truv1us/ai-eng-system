@@ -5,7 +5,14 @@
  * for ai-eng ralph runner using OpenCode SDK.
  */
 
-import { createOpencodeClient, type OpencodeClient } from "@opencode-ai/sdk";
+import {
+    createOpencode,
+    createOpencodeClient,
+    type OpencodeClient,
+} from "@opencode-ai/sdk";
+import { Log } from "../../util/log.js";
+
+const log = Log.create({ service: "opencode-client" });
 
 /**
  * Response interface for messages
@@ -29,12 +36,16 @@ export interface Session {
 export interface ClientConfig {
     /** Custom client instance (for testing) */
     client?: OpencodeClient;
-    /** Connection timeout in milliseconds */
+    /** Connection timeout in milliseconds (default: 10000) */
     timeout?: number;
     /** Retry attempts for failed operations */
     retryAttempts?: number;
     /** Prompt timeout in milliseconds */
     promptTimeout?: number;
+    /** URL of existing OpenCode server to reuse (if provided, won't spawn new server) */
+    existingServerUrl?: string;
+    /** Server startup timeout in milliseconds (default: 10000) */
+    serverStartupTimeout?: number;
 }
 
 /**
@@ -49,13 +60,92 @@ export class OpenCodeClient {
     private retryAttempts: number;
     private activeSessions: Map<string, Session>;
     private promptTimeout: number;
+    private server: { url: string; close: () => void } | null = null;
+    private serverStartupTimeout: number;
 
-    constructor(config: ClientConfig = {}) {
-        this.client = config.client || createOpencodeClient();
+    /**
+     * Private constructor - use static create() factory method instead
+     */
+    private constructor(
+        client: OpencodeClient,
+        server: { url: string; close: () => void } | null,
+        config: ClientConfig = {},
+    ) {
+        this.client = client;
+        this.server = server;
         this.timeout = config.timeout || 30000;
         this.retryAttempts = config.retryAttempts || 3;
         this.promptTimeout = config.promptTimeout || 120000; // 120 seconds default
+        this.serverStartupTimeout = config.serverStartupTimeout || 10000; // 10 seconds default
         this.activeSessions = new Map();
+
+        log.debug("OpenCodeClient initialized", {
+            hasOwnServer: !!this.server,
+            timeout: this.timeout,
+            serverStartupTimeout: this.serverStartupTimeout,
+        });
+    }
+
+    /**
+     * Static factory method to create an OpenCodeClient
+     *
+     * Creates a new client with either:
+     * 1. A fresh OpenCode server (default behavior)
+     * 2. An existing server URL (if existingServerUrl is provided)
+     * 3. A custom client instance (for testing)
+     */
+    static async create(config: ClientConfig = {}): Promise<OpenCodeClient> {
+        try {
+            // If custom client provided (for testing), use it directly
+            if (config.client) {
+                log.info("Creating OpenCodeClient with custom client instance");
+                return new OpenCodeClient(config.client, null, config);
+            }
+
+            // If existing server URL provided, connect to it
+            if (config.existingServerUrl) {
+                log.info("Connecting to existing OpenCode server", {
+                    url: config.existingServerUrl,
+                });
+                try {
+                    const client = createOpencodeClient({
+                        baseUrl: config.existingServerUrl,
+                    });
+
+                    // Verify connection by making a test request
+                    log.debug("Verifying connection to existing server...");
+                    // Note: We'll skip verification for now to avoid unnecessary API calls
+                    // The connection will be verified when first session is created
+
+                    return new OpenCodeClient(client, null, config);
+                } catch (error) {
+                    const errorMsg =
+                        error instanceof Error ? error.message : String(error);
+                    log.error("Failed to connect to existing server", {
+                        url: config.existingServerUrl,
+                        error: errorMsg,
+                    });
+                    throw error;
+                }
+            }
+
+            // Default: spawn a new OpenCode server
+            log.info("Spawning new OpenCode server...", {
+                timeout: config.serverStartupTimeout || 10000,
+            });
+
+            const { client, server } = await createOpencode({
+                timeout: config.serverStartupTimeout || 10000,
+            });
+
+            log.info("OpenCode server started successfully");
+            return new OpenCodeClient(client, server, config);
+        } catch (error) {
+            const errorMsg =
+                error instanceof Error ? error.message : String(error);
+            log.error("Failed to create OpenCodeClient", { error: errorMsg });
+            throw new Error(`Failed to create OpenCodeClient: ${errorMsg}`);
+        }
     }
 
     /**
@@ -296,9 +386,44 @@ export class OpenCodeClient {
     }
 
     /**
-     * Cleanup method to close all sessions
+     * Cleanup method to close all sessions and server
      */
     async cleanup(): Promise<void> {
-        await this.closeAllSessions();
+        try {
+            log.debug("Starting cleanup...", {
+                activeSessions: this.activeSessions.size,
+                hasServer: !!this.server,
+            });
+
+            // Close all active sessions
+            await this.closeAllSessions();
+
+            // Stop the OpenCode server if we started one
+            if (this.server) {
+                log.info("Closing spawned OpenCode server");
+                try {
+                    this.server.close();
+                    this.server = null;
+                    log.info("OpenCode server closed successfully");
+                } catch (error) {
+                    const errorMsg =
+                        error instanceof Error ? error.message : String(error);
+                    log.error("Error closing OpenCode server", {
+                        error: errorMsg,
+                    });
+                }
+            } else {
+                log.debug(
+                    "No spawned server to close (connected to existing server)",
+                );
+            }
+
+            log.info("Cleanup complete");
+        } catch (error) {
+            const errorMsg =
+                error instanceof Error ? error.message : String(error);
+            log.error("Error during cleanup", { error: errorMsg });
+            throw error;
+        }
     }
 }

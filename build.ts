@@ -586,6 +586,7 @@ async function copyCLI(): Promise<void> {
     const cliSrcDir = join(ROOT, "src", "cli");
     const backendsSrcDir = join(ROOT, "src", "backends");
     const configSrcDir = join(ROOT, "src", "config");
+    const utilSrcDir = join(ROOT, "src", "util");
 
     if (existsSync(cliSrcDir)) {
         await copyDirRecursive(cliSrcDir, join(DIST_DIR, "cli"));
@@ -595,6 +596,9 @@ async function copyCLI(): Promise<void> {
     }
     if (existsSync(configSrcDir)) {
         await copyDirRecursive(configSrcDir, join(DIST_DIR, "config"));
+    }
+    if (existsSync(utilSrcDir)) {
+        await copyDirRecursive(utilSrcDir, join(DIST_DIR, "util"));
     }
 }
 

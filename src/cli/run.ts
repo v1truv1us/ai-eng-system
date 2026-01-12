@@ -4,33 +4,44 @@
  */
 
 import { parseArgs } from "node:util";
-import type { RalphFlags } from "./flags.js";
+import type { RalphFlags, LogLevel } from "./flags.js";
 import { loadConfig } from "../config/loadConfig.js";
 import { launchTui } from "./tui/App.js";
+import { runCli } from "./run-cli.js";
+import { Log } from "../util/log.js";
+import { UI } from "./ui.js";
 
 const HELP_TEXT = `
 ai-eng ralph - Iteration loop runner for ai-eng-system
 
 USAGE:
-  ai-eng [workflow] [options]
+  ai-eng [prompt] [options]
+  ai-eng [workflow.yml] [options]
 
-WORKFLOW:
-  Path to workflow specification file or directory
+POSITIONAL:
+  prompt/workflow    Task prompt or path to workflow specification
 
 OPTIONS:
-  --max-iters <number>     Maximum iterations (default: from config)
-  --gates <gate1,gate2>   Comma-separated list of quality gates
-  --review <mode>          Review mode: none|opencode|anthropic|both
-  --resume                 Resume previous run
-  --run-id <id>           Specific run ID to resume
-  --dry-run               Show what would be done without executing
-  --ci                     Run in CI mode (no interactive prompts)
-  --help                   Show this help message
+  --max-iters <n>     Maximum iterations (default: from config)
+  --gates <g1,g2>     Comma-separated list of quality gates
+  --review <mode>     Review mode: none|opencode|anthropic|both
+  --resume            Resume previous run
+  --run-id <id>       Specific run ID to resume
+  --dry-run           Show what would be done without executing
+  --ci                Run in CI mode (no interactive prompts)
+  
+  --print-logs        Print detailed logs to stderr
+  --log-level <lvl>   Log level: DEBUG|INFO|WARN|ERROR (default: INFO)
+  -v, --verbose       Verbose output (same as --log-level DEBUG)
+  --tui               Use TUI mode instead of CLI
+  
+  --help              Show this help message
 
 EXAMPLES:
-  ai-eng feature-spec.yml
-  ai-eng --max-iters 5 --review both
-  ai-eng --resume --run-id abc123
+  ai-eng "implement user authentication"
+  ai-eng feature-spec.yml --max-iters 5
+  ai-eng "fix the bug" --print-logs --log-level DEBUG
+  ai-eng --tui --resume
 `;
 
 async function main() {
@@ -46,6 +57,11 @@ async function main() {
                 "dry-run": { type: "boolean" },
                 ci: { type: "boolean" },
                 help: { type: "boolean" },
+                // NEW FLAGS
+                "print-logs": { type: "boolean" },
+                "log-level": { type: "string" },
+                verbose: { type: "boolean", short: "v" },
+                tui: { type: "boolean" },
             },
             allowPositionals: true,
         });
@@ -65,6 +81,13 @@ async function main() {
             dryRun: values["dry-run"],
             ci: values.ci,
             help: values.help,
+            // NEW
+            printLogs: values["print-logs"],
+            logLevel:
+                (values["log-level"] as LogLevel) ??
+                (values.verbose ? "DEBUG" : undefined),
+            verbose: values.verbose,
+            tui: values.tui,
         };
 
         // Show help
@@ -73,23 +96,29 @@ async function main() {
             process.exit(0);
         }
 
+        // Initialize logging
+        await Log.init({
+            print: flags.printLogs ?? false,
+            level: flags.logLevel ?? "INFO",
+            logDir: ".ai-eng/logs",
+        });
+
+        Log.Default.info("ai-eng ralph starting", {
+            flags: JSON.stringify(flags),
+        });
+
         // Load config
         const config = await loadConfig(flags);
 
-        // Log parsed information
-        console.log("🚀 ai-eng ralph runner");
-        console.log("=".repeat(50));
-        console.log("Parsed flags:", JSON.stringify(flags, null, 2));
-        console.log("Config:", JSON.stringify(config, null, 2));
-
-        // Launch TUI
-        console.log("\n🚀 Launching TUI dashboard...");
-        await launchTui(config, flags);
+        // Choose mode: TUI or CLI
+        if (flags.tui) {
+            UI.info("Launching TUI mode...");
+            await launchTui(config, flags);
+        } else {
+            await runCli(config, flags);
+        }
     } catch (error) {
-        console.error(
-            "❌ CLI error:",
-            error instanceof Error ? error.message : String(error),
-        );
+        UI.error(error instanceof Error ? error.message : String(error));
         process.exit(1);
     }
 }
