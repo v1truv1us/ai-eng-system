@@ -20,7 +20,19 @@ All /ai-eng/* commands available.
 
 /ai-eng/review - Multi-agent code review (add `--ralph` for thorough analysis)
 
-> **🔄 Ralph Wiggum**: All core commands support `--ralph` flag for persistent iteration. See [Ralph Wiggum Integration](../features/ralph-wiggum/) for complete documentation.
+---
+
+## Workflow Orchestration
+
+/ai-eng/ralph-wiggum - Full-cycle feature development with continuous iteration through all phases
+
+Orchestrates Research → Specify → Plan → Work → Review in persistent loops
+
+> **🔄 Ralph Wiggum**: Full-cycle orchestration command for autonomous feature development. See [Ralph Wiggum Integration](../features/ralph-wiggum/) for complete documentation.
+
+---
+
+> **⚡ Ralph Wiggum Flags**: Core commands also support `--ralph` flag for persistent iteration within individual phases.
 
 ---
 
@@ -59,3 +71,15 @@ All /ai-eng/* commands available.
 /ai-eng/compound - Document solved problems
 
 See individual command files for detailed usage
+
+---
+
+## Command Categories
+
+| Category | Commands |
+|----------|----------|
+| Core Workflow | research, specify, plan, work, review |
+| Orchestration | ralph-wiggum |
+| Development | seo, deploy, optimize, clean |
+| Creation | create-plugin, create-agent, create-command, create-skill, create-tool |
+| Utility | recursive-init, context, compound |

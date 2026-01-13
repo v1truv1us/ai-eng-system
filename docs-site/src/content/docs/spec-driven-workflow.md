@@ -97,6 +97,8 @@ flowchart TD
 - [ ] **Phase 5**: Run `/ai-eng/review` to get multi-agent review
 - [ ] **Repeat**: If review finds issues, go back to Phase 4
 
+> **🔄 Full Automation**: Use `/ai-eng/ralph-wiggum "feature description"` for autonomous execution through all phases with persistent iteration.
+
 ## Best Practices
 
 ### ✅ Do
@@ -115,6 +117,8 @@ flowchart TD
 
 ## Example: Complete Feature Development
 
+### Manual Phase-by-Phase
+
 ```bash
 # 1. Research the domain
 /ai-eng/research "payment processing integration stripe"
@@ -132,20 +136,28 @@ flowchart TD
 /review
 ```
 
+### Automated with Ralph Wiggum
+
+```bash
+# Orchestrate all phases with continuous iteration
+/ai-eng/ralph-wiggum "implement payment processing with Stripe integration"
+
+# Start from existing spec
+/ai-eng/ralph-wiggum "payment processing" --from-spec=specs/payment/spec.md
+
+# Dry run to see execution plan
+/ai-eng/ralph-wiggum "payment processing" --dry-run
+```
+
 ## Related Documentation
 
-- [README.md](./README.md) - Project overview
-- [IMPLEMENTATION-ROADMAP.md](./IMPLEMENTATION-ROADMAP.md) - Technical roadmap
-- [TODO.md](./TODO.md) - Current task tracking
-- [content/commands/specify.md](./content/commands/specify.md) - Specify command details
-- [content/commands/plan.md](./content/commands/plan.md) - Plan command details
-- [content/commands/work.md](./content/commands/work.md) - Work command details
-
-## Methodology
-
-Based on [GitHub's spec-driven development approach](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/).
+- [Ralph Wiggum](./features/ralph-wiggum.md) - Autonomous feature development with continuous iteration
+- [Agent Coordination](./features/agent-coordination.md) - Three-mode workflow for agent delegation
+- [Commands Reference](./reference/commands.md) - All available commands
+- [Skills Reference](./reference/skills.md) - Available skill packs
+- [Agents Reference](./reference/agents.md) - Specialized agents
 
 ---
 
-**Last Updated**: 2025-12-30
-**Version**: 0.0.10
+**Last Updated**: 2026-01-12
+**Version**: 1.0.0

@@ -1,206 +1,220 @@
 ---
-title: Ralph Wiggum Integration
+title: Ralph Wiggum
+description: Autonomous feature development with continuous iteration
 ---
 
-# Ralph Wiggum Integration
+# Ralph Wiggum
 
-## 🎯 What We Accomplished
+Autonomous feature development with continuous iteration through all phases.
 
-**Session Date**: 2026-01-05  
-**Status**: ✅ **COMPLETE** - All 5 phase commands now support Ralph Wiggum iteration
+---
 
-## 📋 Overview
+## Philosophy
 
-Successfully integrated the **Ralph Wiggum iteration pattern** across all 5 phase commands in the ai-eng-system. This brings persistent, iterative refinement to research, specification, planning, work execution, and code review - exactly as requested by the user.
+"Iteration > Perfection, Failures Are Data, Persistence Wins"
 
-## 🔄 Ralph Wiggum Philosophy
+Executes complete spec-driven workflow in persistent loops until feature completion.
 
-**Core Principle**: "Iteration > Perfection, Failures Are Data, Persistence Wins"
+---
 
-**Implementation**: Each phase command now supports a `--ralph` flag that enables:
-- **Conservative Default**: 10 iterations (prevents excessive token usage)
-- **Custom Override**: `--ralph-max-iterations <n>` for complex tasks
-- **Quality Gates**: Optional validation after each iteration
-- **Progress Tracking**: Detailed iteration metrics and status
-- **Smart Completion**: Phase-specific completion promises
-- **Safety Features**: History logging, graceful failure handling
+## What It Does
 
-## 🚀 Commands Updated
+Orchestrates all five phases automatically:
 
-### ✅ `/ai-eng/work` - **TDD Implementation Cycle**
-- **Complete**: Already fully implemented in previous session
-- **Cycle**: Write failing test → Implement minimal code → Test → Repeat
-- **Quality Gates**: Test execution, linting, security scans
-- **Promise**: "Implementation meets all acceptance criteria and passes quality gates"
+Research → Specify → Plan → Work → Review
 
-### ✅ `/ai-eng/research` - **Progressive Research Deepening**
-- **New**: Added Ralph Wiggum support (245 lines → 300+ lines)
-- **Cycle**: Research → Gap analysis → Targeted deepening → Validation
-- **Quality Gates**: Evidence completeness, confidence scoring
-- **Promise**: "Research is complete and comprehensive"
-- **Features**: Evidence citation tracking, confidence evolution, open question resolution
+Returns to earlier phases based on review findings
 
-### ✅ `/ai-eng/specify` - **Specification Refinement**
-- **New**: Added Ralph Wiggum support (484 lines → 550+ lines)
-- **Cycle**: Draft → Gap analysis → Requirement enhancement → Validation
-- **Quality Gates**: No unclarified markers, completeness checks
-- **Promise**: "Specification is complete and ready for implementation"
-- **Features**: `[NEEDS CLARIFICATION]` resolution, user story enhancement, NFR coverage
+Stops when all acceptance criteria met
 
-### ✅ `/ai-eng/plan` - **Planning Enhancement**
-- **New**: Added Ralph Wiggum support (507 lines → 600+ lines)
-- **Cycle**: Plan → Gap analysis → Task refinement → Dependency mapping
-- **Quality Gates**: Task completeness, dependency validation
-- **Promise**: "Plan is comprehensive and ready for execution"
-- **Features**: Task atomicity, dependency mapping, risk mitigation strengthening
+---
 
-### ✅ `/ai-eng/review` - **Multi-Perspective Review Deepening**
-- **New**: Added Ralph Wiggum support (147 lines → 250+ lines)
-- **Cycle**: Review → Gap analysis → Perspective deepening → Finding enhancement
-- **Quality Gates**: Critical findings, recommendations completeness
-- **Promise**: "Review is comprehensive and all findings addressed"
-- **Features**: Escalating focus, severity validation, recommendation strengthening
+## Quick Start
 
-## 🔧 Technical Implementation
-
-### Consistent Flag Set
-All 5 commands now support the same 8 Ralph Wiggum options:
-
-| Flag | Purpose | Default |
-|------|---------|---------|
-| `--ralph` | Enable iteration mode | - |
-| `--ralph-max-iterations <n>` | Max iterations | 10 |
-| `--ralph-completion-promise <text>` | Custom completion | Phase-specific |
-| `--ralph-quality-gate <command>` | Validation command | None |
-| `--ralph-stop-on-gate-fail` | Stop on failure | Continue |
-| `--ralph-show-progress` | Progress display | Enabled |
-| `--ralph-log-history <file>` | Iteration logging | Optional |
-| `--ralph-verbose` | Detailed output | Optional |
-
-### Progress Tracking
-Each iteration provides structured progress output:
-```
-🔄 Ralph Wiggum [Phase] Iteration 3/10
-📊 [Metric 1]: [value] (+change this iteration)
-📝 [Metric 2]: [value] (+change this iteration)
-✅ Quality gate: PASSED/FAILED
-🎯 [Progress metric]: [score] (improving/stable)
-```
-
-### Quality Gates
-Phase-specific quality validation:
-- **Research**: Evidence completeness, confidence scoring
-- **Specify**: No `[NEEDS CLARIFICATION]` markers, coverage checks
-- **Plan**: Task completeness, dependency mapping
-- **Work**: Test execution, quality checks
-- **Review**: Critical findings, recommendations
-
-## 📚 Documentation Enhanced
-
-### Quick Start Examples Updated
-All commands now show Ralph Wiggum usage in Quick Start:
 ```bash
-# Basic usage
-/ai-eng/research "authentication patterns"
+# Full-cycle feature development
+/ai-eng/ralph-wiggum "implement user authentication with JWT tokens"
 
-# Ralph Wiggum iteration
+# Start from existing specification
+/ai-eng/ralph-wiggum "user authentication" --from-spec=specs/auth/spec.md
+
+# Start from existing plan
+/ai-eng/ralph-wiggum "user authentication" --from-plan=specs/auth/plan.md
+
+# With checkpoints for manual review
+/ai-eng/ralph-wiggum "user authentication" --checkpoint=all
+
+# Dry run to see execution plan
+/ai-eng/ralph-wiggum "user authentication" --dry-run
+```
+
+---
+
+## Key Options
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `--max-cycles <n>` | 5 | Maximum full workflow cycles |
+| `--max-phase-iterations <n>` | 10 | Max iterations per phase |
+| `--checkpoint` | none | Pause points: `all`, `review`, or `none` |
+| `--from-research <path>` | - | Start from existing research document |
+| `--from-spec <path>` | - | Start from existing specification |
+| `--from-plan <path>` | - | Start from existing plan |
+| `--show-progress` | true | Show detailed cycle progress |
+| `--dry-run` | false | Show plan without executing |
+| `--resume` | false | Resume from last checkpoint |
+
+---
+
+## How It Works
+
+### Phase 0: Prompt Refinement
+
+Transforms your prompt into structured TCRO format (Task, Context, Requirements, Output)
+
+### Phase 1: Git Setup
+
+Creates feature branch automatically
+
+### Phase 2: Main Cycle Loop
+
+Executes all five phases in sequence
+
+After review, analyzes gaps and returns to appropriate phase
+
+Repeats until completion criteria met or max cycles reached
+
+### Phase 3: Checkpoint Management
+
+Saves state after each cycle to `.ralph-wiggum/[feature]/checkpoint.json`
+
+Enables resume with `--resume` flag
+
+### Phase 4: Pull Request Creation
+
+Creates draft PR with comprehensive summary when complete
+
+---
+
+## Completion Criteria
+
+Feature completes when:
+
+- Review status: APPROVE (no critical or major findings)
+- Quality gates: All pass
+- Spec coverage: All acceptance criteria marked complete
+- Test coverage: ≥ 80%
+- Documentation: Updated and complete
+
+---
+
+## Progress Tracking
+
+Shows detailed metrics after each cycle:
+
+```
+🔄 Ralph Wiggum Cycle 2/5 for "user authentication"
+
+📊 Phase Status:
+  ✅ Research: Complete (confidence: 0.9)
+  ✅ Specify: Complete (5 user stories, 23 acceptance criteria)
+  ✅ Plan: Complete (12 tasks, 8 hours estimated)
+  🔄 Work: In Progress (8/12 tasks complete)
+  ⏳ Review: Pending
+
+📈 Quality Gates:
+  ✅ Lint: Passing
+  ✅ Types: Passing
+  🔄 Tests: 15/20 passing (75%)
+  ⏳ Build: Not run
+
+💰 Token Usage: 45,230 total (this cycle: 12,450)
+⏱️ Elapsed: 23m 45s
+```
+
+---
+
+## Gap Analysis
+
+After review, determines which phase to return to:
+
+| Finding Type | Severity | Return To |
+|-------------|-----------|-----------|
+| Missing requirements | Any | SPECIFY |
+| Unclear acceptance criteria | Any | SPECIFY |
+| Architectural issues | Major/Critical | PLAN |
+| Missing dependencies | Any | PLAN |
+| Implementation bugs | Any | WORK |
+| Test coverage gaps | Any | WORK |
+
+---
+
+## Safety Features
+
+Max cycles limit prevents infinite loops
+
+Stuck detection alerts after 3 cycles without progress
+
+Token usage tracked and displayed
+
+Checkpoints enable resume after interruption
+
+---
+
+## Using Ralph Wiggum Flags on Individual Commands
+
+All phase commands support `--ralph` flag for persistent iteration:
+
+```bash
+# Ralph Wiggum iteration on research only
 /ai-eng/research "complex topic" --ralph --ralph-show-progress
 
-# Custom iteration with quality gate
+# Ralph Wiggum iteration on implementation only
 /ai-eng/work "feature" --ralph --ralph-max-iterations 15 --ralph-quality-gate="npm test"
+
+# Ralph Wiggum iteration on review only
+/ai-eng/review . --ralph --ralph-focus=security --ralph-max-iterations 12
 ```
 
-### Implementation Notes Added
-Each command now includes:
-- **Ralph Wiggum Iteration Mode** section with complete cycle description
-- **Quality Gates** with phase-specific examples
-- **Progress Tracking** with iteration metrics
-- **Implementation Notes** with best practices
-- **Default Settings** and configuration options
+---
 
-## 🎯 Key Benefits
+## When to Use Ralph Wiggum
 
-### 1. **Conservative by Default**
-- 10 iterations prevents runaway token usage
-- Override available for complex tasks
-- Quality gates optional but recommended
+### Ideal For
 
-### 2. **Phase-Optimized**
-- Each phase has tailored completion promises
-- Quality gates match phase-specific needs
-- Progress metrics relevant to each domain
+Well-defined features with clear acceptance criteria
 
-### 3. **Safety First**
-- History logging for debugging
-- Graceful failure handling
-- Stop-on-gate-fail option
-- Detailed progress tracking
+Complex features requiring multiple iterations
 
-### 4. **Developer Experience**
-- Consistent flag interface across all commands
-- Clear progress feedback
-- Verbose mode for detailed debugging
-- Smart completion detection
+Unattended development (overnight builds)
 
-## 📊 Statistics
+Features with comprehensive quality requirements
 
-**Files Modified**: 5 command files
-**Lines Added**: ~400+ lines of Ralph Wiggum documentation
-**Options Added**: 40 total options (8 per command × 5 commands)
-**Examples Updated**: 15+ new usage examples
-**Integration**: Complete across all phase commands
+### Less Ideal For
 
-## 🔄 Next Steps
+Exploratory research without clear goals
 
-### Immediate (Ready Now)
-- All 5 phase commands support Ralph Wiggum iteration
-- Users can start using `--ralph` flag immediately
-- Documentation is comprehensive and ready
+Quick bug fixes
 
-### Future Enhancements (Optional)
-- Add Ralph Wiggum support to utility commands
-- Create Ralph Wiggum usage guide
-- Add integration tests for iteration logic
-- Consider Ralph Wiggum templates for common patterns
+Experimental prototypes
 
-## 🚀 Usage Examples
+Small, trivial changes
 
-### Complex Research
-```bash
-/ai-eng/research "microservices patterns" --ralph --ralph-max-iterations 15 --ralph-show-progress
-```
+---
 
-### Feature Specification
-```bash
-/ai-eng/specify "user authentication" --ralph --ralph-quality-gate="rg '\[NEEDS CLARIFICATION\]' specs/*/spec.md" --ralph-stop-on-gate-fail
-```
+## Comparison: Full-Cycle vs. Individual Phases
 
-### Implementation Work
-```bash
-/ai-eng/work "implement auth" --ralph --ralph-max-iterations 20 --ralph-quality-gate="npm test && npm run lint"
-```
+| Approach | Use Case | Control |
+|----------|-----------|---------|
+| `/ai-eng/ralph-wiggum` | Complete feature development | Autonomous execution |
+| `/ai-eng/research --ralph` | Deep research only | Single phase iteration |
+| `/ai-eng/work --ralph` | Implementation refinement | Single phase iteration |
 
-### Code Review
-```bash
-/ai-eng/review src/ --ralph --ralph-focus=security --ralph-max-iterations 12 --ralph-verbose
-```
+---
 
-## 🎉 Success Metrics
+## Related Documentation
 
-✅ **Complete Integration**: All 5 phase commands support Ralph Wiggum  
-✅ **Consistent Interface**: Same 8 flags across all commands  
-✅ **Conservative Defaults**: 10 iterations prevent token waste  
-✅ **Phase-Optimized**: Tailored promises and quality gates  
-✅ **Safety Features**: History logging, graceful failures  
-✅ **Documentation**: Comprehensive guides and examples  
-✅ **Ready to Use**: Users can start immediately  
-
-## 📝 Final Notes
-
-The Ralph Wiggum integration is now **complete and production-ready**. Users can add `--ralph` to any phase command to enable persistent iteration toward quality results. The implementation balances power (flexible iteration) with safety (conservative defaults and quality gates), exactly as requested.
-
-**Total Implementation Time**: ~2 hours across 2 sessions  
-**Code Quality**: Production-ready with comprehensive documentation  
-**User Experience**: Consistent, intuitive, and safe  
-
-🎯 **Mission Accomplished**: Ralph Wiggum iteration is now available across the entire spec-driven workflow!
+- [Commands Reference](../reference/commands.md) - All available commands
+- [Spec-Driven Workflow](../spec-driven-workflow.md) - Complete development cycle
+- [Agent Coordination](./agent-coordination.md) - Three-mode workflow
+- [Skills Reference](../reference/skills.md) - ralph-wiggum skill details

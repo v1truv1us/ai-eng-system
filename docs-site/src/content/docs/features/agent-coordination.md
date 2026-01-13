@@ -48,3 +48,5 @@ No code modifications, read-only analysis
 `/ai-eng/work` - Execute with quality tracking
 
 `/ai-eng/review` - Multi-agent code review
+
+`/ai-eng/ralph-wiggum` - Full-cycle orchestration with iteration
