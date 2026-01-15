@@ -6,9 +6,9 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import YAML from "yaml";
-import type { RalphFlags } from "../cli/flags.js";
-import type { AiEngConfig, DEFAULT_CONFIG } from "./schema.js";
-import { DEFAULT_CONFIG as HARDCODED_DEFAULTS } from "./schema.js";
+import type { RalphFlags } from "../cli/flags";
+import type { AiEngConfig, DEFAULT_CONFIG } from "./schema";
+import { DEFAULT_CONFIG as HARDCODED_DEFAULTS } from "./schema";
 
 // Use current working directory where command is called from
 // This ensures .ai-eng/config.yaml is loaded from user's project directory

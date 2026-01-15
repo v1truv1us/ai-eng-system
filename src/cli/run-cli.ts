@@ -7,20 +7,20 @@
  * - Loop mode (default): Iterates with fresh OpenCode sessions per cycle
  * - Single-shot mode (--no-loop): Single execution with prompt optimization
  */
-import { select, isCancel, outro, spinner } from "@clack/prompts";
-import type { AiEngConfig } from "../config/schema.js";
-import type { RalphFlags } from "./flags.js";
-import { PromptOptimizer } from "../prompt-optimization/optimizer.js";
+import { isCancel, outro, select, spinner } from "@clack/prompts";
 import {
-    OpenCodeClient,
     type MessageResponse,
-} from "../backends/opencode/client.js";
+    OpenCodeClient,
+} from "../backends/opencode/client";
+import type { AiEngConfig } from "../config/schema";
 import {
-    createRalphLoopRunner,
     RalphLoopRunner,
-} from "../execution/ralph-loop.js";
-import { UI } from "./ui.js";
-import { Log } from "../util/log.js";
+    createRalphLoopRunner,
+} from "../execution/ralph-loop";
+import { PromptOptimizer } from "../prompt-optimization/optimizer";
+import { Log } from "../util/log";
+import type { RalphFlags } from "./flags";
+import { UI } from "./ui";
 
 const log = Log.create({ service: "run-cli" });
 

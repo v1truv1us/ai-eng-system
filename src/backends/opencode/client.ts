@@ -11,7 +11,7 @@ import {
     createOpencode,
     createOpencodeClient,
 } from "@opencode-ai/sdk";
-import { Log } from "../../util/log.js";
+import { Log } from "../../util/log";
 
 const log = Log.create({ service: "opencode-client" });
 

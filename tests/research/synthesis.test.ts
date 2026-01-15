@@ -3,7 +3,7 @@
  */
 
 import { beforeEach, describe, expect, it, mock } from "bun:test";
-import { SynthesisHandlerImpl } from "../../src/research/synthesis.js";
+import { SynthesisHandlerImpl } from "../../src/research/synthesis";
 import {
     type AnalysisResult,
     ConfidenceLevel,
@@ -12,7 +12,7 @@ import {
     type ResearchExportOptions,
     type ResearchQuery,
     ResearchScope,
-} from "../../src/research/types.js";
+} from "../../src/research/types";
 
 describe("SynthesisHandlerImpl", () => {
     let handler: SynthesisHandlerImpl;

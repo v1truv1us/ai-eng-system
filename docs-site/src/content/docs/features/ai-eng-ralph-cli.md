@@ -21,23 +21,36 @@ Each iteration automatically improves based on results, creating a continuous lo
 
 ## Installation
 
-The CLI is built as part of the ai-eng-system project:
+Install globally via npm (works with Node.js or Bun):
+
+```bash
+npm install -g ai-eng-system
+
+# Run the CLI
+ai-eng ralph "implement user authentication"
+```
+
+### Quick Start
+
+```bash
+# Default to ralph (shortcut)
+ai-eng "fix the bug" --print-logs
+
+# Explicit ralph subcommand
+ai-eng ralph "implement authentication" --ship
+
+# TUI mode
+ai-eng ralph --tui "build a REST API"
+```
+
+### Development
+
+Run directly from source (requires Bun):
 
 ```bash
 # From project root
-cd ~/git/ai-eng-system
 bun run build
-
-# Run the CLI
-bun ~/git/ai-eng-system/src/cli/run.ts
-```
-
-Or from the worktree:
-
-```bash
-# From feature branch worktree
-cd ~/git/ai-eng-ralph-cli
-bun src/cli/run.ts
+bun src/cli/run.ts "implement user authentication"
 ```
 
 ## Configuration

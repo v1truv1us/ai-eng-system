@@ -3,13 +3,13 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it } from "bun:test";
-import { TaskExecutor } from "../../src/execution/task-executor.js";
+import { TaskExecutor } from "../../src/execution/task-executor";
 import {
     type Plan,
     type Task,
     TaskStatus,
     TaskType,
-} from "../../src/execution/types.js";
+} from "../../src/execution/types";
 
 describe("TaskExecutor", () => {
     let executor: TaskExecutor;

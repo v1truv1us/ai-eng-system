@@ -1,5 +1,5 @@
 /**
- * ai-eng ralph - Minimal TUI
+ * TUI for ai-eng ralph command
  *
  * Simple terminal UI using OpenTUI core API directly.
  */
@@ -442,7 +442,7 @@ class TuiApp {
 
         const desc = new TextRenderable(ctx, {
             id: "welcome-desc",
-            content: "An iteration loop runner for AI-assisted development.",
+            content: "AI Engineering System - Iteration Loop Runner",
             fg: "#8b949e",
             marginTop: 1,
         });

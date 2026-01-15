@@ -6,7 +6,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "ai-eng ralph": "./dist/cli/run.js"
+    "ai-eng": "./dist/cli/run.js"
   },
   "exports": {
     ".": {
@@ -16,7 +16,6 @@
   },
   "files": [
     "dist/",
-    "scripts/install.js",
     "index.js",
     "index.d.ts",
     "README.md",
@@ -37,7 +36,6 @@
     "test:build": "bun test tests/build.test.ts",
     "quality": "bun run lint && bun run build",
     "prepublishOnly": "bun run quality",
-    "postinstall": "node scripts/install.js",
     "prepare": "husky",
     "changelog": "standard-version",
     "changelog:patch": "standard-version --release-as patch",
@@ -89,7 +87,8 @@
   },
   "homepage": "https://github.com/v1truv1us/ai-eng-system#readme",
   "engines": {
-    "bun": ">=1.0.0"
+    "bun": ">=1.0.0",
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.13",

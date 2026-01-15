@@ -3,21 +3,21 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it } from "bun:test";
-import { AgentCoordinator } from "../../src/agents/coordinator.js";
+import { AgentCoordinator } from "../../src/agents/coordinator";
 import {
     type AgentCoordinatorConfig,
     type AgentTask,
     AgentTaskStatus,
     AgentType,
     ExecutionStrategy,
-} from "../../src/agents/types.js";
-import { PlanParser } from "../../src/execution/plan-parser.js";
-import { TaskExecutor } from "../../src/execution/task-executor.js";
+} from "../../src/agents/types";
+import { PlanParser } from "../../src/execution/plan-parser";
+import { TaskExecutor } from "../../src/execution/task-executor";
 import {
     ExecutionOptions,
     TaskStatus,
     TaskType,
-} from "../../src/execution/types.js";
+} from "../../src/execution/types";
 
 describe("Enhanced Task Executor", () => {
     let taskExecutor: TaskExecutor;

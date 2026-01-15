@@ -1,22 +1,22 @@
 /**
  * Tests for Ralph Loop Runner and Flow Store
  */
-import { describe, expect, it, beforeEach, afterEach } from "bun:test";
-import { join } from "node:path";
+import { afterEach, beforeEach, describe, expect, it } from "bun:test";
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
-import type { RalphFlags } from "../../src/cli/flags.js";
-import type { AiEngConfig } from "../../src/config/schema.js";
-import { FlowStore } from "../../src/execution/flow-store.js";
+import { join } from "node:path";
+import type { RalphFlags } from "../../src/cli/flags";
+import type { AiEngConfig } from "../../src/config/schema";
+import { FlowStore } from "../../src/execution/flow-store";
 import {
+    type CycleState,
     FLOW_SCHEMA_VERSION,
+    Phase,
     RunStatus,
     StopReason,
-    Phase,
-    type CycleState,
-} from "../../src/execution/flow-types.js";
-import { RalphLoopRunner } from "../../src/execution/ralph-loop.js";
-import { PromptOptimizer } from "../../src/prompt-optimization/optimizer.js";
+} from "../../src/execution/flow-types";
+import { RalphLoopRunner } from "../../src/execution/ralph-loop";
+import { PromptOptimizer } from "../../src/prompt-optimization/optimizer";
 
 describe("Flow Store", () => {
     let tempDir: string;

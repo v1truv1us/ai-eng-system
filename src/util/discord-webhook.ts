@@ -5,7 +5,7 @@
  * Supports rich embeds for cycle progress, errors, and completions.
  */
 
-import { Log } from "./log.js";
+import { Log } from "./log";
 
 const log = Log.create({ service: "discord-webhook" });
 

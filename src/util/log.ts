@@ -1,10 +1,10 @@
+import fs from "node:fs/promises";
 /**
  * Structured logging for ai-eng ralph
  *
  * Supports both stderr output (with --print-logs) and file-based logging
  */
 import path from "node:path";
-import fs from "node:fs/promises";
 
 export namespace Log {
     export type Level = "DEBUG" | "INFO" | "WARN" | "ERROR";

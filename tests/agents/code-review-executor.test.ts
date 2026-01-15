@@ -3,16 +3,16 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it } from "bun:test";
-import { CodeReviewExecutor } from "../../src/agents/code-review-executor.js";
-import { AgentCoordinator } from "../../src/agents/coordinator.js";
-import { AgentRegistry } from "../../src/agents/registry.js";
+import { CodeReviewExecutor } from "../../src/agents/code-review-executor";
+import { AgentCoordinator } from "../../src/agents/coordinator";
+import { AgentRegistry } from "../../src/agents/registry";
 import {
     type AgentCoordinatorConfig,
     type AgentDefinition,
     AgentType,
     type CodeReviewInput,
     ConfidenceLevel,
-} from "../../src/agents/types.js";
+} from "../../src/agents/types";
 
 // Mock registry for testing
 class MockAgentRegistry extends AgentRegistry {

@@ -10,7 +10,7 @@ import {
     AnalysisHandler,
     CodebaseAnalyzer,
     ResearchAnalyzer,
-} from "../../src/research/analysis.js";
+} from "../../src/research/analysis";
 import {
     ConfidenceLevel,
     type DiscoveryResult,
@@ -20,7 +20,7 @@ import {
     ResearchDepth,
     type ResearchQuery,
     ResearchScope,
-} from "../../src/research/types.js";
+} from "../../src/research/types";
 
 describe("CodebaseAnalyzer", () => {
     let analyzer: CodebaseAnalyzer;

@@ -4,9 +4,9 @@
 
 import { describe, expect, it } from "bun:test";
 import { OpenCodeClient } from "../../src/backends/opencode/client";
-import { loadConfig } from "../../src/config/loadConfig";
-import { resolveModel, getAllModels } from "../../src/config/modelResolver";
 import type { RalphFlags } from "../../src/cli/flags";
+import { loadConfig } from "../../src/config/loadConfig";
+import { getAllModels, resolveModel } from "../../src/config/modelResolver";
 import type { AiEngConfig } from "../../src/config/schema";
 
 describe("Fix #1: Timeout + Rate-Limit Handling", () => {
