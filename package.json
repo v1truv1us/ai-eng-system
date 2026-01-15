@@ -5,6 +5,9 @@
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "bin": {
+    "ai-eng ralph": "./dist/cli/run.js"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
