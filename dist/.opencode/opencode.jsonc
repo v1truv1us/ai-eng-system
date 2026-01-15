@@ -1,0 +1,13 @@
+{
+  "$schema": "https://opencode.ai/schema/v2.jsonc",
+  "plugin": ["ai-eng-system"],
+  "skill": [
+    "coolify-deploy",
+    "git-worktree",
+    "prompt-refinement",
+    "incentive-prompting",
+    "comprehensive-research",
+    "plugin-dev",
+    "ralph-wiggum"
+  ]
+}

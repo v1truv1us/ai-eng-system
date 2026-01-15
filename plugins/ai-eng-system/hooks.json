@@ -5,6 +5,11 @@
         "description": "Initialize ai-eng-system on session start",
         "hooks": [
           {
+            "type": "command",
+            "command": "bash ${CLAUDE_PROJECT_DIR}/plugins/ai-eng-system/hooks/session-start.sh",
+            "timeout": 10
+          },
+          {
             "type": "notification",
             "message": "🔧 AI Engineering System loaded. Prompt optimization active. Use ! prefix to skip optimization."
           }
