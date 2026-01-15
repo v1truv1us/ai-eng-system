@@ -5,18 +5,18 @@
  */
 
 import {
-    createCliRenderer,
-    type CliRendererConfig,
     BoxRenderable,
-    TextRenderable,
-    TextAttributes,
+    type CliRendererConfig,
     type RenderContext,
+    TextAttributes,
+    TextRenderable,
+    createCliRenderer,
 } from "@opentui/core";
-import type { AiEngConfig } from "../../config/schema";
+import { OpenCodeClient } from "../../backends/opencode/client";
 import type { RalphFlags } from "../../cli/flags";
+import type { AiEngConfig } from "../../config/schema";
 import { PromptOptimizer } from "../../prompt-optimization/optimizer";
 import type { OptimizationSession } from "../../prompt-optimization/types";
-import { OpenCodeClient } from "../../backends/opencode/client";
 
 /**
  * TUI State
@@ -52,7 +52,7 @@ class TuiApp {
     private optimizer: PromptOptimizer;
     private config: AiEngConfig;
     private flags: RalphFlags;
-    private opencodeClient: OpenCodeClient;
+    private opencodeClient: OpenCodeClient | null = null;
 
     constructor(config: AiEngConfig, flags: RalphFlags) {
         this.state = {
@@ -72,7 +72,7 @@ class TuiApp {
         });
         this.config = config;
         this.flags = flags;
-        this.opencodeClient = new OpenCodeClient({});
+        this.opencodeClient = null;
     }
 
     /**
@@ -104,16 +104,16 @@ class TuiApp {
         // Now that renderer exists, we can attach to keyboard handler
         if (!this.renderer) return;
 
-        this.renderer.keyInput.on("keypress", (event) => {
+        this.renderer.keyInput.on("keypress", async (event) => {
             const key = event.name;
-            this.handleKeyPress(key);
+            await this.handleKeyPress(key);
         });
     }
 
     /**
      * Handle keyboard input
      */
-    private handleKeyPress(key: string): void {
+    private async handleKeyPress(key: string): Promise<void> {
         switch (this.state.view) {
             case "welcome":
                 if (key === "enter") {
@@ -121,7 +121,7 @@ class TuiApp {
                     this.render();
                 }
                 if (key === "q" || key === "Q") {
-                    this.cleanup();
+                    await this.cleanup();
                     process.exit(0);
                 }
                 break;
@@ -145,7 +145,7 @@ class TuiApp {
                     this.state.prompt += key;
                     this.render();
                 } else if (key === "q" || key === "Q") {
-                    this.cleanup();
+                    await this.cleanup();
                     process.exit(0);
                 }
                 break;
@@ -166,7 +166,7 @@ class TuiApp {
                     this.state.view = "input";
                     this.render();
                 } else if (key === "q" || key === "Q") {
-                    this.cleanup();
+                    await this.cleanup();
                     process.exit(0);
                 }
                 break;
@@ -179,7 +179,7 @@ class TuiApp {
                 if (key === "enter") {
                     this.reset();
                 } else if (key === "q" || key === "Q") {
-                    this.cleanup();
+                    await this.cleanup();
                     process.exit(0);
                 }
                 break;
@@ -268,8 +268,20 @@ class TuiApp {
         this.render();
 
         try {
+            if (!this.opencodeClient) {
+                this.opencodeClient = await OpenCodeClient.create({
+                    existingServerUrl: process.env.OPENCODE_URL,
+                    serverStartupTimeout: 10000,
+                });
+            }
+
+            const opencodeClient = this.opencodeClient;
+            if (!opencodeClient) {
+                throw new Error("OpenCode client not initialized");
+            }
+
             // Create OpenCode session
-            const session = await this.opencodeClient.createSession(
+            const session = await opencodeClient.createSession(
                 this.state.session?.finalPrompt || this.state.prompt,
             );
             this.state.opencodeSessionId = session.id;
@@ -321,15 +333,18 @@ class TuiApp {
             this.renderer = null;
         }
 
-        // Close OpenCode sessions
-        if (this.state.opencodeSessionId) {
+        // Close OpenCode client if it exists
+        if (this.opencodeClient) {
             try {
                 await this.opencodeClient.cleanup();
             } catch (error) {
-                console.warn("Error closing session:", error);
+                console.warn("Error closing OpenCode client:", error);
             }
-            this.state.opencodeSessionId = null;
+            this.opencodeClient = null;
         }
+
+        // Clear session ID in state
+        this.state.opencodeSessionId = null;
     }
 
     /**

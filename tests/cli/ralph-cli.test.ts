@@ -11,11 +11,11 @@
 
 import { beforeEach, describe, expect, it } from "bun:test";
 import { parseArgs } from "node:util";
+import { OpenCodeClient } from "../../src/backends/opencode/client";
 import type { RalphFlags } from "../../src/cli/flags";
 import { loadConfig } from "../../src/config/loadConfig";
-import { OpenCodeClient } from "../../src/backends/opencode/client";
-import { PromptOptimizer } from "../../src/prompt-optimization/optimizer";
 import type { AiEngConfig } from "../../src/config/schema";
+import { PromptOptimizer } from "../../src/prompt-optimization/optimizer";
 
 describe("CLI Flag Parsing", () => {
     it("should parse help flag", async () => {
@@ -123,7 +123,7 @@ describe("OpenCode Client", () => {
     let client: OpenCodeClient;
 
     beforeEach(() => {
-        client = new OpenCodeClient({});
+        client = new (OpenCodeClient as any)({});
     });
 
     it("should create client instance", () => {
@@ -145,6 +145,128 @@ describe("OpenCode Client", () => {
     it("should cleanup method exist", async () => {
         expect(typeof client.cleanup).toBe("function");
         await client.cleanup();
+    });
+
+    it("streams via SSE and defers initial prompt", async () => {
+        const promptAsyncCalls: any[] = [];
+        let lastUserMessageId: string | null = null;
+
+        const mockClientWithSse: any = {
+            session: {
+                create: async () => ({ data: { id: "session-1" } }),
+                promptAsync: async (options: any) => {
+                    promptAsyncCalls.push(options);
+                    lastUserMessageId = options?.body?.messageID || null;
+                    return { data: undefined };
+                },
+            },
+            event: {
+                subscribe: async () => {
+                    const userMessageId = lastUserMessageId;
+
+                    async function* stream() {
+                        // Identify assistant message
+                        yield {
+                            type: "message.updated",
+                            properties: {
+                                info: {
+                                    id: "assistant-1",
+                                    role: "assistant",
+                                    sessionID: "session-1",
+                                    parentID: userMessageId,
+                                    time: { created: Date.now() },
+                                },
+                            },
+                        };
+
+                        // First text update
+                        yield {
+                            type: "message.part.updated",
+                            properties: {
+                                part: {
+                                    id: "part-1",
+                                    sessionID: "session-1",
+                                    messageID: "assistant-1",
+                                    type: "text",
+                                    text: "hello",
+                                },
+                            },
+                        };
+
+                        // Duplicate full-text update with a different part id
+                        yield {
+                            type: "message.part.updated",
+                            properties: {
+                                part: {
+                                    id: "part-2",
+                                    sessionID: "session-1",
+                                    messageID: "assistant-1",
+                                    type: "text",
+                                    text: "hello",
+                                },
+                            },
+                        };
+
+                        // Mark assistant message as completed
+                        yield {
+                            type: "message.updated",
+                            properties: {
+                                info: {
+                                    id: "assistant-1",
+                                    role: "assistant",
+                                    sessionID: "session-1",
+                                    parentID: userMessageId,
+                                    time: {
+                                        created: Date.now(),
+                                        completed: Date.now(),
+                                    },
+                                },
+                            },
+                        };
+                    }
+
+                    return { stream: stream() };
+                },
+            },
+        };
+
+        const streamingClient = await OpenCodeClient.create({
+            client: mockClientWithSse,
+            retryAttempts: 1,
+        });
+
+        const session = await streamingClient.createSession("INITIAL PROMPT");
+        expect(promptAsyncCalls.length).toBe(0);
+
+        const { stream, complete } =
+            await session.sendMessageStream("DO THE THING");
+
+        const reader = stream.getReader();
+        const decoder = new TextDecoder();
+        let out = "";
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            if (value) out += decoder.decode(value, { stream: true });
+        }
+        out += decoder.decode();
+
+        expect(out).toBe("hello");
+        const completeResult = await complete;
+        expect(completeResult.content).toBe("hello");
+        expect(completeResult.diagnostics).toBeDefined();
+        expect(completeResult.diagnostics.assistantMessageIdFound).toBe(true);
+        expect(completeResult.diagnostics.bytesWritten).toBe(5);
+        expect(completeResult.diagnostics.contentLength).toBe(5);
+        expect(completeResult.diagnostics.eventCount).toBe(4);
+        expect(completeResult.diagnostics.idleTimedOut).toBe(false);
+
+        expect(promptAsyncCalls.length).toBe(1);
+        const sentText = promptAsyncCalls[0]?.body?.parts?.[0]?.text;
+        expect(sentText).toContain("INITIAL PROMPT");
+        expect(sentText).toContain("DO THE THING");
+
+        await streamingClient.cleanup();
     });
 });
 

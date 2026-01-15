@@ -3,8 +3,8 @@
  *
  * Supports both stderr output (with --print-logs) and file-based logging
  */
-import path from "path";
-import fs from "fs/promises";
+import path from "node:path";
+import fs from "node:fs/promises";
 
 export namespace Log {
     export type Level = "DEBUG" | "INFO" | "WARN" | "ERROR";
@@ -37,15 +37,11 @@ export namespace Log {
     export async function init(options: Options): Promise<void> {
         if (options.level) currentLevel = options.level;
 
-        if (options.print) {
-            // Print to stderr
-            write = (msg) => {
-                process.stderr.write(msg);
-            };
-            return;
-        }
+        // Build the write function that outputs to BOTH stderr AND file
+        const stderrWriter = (msg: string) => {
+            process.stderr.write(msg);
+        };
 
-        // Write to log file
         if (options.logDir) {
             const timestamp = new Date()
                 .toISOString()
@@ -55,11 +51,20 @@ export namespace Log {
             await fs.mkdir(options.logDir, { recursive: true });
 
             const file = Bun.file(logPath);
-            const writer = file.writer();
+            const fileWriter = file.writer();
+
+            // Always write to stderr if print is enabled
+            // Also always write to file if logDir is provided
             write = (msg) => {
-                writer.write(msg);
-                writer.flush();
+                if (options.print) {
+                    stderrWriter(msg);
+                }
+                fileWriter.write(msg);
+                fileWriter.flush();
             };
+        } else if (options.print) {
+            // Only print to stderr
+            write = stderrWriter;
         }
     }
 
@@ -72,23 +77,22 @@ export namespace Log {
 
     function formatExtra(extra?: Record<string, any>): string {
         if (!extra) return "";
-        return (
-            " " +
-            Object.entries(extra)
-                .map(
-                    ([k, v]) =>
-                        `${k}=${typeof v === "object" ? JSON.stringify(v) : v}`,
-                )
-                .join(" ")
-        );
+        const extraStr = Object.entries(extra)
+            .map(
+                ([k, v]) =>
+                    `${k}=${typeof v === "object" ? JSON.stringify(v) : v}`,
+            )
+            .join(" ");
+        return extraStr ? ` ${extraStr}` : "";
     }
 
     export function create(tags?: Record<string, string>): Logger {
         const tagStr = tags
             ? Object.entries(tags)
                   .map(([k, v]) => `${k}=${v}`)
-                  .join(" ") + " "
+                  .join(" ")
             : "";
+        const tagStrWithSpace = tagStr ? `${tagStr} ` : "";
 
         return {
             debug(message: string, extra?: Record<string, any>) {

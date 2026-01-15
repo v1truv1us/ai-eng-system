@@ -68,12 +68,13 @@ maxRetries: 3
 
 ### Model Resolution Priority
 
-The CLI uses a 4-tier fallback system for model selection:
+The CLI uses a 3-tier fallback system for model selection:
 
 1. **Task-specific model** - e.g., `config.models.research` for research tasks
 2. **Default model** - `config.models.default` if no task-specific model is set
 3. **OpenCode fallback** - `config.opencode.model` from OpenCode configuration
-4. **Ultimate fallback** - `claude-3-5-sonnet-latest`
+
+**Important:** If no model is configured, the CLI will throw an error. You must explicitly specify a model in your config.
 
 ## Usage
 

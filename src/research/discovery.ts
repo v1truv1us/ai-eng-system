@@ -19,6 +19,51 @@ import {
 } from "./types.js";
 
 /**
+ * Compile a glob-style ignore pattern to a safe, pre-optimized regex.
+ * Escapes regex metacharacters and replaces glob wildcards with safe patterns.
+ * Precompiles once to avoid ReDoS and repeated compilation overhead.
+ */
+function compileIgnorePattern(globPattern: string): RegExp {
+    // Escape regex metacharacters except * and ?
+    const escaped = globPattern.replace(/[.+^${}()|[\]\\]/g, "\\$&");
+    // Replace glob wildcards with safe patterns:
+    // * matches any characters except / (directory separator)
+    // ? matches exactly one character except /
+    const regexStr = escaped.replace(/\*/g, "[^/]*").replace(/\?/g, "[^/]");
+    return new RegExp(`^${regexStr}$`);
+}
+
+/**
+ * Create compiled ignore matchers for a list of glob patterns.
+ * Returns matchers that can be reused for filtering multiple paths.
+ */
+function createIgnoreMatchers(patterns: string[]): RegExp[] {
+    return patterns.map(compileIgnorePattern);
+}
+
+/**
+ * Common ignore patterns used across discovery agents
+ */
+const DEFAULT_IGNORE_PATTERNS = [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/.git/**",
+    "**/coverage/**",
+];
+
+const DEFAULT_IGNORE_MATCHERS = createIgnoreMatchers(DEFAULT_IGNORE_PATTERNS);
+
+/**
+ * Check if a file path matches any of the ignore patterns
+ */
+function isIgnored(
+    filePath: string,
+    matchers: RegExp[] = DEFAULT_IGNORE_MATCHERS,
+): boolean {
+    return matchers.some((matcher) => matcher.test(filePath));
+}
+
+/**
  * Codebase Locator Agent
  * Finds relevant files and directories in the codebase
  */
@@ -97,23 +142,9 @@ export class CodebaseLocator implements DiscoveryAgent {
 
         for (const pattern of patterns) {
             const globber = new Glob(pattern);
-            const ignorePatterns = [
-                "**/node_modules/**",
-                "**/dist/**",
-                "**/.git/**",
-                "**/coverage/**",
-            ];
 
             const files = Array.from(globber.scanSync()).filter((filePath) => {
-                return !ignorePatterns.some((ignorePattern) =>
-                    filePath.match(
-                        new RegExp(
-                            ignorePattern
-                                .replace(/\*/g, ".*")
-                                .replace(/\?/g, "."),
-                        ),
-                    ),
-                );
+                return !isIgnored(filePath);
             });
 
             for (const filePath of files) {
@@ -357,22 +388,9 @@ export class ResearchLocator implements DiscoveryAgent {
 
         for (const pattern of docPatterns) {
             const globber = new Glob(pattern);
-            const ignorePatterns = [
-                "**/node_modules/**",
-                "**/dist/**",
-                "**/.git/**",
-            ];
 
             const files = Array.from(globber.scanSync()).filter((filePath) => {
-                return !ignorePatterns.some((ignorePattern) =>
-                    filePath.match(
-                        new RegExp(
-                            ignorePattern
-                                .replace(/\*/g, ".*")
-                                .replace(/\?/g, "."),
-                        ),
-                    ),
-                );
+                return !isIgnored(filePath);
             });
 
             for (const filePath of files) {
@@ -625,20 +643,9 @@ export class PatternFinder implements DiscoveryAgent {
         const globber = new Glob(
             "**/*.{ts,js,tsx,jsx,py,java,cpp,c,h,hpp,md,mdx}",
         );
-        const ignorePatterns = [
-            "**/node_modules/**",
-            "**/dist/**",
-            "**/.git/**",
-        ];
 
         const codeFiles = Array.from(globber.scanSync()).filter((filePath) => {
-            return !ignorePatterns.some((ignorePattern) =>
-                filePath.match(
-                    new RegExp(
-                        ignorePattern.replace(/\*/g, ".*").replace(/\?/g, "."),
-                    ),
-                ),
-            );
+            return !isIgnored(filePath);
         });
 
         for (const pattern of patterns) {
