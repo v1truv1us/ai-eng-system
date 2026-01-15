@@ -3,7 +3,7 @@
  */
 
 import { describe, expect, it } from "bun:test";
-import { AgentType } from "../../src/agents/types.js";
+import { AgentType } from "../../src/agents/types";
 
 describe("AgentType Enum Completeness", () => {
     const expectedAgents = [

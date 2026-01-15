@@ -3,7 +3,7 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it } from "bun:test";
-import { AgentCoordinator } from "../../src/agents/coordinator.js";
+import { AgentCoordinator } from "../../src/agents/coordinator";
 import {
     type AgentCoordinatorConfig,
     type AgentTask,
@@ -12,7 +12,7 @@ import {
     AggregationStrategy,
     ConfidenceLevel,
     ExecutionStrategy,
-} from "../../src/agents/types.js";
+} from "../../src/agents/types";
 
 describe("AgentCoordinator", () => {
     let coordinator: AgentCoordinator;

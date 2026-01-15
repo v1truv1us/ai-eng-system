@@ -69,7 +69,7 @@ When installed globally via npm:
 ```bash
 npm install -g @v1truv1us/ai-eng-system
 cd ~/my-awesome-project
-ai-eng ralph
+"ai-eng ralph"
 ```
 
 The behavior will be the same:

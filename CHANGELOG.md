@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.4] - 2026-01-12
+
+### Fixed
+- **OpenCode SDK Compatibility**: Upgraded @opencode-ai/plugin from 1.0.218 to 1.1.13 to resolve messageID validation errors with OpenCode 1.1.13 server
+- **Session Management**: SDK v1.1.13 fixes API response format validation issues that prevented proper session creation and closure
+
+### Changed
+- **Dependencies**: Updated OpenCode SDK to 1.1.13 for compatibility with latest OpenCode CLI server
+- **Build**: Regenerated bun.lock with updated dependency tree
+
+### Technical Details
+The OpenCode 1.1.x server introduced API response format changes that were incompatible with SDK 1.0.x clients. The error manifested as:
+```
+Invalid string: must start with "msg"
+```
+Upgrading to SDK 1.1.13 resolves this without any breaking API changes to ai-eng-ralph-cli.
+
+### Verification
+- ✅ Clean build successful with all 662 packages
+- ✅ Tested with fleettools project - session created and closed successfully
+- ✅ No source code changes required - SDK API remained compatible
+
 ### [0.2.3](https://github.com/v1truv1us/ai-eng-system/compare/v0.2.0...v0.2.3) (2026-01-10)
 
 

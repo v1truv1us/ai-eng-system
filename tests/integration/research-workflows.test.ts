@@ -3,14 +3,14 @@
  */
 
 import { beforeEach, describe, expect, it, mock, spyOn } from "bun:test";
-import { DiscoveryHandler } from "../../src/research/discovery.js";
-import { ResearchOrchestrator } from "../../src/research/orchestrator.js";
+import { DiscoveryHandler } from "../../src/research/discovery";
+import { ResearchOrchestrator } from "../../src/research/orchestrator";
 import {
     type ResearchConfig,
     ResearchDepth,
     type ResearchQuery,
     ResearchScope,
-} from "../../src/research/types.js";
+} from "../../src/research/types";
 
 describe("Research Workflow Integration", () => {
     let orchestrator: ResearchOrchestrator;

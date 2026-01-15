@@ -580,22 +580,88 @@ async function copyPromptOptimization(): Promise<void> {
 }
 
 /**
- * Copy CLI files to dist/
+ * Build CLI files to dist/
+ * - Copies CLI source files for execution with Bun
+ * - Copies required dependencies to dist/node_modules
+ * - Creates a simple shim that can be run with Bun (handles TypeScript natively)
  */
 async function copyCLI(): Promise<void> {
-    const cliSrcDir = join(ROOT, "src", "cli");
-    const backendsSrcDir = join(ROOT, "src", "backends");
-    const configSrcDir = join(ROOT, "src", "config");
+    const srcDir = join(ROOT, "src");
+    const nodeModulesSrc = join(ROOT, "node_modules");
 
-    if (existsSync(cliSrcDir)) {
-        await copyDirRecursive(cliSrcDir, join(DIST_DIR, "cli"));
+    // Copy all source directories needed for CLI execution
+    const dirsToCopy = [
+        "cli",
+        "backends",
+        "config",
+        "util",
+        "install",
+        "execution",
+        "research",
+        "context",
+        "types",
+        "agents",
+        "prompt-optimization",
+    ];
+
+    for (const dir of dirsToCopy) {
+        const srcPath = join(srcDir, dir);
+        if (existsSync(srcPath)) {
+            await copyDirRecursive(srcPath, join(DIST_DIR, dir));
+        }
     }
-    if (existsSync(backendsSrcDir)) {
-        await copyDirRecursive(backendsSrcDir, join(DIST_DIR, "backends"));
+
+    // Copy required dependencies for CLI execution
+    const depsToCopy = ["@opencode-ai/sdk", "@opencode-ai/plugin"];
+    for (const dep of depsToCopy) {
+        const srcPath = join(nodeModulesSrc, dep);
+        const destPath = join(DIST_DIR, "node_modules", dep);
+        if (existsSync(srcPath)) {
+            await copyDirRecursive(srcPath, destPath);
+        }
     }
-    if (existsSync(configSrcDir)) {
-        await copyDirRecursive(configSrcDir, join(DIST_DIR, "config"));
+
+    // Create a shim that works with Bun (handles TypeScript natively)
+    const shimPath = join(DIST_DIR, "cli", "run.js");
+    await writeFile(
+        shimPath,
+        `#!/usr/bin/env node
+/**
+ * CLI shim for ai-eng-system
+ *
+ * For Bun: Bun can run TypeScript directly, so we import the .ts file
+ * For Node.js: Requires transpilation or ts-node; primarily intended for Bun development
+ */
+
+async function main() {
+    // When running with Bun, import the TypeScript source directly
+    // Bun handles TypeScript natively without transpilation
+    if (process.env.BUN || process.argv0?.includes("bun")) {
+        const { runMain } = await import("./run.ts");
+        await runMain();
+    } else {
+        // For Node.js, try importing the .ts file anyway (some Node.js setups support it)
+        // Otherwise users should run with Bun: bun run dist/cli/run.js <command>
+        try {
+            const { runMain } = await import("./run.ts");
+            await runMain();
+        } catch {
+            console.error("Error: TypeScript execution failed. Use Bun to run this CLI:");
+            console.error("  bun run dist/cli/run.js <command>");
+            process.exit(1);
+        }
     }
+}
+
+main().catch((error) => {
+    console.error("Error:", error);
+    process.exit(1);
+});
+`,
+    );
+    console.log("  ✓ CLI sources copied to dist/cli/");
+    console.log("  ✓ Dependencies copied to dist/node_modules/");
+    console.log("  ℹ️  Run with: bun run dist/cli/run.js <command>");
 }
 
 /**

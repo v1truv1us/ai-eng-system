@@ -12,6 +12,19 @@ bun.lockb
 # Context engineering local storage (user-specific, not committed)
 .ferg-context/
 
+# Local ai-eng config (user-specific)
+.ai-eng-config.yaml
+
+# Claude hook backups (local/dev artifacts)
+.claude/hooks.backup-*/
+
+# build.ts copies these into dist/ for local CLI runs; keep them out of git
+# unless/until we intentionally publish them.
+dist/cli/
+dist/backends/
+dist/config/
+dist/util/
+
 # Build scratch
 build.ts.tmp
 

@@ -4,14 +4,14 @@ import {
     DiscoveryHandler,
     PatternFinder,
     ResearchLocator,
-} from "../../src/research/discovery.js";
+} from "../../src/research/discovery";
 import {
     ConfidenceLevel,
     ResearchConstraints,
     ResearchDepth,
     type ResearchQuery,
     ResearchScope,
-} from "../../src/research/types.js";
+} from "../../src/research/types";
 
 describe("Discovery Phase", () => {
     let config: any;

@@ -72,13 +72,22 @@ See [docs/spec-driven-workflow.md](./docs/spec-driven-workflow.md) for complete 
 **New!** Terminal-based interface for autonomous research and implementation workflows:
 
 ```bash
-# From project root
-bun run build
-bun ~/git/ai-eng-system/src/cli/run.ts
+# Install globally via npm (requires Node.js or Bun)
+npm install -g ai-eng-system
+ai-eng ralph "implement user authentication"
 
-# Or from feature worktree
-cd ~/git/ai-eng-ralph-cli
-bun src/cli/run.ts
+# Or run directly from source (requires Bun)
+bun run build
+bun src/cli/run.ts "implement user authentication"
+
+# Shortcut: "ai-eng prompt" defaults to ralph
+ai-eng "fix the bug" --print-logs
+```
+
+**Installation command** (replaces automatic postinstall):
+```bash
+ai-eng install --scope project   # Install to project .opencode/
+ai-eng install --scope global    # Install to ~/.config/opencode/
 ```
 
 **Features**:
