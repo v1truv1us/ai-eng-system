@@ -7,6 +7,33 @@
 
 *All High Priority documentation cleanup and count fixes completed. See Completed Tasks for details.*
 
+## Completed Tasks
+
+### ai-eng ralph CLI Implementation (2026-01-11) ✅
+
+- [x] Re-implemented complete CLI runner with TUI (6 screens, keyboard navigation)
+- [x] Added timeout handling (120s default) to prevent indefinite hangs
+- [x] Added rate-limit detection (HTTP 429, quota errors) with exponential backoff
+- [x] Implemented exponential backoff with jitter for retries
+- [x] Added configurable models per task type (research/planning/exploration/coding)
+- [x] Set all defaults to github-copilot/gpt-5.2
+- [x] Implemented 4-tier model resolution priority (task → default → opencode → fallback)
+- [x] Created comprehensive test suite (42 tests, all passing)
+- [x] Added documentation in docs/ai-eng-ralph-cli-complete.md
+- [x] Added documentation site page at docs-site/src/content/docs/features/ai-eng-ralph-cli.md
+- [x] Updated README.md with CLI usage instructions
+- [x] Committed to feature/ai-eng-ralph-cli branch
+- [x] Pushed to GitHub
+- [x] Created worktree for feature development
+
+**Fixes applied from specs/fix-timeout-and-model-config.md:**
+- Timeout handling for OpenCode prompts
+- Rate-limit detection and backoff strategy
+- Configurable models with proper resolution
+- All 42 CLI tests passing
+
+**Commit**: 5562fc32e - "feat: ai-eng ralph CLI with timeout and model config"
+
 ## Medium Priority
 
 ### Ralph Wiggum Integration - COMPLETED ✅

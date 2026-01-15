@@ -580,6 +580,29 @@ async function copyPromptOptimization(): Promise<void> {
 }
 
 /**
+ * Copy CLI files to dist/
+ */
+async function copyCLI(): Promise<void> {
+    const cliSrcDir = join(ROOT, "src", "cli");
+    const backendsSrcDir = join(ROOT, "src", "backends");
+    const configSrcDir = join(ROOT, "src", "config");
+    const utilSrcDir = join(ROOT, "src", "util");
+
+    if (existsSync(cliSrcDir)) {
+        await copyDirRecursive(cliSrcDir, join(DIST_DIR, "cli"));
+    }
+    if (existsSync(backendsSrcDir)) {
+        await copyDirRecursive(backendsSrcDir, join(DIST_DIR, "backends"));
+    }
+    if (existsSync(configSrcDir)) {
+        await copyDirRecursive(configSrcDir, join(DIST_DIR, "config"));
+    }
+    if (existsSync(utilSrcDir)) {
+        await copyDirRecursive(utilSrcDir, join(DIST_DIR, "util"));
+    }
+}
+
+/**
  * Clean a directory by removing all contents and recreating it
  */
 async function cleanDirectory(dir: string): Promise<void> {
@@ -928,6 +951,7 @@ async function buildAll(): Promise<void> {
     await buildOpenCode();
     await copySkillsToDist();
     await copyPromptOptimization();
+    await copyCLI();
     await buildNpmEntrypoint();
 
     // Sync to committed directories (required for marketplace)

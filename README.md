@@ -67,6 +67,31 @@ See [docs/spec-driven-workflow.md](./docs/spec-driven-workflow.md) for complete 
 
 > **🛠️ Fixed (v0.2.2)**: Ralph Wiggum now runs continuously without stopping between phases. Full backward compatibility maintained. [Fix details →](./docs/ralph-wiggum-autonomous-looping-fix.md)
 
+### Terminal UI: ai-eng ralph CLI
+
+**New!** Terminal-based interface for autonomous research and implementation workflows:
+
+```bash
+# From project root
+bun run build
+bun ~/git/ai-eng-system/src/cli/run.ts
+
+# Or from feature worktree
+cd ~/git/ai-eng-ralph-cli
+bun src/cli/run.ts
+```
+
+**Features**:
+- 🖥️ Full-screen TUI with keyboard navigation
+- ⏱️ Timeout handling (default 120s) to prevent hangs
+- 🔄 Rate-limit detection with smart backoff
+- 🤖 Configurable models per task type (research/planning/exploration/coding)
+- 🚀 4-tier model resolution priority
+- 🎯 Continuous iteration through all 5 phases
+- ✅ Research-backed prompt optimization (+45-115% quality)
+
+**Documentation**: See [docs-site/docs/features/ai-eng-ralph-cli.md](./docs-site/src/content/docs/features/ai-eng-ralph-cli.md) for complete guide
+
 ### Additional Commands (13 total)
 - `/ai-eng/optimize` - Prompt enhancement (+45% quality)
 - `/ai-eng/deploy` - Pre-deployment checklists
@@ -81,7 +106,7 @@ See [docs/spec-driven-workflow.md](./docs/spec-driven-workflow.md) for complete 
 - `/ai-eng/clean` - Remove build artifacts and generated files
 - `/ai-eng/seo` - SEO audits with Core Web Vitals
 
-**Total Commands**: 17
+**Total Commands**: 17 + 1 CLI
 
 ### Agents (29 total)
 - **Architecture & Planning**: `architect-advisor`, `backend-architect`, `infrastructure-builder`

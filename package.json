@@ -69,7 +69,7 @@
     "husky": "^9.1.7",
     "standard-version": "^9.5.0",
     "typescript": "^5.9.3",
-    "yaml": "^2.8.1"
+    "yaml": "^2.8.2"
   },
   "author": {
     "name": "v1truv1us",
@@ -91,6 +91,9 @@
   "dependencies": {
     "@astrojs/mdx": "^4.3.13",
     "@astrojs/starlight": "^0.37.1",
-    "@opencode-ai/plugin": "^1.0.218"
+    "@clack/prompts": "^0.11.0",
+    "@opencode-ai/plugin": "^1.1.13",
+    "@opencode-ai/sdk": "^1.1.13",
+    "@opentui/core": "^0.1.72"
   }
 }
