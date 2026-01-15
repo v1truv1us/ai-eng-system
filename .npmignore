@@ -1,0 +1,27 @@
+# Exclude bundled dependencies (peer dependencies, installed by users)
+dist/node_modules/
+
+# Exclude CLI build artifacts (development-only, not for npm package)
+dist/cli/
+dist/backends/
+dist/config/
+dist/util/
+dist/install/
+dist/execution/
+dist/research/
+dist/context/
+dist/types/
+dist/agents/
+dist/prompt-optimization/
+
+# Exclude test and development files from hooks
+dist/.claude-plugin/hooks/test_prompt_optimizer.py
+dist/.claude-plugin/hooks/test_runner.py
+dist/.claude-plugin/hooks/validate.py
+dist/.claude-plugin/hooks/session-start.py.bak
+
+# Exclude backup files
+dist/**/*.bak
+dist/**/*.old
+dist/**/*.tmp
+dist/**/*~

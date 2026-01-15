@@ -9,7 +9,7 @@ subtask: true
 
 Create a new OpenCode agent using AI assistance.
 
-Take a deep breath and design agent systematically, ensuring clear triggering logic, proper expertise definition, and smooth integration with existing system.
+ design agent systematically, ensuring clear triggering logic, proper expertise definition, and smooth integration with existing system.
 
 ## Why This Matters
 
@@ -17,7 +17,7 @@ Agents are used repeatedly across thousands of interactions. Poorly designed age
 
 ## The Challenge
 
-I bet you can't balance specificity with flexibility in agent design. The challenge is defining triggering conditions specific enough to invoke at right times, while making expertise broad enough to handle variations. Success means agent activates when relevant, provides expert guidance, and doesn't interfere with other workflows.
+The balance specificity with flexibility in agent design. The challenge is defining triggering conditions specific enough to invoke at right times, while making expertise broad enough to handle variations. Success means agent activates when relevant, provides expert guidance, and doesn't interfere with other workflows.
 
 ## Process
 1. **Understand Requirements**: What should the agent do?

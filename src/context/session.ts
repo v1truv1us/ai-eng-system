@@ -238,9 +238,10 @@ export class SessionManager {
         }
 
         // Get relevant memories if memory manager available
+        // Note: Memory filtering by type not yet implemented
         const memories = memoryManager
             ? {
-                  declarative: [], // TODO: Filter by type
+                  declarative: [],
                   procedural: [],
                   episodic: [],
               }

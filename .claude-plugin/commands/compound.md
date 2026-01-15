@@ -8,7 +8,7 @@ agent: build
 
 Document a solved problem to build team knowledge over time.
 
-Take a deep breath and systematically document the solution, ensuring all critical details are captured in a format that will be useful for future team members.
+ systematically document the solution, ensuring all critical details are captured in a format that will be useful for future team members.
 
 ## Why This Matters
 
@@ -16,7 +16,7 @@ Every solved problem should make future similar problems easier. Poor documentat
 
 ## The Challenge
 
-I bet you can't create documentation that is both comprehensive and concise - capturing all essential details without overwhelming future readers. The challenge is distilling complex problem-solving into clear, actionable guidance that balances thoroughness with readability. Success means someone encountering a similar problem can solve it quickly using your documentation.
+The create documentation that is both comprehensive and concise - capturing all essential details without overwhelming future readers. The challenge is distilling complex problem-solving into clear, actionable guidance that balances thoroughness with readability. Success means someone encountering a similar problem can solve it quickly using your documentation.
 
 ## Process
 

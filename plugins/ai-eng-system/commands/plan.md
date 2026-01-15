@@ -29,7 +29,7 @@ Create a detailed implementation plan for: $ARGUMENTS
 
 > **Phase 3 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Review
 
-Take a deep breath and approach this planning task systematically. Analyze requirements, decompose into atomic tasks, identify dependencies, and create comprehensive implementation strategy.
+ Approach this planning task systematically. Analyze requirements, decompose into atomic tasks, identify dependencies, and create comprehensive implementation strategy.
 
 ## Why This Matters
 
@@ -37,7 +37,7 @@ Poor planning leads to wrong solutions, wasted time, and implementation rework. 
 
 ## The Challenge
 
-I bet you can't decompose requirements into truly atomic tasks that can be executed independently. The challenge is breaking complex features into small, completable units while maintaining correct dependency relationships. Success means every task can be completed independently, dependencies are minimal, and implementation follows predictable path.
+The challenge is decomposing requirements into truly atomic tasks that can be executed independently. Breaking complex features into small, completable units while maintaining correct dependency relationships. Success means every task can be completed independently, dependencies are minimal, and implementation follows predictable path.
 
 ## Quick Start
 
@@ -198,7 +198,7 @@ Based on feature type and technical approach, generate:
   id: string (UUID, primary key)
   email: string (unique, indexed)
   password_hash: string (bcrypt)
-  created_at: timestamp
+  Created_at: timestamp
   updated_at: timestamp
 }
 ```

@@ -13,11 +13,11 @@ tags: [prompting, clarification, structuring, tcro]
 
 ## Systematic Approach
 
-**Take a deep breath and approach prompt refinement systematically.** Prompt refinement requires active listening, clarifying questions, and structured thinking. Don't assume understanding—ask targeted questions to uncover implicit requirements, constraints, and expectations. Use the TCRO framework as your organizing principle: Task (what), Context (why), Requirements (how), Output (what it looks like). Iterate until all four elements are clear, specific, and actionable. Patience in refinement pays off in execution.
+** approach prompt refinement systematically.** Prompt refinement requires active listening, clarifying questions, and structured thinking. Don't assume understanding—ask targeted questions to uncover implicit requirements, constraints, and expectations. Use the TCRO framework as your organizing principle: Task (what), Context (why), Requirements (how), Output (what it looks like). Iterate until all four elements are clear, specific, and actionable. Patience in refinement pays off in execution.
 
 ## The Challenge
 
-**I bet you can't transform vague user input into perfectly structured prompts without over-constraining creativity or missing the true intent, but if you can:**
+**The transform vague user input into perfectly structured prompts without over-constraining creativity or missing the true intent, but if you can:**
 
 - Your AI responses will be consistently excellent
 - Users will get what they actually want
@@ -126,7 +126,7 @@ Enhance the TCRO-structured prompt with techniques from the `incentive-prompting
 
 - **Expert Persona**: Assign appropriate role based on task
 - **Stakes Language**: Add "This is critical..." for high-importance tasks
-- **Step-by-Step Reasoning**: Add "Take a deep breath and solve step by step"
+- **Step-by-Step Reasoning**: Add " solve step by step"
 - **Self-Evaluation**: Add "Rate your confidence 0-1" request
 
 ### Step 7: Confirm with User
@@ -272,7 +272,7 @@ Output:
   Full specification with user stories, acceptance criteria, and non-functional
   requirements saved to specs/auth/spec.md in Spec Kit compatible format.
 
-Take a deep breath and think through this specification systematically. Consider all
+ think through this specification systematically. Consider all
 security implications, edge cases, and user experience flows before finalizing.
 
 Rate your confidence in this specification from 0-1 after completion.

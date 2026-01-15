@@ -13,11 +13,11 @@ tags: [research, analysis, discovery, documentation, synthesis, multi-agent]
 
 ## Systematic Approach
 
-**Take a deep breath and approach research systematically.** Research is not linear—it requires iterative discovery, parallel investigation, and constant refinement. Don't jump to conclusions—gather evidence from multiple sources, cross-reference findings, and validate assumptions. Use the multi-phase methodology: scope definition, parallel discovery, sequential analysis, and synthesis. Each phase builds on the previous one. Rushing research guarantees missing important information.
+** approach research systematically.** Research is not linear—it requires iterative discovery, parallel investigation, and constant refinement. Don't jump to conclusions—gather evidence from multiple sources, cross-reference findings, and validate assumptions. Use the multi-phase methodology: scope definition, parallel discovery, sequential analysis, and synthesis. Each phase builds on the previous one. Rushing research guarantees missing important information.
 
 ## The Challenge
 
-**I bet you can't conduct truly comprehensive research without getting lost in the details or missing the big picture, but if you can:**
+**The conduct truly comprehensive research without getting lost in the details or missing the big picture, but if you can:**
 
 - Your solutions will be well-founded and robust
 - You'll avoid repeating historical mistakes
@@ -324,7 +324,7 @@ or documentation will result in incomplete analysis.
 
 ### Step-by-Step for Synthesis
 ```markdown
-Take a deep breath. Analyze findings systematically before synthesizing.
+. Analyze findings systematically before synthesizing.
 Cross-reference all claims with evidence. Identify gaps methodically.
 ```
 

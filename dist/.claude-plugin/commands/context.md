@@ -8,7 +8,7 @@ agent: build
 
 Manage the context engineering system including sessions, memories, and context assembly.
 
-Take a deep breath and approach context management systematically, ensuring memories are stored correctly, organized logically, and retrieved efficiently when needed.
+ approach context management systematically, ensuring memories are stored correctly, organized logically, and retrieved efficiently when needed.
 
 ## Why This Matters
 
@@ -16,7 +16,7 @@ Context system provides persistent session state and intelligent memory manageme
 
 ## The Challenge
 
-I bet you can't organize context and memories in a way that balances specificity with generalizability. The challenge is capturing details precisely enough to be useful later, while making them general enough to apply across multiple scenarios. Success means context system enables efficient retrieval without overwhelming noise or irrelevant information.
+The organize context and memories in a way that balances specificity with generalizability. The challenge is capturing details precisely enough to be useful later, while making them general enough to apply across multiple scenarios. Success means context system enables efficient retrieval without overwhelming noise or irrelevant information.
 
 ## Overview
 

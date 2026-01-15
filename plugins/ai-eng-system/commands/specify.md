@@ -25,7 +25,7 @@ Create a comprehensive feature specification: $ARGUMENTS
 
 > **Phase 2 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Review
 
-Take a deep breath and gather requirements systematically. Understand user needs, clarify ambiguities, and create detailed specification with clear acceptance criteria.
+Gather requirements systematically. Understand user needs, clarify ambiguities, and create detailed specification with clear acceptance criteria.
 
 ## Why This Matters
 
@@ -33,7 +33,7 @@ Poor specifications lead to wrong implementations, wasted time, and rework. Miss
 
 ## The Challenge
 
-I bet you can't create specification that's comprehensive without being overly detailed. The challenge is capturing all requirements while keeping specification manageable and not over-constraining implementation. Success means spec has clear acceptance criteria, covers edge cases, and allows appropriate implementation flexibility.
+The challenge is capturing all requirements while keeping specification manageable and not over-constraining implementation. Success means spec has clear acceptance criteria, covers edge cases, and allows appropriate implementation flexibility.
 
 ## Quick Start
 

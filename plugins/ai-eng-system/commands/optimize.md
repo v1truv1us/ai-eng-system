@@ -8,7 +8,7 @@ agent: build
 
 Interactive optimization tool that enhances content using research-backed techniques, web-researched best practices, and iterative refinement based on user feedback.
 
-Take a deep breath and approach this optimization systematically. Analyze content, apply appropriate techniques, and iteratively refine based on feedback.
+ approach this optimization systematically. Analyze content, apply appropriate techniques, and iteratively refine based on feedback.
 
 ## Why This Matters
 
@@ -16,7 +16,7 @@ Optimization quality directly impacts user satisfaction and content effectivenes
 
 ## The Challenge
 
-I bet you can't balance aggressiveness with preservation when optimizing content. The challenge is enhancing effectiveness while maintaining accuracy, clarity, and user intent. Success means optimization provides measurable improvement without introducing errors or losing essential meaning.
+The balance aggressiveness with preservation when optimizing content. The challenge is enhancing effectiveness while maintaining accuracy, clarity, and user intent. Success means optimization provides measurable improvement without introducing errors or losing essential meaning.
 
 ## Automatic Prompt Optimization
 
@@ -374,7 +374,7 @@ Step 1: Expert Persona
 
 Step 2: Step-by-Step Reasoning
   ```
-  Take a deep breath and analyze this step by step.
+   analyze this step by step.
   ```
 
 Step 3: Stakes Language
@@ -421,7 +421,7 @@ Step 1: Expert Persona
 
 Step 2: Step-by-Step Reasoning
   ```
-  Take a deep breath and analyze this step by step.
+   analyze this step by step.
   ```
 
 Step 3: Stakes Language
@@ -466,7 +466,7 @@ Step 1: Expert Persona
 
 Step 2: Step-by-Step Reasoning
   ```
-  Take a deep breath and analyze this step by step.
+   analyze this step by step.
   ```
 
 Step 3: Stakes Language
@@ -523,7 +523,7 @@ Step 1: Expert Persona
 
 Step 2: Step-by-Step Reasoning
   ```
-  Take a deep breath and analyze this step by step.
+   analyze this step by step.
   ```
 
 Step 3: Stakes Language
@@ -551,7 +551,7 @@ Current optimized prompt:
 ```
 You are a senior backend engineer with 15+ years of distributed systems experience.
 
-Take a deep breath and analyze this step by step.
+ analyze this step by step.
 
 This is important for the project's success. A thorough, complete solution is essential.
 
@@ -564,7 +564,7 @@ Edit this prompt:
 ```
 You are a senior backend engineer with 15+ years of distributed systems experience, specializing in REST API design and microservices.
 
-Take a deep breath and analyze this step by step.
+ analyze this step by step.
 
 This API is critical for our application's performance and scalability.
 
@@ -612,7 +612,7 @@ User: /optimize "Help me fix my authentication" --prompt --interactive
 ### Research-Based Enhancements:
 1. **Expert Persona**: "You are a senior security engineer with 10+ years..."
 2. **Stakes Language**: "This authentication system is critical to production security..."
-3. **Step-by-Step Reasoning**: "Take a deep breath and analyze systematically..."
+3. **Step-by-Step Reasoning**: " analyze systematically..."
 4. **Self-Evaluation**: "Rate your confidence 0-1 and explain reasoning..."
 
 ### Questions:
@@ -957,7 +957,7 @@ Step 1: Expert Persona
   You are a senior security engineer with 15+ years...
 
 Step 2: Step-by-Step Reasoning
-  Take a deep breath and analyze this step by step.
+   analyze this step by step.
 
 [2 more steps...]
 
@@ -1180,7 +1180,7 @@ The optimize command provides interactive, research-driven enhancement of any co
   "complexity": "medium",
   "steps": [
     {"id": "persona", "title": "Expert Persona", "after": "You are a senior security engineer..."},
-    {"id": "reasoning", "title": "Step-by-Step Reasoning", "after": "Take a deep breath..."},
+    {"id": "reasoning", "title": "Step-by-Step Reasoning", "after": "..."},
     {"id": "stakes", "title": "Stakes Language", "after": "This is important..."},
     {"id": "selfEval", "title": "Self-Evaluation", "after": "Rate your confidence..."}
   ],
@@ -1196,7 +1196,7 @@ The optimize command provides interactive, research-driven enhancement of any co
 
 You are a senior security engineer with 15+ years of authentication experience.
 
-Take a deep breath and analyze this step by step.
+ analyze this step by step.
 
 This is important for the project's success. A thorough, complete solution is essential.
 

@@ -25,7 +25,7 @@ Execute a plan or task: $ARGUMENTS
 
 > **Phase 4 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Review
 
-Take a deep breath and execute implementation systematically. Follow TDD, run quality gates at each step, and ensure all acceptance criteria are met.
+Execute implementation systematically using TDD, run quality gates at each step, and ensure all acceptance criteria are met.
 
 ## Why This Matters
 
@@ -33,7 +33,7 @@ Code runs in production. Bugs cause outages. Security issues compromise data. Po
 
 ## The Challenge
 
-I bet you can't implement all tasks efficiently while passing all quality gates. The challenge is maintaining development velocity without compromising on quality, testing, or documentation. Success means all tasks complete, all tests pass, all quality gates succeed, and code is ready for production.
+The challenge is maintaining development velocity without compromising on quality, testing, or documentation. Success means all tasks complete, all tests pass, all quality gates succeed, and code is ready for production.
 
 ## Phase 0: Prompt Refinement (CRITICAL - Do First)
 

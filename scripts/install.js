@@ -4,10 +4,10 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-var __filename2 = fileURLToPath(import.meta.url);
-var __dirname2 = path.dirname(__filename2);
-var packageRoot = path.dirname(__dirname2);
-var NAMESPACE_PREFIX = "ai-eng";
+const __filename2 = fileURLToPath(import.meta.url);
+const __dirname2 = path.dirname(__filename2);
+const packageRoot = path.dirname(__dirname2);
+const NAMESPACE_PREFIX = "ai-eng";
 function cleanNamespacedDirectory(baseDir, subdir, namespace, silent = false) {
     const dir = path.join(baseDir, subdir, namespace);
     if (fs.existsSync(dir)) {

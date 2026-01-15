@@ -35,10 +35,7 @@ export function resolveModel(config: AiEngConfig, taskType?: TaskType): string {
     // Priority 4: Error - no model configured
     const taskMsg = taskType ? ` for task type '${taskType}'` : "";
     throw new Error(
-        `No model configured${taskMsg}. Please configure a model in .ai-eng/config.yaml:\n` +
-            `  models:\n` +
-            `    default: claude-3-5-sonnet-latest\n` +
-            `  or set opencode.model in the config.`,
+        `No model configured${taskMsg}. Please configure a model in .ai-eng/config.yaml:\n  models:\n    default: claude-3-5-sonnet-latest\n  or set opencode.model in the config.`,
     );
 }
 

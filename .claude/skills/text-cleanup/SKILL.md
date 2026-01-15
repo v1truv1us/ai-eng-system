@@ -13,11 +13,11 @@ tags: [text-cleanup, slop-removal, pattern-matching, content-optimization]
 
 ## Systematic Approach
 
-**Take a deep breath and approach text cleanup systematically.** Text cleanup requires pattern recognition, contextual judgment, and careful preservation of meaning. Don't remove blindly—identify patterns, assess their purpose, and determine if removal is safe. Work iteratively: start conservatively, increase aggressiveness gradually, and verify that technical content remains intact. Balance conciseness with clarity—don't sacrifice precision for brevity.
+** approach text cleanup systematically.** Text cleanup requires pattern recognition, contextual judgment, and careful preservation of meaning. Don't remove blindly—identify patterns, assess their purpose, and determine if removal is safe. Work iteratively: start conservatively, increase aggressiveness gradually, and verify that technical content remains intact. Balance conciseness with clarity—don't sacrifice precision for brevity.
 
 ## The Challenge
 
-**I bet you can't remove AI-generated slop perfectly without losing critical meaning, but if you can:**
+**The remove AI-generated slop perfectly without losing critical meaning, but if you can:**
 
 - Your documentation will be a joy to read
 - Code comments will be helpful not redundant

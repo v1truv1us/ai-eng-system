@@ -10,7 +10,7 @@ agent: build
 
 Recursively initialize AGENTS.md in all important subdirectories with smart detection. Each AGENTS.md file guides AI agents for months across thousands of interactions. Execute this multi-phase operation systematically.
 
-Take a deep breath and approach this initialization systematically. Scan directory structure, identify important subdirectories, and create AGENTS.md files with proper hierarchy linking.
+ approach this initialization systematically. Scan directory structure, identify important subdirectories, and create AGENTS.md files with proper hierarchy linking.
 
 ## Why This Matters
 
@@ -18,7 +18,7 @@ AGENTS.md files guide AI agents across months and thousands of interactions. Poo
 
 ## The Challenge
 
-I bet you can't create comprehensive yet concise AGENTS.md files for all subdirectories efficiently. The challenge is identifying the most important directories, extracting relevant context, and creating files that provide clear guidance without overwhelming token budgets. Success means every important directory has useful AGENTS.md with proper hierarchy linking.
+The create comprehensive yet concise AGENTS.md files for all subdirectories efficiently. The challenge is identifying the most important directories, extracting relevant context, and creating files that provide clear guidance without overwhelming token budgets. Success means every important directory has useful AGENTS.md with proper hierarchy linking.
 
 ---
 

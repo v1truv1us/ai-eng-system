@@ -11,7 +11,7 @@ description: Deploy to Coolify with best practices
 
 ## Systematic Approach
 
-**Take a deep breath and approach this deployment systematically.** Deployments require careful planning, thorough verification, and methodical execution. Rushing or skipping checks leads to avoidable incidents. Follow the checklist methodically, verify each step, and ensure all safety measures are in place before proceeding.
+** approach this deployment systematically.** Deployments require careful planning, thorough verification, and methodical execution. Rushing or skipping checks leads to avoidable incidents. Follow the checklist methodically, verify each step, and ensure all safety measures are in place before proceeding.
 
 ## Project Types
 
@@ -19,7 +19,7 @@ Project types: static (Astro/Svelte static), Node apps, Docker-based. Set build/
 
 ## The Challenge
 
-**I bet you can't deploy flawlessly every time, but if you can:**
+**The deploy flawlessly every time, but if you can:**
 
 - You'll maintain production stability
 - Users will experience zero downtime

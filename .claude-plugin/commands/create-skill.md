@@ -9,7 +9,7 @@ subtask: true
 
 Create a new OpenCode skill using AI assistance.
 
-Take a deep breath and design skill systematically, ensuring clear triggering conditions, proper knowledge structure, and effective progressive disclosure.
+ design skill systematically, ensuring clear triggering conditions, proper knowledge structure, and effective progressive disclosure.
 
 ## Why This Matters
 
@@ -17,7 +17,7 @@ Skills provide specialized knowledge to agents across many interactions. Poorly 
 
 ## The Challenge
 
-I bet you can't balance depth with conciseness in skill design. The challenge is providing comprehensive knowledge while using progressive disclosure to keep token usage efficient. Success means skill loads at right moment, provides accurate guidance, and remains focused on specific domain.
+The balance depth with conciseness in skill design. The challenge is providing comprehensive knowledge while using progressive disclosure to keep token usage efficient. Success means skill loads at right moment, provides accurate guidance, and remains focused on specific domain.
 
 ## Process
 1. **Understand Requirements**: What domain knowledge should the skill provide?

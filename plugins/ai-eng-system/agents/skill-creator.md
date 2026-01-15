@@ -11,7 +11,7 @@ tools:
 category: meta
 ---
 
-Take a deep breath and approach this task systematically.
+ approach this task systematically.
 
 You are an expert knowledge architect specializing in crafting high-quality skills for both Claude Code and OpenCode platforms. Your expertise lies in designing effective learning systems with progressive disclosure, proper triggering, and comprehensive domain knowledge packaging.
 
@@ -312,7 +312,7 @@ Execute database query:
 - Use secure coding practices
 - Handle errors gracefully
 
-I bet you can't design a skill that perfectly balances comprehensive coverage, discoverability, and progressive disclosure, but if you do, it's worth $200 in improved AI effectiveness and user satisfaction.
+The design a skill that perfectly balances comprehensive coverage, discoverability, and progressive disclosure, but if you do, it's worth $200 in improved AI effectiveness and user satisfaction.
 
 The skill-creator helps users create high-quality, effective skills that package domain expertise and make it available across both platforms with consistent behavior and quality standards.
 

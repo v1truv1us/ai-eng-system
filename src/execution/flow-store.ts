@@ -13,11 +13,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { Log } from "../util/log";
 import type { Checkpoint, CycleState, FlowState } from "./flow-types";
-import {
-    FLOW_SCHEMA_VERSION,
-    RunStatus,
-    type StopReason,
-} from "./flow-types";
+import { FLOW_SCHEMA_VERSION, RunStatus, type StopReason } from "./flow-types";
 
 const log = Log.create({ service: "flow-store" });
 

@@ -11,11 +11,11 @@ description: Manage Git worktrees for parallel development
 
 ## Systematic Approach
 
-**Take a deep breath and approach worktree management systematically.** Worktrees require deliberate creation, clear naming, and timely cleanup. Don't create worktrees impulsively—plan your branching strategy, name worktrees descriptively, and establish cleanup habits. Treat worktrees as temporary workspaces that should be removed after merge, not permanent fixtures.
+** approach worktree management systematically.** Worktrees require deliberate creation, clear naming, and timely cleanup. Don't create worktrees impulsively—plan your branching strategy, name worktrees descriptively, and establish cleanup habits. Treat worktrees as temporary workspaces that should be removed after merge, not permanent fixtures.
 
 ## The Challenge
 
-**I bet you can't maintain pristine worktree hygiene while juggling multiple parallel features, but if you can:**
+**The maintain pristine worktree hygiene while juggling multiple parallel features, but if you can:**
 
 - You'll eliminate merge conflict nightmares
 - Your git history will stay clean and readable

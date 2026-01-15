@@ -681,7 +681,7 @@ export class RalphLoopRunner {
             return null;
         }
 
-        const result = [`\n# Relevant Specifications\n`];
+        const result = ["\n# Relevant Specifications\n"];
 
         for (const match of topMatches) {
             const specPath = join(specsDir, match.dir, "spec.md");

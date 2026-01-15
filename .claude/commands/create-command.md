@@ -9,7 +9,7 @@ subtask: true
 
 Create a new OpenCode command using AI assistance.
 
-Take a deep breath and design command systematically, ensuring clear argument structure, proper shell integration, and comprehensive documentation.
+ design command systematically, ensuring clear argument structure, proper shell integration, and comprehensive documentation.
 
 ## Why This Matters
 
@@ -17,7 +17,7 @@ Commands become part of user's daily workflow. Poorly designed commands with con
 
 ## The Challenge
 
-I bet you can't design command interface that balances simplicity with power. The challenge is creating argument structure that's intuitive for common use cases while supporting advanced scenarios. Success means command is easy to discover, simple to use, and powerful enough to handle complex workflows.
+The design command interface that balances simplicity with power. The challenge is creating argument structure that's intuitive for common use cases while supporting advanced scenarios. Success means command is easy to discover, simple to use, and powerful enough to handle complex workflows.
 
 ## Process
 1. **Understand Requirements**: What should the command do?

@@ -16,7 +16,7 @@ tools:
   list: true
 ---
 
-Take a deep breath and approach this task systematically.
+ approach this task systematically.
 
 **Stakes:** Code you write runs in production and affects real users. Bugs cause outages, security vulnerabilities compromise data, and poor architecture creates technical debt that compounds. Every feature you implement impacts user experience and business metrics - quality and correctness are non-negotiable.
 
@@ -366,7 +366,7 @@ For complex implementations requiring domain expertise, coordinate with these sp
 
 ALWAYS: confirm scope, evaluate escalation triggers, implement minimal vertical slice, validate, output AGENT_OUTPUT_V1. If ambiguity persists after one clarification attempt—escalate rather than guess.
 
-I bet you can't deliver perfect implementations while balancing all constraints, but if you do, it's worth $200 in user satisfaction and reduced technical debt.
+The deliver perfect implementations while balancing all constraints, but if you do, it's worth $200 in user satisfaction and reduced technical debt.
 
 **Quality Check:** After completing your response, briefly assess your confidence level (0-1) and note any assumptions or limitations.
 

@@ -9,7 +9,7 @@ subtask: false
 
 Create a complete, high-quality OpenCode extension from initial concept to tested implementation. Follow a systematic approach: understand requirements, design components, clarify details, implement following best practices, validate, and test.
 
-Take a deep breath and approach plugin creation systematically. This is a complex multi-phase task that requires careful planning, component design, implementation, and thorough validation.
+ approach plugin creation systematically. This is a complex multi-phase task that requires careful planning, component design, implementation, and thorough validation.
 
 ## Why This Matters
 
@@ -17,7 +17,7 @@ Plugins are integrated into development workflows and used repeatedly. Poorly de
 
 ## The Challenge
 
-I bet you can't design a plugin architecture that is both comprehensive and maintainable. The challenge is creating components that work together seamlessly while remaining modular enough for future enhancements. Success means plugin is thoroughly validated, well-documented, and ready for production use.
+The design a plugin architecture that is both comprehensive and maintainable. The challenge is creating components that work together seamlessly while remaining modular enough for future enhancements. Success means plugin is thoroughly validated, well-documented, and ready for production use.
 
 ## Core Principles
 

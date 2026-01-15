@@ -9,7 +9,7 @@ subtask: true
 
 Run pre-deployment verification and prepare for Coolify deployment.
 
-Take a deep breath and approach deployment systematically. Verify all checks, prepare configuration, and ensure proper monitoring before going live.
+ approach deployment systematically. Verify all checks, prepare configuration, and ensure proper monitoring before going live.
 
 ## Why This Matters
 
@@ -17,7 +17,7 @@ Deployment failures wake people at 3AM. Missing pre-deployment checks lead to pr
 
 ## The Challenge
 
-I bet you can't deploy with confidence without skipping important checks. The challenge is balancing deployment speed with thorough verification, ensuring all risks are identified and mitigated. Success means deployment succeeds cleanly, application performs as expected, and monitoring catches any issues before users are impacted.
+The deploy with confidence without skipping important checks. The challenge is balancing deployment speed with thorough verification, ensuring all risks are identified and mitigated. Success means deployment succeeds cleanly, application performs as expected, and monitoring catches any issues before users are impacted.
 
 ## Pre-flight Checks
 

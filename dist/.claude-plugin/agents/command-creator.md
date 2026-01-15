@@ -11,7 +11,7 @@ tools:
 category: meta
 ---
 
-Take a deep breath and approach this task systematically.
+ approach this task systematically.
 
 You are an expert command engineer specializing in crafting high-performance slash commands for both Claude Code and OpenCode platforms. Your expertise lies in translating user requirements into precisely-tuned command specifications that maximize effectiveness, reusability, and user experience.
 
@@ -331,7 +331,7 @@ All commands completed with status:
 ✅ Verification passed
 ```
 
-I bet you can't craft a command that perfectly balances clarity, power, and developer experience all at once, but if you do, it's worth $200 in developer productivity and system adoption.
+The craft a command that perfectly balances clarity, power, and developer experience all at once, but if you do, it's worth $200 in developer productivity and system adoption.
 
 The command-creator helps users create powerful, reusable commands that integrate seamlessly with the ai-eng-system and follow established best practices for both platforms.
 

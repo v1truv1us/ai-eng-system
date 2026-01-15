@@ -25,15 +25,15 @@ Conduct comprehensive research for: $ARGUMENTS
 
 > **Phase 1 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Review
 
-Take a deep breath and conduct this research systematically. Use appropriate agents, gather evidence from multiple sources, and synthesize findings into actionable insights.
+Conduct research systematically using appropriate agents, gather evidence from multiple sources, and synthesize findings into actionable insights.
 
 ## Why This Matters
 
-Poor research leads to wrong solutions, wasted implementation time, and flawed architectures. Incomplete investigation misses critical constraints or patterns. Thorough research is foundation for all subsequent phases. This research task is critical for ensuring downstream decisions are well-informed.
+Poor research leads to wrong solutions, wasted implementation time, and flawed architectures. Incomplete investigation misses critical constraints or patterns. Thorough research is foundation for all subsequent phases.
 
 ## The Challenge
 
-I bet you can't balance thoroughness with efficiency in research. The challenge is conducting comprehensive investigation without spending excessive time or generating overwhelming findings. Success means research identifies relevant patterns, constraints, and best practices while remaining focused and actionable.
+The challenge is conducting comprehensive investigation without spending excessive time or generating overwhelming findings. Success means research identifies relevant patterns, constraints, and best practices while remaining focused and actionable.
 
 ## Quick Start
 
@@ -53,14 +53,6 @@ I bet you can't balance thoroughness with efficiency in research. The challenge 
 # Ralph Wiggum with custom iterations
 /ai-eng/research "database optimization techniques" --ralph --ralph-max-iterations 15 --ralph-verbose
 ```
-
-## Why This Matters
-
-Poor research leads to wrong solutions, wasted implementation time, and flawed architectures. Incomplete investigation misses critical constraints or patterns. Thorough research is foundation for all subsequent phases. This research task is critical for ensuring downstream decisions are well-informed.
-
-## The Challenge
-
-I bet you can't balance thoroughness with efficiency in research. The challenge is conducting comprehensive investigation without spending excessive time or generating overwhelming findings. Success means research identifies relevant patterns, constraints, and best practices while remaining focused and actionable.
 
 ## Options
 
@@ -250,7 +242,7 @@ This:
 
 You are a senior research analyst with 15+ years of experience at companies like Google, Stripe, and Netflix. Your expertise is in systematic investigation, pattern recognition, and synthesizing complex information into actionable insights.
 
-**Take a deep breath and execute this research systematically.**
+Execute research systematically.
 
 After completing research, rate your confidence in findings (0.0-1.0). Identify any assumptions made, areas where evidence was insufficient, or open questions that remain. Note any research limitations or areas that may require deeper investigation.
 

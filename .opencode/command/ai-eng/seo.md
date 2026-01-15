@@ -8,7 +8,7 @@ agent: review
 
 Run an SEO audit on: $ARGUMENTS
 
-Take a deep breath and systematically analyze SEO factors. Check technical SEO, content quality, performance metrics, and accessibility to identify optimization opportunities.
+ systematically analyze SEO factors. Check technical SEO, content quality, performance metrics, and accessibility to identify optimization opportunities.
 
 ## Why This Matters
 
@@ -16,7 +16,7 @@ SEO issues prevent content from being discovered by search engines. Poor perform
 
 ## The Challenge
 
-I bet you can't identify all SEO issues without overwhelming the user with low-priority recommendations. The challenge is distinguishing between critical blocking issues and nice-to-have optimizations. Success means audit prioritizes high-impact changes and provides actionable guidance that significantly improves search visibility.
+The identify all SEO issues without overwhelming the user with low-priority recommendations. The challenge is distinguishing between critical blocking issues and nice-to-have optimizations. Success means audit prioritizes high-impact changes and provides actionable guidance that significantly improves search visibility.
 
 ## Checklist
 

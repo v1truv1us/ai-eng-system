@@ -9,7 +9,7 @@ subtask: true
 
 Create a new OpenCode custom tool using AI assistance.
 
-Take a deep breath and implement tool systematically, ensuring proper TypeScript types, robust validation, and comprehensive error handling.
+ implement tool systematically, ensuring proper TypeScript types, robust validation, and comprehensive error handling.
 
 ## Why This Matters
 
@@ -17,7 +17,7 @@ Custom tools extend system capabilities and are called from agents and commands.
 
 ## The Challenge
 
-I bet you can't implement a tool that balances flexibility with safety. The challenge is creating tool interface that handles various input scenarios while validating rigorously and failing gracefully. Success means tool works reliably, provides clear error messages, and integrates smoothly with existing patterns.
+The implement a tool that balances flexibility with safety. The challenge is creating tool interface that handles various input scenarios while validating rigorously and failing gracefully. Success means tool works reliably, provides clear error messages, and integrates smoothly with existing patterns.
 
 ## Process
 1. **Understand Requirements**: What functionality should the tool provide?

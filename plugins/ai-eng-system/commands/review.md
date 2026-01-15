@@ -21,7 +21,7 @@ Review code changes: $ARGUMENTS
 
 > **Phase 5 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Review
 
-Take a deep breath and approach this review systematically. Examine code from multiple expert perspectives, identify issues across all quality dimensions, and provide actionable recommendations.
+ Approach this review systematically. Examine code from multiple expert perspectives, identify issues across all quality dimensions, and provide actionable recommendations.
 
 ## Why This Matters
 
@@ -29,7 +29,7 @@ Code runs in production, and bugs cause outages. Security issues compromise data
 
 ## The Challenge
 
-I bet you can't provide comprehensive review without being overly critical or missing important issues. The challenge is balancing thoroughness with constructiveness, identifying real problems while avoiding noise. Success means review catches real issues, provides actionable guidance, and helps maintainers improve code quality.
+The challenge is providing comprehensive review without being overly critical or missing important issues. Balancing thoroughness with constructiveness, identifying real problems while avoiding noise. Success means review catches real issues, provides actionable guidance, and helps maintainers improve code quality.
 
 ## Quick Start
 

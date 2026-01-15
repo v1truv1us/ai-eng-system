@@ -3,7 +3,7 @@
  *
  * Console styling and output helpers
  */
-import { EOL } from "os";
+import { EOL } from "node:os";
 
 export namespace UI {
     export const Style = {
@@ -34,20 +34,20 @@ export namespace UI {
 
     export function error(message: string): void {
         println(
-            Style.TEXT_DANGER_BOLD + "Error: " + Style.TEXT_NORMAL + message,
+            `${Style.TEXT_DANGER_BOLD}Error: ${Style.TEXT_NORMAL}${message}`,
         );
     }
 
     export function success(message: string): void {
-        println(Style.TEXT_SUCCESS_BOLD + "✓ " + Style.TEXT_NORMAL + message);
+        println(`${Style.TEXT_SUCCESS_BOLD}✓ ${Style.TEXT_NORMAL}${message}`);
     }
 
     export function info(message: string): void {
-        println(Style.TEXT_INFO_BOLD + "ℹ " + Style.TEXT_NORMAL + message);
+        println(`${Style.TEXT_INFO_BOLD}ℹ ${Style.TEXT_NORMAL}${message}`);
     }
 
     export function warn(message: string): void {
-        println(Style.TEXT_WARNING_BOLD + "! " + Style.TEXT_NORMAL + message);
+        println(`${Style.TEXT_WARNING_BOLD}! ${Style.TEXT_NORMAL}${message}`);
     }
 
     export function header(title: string): void {

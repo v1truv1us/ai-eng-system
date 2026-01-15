@@ -13,11 +13,11 @@ tags: [workflow, iteration, automation, continuous, looping]
 
 ## Systematic Approach
 
-**Take a deep breath and approach Ralph Wiggum loops systematically.** Loop setup requires careful planning: define the task precisely, set verifiable success criteria, establish safety limits, and plan verification steps. Don't let loops run blindly—monitor progress, detect stuck states, and implement cancellation mechanisms. The loop is a tool, not a substitute for clear thinking. Configure it thoughtfully, monitor it actively, and trust it to handle the repetitive work.
+** approach Ralph Wiggum loops systematically.** Loop setup requires careful planning: define the task precisely, set verifiable success criteria, establish safety limits, and plan verification steps. Don't let loops run blindly—monitor progress, detect stuck states, and implement cancellation mechanisms. The loop is a tool, not a substitute for clear thinking. Configure it thoughtfully, monitor it actively, and trust it to handle the repetitive work.
 
 ## The Challenge
 
-**I bet you can't configure a loop that runs autonomously without getting stuck or burning excessive tokens, but if you can:**
+**The configure a loop that runs autonomously without getting stuck or burning excessive tokens, but if you can:**
 
 - You'll unlock overnight productivity
 - Features will complete while you sleep

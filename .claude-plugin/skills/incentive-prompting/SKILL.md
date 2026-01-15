@@ -32,7 +32,7 @@ LLMs don't understand incentives, but they **pattern-match** on language associa
 **Source:** Yang et al. (2023, Google DeepMind OPRO)
 
 ```
-"Take a deep breath and solve this step by step."
+" solve this step by step."
 ```
 
 **When to use:** Multi-step reasoning, math problems, logical analysis
@@ -41,7 +41,7 @@ LLMs don't understand incentives, but they **pattern-match** on language associa
 **Source:** Li et al. (2023, ICLR 2024)
 
 ```
-"I bet you can't solve this, but if you do..."
+"The solve this, but if you do..."
 ```
 
 **When to use:** Difficult problems, edge cases, problems where simpler approaches failed
@@ -84,7 +84,7 @@ Combine multiple techniques for maximum effect:
 ```
 "You are a senior [ROLE] with [X] years of experience at [NOTABLE_COMPANIES].
 
-I bet you can't solve this, but it's critical to my career and worth $200 if you get it perfect. Take a deep breath and solve step by step.
+The solve this, but it's critical to my career and worth $200 if you get it perfect.  solve step by step.
 
 [PROBLEM DESCRIPTION]
 
@@ -123,7 +123,7 @@ You are a senior [expert role] with extensive experience in [domain].
 This task is critical. Incomplete or incorrect results will cause significant issues.
 
 # Approach
-Take a deep breath. Analyze the problem step by step before providing solutions.
+. Analyze the problem step by step before providing solutions.
 
 # Task
 [Actual task instructions]
@@ -140,7 +140,7 @@ Before finalizing, rate your confidence and identify any assumptions or limitati
    - arxiv.org/abs/2312.16171
 
 2. **Yang et al. (2023)** - "Large Language Models as Optimizers" (OPRO) - Google DeepMind
-   - "Take a deep breath" phrase origin
+   - "" phrase origin
    - Up to 50% improvement over human-designed prompts
    - arxiv.org/abs/2309.03409
 

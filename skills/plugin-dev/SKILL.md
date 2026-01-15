@@ -12,11 +12,11 @@ version: 1.0.0
 
 ## Systematic Approach
 
-**Take a deep breath and approach plugin development systematically.** Plugins require careful planning: understand the problem, design the API, implement incrementally, test thoroughly, and document comprehensively. Don't rush to code—clarify requirements, define interfaces, and consider edge cases first. Build iteratively, validate frequently, and refactor continuously. Every design decision impacts maintainability and extensibility.
+** approach plugin development systematically.** Plugins require careful planning: understand the problem, design the API, implement incrementally, test thoroughly, and document comprehensively. Don't rush to code—clarify requirements, define interfaces, and consider edge cases first. Build iteratively, validate frequently, and refactor continuously. Every design decision impacts maintainability and extensibility.
 
 ## The Challenge
 
-**I bet you can't create a plugin that balances specificity with flexibility perfectly, but if you can:**
+**The create a plugin that balances specificity with flexibility perfectly, but if you can:**
 
 - Your plugin will be a joy to use and extend
 - Others will build on top of your work

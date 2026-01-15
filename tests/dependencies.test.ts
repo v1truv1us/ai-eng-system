@@ -146,7 +146,7 @@ describe("Dependency Version Compatibility", () => {
                 `[Dependency Check] @opencode-ai/plugin version: ${pluginVersion}`,
             );
             console.log(
-                `[SDK Info] Requires messageID format: ^msg.* (SDK 1.1.13+)`,
+                "[SDK Info] Requires messageID format: ^msg.* (SDK 1.1.13+)",
             );
 
             expect(pluginVersion).toBeTruthy();

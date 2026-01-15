@@ -159,14 +159,22 @@ async function runInstaller(flags: InstallFlags): Promise<void> {
     // Check for ai-eng-system plugin reference
     const config = findOpenCodeConfig(projectDir);
     if (config && !isPluginReferenced(config.path)) {
-        console.log("⚠️  opencode.jsonc does not reference ai-eng-system plugin");
-        console.log("   Add 'ai-eng-system' to the plugin array in opencode.jsonc");
+        console.log(
+            "⚠️  opencode.jsonc does not reference ai-eng-system plugin",
+        );
+        console.log(
+            "   Add 'ai-eng-system' to the plugin array in opencode.jsonc",
+        );
     }
 
     if (flags.dryRun) {
         console.log("🔍 dry-run: Would install the following files:");
-        console.log(`   Commands -> ${targetOpenCodeDir}/command/${NAMESPACE_PREFIX}/`);
-        console.log(`   Agents   -> ${targetOpenCodeDir}/agent/${NAMESPACE_PREFIX}/`);
+        console.log(
+            `   Commands -> ${targetOpenCodeDir}/command/${NAMESPACE_PREFIX}/`,
+        );
+        console.log(
+            `   Agents   -> ${targetOpenCodeDir}/agent/${NAMESPACE_PREFIX}/`,
+        );
         console.log(`   Skills   -> ${targetOpenCodeDir}/skill/`);
         return;
     }
@@ -177,10 +185,18 @@ async function runInstaller(flags: InstallFlags): Promise<void> {
         "command",
         NAMESPACE_PREFIX,
     );
-    const distCommandsDir = path.join(distOpenCodeDir, "command", NAMESPACE_PREFIX);
+    const distCommandsDir = path.join(
+        distOpenCodeDir,
+        "command",
+        NAMESPACE_PREFIX,
+    );
 
     if (fs.existsSync(distCommandsDir)) {
-        await cleanNamespacedDirectory(targetOpenCodeDir, "command", NAMESPACE_PREFIX);
+        await cleanNamespacedDirectory(
+            targetOpenCodeDir,
+            "command",
+            NAMESPACE_PREFIX,
+        );
         fs.cpSync(distCommandsDir, commandsDir, { recursive: true });
         console.log(`  ✅ Installed commands to ${commandsDir}`);
     }
@@ -190,7 +206,11 @@ async function runInstaller(flags: InstallFlags): Promise<void> {
     const distAgentsDir = path.join(distOpenCodeDir, "agent", NAMESPACE_PREFIX);
 
     if (fs.existsSync(distAgentsDir)) {
-        await cleanNamespacedDirectory(targetOpenCodeDir, "agent", NAMESPACE_PREFIX);
+        await cleanNamespacedDirectory(
+            targetOpenCodeDir,
+            "agent",
+            NAMESPACE_PREFIX,
+        );
         fs.cpSync(distAgentsDir, agentsDir, { recursive: true });
         console.log(`  ✅ Installed agents to ${agentsDir}`);
     }
@@ -206,7 +226,9 @@ async function runInstaller(flags: InstallFlags): Promise<void> {
     }
 
     console.log("\n✅ Installation complete!");
-    console.log("   Restart OpenCode or Claude Code to use new commands and agents.");
+    console.log(
+        "   Restart OpenCode or Claude Code to use new commands and agents.",
+    );
 }
 
 export { runInstaller };

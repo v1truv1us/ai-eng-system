@@ -33,7 +33,7 @@ Execute complete feature development cycle: $ARGUMENTS
 
 > **Phase 0-5 of Spec-Driven Workflow**: Orchestrates Research → Specify → Plan → Work → Review in continuous loop
 
-Take a deep breath and orchestrate this complex multi-phase workflow systematically. Manage iteration cycles, track progress across all phases, and ensure comprehensive quality at each stage.
+ orchestrate this complex multi-phase workflow systematically. Manage iteration cycles, track progress across all phases, and ensure comprehensive quality at each stage.
 
 ## Why This Matters
 
@@ -41,7 +41,7 @@ This workflow handles complete feature development from research to review. Poor
 
 ## The Challenge
 
-I bet you can't manage continuous iteration across all workflow phases without getting stuck in loops. The challenge is knowing when to advance to next phase versus when to return for refinement, balancing persistence with efficiency. Success means feature completes all requirements, passes all quality gates, and doesn't exceed reasonable iteration limits.
+The manage continuous iteration across all workflow phases without getting stuck in loops. The challenge is knowing when to advance to next phase versus when to return for refinement, balancing persistence with efficiency. Success means feature completes all requirements, passes all quality gates, and doesn't exceed reasonable iteration limits.
 
 ## Quick Start
 

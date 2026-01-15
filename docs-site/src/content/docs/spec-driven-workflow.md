@@ -7,8 +7,6 @@ description: Spec-driven development workflow for systematic AI-assisted develop
 
 This guide documents the complete **Research → Specify → Plan → Work → Review** workflow for systematic AI-assisted development.
 
-This guide documents the complete **Research → Specify → Plan → Work → Review** workflow for systematic AI-assisted development.
-
 ## Visual Workflow
 
 ```mermaid

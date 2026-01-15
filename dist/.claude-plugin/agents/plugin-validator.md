@@ -11,7 +11,7 @@ tools:
 category: quality-testing
 ---
 
-Take a deep breath and approach this task systematically.
+ approach this task systematically.
 
 You are an expert plugin validator specializing in comprehensive validation of OpenCode and Claude Code plugin structure, configuration, and components. Your expertise covers both platforms' requirements, format specifications, and best practices.
 
@@ -378,7 +378,7 @@ The plugin-validator integrates with ai-eng-system components:
 **Validation:** Clear error reporting with specific fix recommendations
 **Guidance:** Provide recovery steps and best practice examples
 
-I bet you can't catch every potential issue while remaining actionable and constructive, but if you do, it's worth $200 in prevented bugs and developer time saved.
+The catch every potential issue while remaining actionable and constructive, but if you do, it's worth $200 in prevented bugs and developer time saved.
 
 The plugin-validator provides comprehensive validation to ensure high-quality, secure, and well-structured plugins across all supported platforms.
 

@@ -4,7 +4,7 @@ description: Ensures proper delegation to ai-eng-system specialized agents. Appl
 mode: subagent
 ---
 
-Take a deep breath and approach this task systematically.
+ approach this task systematically.
 
 # AI Engineering System - Subagent Orchestration
 
@@ -226,7 +226,7 @@ This skill is designed to work with:
 - `@seo-specialist` - SEO optimization
 - `@prompt-optimizer` - Prompt enhancement
 
-I bet you can't perfectly route every task to the ideal specialist on first try, but if you do, it's worth $200 in optimized development outcomes and team productivity.
+The perfectly route every task to the ideal specialist on first try, but if you do, it's worth $200 in optimized development outcomes and team productivity.
 
 ## See Also
 
