@@ -26,7 +26,13 @@ bun install
 bun run build
 
 # Create symlink for global access
-ln -s $(pwd)/dist/cli/run.ts ~/.local/bin/ai-eng-ralph
+ln -s $(pwd)/dist/cli/run.js ~/.local/bin/"ai-eng ralph"
+```
+
+Or for the `ai-eng` command (without ralph):
+
+```bash
+ln -s $(pwd)/dist/cli/run.js ~/.local/bin/ai-eng
 chmod +x dist/cli/run.ts
 ```
 
@@ -103,13 +109,13 @@ opencode:
 
 ```bash
 # Interactive mode (TUI)
-ai-eng-ralph "implement user authentication"
+ai-eng ralph "implement user authentication"
 
 # With workflow specification
-ai-eng-ralph path/to/workflow.yml
+ai-eng ralph path/to/workflow.yml
 
 # With options
-ai-eng-ralph --max-iters 5 --review both
+ai-eng ralph --max-iters 5 --review both
 ```
 
 ### CLI Options
@@ -238,7 +244,7 @@ Use `--ci` mode for non-interactive execution:
 
 ```bash
 # In GitHub Actions or other CI
-ai-eng-ralph "fix bug in auth module" --ci --review opencode
+ai-eng ralph "fix bug in auth module" --ci --review opencode
 ```
 
 **CI Mode Features:**
@@ -343,13 +349,13 @@ gates:
   test: bun test
 EOF
 
-ai-eng-ralph "implement user authentication with JWT"
+ai-eng ralph "implement user authentication with JWT"
 ```
 
 ### Example 2: Bug Fix with Full Review
 
 ```bash
-ai-eng-ralph "fix memory leak in background worker" \
+ai-eng ralph "fix memory leak in background worker" \
   --review both \
   --gates lint,typecheck,test
 ```
@@ -361,13 +367,13 @@ ai-eng-ralph "fix memory leak in background worker" \
 ls .ai-eng/runs/
 
 # Resume specific run
-ai-eng-ralph --resume --run-id run-20260112-012345
+ai-eng ralph --resume --run-id run-20260112-012345
 ```
 
 ### Example 4: Dry Run (Preview)
 
 ```bash
-ai-eng-ralph "refactor database layer" --dry-run
+ai-eng ralph "refactor database layer" --dry-run
 ```
 
 ## Troubleshooting
@@ -376,11 +382,11 @@ ai-eng-ralph "refactor database layer" --dry-run
 
 ```bash
 # Check if installed globally
-which ai-eng-ralph
+which "ai-eng ralph"
 
 # If not found, create symlink
-ln -s /path/to/ai-eng-system/dist/cli/run.ts ~/.local/bin/ai-eng-ralph
-chmod +x ~/.local/bin/ai-eng-ralph
+ln -s /path/to/ai-eng-system/dist/cli/run.js ~/.local/bin/"ai-eng ralph"
+chmod +x ~/.local/bin/"ai-eng ralph"
 
 # Or add to PATH
 export PATH="$PATH:/path/to/ai-eng-system/dist/cli"
