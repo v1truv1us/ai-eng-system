@@ -1,6 +1,6 @@
 {
   "name": "ai-eng-system",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Compounding engineering system for Claude Code and OpenCode. Shared agents, commands, skills, and plugin development tools.",
   "type": "module",
   "main": "./dist/index.js",
@@ -36,7 +36,7 @@
     "test:build": "bun test tests/build.test.ts",
     "quality": "bun run lint && bun run build",
     "prepublishOnly": "bun run quality",
-    "prepare": "husky",
+    "prepare": "node_modules/.bin/husky",
     "changelog": "standard-version",
     "changelog:patch": "standard-version --release-as patch",
     "changelog:minor": "standard-version --release-as minor",
