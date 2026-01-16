@@ -5,7 +5,7 @@
 
 import { readFile, stat } from "node:fs/promises";
 import { extname, join } from "node:path";
-import { Glob } from "bun";
+import { glob } from "glob";
 import {
     ConfidenceLevel,
     type DiscoveryAgent,
@@ -141,9 +141,10 @@ export class CodebaseLocator implements DiscoveryAgent {
         const allFiles: FileReference[] = [];
 
         for (const pattern of patterns) {
-            const globber = new Glob(pattern);
-
-            const files = Array.from(globber.scanSync()).filter((filePath) => {
+            const globFiles = await glob(pattern, {
+                absolute: true,
+            });
+            const files = globFiles.filter((filePath) => {
                 return !isIgnored(filePath);
             });
 
@@ -387,9 +388,10 @@ export class ResearchLocator implements DiscoveryAgent {
         const allDocs: DocReference[] = [];
 
         for (const pattern of docPatterns) {
-            const globber = new Glob(pattern);
-
-            const files = Array.from(globber.scanSync()).filter((filePath) => {
+            const allFiles = await glob(pattern, {
+                absolute: true,
+            });
+            const files = allFiles.filter((filePath: string) => {
                 return !isIgnored(filePath);
             });
 
@@ -640,11 +642,13 @@ export class PatternFinder implements DiscoveryAgent {
     ): Promise<PatternMatch[]> {
         const matches: PatternMatch[] = [];
 
-        const globber = new Glob(
+        const allCodeFiles = await glob(
             "**/*.{ts,js,tsx,jsx,py,java,cpp,c,h,hpp,md,mdx}",
+            {
+                absolute: true,
+            },
         );
-
-        const codeFiles = Array.from(globber.scanSync()).filter((filePath) => {
+        const codeFiles = allCodeFiles.filter((filePath: string) => {
             return !isIgnored(filePath);
         });
 

@@ -60,3 +60,18 @@ export interface RalphFlags {
     /** Debug mode: print every tool invocation input/output to console and logs */
     debugWork?: boolean;
 }
+
+export interface InstallFlags {
+    scope?: "project" | "global" | "auto";
+    dryRun?: boolean;
+    yes?: boolean;
+    verbose?: boolean;
+    help?: boolean;
+}
+
+export interface InitFlags {
+    interactive?: boolean;
+    overwrite?: boolean;
+    help?: boolean;
+    verbose?: boolean;
+}

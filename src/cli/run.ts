@@ -26,6 +26,7 @@ USAGE:
   ai-eng "prompt" [options]          # Shortcut: defaults to 'ralph'
 
 COMMANDS:
+  init [options]                     # Initialize .ai-eng/config.yaml with defaults
   ralph <prompt|workflow> [options]  # Iteration loop runner
   install [options]                  # Install OpenCode/Claude assets
 
@@ -34,13 +35,33 @@ GLOBAL OPTIONS:
   -v, --verbose                      Verbose output (DEBUG level logs)
 
 EXAMPLES:
+  ai-eng init                    # Initialize config with defaults
+  ai-eng init --interactive       # Interactive config setup
   ai-eng "implement user authentication"
-  ai-eng ralph "fix the bug" --print-logs --log-level DEBUG
+  ai-eng ralph "fix bug" --print-logs --log-level DEBUG
   ai-eng install --scope project
   ai-eng ralph feature-spec.yml --max-iters 5
   ai-eng ralph --tui --resume
   ai-eng ralph "make fleettools usable" --ship --max-cycles 30
   ai-eng ralph "make fleettools usable" --draft --max-cycles 10 --ci
+`;
+
+const INIT_HELP_TEXT = `
+ai-eng init - Initialize .ai-eng/config.yaml with defaults
+
+USAGE:
+  ai-eng init [options]
+
+OPTIONS:
+  -i, --interactive    Interactive configuration setup
+  --overwrite           Overwrite existing config file
+  -h, --help          Show this help message
+  -v, --verbose         Verbose output
+
+EXAMPLES:
+  ai-eng init                    # Create config with defaults
+  ai-eng init --interactive       # Interactive setup with prompts
+  ai-eng init --overwrite          # Replace existing config
 `;
 
 const INSTALL_HELP_TEXT = `
@@ -113,6 +134,50 @@ interface InstallFlags {
     yes?: boolean;
     verbose?: boolean;
     help?: boolean;
+}
+
+interface InitFlags {
+    interactive?: boolean;
+    overwrite?: boolean;
+    help?: boolean;
+    verbose?: boolean;
+}
+
+/**
+ * Handle the 'init' subcommand
+ */
+async function runInit(args: string[]): Promise<void> {
+    const { values, positionals } = parseArgs({
+        args,
+        options: {
+            interactive: { type: "boolean", short: "i" },
+            overwrite: { type: "boolean" },
+            help: { type: "boolean" },
+            verbose: { type: "boolean", short: "v" },
+        },
+        allowPositionals: true,
+    });
+
+    const flags: InitFlags = {
+        interactive: values.interactive,
+        overwrite: values.overwrite,
+        help: values.help,
+        verbose: values.verbose,
+    };
+
+    if (flags.help) {
+        console.log(INIT_HELP_TEXT);
+        return;
+    }
+
+    await Log.init({
+        print: false,
+        level: flags.verbose ? "DEBUG" : "INFO",
+        logDir: ".ai-eng/logs",
+    });
+
+    const { initConfig } = await import("../install/init");
+    await initConfig(flags);
 }
 
 /**
@@ -280,6 +345,10 @@ async function main() {
 
         // Route to subcommand
         switch (subcommand) {
+            case "init":
+                await runInit(subcommandArgs);
+                break;
+
             case "install":
             case "i":
                 await runInstall(subcommandArgs);

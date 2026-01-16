@@ -580,38 +580,152 @@ async function copyPromptOptimization(): Promise<void> {
 }
 
 /**
- * Build CLI files to dist/
- * - Copies CLI source files for execution with Bun
- * - Copies required dependencies to dist/node_modules
- * - Creates a simple shim that can be run with Bun (handles TypeScript natively)
+ * Transpile TypeScript CLI source files to JavaScript
+ * - Uses Bun.build to compile .ts → .js for Node.js compatibility
+ * - Maintains directory structure in dist/
  */
-async function copyCLI(): Promise<void> {
-    const srcDir = join(ROOT, "src");
-    const nodeModulesSrc = join(ROOT, "node_modules");
+async function transpileCLI(): Promise<void> {
+    console.log("🔧 Transpiling TypeScript to JavaScript...");
 
-    // Copy all source directories needed for CLI execution
-    const dirsToCopy = [
-        "cli",
-        "backends",
-        "config",
-        "util",
-        "install",
-        "execution",
-        "research",
-        "context",
-        "types",
-        "agents",
-        "prompt-optimization",
+    const srcDir = join(ROOT, "src");
+    const distDir = join(DIST_DIR);
+
+    // List of all TypeScript entry points that need transpilation
+    // Organized by dependency order (dependencies first)
+    const entryPoints = [
+        // Dependencies (lowest level)
+        "types/common.ts",
+        "util/log.ts",
+        "util/discord-webhook.ts",
+        "config/schema.ts",
+        "config/loadConfig.ts",
+        "config/modelResolver.ts",
+
+        // Context system
+        "context/types.ts",
+        "context/vector.ts",
+        "context/memory.ts",
+        "context/session.ts",
+        "context/progressive.ts",
+        "context/retrieval.ts",
+        "context/exporters/types.ts",
+        "context/exporters/markdown.ts",
+        "context/exporters/index.ts",
+        "context/index.ts",
+
+        // Agents
+        "agents/types.ts",
+        "agents/registry.ts",
+        "agents/executor-bridge.ts",
+        "agents/communication-hub.ts",
+        "agents/coordinator.ts",
+        "agents/code-review-executor.ts",
+        "agents/improvement-tracker.ts",
+        "agents/plan-generator.ts",
+
+        // Backends
+        "backends/opencode/client.ts",
+
+        // Research
+        "research/types.ts",
+        "research/discovery.ts", // Skip for now - has Bun-specific imports
+        "research/analysis.ts",
+        "research/synthesis.ts",
+        "research/orchestrator.ts",
+
+        // Execution
+        "execution/types.ts",
+        "execution/flow-types.ts",
+        "execution/flow-store.ts",
+        "execution/quality-gates.ts",
+        "execution/task-executor.ts",
+        "execution/plan-parser.ts",
+        "execution/ralph-loop.ts",
+
+        // Prompt optimization
+        "prompt-optimization/types.ts",
+        "prompt-optimization/analyzer.ts",
+        "prompt-optimization/techniques.ts",
+        "prompt-optimization/optimizer.ts",
+        "prompt-optimization/formatter.ts",
+        "prompt-optimization/index.ts",
+
+        // Install
+        "install/install.ts",
+        "install/init.ts",
+
+        // CLI (highest level - must be last)
+        "cli/flags.ts",
+        "cli/ui.ts",
+        "cli/run-cli.ts",
+        "cli/tui/App.ts",
+        "cli/run.ts",
     ];
 
-    for (const dir of dirsToCopy) {
-        const srcPath = join(srcDir, dir);
-        if (existsSync(srcPath)) {
-            await copyDirRecursive(srcPath, join(DIST_DIR, dir));
+    let successCount = 0;
+    let skipCount = 0;
+
+    // Transpile each entry point
+    for (const entry of entryPoints) {
+        const srcPath = join(srcDir, entry);
+        if (!existsSync(srcPath)) {
+            console.warn(`  ⚠️  Skipping ${entry} (not found)`);
+            skipCount++;
+            continue;
         }
+
+        // Skip files with Bun-specific imports for now
+        if (entry.includes("research/discovery.ts")) {
+            console.log(
+                `  ⚠️  Skipping ${entry} (Bun-specific imports need refactoring)`,
+            );
+            skipCount++;
+            continue;
+        }
+
+        console.log(`  🔄 Transpiling ${entry}...`);
+
+        const result = await Bun.build({
+            entrypoints: [srcPath],
+            outdir: distDir,
+            target: "node",
+            format: "esm",
+            sourcemap: "inline", // For debugging
+            minify: false, // Keep readable
+            splitting: false, // Prevent CommonJS bundling
+            external: [], // Don't bundle external modules
+        });
+
+        if (!result.success) {
+            const messages = result.logs
+                .map((l) => `${l.level}: ${l.message}`)
+                .join("\n");
+            console.error(`  ❌ Failed to transpile ${entry}:\n${messages}`);
+            throw new Error(`Failed to transpile ${entry}:\n${messages}`);
+        }
+
+        successCount++;
+        console.log(`  ✅ ${entry} transpiled`);
     }
 
-    // Copy required dependencies for CLI execution
+    console.log(
+        `  ✅ Transpilation complete: ${successCount} files, ${skipCount} skipped`,
+    );
+}
+
+/**
+ * Build CLI files to dist/
+ * - Transpiles TypeScript to JavaScript for Node.js compatibility
+ * - Copies required dependencies to dist/node_modules
+ * - Creates a universal shim that works with both Node.js and Bun
+ */
+async function copyCLI(): Promise<void> {
+    const nodeModulesSrc = join(ROOT, "node_modules");
+
+    // Step 1: Transpile all TypeScript to JavaScript
+    await transpileCLI();
+
+    // Step 2: Copy required dependencies for CLI execution
     const depsToCopy = ["@opencode-ai/sdk", "@opencode-ai/plugin"];
     for (const dep of depsToCopy) {
         const srcPath = join(nodeModulesSrc, dep);
@@ -621,36 +735,27 @@ async function copyCLI(): Promise<void> {
         }
     }
 
-    // Create a shim that works with Bun (handles TypeScript natively)
+    // Step 3: Create a universal shim (works with both Node.js and Bun)
     const shimPath = join(DIST_DIR, "cli", "run.js");
+
+    // Ensure cli directory exists
+    await mkdir(join(DIST_DIR, "cli"), { recursive: true });
+
     await writeFile(
         shimPath,
         `#!/usr/bin/env node
 /**
- * CLI shim for ai-eng-system
+ * CLI entry point for ai-eng-system
  *
- * For Bun: Bun can run TypeScript directly, so we import the .ts file
- * For Node.js: Requires transpilation or ts-node; primarily intended for Bun development
+ * Works with both Node.js and Bun runtime
+ * Imports pre-transpiled JavaScript files
  */
 
 async function main() {
-    // When running with Bun, import the TypeScript source directly
-    // Bun handles TypeScript natively without transpilation
-    if (process.env.BUN || process.argv0?.includes("bun")) {
-        const { runMain } = await import("./run.ts");
-        await runMain();
-    } else {
-        // For Node.js, try importing the .ts file anyway (some Node.js setups support it)
-        // Otherwise users should run with Bun: bun run dist/cli/run.js <command>
-        try {
-            const { runMain } = await import("./run.ts");
-            await runMain();
-        } catch {
-            console.error("Error: TypeScript execution failed. Use Bun to run this CLI:");
-            console.error("  bun run dist/cli/run.js <command>");
-            process.exit(1);
-        }
-    }
+    // Import transpiled JavaScript (works in both Node.js and Bun)
+    // Note: Bun.build flattens directory structure, so cli/run.ts -> dist/run.js
+    const { runMain } = await import("./run.js");
+    await runMain();
 }
 
 main().catch((error) => {
@@ -659,9 +764,6 @@ main().catch((error) => {
 });
 `,
     );
-    console.log("  ✓ CLI sources copied to dist/cli/");
-    console.log("  ✓ Dependencies copied to dist/node_modules/");
-    console.log("  ℹ️  Run with: bun run dist/cli/run.js <command>");
 }
 
 /**
