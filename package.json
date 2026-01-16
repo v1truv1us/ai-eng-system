@@ -1,10 +1,103 @@
 {
-  "name": "ai-eng-system",
+  "name": "@ai-eng-system/cli",
   "version": "0.4.0",
   "description": "Compounding engineering system for Claude Code and OpenCode. Shared agents, commands, skills, and plugin development tools.",
+  "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
     "ai-eng": "./dist/cli/run.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist/",
+    "scripts/install.js",
+    "index.js",
+    "index.d.ts",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "bun build.ts",
+    "build:watch": "bun build.ts --watch",
+    "clean": "rm -rf dist",
+    "validate": "bun build.ts --validate",
+    "typecheck": "tsc --noEmit",
+    "typecheck:plugin": "tsc -p tsconfig.plugin.json",
+    "lint": "biome check . --diagnostic-level=error",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "test": "bun test",
+    "test:unit": "bun test tests/unit.test.ts",
+    "test:build": "bun test tests/build.test.ts",
+    "quality": "bun run lint && bun run build",
+    "prepublishOnly": "bun run quality",
+    "postinstall": "node scripts/install.js",
+    "prepare": "husky",
+    "changelog": "standard-version",
+    "changelog:patch": "standard-version --release-as patch",
+    "changelog:minor": "standard-version --release-as minor",
+    "changelog:major": "standard-version --release-as major",
+    "changelog:dry-run": "standard-version --dry-run",
+    "version-set": "bun scripts/version-set.ts"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "keywords": [
+    "engineering",
+    "workflow",
+    "agents",
+    "claude-code",
+    "opencode",
+    "code-review",
+    "planning",
+    "deployment",
+    "seo",
+    "optimization",
+    "productivity",
+    "plugin-development",
+    "extension-tools",
+    "ai-assistance",
+    "cross-platform"
+  ],
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "bun-types": "latest",
+    "husky": "^9.1.7",
+    "standard-version": "^9.5.0",
+    "typescript": "^5.9.3",
+    "yaml": "^2.8.2"
+  },
+  "author": {
+    "name": "v1truv1us",
+    "email": "contact@v1truv1us.dev",
+    "url": "https://github.com/v1truv1us"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/v1truv1us/ai-eng-system.git"
+  },
+  "bugs": {
+    "url": "https://github.com/v1truv1us/ai-eng-system/issues"
+  },
+  "homepage": "https://github.com/v1truv1us/ai-eng-system#readme",
+  "engines": {
+    "bun": ">=1.0.0"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.3.13",
+    "@astrojs/starlight": "^0.37.1",
+    "@clack/prompts": "^0.11.0",
+    "@opencode-ai/plugin": "^1.1.13",
+    "@opencode-ai/sdk": "^1.1.13",
+    "@opentui/core": "^0.1.72"
   }
 }

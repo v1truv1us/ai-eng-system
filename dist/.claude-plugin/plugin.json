@@ -24,6 +24,7 @@
     "./commands/review.md",
     "./commands/seo.md",
     "./commands/specify.md",
-    "./commands/work.md"
+    "./commands/work.md",
+    "./commands/init.md"
   ]
 }

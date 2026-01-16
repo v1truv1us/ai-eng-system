@@ -1,0 +1,97 @@
+name: Release to NPM
+
+on:
+  push:
+    tags:
+      - 'v*'  # Trigger on version tags like v1.0.0
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 1.0.0)'
+        required: true
+        type: string
+      dry_run:
+        description: 'Dry run (do not actually publish)'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write  # For npm authentication
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build project
+        run: bun run build
+
+      - name: Run tests
+        run: bun test
+
+      - name: Set version from tag
+        if: github.event_name == 'push'
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+
+      - name: Set version from input
+        if: github.event_name == 'workflow_dispatch'
+        run: echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+
+      - name: Update package.json version
+        run: |
+          bun package.json-version-set $VERSION
+
+      - name: Configure NPM registry
+        run: |
+          echo "@ai-eng-system:registry=https://registry.npmjs.org/" > ~/.npmrc
+          echo "registry=https://registry.npmjs.org/" >> ~/.npmrc
+
+      - name: Publish to NPM
+        if: github.event.inputs.dry_run != 'true'
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" >> ~/.npmrc
+          bun publish --access public
+
+      - name: Dry run check
+        if: github.event.inputs.dry_run == 'true'
+        run: |
+          echo "Dry run mode - checking package..."
+          bun publish --dry-run
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ env.VERSION }}
+          release_name: Release v${{ env.VERSION }}
+          draft: false
+          prerelease: false
+          body: |
+            ## Changes in v${{ env.VERSION }}
+            
+            See [CHANGELOG.md](https://github.com/v1truv1us/ai-eng-system/blob/main/CHANGELOG.md) for detailed changes.
+            
+            ### Installation
+            ```bash
+            npm install -g @ai-eng-system/cli
+            ```
+            
+            ### Quick Start
+            ```bash
+            ai-eng init                    # Initialize config
+            ai-eng "implement feature"        # Start development
+            ```

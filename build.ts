@@ -36,7 +36,9 @@ import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import YAML from "yaml";
 
-const ROOT = process.env.TEST_ROOT ?? dirname(fileURLToPath(import.meta.url));
+const ROOT = process.env.TEST_ROOT
+    ? process.env.TEST_ROOT
+    : dirname(fileURLToPath(import.meta.url));
 const CONTENT_DIR = join(ROOT, "content");
 const SKILLS_DIR = join(ROOT, "skills");
 const PROMPT_OPT_DIR = join(ROOT, "src", "prompt-optimization");
@@ -743,7 +745,7 @@ async function copyCLI(): Promise<void> {
 
     await writeFile(
         shimPath,
-        `#!/usr/bin/env node
+        `#!/usr/bin/env bun
 /**
  * CLI entry point for ai-eng-system
  *
@@ -754,7 +756,7 @@ async function copyCLI(): Promise<void> {
 async function main() {
     // Import transpiled JavaScript (works in both Node.js and Bun)
     // Note: Bun.build flattens directory structure, so cli/run.ts -> dist/run.js
-    const { runMain } = await import("./run.js");
+    const { runMain } = await import("../run.js");
     await runMain();
 }
 

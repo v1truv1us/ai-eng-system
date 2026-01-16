@@ -22,7 +22,7 @@ import {
     expect,
     it,
 } from "bun:test";
-import { spawn } from "node:child_process";
+import { execSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -624,22 +624,17 @@ async function getMarkdownFiles(dir: string): Promise<string[]> {
 
 // Function to run build script as subprocess
 async function runBuild(): Promise<void> {
+    // Run build from project root, but set environment to use test directory
     return new Promise((resolve, reject) => {
-        // Run build from project root, but set environment to use test directory
-        const buildProcess = spawn("bun", ["run", "build.ts"], {
-            cwd: process.cwd(), // Run from project root
-            env: { ...process.env, TEST_ROOT, PATH: process.env.PATH }, // Pass test root and PATH if needed
-            stdio: "inherit",
-        });
-
-        buildProcess.on("close", (code) => {
-            if (code === 0) {
-                resolve();
-            } else {
-                reject(new Error(`Build failed with code ${code}`));
-            }
-        });
-
-        buildProcess.on("error", reject);
+        try {
+            execSync("bun build.ts", {
+                cwd: process.cwd(), // Run from project root
+                env: { ...process.env, TEST_ROOT }, // Pass test root environment
+                stdio: "inherit",
+            });
+            resolve();
+        } catch (error) {
+            reject(error);
+        }
     });
 }

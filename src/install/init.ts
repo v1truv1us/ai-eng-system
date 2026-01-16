@@ -2,7 +2,8 @@
  * Initialize ai-eng configuration file
  */
 
-import { existsSync, writeFile } from "node:fs/promises";
+import { existsSync } from "node:fs";
+import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import YAML from "yaml";
 import type { InitFlags } from "../cli/flags";
