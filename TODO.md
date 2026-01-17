@@ -36,16 +36,13 @@
 
 ## Medium Priority
 
-### Ralph Wiggum Integration - COMPLETED ✅
-
-- [x] `/ai-eng/research` command - Ralph Wiggum iteration for comprehensive research
-- [x] `/ai-eng/specify` command - Ralph Wiggum refinement for specifications
-- [x] `/ai-eng/plan` command - Ralph Wiggum enhancement for planning
-- [x] `/ai-eng/work` command - Ralph Wiggum iteration for TDD cycles
-- [x] `/ai-eng/review` command - Ralph Wiggum deepening for code reviews
-- [x] All 5 phase commands support `--ralph` flag with consistent options
-- [x] Documentation updated with Ralph Wiggum examples and guidance
-- [x] Documentation site includes Ralph Wiggum page and examples
+### Modularization - COMPLETED ✅
+- [x] Complete workspace modularization into packages/core and packages/cli
+- [x] Publish @ai-eng-system/core@0.4.5 with all agents, skills, commands
+- [x] Publish @ai-eng-system/cli@0.5.0 with orchestration logic
+- [x] Set up OIDC publishing via GitHub Actions
+- [x] Verify end-to-end installation and functionality
+- [x] Update documentation (MODULARIZATION.md, PUBLISHING.md)
 
 ### Feature Enhancements
 - [ ] Review and prioritize feature requests from GitHub issues
