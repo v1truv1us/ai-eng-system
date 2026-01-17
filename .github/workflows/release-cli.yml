@@ -1,0 +1,108 @@
+name: Release CLI Package
+
+on:
+  push:
+    tags:
+      - 'cli-v*'  # Matches: cli-v0.4.5, cli-v0.5.0
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 0.5.1)'
+        required: true
+        type: string
+      dry_run:
+        description: 'Dry run (do not actually publish)'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  release-cli:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write  # Required for OIDC trusted publishing
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        working-directory: ./packages/cli
+        run: bun install
+
+      - name: Build CLI package
+        working-directory: ./packages/cli
+        run: bun run build
+
+      - name: Run tests
+        working-directory: ./packages/cli
+        run: bun test
+
+      - name: Set version from tag
+        if: github.event_name == 'push'
+        run: echo "VERSION=${GITHUB_REF#refs/tags/cli-v}" >> $GITHUB_ENV
+
+      - name: Set version from input
+        if: github.event_name == 'workflow_dispatch'
+        run: echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+
+      - name: Update package.json version
+        working-directory: ./packages/cli
+        run: bun package.json-version-set $VERSION
+
+      - name: Configure NPM registry
+        run: |
+          echo "@ai-eng-system:registry=https://registry.npmjs.org/" > ~/.npmrc
+          echo "registry=https://registry.npmjs.org/" >> ~/.npmrc
+
+      - name: Publish to NPM (dry-run)
+        if: github.event.inputs.dry_run == 'true'
+        working-directory: ./packages/cli
+        run: npm publish --dry-run
+
+      - name: Publish to NPM
+        if: github.event.inputs.dry_run != 'true'
+        working-directory: ./packages/cli
+        run: |
+          echo "🚀 Publishing @ai-eng-system/cli@$VERSION using OIDC trusted publishing"
+          npm publish --access public
+          echo "✅ CLI package published successfully"
+
+      - name: Create GitHub Release
+        if: github.event.inputs.dry_run != 'true'
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: cli-v${{ env.VERSION }}
+          release_name: CLI v${{ env.VERSION }}
+          draft: false
+          prerelease: false
+          body: |
+            ## @ai-eng-system/cli v${{ env.VERSION }}
+            
+            ### Installation
+            ```bash
+            npm install -g @ai-eng-system/cli@${{ env.VERSION }}
+            ```
+            
+            ### Quick Start
+            ```bash
+            ai-eng init                    # Initialize config
+            ai-eng "implement feature"        # Start development
+            ```
+            
+            ### What's Included
+            - Complete CLI interface
+            - Built-in agents and commands
+            - Plugin development tools
+            - Cross-platform support
+            
+            **Note**: This is the full CLI package. Core dependencies are included automatically.
+            
+            Published via OIDC trusted publishing

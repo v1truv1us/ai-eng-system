@@ -1,0 +1,6 @@
+{
+    "$schema": "https://opencode.ai/schema/v2.jsonc",
+    "plugin": ["ai-eng-system"],
+    "mcp": {},
+    "tools": {}
+}

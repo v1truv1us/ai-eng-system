@@ -1,0 +1,70 @@
+{
+  "name": "@ai-eng-system/core",
+  "version": "0.4.5",
+  "description": "AI Engineering System - Core agents, skills, and commands",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./content": {
+      "types": "./dist/content-loader.d.ts",
+      "default": "./dist/content-loader.js"
+    },
+    "./paths": {
+      "types": "./dist/paths.d.ts",
+      "default": "./dist/paths.js"
+    }
+  },
+  "files": [
+    "dist/",
+    "content/",
+    "skills/",
+    "opencode/",
+    "claude/",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "bun run typecheck && bun build src/index.ts --outdir dist --target node --format esm",
+    "dev": "bun build src/index.ts --outdir dist --target node --format esm --watch",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --project tsconfig.json --emitDeclarationOnly"
+  },
+  "keywords": [
+    "ai-engineering",
+    "agents",
+    "skills",
+    "commands",
+    "content",
+    "modular"
+  ],
+  "author": {
+    "name": "v1truv1us",
+    "email": "contact@v1truv1us.dev",
+    "url": "https://github.com/v1truv1us"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/v1truv1us/ai-eng-system.git"
+  },
+  "bugs": {
+    "url": "https://github.com/v1truv1us/ai-eng-system/issues"
+  },
+  "homepage": "https://github.com/v1truv1us/ai-eng-system#readme",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "engines": {
+    "bun": ">=1.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.9.3"
+  }
+}

@@ -2,6 +2,72 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.4](https://github.com/v1truv1us/ai-eng-system/compare/v0.2.3...v0.4.4) (2026-01-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* Model must now be explicitly configured in config.yaml
+or opencode.model. No automatic fallback to claude-3-5-sonnet-latest.
+* None
+This addresses all requirements from issue analysis and provides
+a complete clean reinstall solution with working hooks.
+
+### Features
+
+* ai-eng ralph CLI with timeout and model config ([5562fc3](https://github.com/v1truv1us/ai-eng-system/commit/5562fc32e61891e1f798591930c7c5e5762de4dc))
+* apply prompt optimization improvements across all agents and commands ([550139e](https://github.com/v1truv1us/ai-eng-system/commit/550139ec4aeb5d5d4783ace2a022bfa93eef862b))
+* v0.3.0 - Complete clean reinstall and hooks implementation ([42ec81c](https://github.com/v1truv1us/ai-eng-system/commit/42ec81c4036cbc05c4b4c9d1a9b808e70053a68a))
+* v0.4.0 CLI improvements and bug fixes ([2561006](https://github.com/v1truv1us/ai-eng-system/commit/2561006a3dc89baadf047114738cd4c169f53daf))
+
+
+### Bug Fixes
+
+* add @opentui/core dependency for TUI ([2ce7eee](https://github.com/v1truv1us/ai-eng-system/commit/2ce7eeecfea50dd23b0fce8d7f20bb20a0218273))
+* address pre-existing issues ([5e470ff](https://github.com/v1truv1us/ai-eng-system/commit/5e470ff87fb26987201f1ce22e700265df211147))
+* Correct OpenCode messageID format and remove invalid config keys ([08c2fe6](https://github.com/v1truv1us/ai-eng-system/commit/08c2fe66c38ac93fe2af5a5fe62cdfc56f032ea9))
+* Resolve critical CLI reliability issues ([678ebe5](https://github.com/v1truv1us/ai-eng-system/commit/678ebe563f50db878d942c9de9b3885418804a1a))
+* resolve OpenCode session creation with proper server lifecycle management ([e90f64f](https://github.com/v1truv1us/ai-eng-system/commit/e90f64f1ec747403d5e732c19009e5eb4d6b7426))
+* use process.cwd() for working directory ([6944987](https://github.com/v1truv1us/ai-eng-system/commit/694498761219e8a569d7cad63913bdfa138e1507))
+
+
+### Build System
+
+* add CLI to dist + remove model fallback ([830eed5](https://github.com/v1truv1us/ai-eng-system/commit/830eed552d26f0009e41386e83cb70965a649fdc))
+
+### [0.4.3](https://github.com/v1truv1us/ai-eng-system/compare/v0.2.3...v0.4.3) (2026-01-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* Model must now be explicitly configured in config.yaml
+or opencode.model. No automatic fallback to claude-3-5-sonnet-latest.
+* None
+This addresses all requirements from issue analysis and provides
+a complete clean reinstall solution with working hooks.
+
+### Features
+
+* ai-eng ralph CLI with timeout and model config ([5562fc3](https://github.com/v1truv1us/ai-eng-system/commit/5562fc32e61891e1f798591930c7c5e5762de4dc))
+* apply prompt optimization improvements across all agents and commands ([550139e](https://github.com/v1truv1us/ai-eng-system/commit/550139ec4aeb5d5d4783ace2a022bfa93eef862b))
+* v0.3.0 - Complete clean reinstall and hooks implementation ([42ec81c](https://github.com/v1truv1us/ai-eng-system/commit/42ec81c4036cbc05c4b4c9d1a9b808e70053a68a))
+* v0.4.0 CLI improvements and bug fixes ([2561006](https://github.com/v1truv1us/ai-eng-system/commit/2561006a3dc89baadf047114738cd4c169f53daf))
+
+
+### Bug Fixes
+
+* add @opentui/core dependency for TUI ([2ce7eee](https://github.com/v1truv1us/ai-eng-system/commit/2ce7eeecfea50dd23b0fce8d7f20bb20a0218273))
+* address pre-existing issues ([5e470ff](https://github.com/v1truv1us/ai-eng-system/commit/5e470ff87fb26987201f1ce22e700265df211147))
+* Correct OpenCode messageID format and remove invalid config keys ([08c2fe6](https://github.com/v1truv1us/ai-eng-system/commit/08c2fe66c38ac93fe2af5a5fe62cdfc56f032ea9))
+* Resolve critical CLI reliability issues ([678ebe5](https://github.com/v1truv1us/ai-eng-system/commit/678ebe563f50db878d942c9de9b3885418804a1a))
+* resolve OpenCode session creation with proper server lifecycle management ([e90f64f](https://github.com/v1truv1us/ai-eng-system/commit/e90f64f1ec747403d5e732c19009e5eb4d6b7426))
+* use process.cwd() for working directory ([6944987](https://github.com/v1truv1us/ai-eng-system/commit/694498761219e8a569d7cad63913bdfa138e1507))
+
+
+### Build System
+
+* add CLI to dist + remove model fallback ([830eed5](https://github.com/v1truv1us/ai-eng-system/commit/830eed552d26f0009e41386e83cb70965a649fdc))
+
 ## [0.2.4] - 2026-01-12
 
 ### Fixed

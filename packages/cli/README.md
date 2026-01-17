@@ -1,0 +1,309 @@
+# AI Engineering System
+
+Advanced development tools with context engineering, research orchestration, and 28 specialized agents for Claude Code & OpenCode.
+
+## 🚀 Quick Start
+
+### Spec-Driven Development (Recommended)
+
+This toolkit follows **spec-driven development methodology** from GitHub's official blog post: [Spec-driven development with AI: Get started with a new open source toolkit](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/).
+
+**The 5-Phase Workflow** (always in this order):
+
+```mermaid
+flowchart LR
+    A[🎯 Research] --> B[📋 Specify] --> C[📝 Plan] --> D[🔨 Work] --> E[🔍 Review]
+    D -.->|If changes needed| E
+    E -.->|Repeat| D
+```
+
+| Phase | Command | Output | Ralph Wiggum 🔄 |
+|-------|---------|--------|-----------------|
+| 1. Research | `/ai-eng/research` | Context and findings | `--ralph` for iterative deepening |
+| 2. Specify | `/ai-eng/specify` | Feature specification | `--ralph` for requirement refinement |
+| 3. Plan | `/ai-eng/plan` | Implementation plan | `--ralph` for task completeness |
+| 4. Work | `/ai-eng/work` | Quality-gated code | `--ralph` for TDD cycles |
+| 5. Review | `/ai-eng/review` | Multi-agent approval | `--ralph` for thorough analysis |
+
+This approach ensures specifications are your "source of truth" for what gets built, reducing guesswork and enabling more reliable AI-assisted development.
+
+🔄 **New: Ralph Wiggum Iteration** - Add `--ralph` flag to any phase command for persistent refinement until quality standards are met. See [Ralph Wiggum Integration Guide](./docs/ralph-wiggum-integration-complete.md).
+
+See [docs/spec-driven-workflow.md](./docs/spec-driven-workflow.md) for complete workflow guide with examples.
+
+### Claude Code (Recommended)
+```bash
+/plugin marketplace add v1truv1us/ai-eng-system
+/plugin install ai-eng-system@ai-eng-marketplace
+```
+
+### OpenCode
+```bash
+# Add to opencode.jsonc:
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": ["opencode-skills", "ai-eng-system"]
+}
+
+# Run OpenCode - plugin auto-installs commands, agents, and skills
+```
+## 📋 What's Included
+
+### Spec-Driven Development Workflow
+
+**Core workflow for systematic development** (always research → specify → plan → work → review):
+
+| Phase | Command | Purpose | Ralph Wiggum 🔄 |
+|-------|---------|---------|-----------------|
+| 1. Research | `/ai-eng/research` | Multi-phase research with codebase and external context | Iterative deepening, gap analysis |
+| 2. Specify | `/ai-eng/specify` | Create feature specifications with TCRO framework | Requirement refinement, completeness |
+| 3. Plan | `/ai-eng/plan` | Create detailed implementation plans from specs | Task atomicity, dependency mapping |
+| 4. Work | `/ai-eng/work` | Execute plans with quality gates and validation | TDD cycles, implementation refinement |
+| 5. Review | `/ai-eng/review` | Multi-perspective code review (28 agents) | Escalating focus, thorough analysis |
+
+> **Methodology**: Based on [GitHub's spec-driven development approach](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/)
+
+> **🔄 Ralph Wiggum**: Add `--ralph` flag to any phase command for persistent iteration. Perfect for complex tasks requiring multiple refinement cycles. [Learn more →](./docs/ralph-wiggum-integration-complete.md)
+
+> **🛠️ Fixed (v0.2.2)**: Ralph Wiggum now runs continuously without stopping between phases. Full backward compatibility maintained. [Fix details →](./docs/ralph-wiggum-autonomous-looping-fix.md)
+
+### Terminal UI: ai-eng ralph CLI
+
+**New!** Terminal-based interface for autonomous research and implementation workflows:
+
+```bash
+# Install globally via npm (requires Node.js or Bun)
+npm install -g ai-eng-system
+ai-eng ralph "implement user authentication"
+
+# Or run directly from source (requires Bun)
+bun run build
+bun src/cli/run.ts "implement user authentication"
+
+# Shortcut: "ai-eng prompt" defaults to ralph
+ai-eng "fix the bug" --print-logs
+```
+
+**Installation command** (replaces automatic postinstall):
+```bash
+ai-eng install --scope project   # Install to project .opencode/
+ai-eng install --scope global    # Install to ~/.config/opencode/
+```
+
+**Features**:
+- 🖥️ Full-screen TUI with keyboard navigation
+- ⏱️ Timeout handling (default 120s) to prevent hangs
+- 🔄 Rate-limit detection with smart backoff
+- 🤖 Configurable models per task type (research/planning/exploration/coding)
+- 🚀 4-tier model resolution priority
+- 🎯 Continuous iteration through all 5 phases
+- ✅ Research-backed prompt optimization (+45-115% quality)
+
+**Documentation**: See [docs-site/docs/features/ai-eng-ralph-cli.md](./docs-site/src/content/docs/features/ai-eng-ralph-cli.md) for complete guide
+
+### Additional Commands (13 total)
+- `/ai-eng/optimize` - Prompt enhancement (+45% quality)
+- `/ai-eng/deploy` - Pre-deployment checklists
+- `/ai-eng/compound` - Document solved problems
+- `/ai-eng/recursive-init` - Initialize AGENTS.md across directories
+- `/ai-eng/create-plugin` - AI-assisted plugin creation
+- `/ai-eng/create-agent` - AI-assisted agent generation
+- `/ai-eng/create-command` - AI-assisted command generation
+- `/ai-eng/create-skill` - AI-assisted skill creation
+- `/ai-eng/create-tool` - AI-assisted custom tool creation
+- `/ai-eng/context` - Context management and retrieval
+- `/ai-eng/clean` - Remove build artifacts and generated files
+- `/ai-eng/seo` - SEO audits with Core Web Vitals
+
+**Total Commands**: 17 + 1 CLI
+
+### Agents (29 total)
+- **Architecture & Planning**: `architect-advisor`, `backend-architect`, `infrastructure-builder`
+- **Development & Coding**: `frontend-reviewer`, `full-stack-developer`, `api-builder-enhanced`, `database-optimizer`, `java-pro`
+- **Quality & Testing**: `code-reviewer`, `test-generator`, `security-scanner`, `performance-engineer`
+- **DevOps & Deployment**: `deployment-engineer`, `monitoring-expert`, `cost-optimizer`
+- **AI & Machine Learning**: `ai-engineer`, `ml-engineer`
+- **Content & SEO**: `seo-specialist`, `prompt-optimizer`
+- **Plugin Development**: `agent-creator`, `command-creator`, `skill-creator`, `tool-creator`, `plugin-validator`
+
+### Skills (8 files)
+- `devops` - Coolify deployment, Git worktree workflows
+- `prompting` - Research-backed incentive prompting techniques
+- `research` - Comprehensive multi-phase research orchestration
+- `plugin-dev` - Plugin development knowledge base and references
+- `text-cleanup` - Pattern-based text cleanup (slop, comments)
+- **`workflow/ralph-wiggum`** - Persistent iteration patterns for quality refinement (NEW!)
+
+> **🔄 Ralph Wiggum Philosophy**: "Iteration > Perfection, Failures Are Data, Persistence Wins" - Now available across all phase commands with `--ralph` flag
+
+## 🔄 Subagent Orchestrator Configuration
+
+**New!** [docs/subagent-orchestration-guide.md](./docs/subagent-orchestration-guide.md) - Configure automatic agent routing for ai-eng-system
+
+Learn how to configure subagent orchestration when using ai-eng-system with OpenCode or Claude Code:
+
+- **For OpenCode**: Inject orchestration into primary agent's prompt for zero-latency routing
+- **For Claude Code**: Use UserPromptSubmit hook for dynamic, per-prompt routing
+- **Platform-specific configurations** for both OpenCode and Claude Code
+- **Three-layer approach**: Base instructions + dynamic enhancement + detailed knowledge
+- **Complete examples** and troubleshooting for reliable agent delegation
+
+**Quick Answer**: How does orchestrator always work?
+
+- **OpenCode**: Orchestrator is injected into primary agent's prompt (part of agent identity)
+- **Claude Code**: UserPromptSubmit Hook runs before every prompt and adds routing guidance
+
+Both ensure reliable routing to ai-eng-system's 28 specialized agents!
+
+## 🏗️ Architecture
+
+This repo follows Anthropic's official Claude Code marketplace pattern:
+
+- **Marketplace root**: `.claude-plugin/marketplace.json` (only file at repo root)
+- **Embedded plugin**: `plugins/ai-eng-system/` with standard plugin layout
+- **Build system**: Transforms canonical `content/` sources into platform-specific outputs
+- **OpenCode support**: Pre-built distributions in `dist/.opencode/`
+- **Auto-installation**: Plugin automatically installs files when loaded by OpenCode or via npm postinstall
+
+
+## 🔧 Development
+
+### Prerequisites
+- Bun >= 1.0.0
+- Node.js >= 18 (for compatibility)
+
+### Build & Test
+```bash
+bun run build        # Build all platforms
+bun run build:watch  # Watch mode
+bun run validate     # Validate content without building
+bun test             # Run test suite
+```
+
+### Repository Structure
+```
+├── content/          # Canonical markdown sources
+│   ├── commands/     # Command definitions
+│   └── agents/       # Agent definitions
+├── skills/           # Skill packs
+├── plugins/          # Embedded Claude plugin
+├── dist/             # Built outputs (committed)
+├── .claude-plugin/   # Marketplace manifest
+└── .opencode/        # OpenCode config
+```
+
+## 📦 Distribution
+
+### Claude Code Marketplace
+- **Source**: `https://github.com/v1truv1us/ai-eng-system`
+- **Marketplace**: `v1truv1us/ai-eng-marketplace`
+- **Plugin**: `ai-eng-system`
+
+### OpenCode
+- **Global**: `~/.config/opencode/` (default)
+- **Local**: `./.opencode/` (project-specific)
+- **Namespace**: `ai-eng/`
+
+## ✅ Validation Status
+- Marketplace manifest: ✅ Valid
+- Embedded plugin: ✅ Valid
+- Build system: ✅ Working
+- Tests: ✅ Passing (21/21)
+
+## 📚 Documentation
+
+### Online Documentation
+**Deploy with Coolify** (recommended):
+- 📖 [Coolify Deployment Guide](docs-site/COOLIFY-DEPLOYMENT.md) - Complete deployment instructions
+- 🚀 Deploy to Coolify in 5 minutes
+
+**Built Site**: `docs-site/` directory
+
+### Developer Documentation
+- [Installation Guide](INSTALLATION.md) - Detailed setup instructions
+- [Agent Coordination](AGENTS.md) - Agent usage patterns and coordination
+- [Plugin Documentation](PLUGIN.md) - Technical plugin details
+- [Research Guide](docs/research-command-guide.md) - Research orchestration usage
+- [Ralph Wiggum Integration](docs/ralph-wiggum-integration-complete.md) - Iterative refinement patterns (NEW!)
+
+### Documentation Site
+
+The documentation site is built with **Astro + Starlight** and ready for deployment:
+
+```bash
+# Local development
+cd docs-site
+bun install
+bun run dev  # http://localhost:4321
+
+# Build for production
+bun run build
+
+# Deploy to Coolify
+# Repository path: docs-site/
+# Build command: bun install && bun run build
+# Output directory: dist
+```
+
+---
+## 💻 Usage Example
+
+### OpenCode Setup
+
+```bash
+# 1. Create opencode.jsonc in your project
+cat > opencode.jsonc << 'EOF'
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": ["opencode-skills", "ai-eng-system"]
+}
+EOF
+
+# 2. Install package (optional - auto-installs via plugin)
+npm install ai-eng-system
+
+# 3. Run OpenCode
+# Commands and agents are automatically available!
+```
+
+**When OpenCode loads the plugin**, it automatically:
+- ✅ Installs 16 commands to `.opencode/command/ai-eng/`
+- ✅ Installs 30 agents to `.opencode/agent/ai-eng/`
+- ✅ Installs 7 skill files to `.opencode/skill/`
+
+### Using Commands
+
+```bash
+# Basic workflow
+/ai-eng/plan              # Create implementation plan
+/ai-eng/review             # Multi-agent code review
+/ai-eng/work               # Execute implementation plan
+/ai-eng/seo                # SEO audit
+/ai-eng/create-agent       # Generate new agent
+
+# Ralph Wiggum iteration (NEW!)
+/ai-eng/work "feature" --ralph                    # TDD cycles until complete
+/ai-eng/research "topic" --ralph --ralph-max-iterations 15  # Deep research
+/ai-eng/specify "feature" --ralph --ralph-quality-gate="rg '\[NEEDS CLARIFICATION\]'"
+/ai-eng/plan --from-spec=specs/feature.md --ralph  # Enhanced planning
+/ai-eng/review src/ --ralph --ralph-focus=security # Thorough review
+
+# ... and 11 more commands
+```
+
+### Using Agents
+
+Commands reference specialized agents automatically:
+```bash
+/ai-eng/review --agent=code-reviewer     # Quality-focused review
+/ai-eng/review --agent=frontend-reviewer # Frontend review
+/ai-eng/review --agent=backend-architect  # Architecture review
+```
+
+**Built with research-backed prompting techniques** (+45-115% quality improvement)
+
+## 📖 Workflow Guide
+
+For complete documentation on the **Research → Specify → Plan → Work → Review** workflow, see:
+- **[docs/spec-driven-workflow.md](./docs/spec-driven-workflow.md)** - Visual workflow guide with examples
+- **[docs/research-command-guide.md](./docs/research-command-guide.md)** - Research command deep dive

@@ -1,0 +1,30 @@
+{
+  "name": "ai-eng-system-workspace",
+  "version": "0.4.1",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "bun run build:core && bun run build:cli",
+    "build:core": "cd packages/core && bun run build && cd ../.. && cp -r packages/core/opencode packages/core/dist/.opencode",
+    "build:cli": "bun build.ts",
+    "dev": "bun run build:core && bun run build:cli --watch",
+    "test": "bun test",
+    "clean": "rm -rf packages/core/dist && rm -rf dist",
+    "install:all": "bun install && cd packages/core && bun install",
+    "publish:core": "cd packages/core && bun publish",
+    "publish:cli": "bun publish"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "bun-types": "latest",
+    "husky": "^9.1.7",
+    "standard-version": "^9.5.0",
+    "typescript": "^5.9.3",
+    "yaml": "^2.8.2"
+  },
+  "engines": {
+    "bun": ">=1.0.0"
+  }
+}

@@ -22,6 +22,9 @@ jobs:
     permissions:
       contents: read
       id-token: write  # For npm authentication
+      # OIDC permissions for trusted publishing
+      # No NPM_TOKEN needed when using OIDC
+      # Note: Repository must be configured as trusted publisher in npmjs.org
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -58,12 +61,15 @@ jobs:
           echo "registry=https://registry.npmjs.org/" >> ~/.npmrc
 
       - name: Publish to NPM
-        if: github.event.inputs.dry_run != 'true'
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # For OIDC trusted publishing, no NPM_TOKEN needed
+          # Uses GitHub's OIDC token automatically
         run: |
-          echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" >> ~/.npmrc
+          # Configure for OIDC trusted publishing
+          # Uses GitHub's built-in OIDC token (no NPM_TOKEN needed)
+          echo "registry=https://registry.npmjs.org/" > ~/.npmrc
           bun publish --access public
+          echo "✅ Published using OIDC trusted publishing"
 
       - name: Dry run check
         if: github.event.inputs.dry_run == 'true'
@@ -89,6 +95,8 @@ jobs:
             ```bash
             npm install -g @ai-eng-system/cli
             ```
+            
+            **Note**: Uses OIDC trusted publishing (no NPM_TOKEN required)
             
             ### Quick Start
             ```bash

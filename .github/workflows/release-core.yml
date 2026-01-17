@@ -1,0 +1,101 @@
+name: Release Core Package
+
+on:
+  push:
+    tags:
+      - 'core-v*'  # Matches: core-v0.4.6, core-v0.5.0
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 0.4.6)'
+        required: true
+        type: string
+      dry_run:
+        description: 'Dry run (do not actually publish)'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  release-core:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write  # Required for OIDC trusted publishing
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        working-directory: ./packages/core
+        run: bun install
+
+      - name: Build core package
+        working-directory: ./packages/core
+        run: bun run build
+
+      - name: Run tests
+        working-directory: ./packages/core
+        run: bun test
+
+      - name: Set version from tag
+        if: github.event_name == 'push'
+        run: echo "VERSION=${GITHUB_REF#refs/tags/core-v}" >> $GITHUB_ENV
+
+      - name: Set version from input
+        if: github.event_name == 'workflow_dispatch'
+        run: echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+
+      - name: Update package.json version
+        working-directory: ./packages/core
+        run: bun package.json-version-set $VERSION
+
+      - name: Configure NPM registry
+        run: |
+          echo "@ai-eng-system:registry=https://registry.npmjs.org/" > ~/.npmrc
+          echo "registry=https://registry.npmjs.org/" >> ~/.npmrc
+
+      - name: Publish to NPM (dry-run)
+        if: github.event.inputs.dry_run == 'true'
+        working-directory: ./packages/core
+        run: npm publish --dry-run
+
+      - name: Publish to NPM
+        if: github.event.inputs.dry_run != 'true'
+        working-directory: ./packages/core
+        run: |
+          echo "🚀 Publishing @ai-eng-system/core@$VERSION using OIDC trusted publishing"
+          npm publish --access public
+          echo "✅ Core package published successfully"
+
+      - name: Create GitHub Release
+        if: github.event.inputs.dry_run != 'true'
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: core-v${{ env.VERSION }}
+          release_name: Core v${{ env.VERSION }}
+          draft: false
+          prerelease: false
+          body: |
+            ## @ai-eng-system/core v${{ env.VERSION }}
+            
+            ### Installation
+            ```bash
+            npm install @ai-eng-system/core@${{ env.VERSION }}
+            ```
+            
+            ### What's Included
+            - Core agents, skills, and commands
+            - Content loading system
+            - Type definitions and exports
+            
+            Published via OIDC trusted publishing
+            
+            **Note**: This is the core package only. For the full CLI, use `@ai-eng-system/cli`
