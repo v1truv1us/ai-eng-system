@@ -7,11 +7,13 @@ This document explains how to release packages in this monorepo using OIDC trust
 Each package has its own release workflow:
 - `release-core.yml` - Publishes `@ai-eng-system/core`
 - `release-cli.yml` - Publishes `@ai-eng-system/cli`
+- `release-toolkit.yml` - Publishes `@ai-eng-system/toolkit`
 
 ## Tag Naming Convention
 
 - Core releases: `core-vX.Y.Z` (e.g., `core-v0.4.6`)
 - CLI releases: `cli-vX.Y.Z` (e.g., `cli-v0.5.1`)
+- Toolkit releases: `toolkit-vX.Y.Z` (e.g., `toolkit-v0.5.1`)
 
 ## Automated Release Process
 
@@ -21,11 +23,37 @@ Each package has its own release workflow:
 git checkout main
 git pull origin main
 
-# 2. Tag the release
+# 2. Tag release
 git tag core-v0.4.6
 
-# 3. Push the tag (triggers release-core.yml)
+# 3. Push tag (triggers release-core.yml)
 git push origin core-v0.4.6
+```
+
+### To Release CLI Package
+```bash
+# 1. Ensure you're on the latest main
+git checkout main
+git pull origin main
+
+# 2. Tag release
+git tag cli-v0.5.1
+
+# 3. Push tag (triggers release-cli.yml)
+git push origin cli-v0.5.1
+```
+
+### To Release Toolkit Package
+```bash
+# 1. Ensure you're on the latest main
+git checkout main
+git pull origin main
+
+# 2. Tag release
+git tag toolkit-v0.5.1
+
+# 3. Push tag (triggers release-toolkit.yml)
+git push origin toolkit-v0.5.1
 ```
 
 ### To Release CLI Package
@@ -100,4 +128,28 @@ Run `bun install` in both packages before tagging to ensure all dependencies are
 
 To sync versions, consider:
 1. Publishing core 0.4.5 to match local
-2. Bumping CLI to 0.5.1 if needed
+2. Bumping CLI to 0.5.1 if needed  
+3. Toolkit is already up-to-date (0.5.0)
+
+## NPM Trusted Publisher Configuration
+
+**For @ai-eng-system/core on npmjs.com:**
+```
+Organization: v1truv1us
+Repository: ai-eng-system
+Workflow filename: release-core.yml
+```
+
+**For @ai-eng-system/cli on npmjs.com:**
+```
+Organization: v1truv1us
+Repository: ai-eng-system
+Workflow filename: release-cli.yml
+```
+
+**For @ai-eng-system/toolkit on npmjs.com:**
+```
+Organization: v1truv1us
+Repository: ai-eng-system
+Workflow filename: release-toolkit.yml
+```

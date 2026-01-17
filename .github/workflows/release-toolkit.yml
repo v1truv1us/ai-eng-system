@@ -1,0 +1,111 @@
+name: Release Toolkit Package
+
+on:
+  push:
+    tags:
+      - 'toolkit-v*'  # Matches: toolkit-v0.5.0, toolkit-v0.6.0
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 0.5.1)'
+        required: true
+        type: string
+      dry_run:
+        description: 'Dry run (do not actually publish)'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  release-toolkit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write  # Required for OIDC trusted publishing
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        working-directory: ./packages/core  # Toolkit depends on core
+        run: bun install
+
+      - name: Install toolkit dependencies
+        working-directory: ./packages/toolkit
+        run: bun install
+
+      - name: Build core package (dependency)
+        working-directory: ./packages/core
+        run: bun run build
+
+      - name: Build toolkit package
+        working-directory: ./packages/toolkit
+        run: bun run build
+
+      - name: Run tests
+        working-directory: ./packages/toolkit
+        run: bun test
+
+      - name: Set version from tag
+        if: github.event_name == 'push'
+        run: echo "VERSION=${GITHUB_REF#refs/tags/toolkit-v}" >> $GITHUB_ENV
+
+      - name: Set version from input
+        if: github.event_name == 'workflow_dispatch'
+        run: echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+
+      - name: Update package.json version
+        working-directory: ./packages/toolkit
+        run: bun package.json-version-set $VERSION
+
+      - name: Configure NPM registry
+        run: |
+          echo "@ai-eng-system:registry=https://registry.npmjs.org/" > ~/.npmrc
+          echo "registry=https://registry.npmjs.org/" >> ~/.npmrc
+
+      - name: Publish to NPM (dry-run)
+        if: github.event.inputs.dry_run == 'true'
+        working-directory: ./packages/toolkit
+        run: npm publish --dry-run
+
+      - name: Publish to NPM
+        if: github.event.inputs.dry_run != 'true'
+        working-directory: ./packages/toolkit
+        run: |
+          echo "🚀 Publishing @ai-eng-system/toolkit@$VERSION using OIDC trusted publishing"
+          npm publish --access public
+          echo "✅ Toolkit package published successfully"
+
+      - name: Create GitHub Release
+        if: github.event.inputs.dry_run != 'true'
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: toolkit-v${{ env.VERSION }}
+          release_name: Toolkit v${{ env.VERSION }}
+          draft: false
+          prerelease: false
+          body: |
+            ## @ai-eng-system/toolkit v${{ env.VERSION }}
+            
+            ### Installation
+            ```bash
+            npm install -g @ai-eng-system/toolkit@${{ env.VERSION }}
+            ```
+            
+            ### What's Included
+            - Complete CLI interface
+            - Built-in agents and commands
+            - Plugin development tools
+            - Cross-platform support
+            - Extended toolkit functionality
+            
+            **Note**: This is the full toolkit package. Core and CLI dependencies are included automatically.
+            
+            Published via OIDC trusted publishing
