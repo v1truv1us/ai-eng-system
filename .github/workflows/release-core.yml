@@ -33,7 +33,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./packages/core
-        run: bun install
+        run: bun install --ignore-scripts
 
       - name: Build core package
         working-directory: ./packages/core

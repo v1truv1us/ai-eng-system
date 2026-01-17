@@ -33,7 +33,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./packages/cli
-        run: bun install
+        run: bun install --ignore-scripts
 
       - name: Build CLI package
         working-directory: ./packages/cli
