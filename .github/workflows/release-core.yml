@@ -52,8 +52,9 @@ jobs:
         run: echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
 
       - name: Update package.json version
-        working-directory: ./packages/core
-        run: bun run version-set $VERSION
+        run: |
+          cd packages/core
+          bun run ../../scripts/version-set.ts $VERSION
 
       - name: Configure NPM registry
         run: |
