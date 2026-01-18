@@ -9,6 +9,7 @@ import { glob } from "glob";
 import {
     ConfidenceLevel,
     type DiscoveryAgent,
+    type DiscoveryConfig,
     type DiscoveryResult,
     type DocReference,
     type FileReference,
@@ -68,9 +69,9 @@ function isIgnored(
  * Finds relevant files and directories in the codebase
  */
 export class CodebaseLocator implements DiscoveryAgent {
-    private config: any;
+    private config: DiscoveryConfig;
 
-    constructor(config: any) {
+    constructor(config: DiscoveryConfig = {}) {
         this.config = config;
     }
 
@@ -331,9 +332,9 @@ export class CodebaseLocator implements DiscoveryAgent {
  * Finds documentation, decisions, and notes
  */
 export class ResearchLocator implements DiscoveryAgent {
-    private config: any;
+    private config: DiscoveryConfig;
 
-    constructor(config: any) {
+    constructor(config: DiscoveryConfig = {}) {
         this.config = config;
     }
 
@@ -549,9 +550,9 @@ export class ResearchLocator implements DiscoveryAgent {
  * Identifies recurring implementation patterns
  */
 export class PatternFinder implements DiscoveryAgent {
-    private config: any;
+    private config: DiscoveryConfig;
 
-    constructor(config: any) {
+    constructor(config: DiscoveryConfig = {}) {
         this.config = config;
     }
 
@@ -772,10 +773,10 @@ export class PatternFinder implements DiscoveryAgent {
  * Coordinates parallel execution of all discovery agents
  */
 export class DiscoveryHandler {
-    private config: any;
+    private config: DiscoveryConfig;
     private locators: DiscoveryAgent[];
 
-    constructor(config: any) {
+    constructor(config: DiscoveryConfig = {}) {
         this.config = config;
         this.locators = [
             new CodebaseLocator(config),

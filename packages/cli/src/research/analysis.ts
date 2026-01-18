@@ -7,6 +7,7 @@ import { readFile } from "node:fs/promises";
 import { extname, join } from "node:path";
 import {
     type AnalysisAgent,
+    type AnalysisConfig,
     type AnalysisResult,
     ConfidenceLevel,
     type DiscoveryResult,
@@ -24,15 +25,15 @@ import {
  * Analyzes code files for insights and relationships
  */
 export class CodebaseAnalyzer implements AnalysisAgent {
-    private config: any;
+    private config: AnalysisConfig;
 
-    constructor(config: any) {
+    constructor(config: AnalysisConfig = {}) {
         this.config = config;
     }
 
     async analyze(
         discoveryResults: DiscoveryResult[],
-        context?: any,
+        context?: Record<string, unknown>,
     ): Promise<AnalysisResult> {
         const startTime = Date.now();
 
@@ -460,15 +461,15 @@ export class CodebaseAnalyzer implements AnalysisAgent {
  * Analyzes documentation and patterns for insights
  */
 export class ResearchAnalyzer implements AnalysisAgent {
-    private config: any;
+    private config: AnalysisConfig;
 
-    constructor(config: any) {
+    constructor(config: AnalysisConfig = {}) {
         this.config = config;
     }
 
     async analyze(
         discoveryResults: DiscoveryResult[],
-        context?: any,
+        context?: Record<string, unknown>,
     ): Promise<AnalysisResult> {
         const startTime = Date.now();
 
@@ -894,9 +895,9 @@ export class ResearchAnalyzer implements AnalysisAgent {
 export class AnalysisHandler {
     private codebaseAnalyzer: CodebaseAnalyzer;
     private researchAnalyzer: ResearchAnalyzer;
-    private config: any;
+    private config: AnalysisConfig;
 
-    constructor(config: any) {
+    constructor(config: AnalysisConfig = {}) {
         this.config = config;
         this.codebaseAnalyzer = new CodebaseAnalyzer(config);
         this.researchAnalyzer = new ResearchAnalyzer(config);
@@ -916,16 +917,18 @@ export class AnalysisHandler {
             // Execute codebase analysis first
             const codebaseAnalysis = await this.codebaseAnalyzer.analyze(
                 discoveryResults,
-                query,
+                query ? { ...query } : undefined,
             );
 
             // Execute research analysis with codebase context
             const researchAnalysis = await this.researchAnalyzer.analyze(
                 discoveryResults,
-                {
-                    ...query,
-                    codebaseContext: codebaseAnalysis,
-                },
+                query
+                    ? {
+                          ...query,
+                          codebaseContext: codebaseAnalysis,
+                      }
+                    : undefined,
             );
 
             // Combine results

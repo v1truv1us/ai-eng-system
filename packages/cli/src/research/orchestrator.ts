@@ -37,7 +37,7 @@ export class ResearchOrchestrator extends EventEmitter {
     private currentPhase: ResearchPhase = ResearchPhase.DISCOVERY;
     private progress: ResearchProgress;
     private anyEventListeners: Array<
-        (event: ResearchEvent["type"], data?: any) => void
+        (event: ResearchEvent["type"], data?: Record<string, unknown>) => void
     > = [];
 
     constructor(config: ResearchConfig) {
@@ -54,10 +54,22 @@ export class ResearchOrchestrator extends EventEmitter {
             logLevel: config.logLevel,
         });
 
-        // Initialize handlers
-        this.discoveryHandler = new DiscoveryHandler(config);
-        this.analysisHandler = new AnalysisHandler(config);
-        this.synthesisHandler = new SynthesisHandlerImpl(config);
+        // Initialize handlers with relevant config parts
+        this.discoveryHandler = new DiscoveryHandler({
+            maxFiles: config.maxResults,
+            timeout: config.defaultTimeout,
+        });
+        this.analysisHandler = new AnalysisHandler({
+            maxInsights: config.maxResults,
+            evidenceDepth: config.logLevel === "debug" ? "deep" : "medium",
+            includeRelationships: true,
+        });
+        this.synthesisHandler = new SynthesisHandlerImpl({
+            exportFormat: config.outputFormat,
+            includeRecommendations: true,
+            includeRisks: true,
+            maxRecommendations: config.maxResults,
+        });
 
         // Initialize progress tracking
         this.progress = {

@@ -2,14 +2,14 @@
  * Discovery phase handlers for research orchestration.
  * Implements parallel discovery with 3 specialized agents.
  */
-import { type DiscoveryAgent, type DiscoveryResult, type ResearchQuery } from "./types";
+import { type DiscoveryAgent, type DiscoveryConfig, type DiscoveryResult, type ResearchQuery } from "./types";
 /**
  * Codebase Locator Agent
  * Finds relevant files and directories in the codebase
  */
 export declare class CodebaseLocator implements DiscoveryAgent {
     private config;
-    constructor(config: any);
+    constructor(config?: DiscoveryConfig);
     discover(query: ResearchQuery): Promise<DiscoveryResult>;
     private parseQueryToPatterns;
     private findFiles;
@@ -26,7 +26,7 @@ export declare class CodebaseLocator implements DiscoveryAgent {
  */
 export declare class ResearchLocator implements DiscoveryAgent {
     private config;
-    constructor(config: any);
+    constructor(config?: DiscoveryConfig);
     discover(query: ResearchQuery): Promise<DiscoveryResult>;
     private findDocumentation;
     private indexDocuments;
@@ -41,7 +41,7 @@ export declare class ResearchLocator implements DiscoveryAgent {
  */
 export declare class PatternFinder implements DiscoveryAgent {
     private config;
-    constructor(config: any);
+    constructor(config?: DiscoveryConfig);
     discover(query: ResearchQuery): Promise<DiscoveryResult>;
     private identifyPatterns;
     private findSimilarCode;
@@ -59,7 +59,7 @@ export declare class PatternFinder implements DiscoveryAgent {
 export declare class DiscoveryHandler {
     private config;
     private locators;
-    constructor(config: any);
+    constructor(config?: DiscoveryConfig);
     discover(query: ResearchQuery): Promise<DiscoveryResult[]>;
     private executeWithTimeout;
     private deduplicateResults;

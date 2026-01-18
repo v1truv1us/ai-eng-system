@@ -346,10 +346,29 @@ export interface ResearchEvent {
 }
 
 /**
+ * Discovery agent configuration interface
+ */
+export interface DiscoveryConfig {
+    maxFiles?: number;
+    timeout?: number;
+    includePatterns?: string[];
+    excludePatterns?: string[];
+}
+
+/**
  * Discovery agent interface
  */
 export interface DiscoveryAgent {
     discover(query: ResearchQuery): Promise<DiscoveryResult>;
+}
+
+/**
+ * Analysis agent configuration interface
+ */
+export interface AnalysisConfig {
+    maxInsights?: number;
+    evidenceDepth?: "shallow" | "medium" | "deep";
+    includeRelationships?: boolean;
 }
 
 /**
@@ -358,8 +377,18 @@ export interface DiscoveryAgent {
 export interface AnalysisAgent {
     analyze(
         discoveryResults: DiscoveryResult[],
-        context?: any,
+        context?: Record<string, unknown>,
     ): Promise<AnalysisResult>;
+}
+
+/**
+ * Synthesis handler configuration interface
+ */
+export interface SynthesisConfig {
+    exportFormat?: ResearchExportFormat;
+    includeRecommendations?: boolean;
+    includeRisks?: boolean;
+    maxRecommendations?: number;
 }
 
 /**

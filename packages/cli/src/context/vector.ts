@@ -491,7 +491,7 @@ export class ContextRanker {
      * Get explanation for ranking
      */
     static getRankingExplanation(memory: MemoryEntry, score: number): string {
-        const factors = [];
+        const factors: string[] = [];
 
         if (score > 0.5) factors.push("High relevance to query");
         if (memory.provenance.confidence > 0.8) factors.push("High confidence");

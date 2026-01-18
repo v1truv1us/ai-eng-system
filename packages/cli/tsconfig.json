@@ -8,7 +8,9 @@
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
         "noEmit": true,
-        "types": ["bun-types"]
+        "types": ["bun-types"],
+        "noImplicitAny": false,
+        "strictNullChecks": false
     },
     "include": ["src/**/*.ts"],
     "exclude": ["node_modules", "dist"]

@@ -2,14 +2,14 @@
  * Synthesis phase handlers for research orchestration.
  * Generates comprehensive research reports with analysis results.
  */
-import { type AnalysisResult, type ResearchExportOptions, type ResearchQuery, type SynthesisHandler, type SynthesisReport } from "./types";
+import { type AnalysisResult, type ResearchExportOptions, type ResearchQuery, type SynthesisConfig, type SynthesisHandler, type SynthesisReport } from "./types";
 /**
  * Synthesis Handler
  * Generates comprehensive research reports from analysis results
  */
 export declare class SynthesisHandlerImpl implements SynthesisHandler {
     private config;
-    constructor(config: any);
+    constructor(config?: SynthesisConfig);
     synthesize(query: ResearchQuery, analysisResults: AnalysisResult[]): Promise<SynthesisReport>;
     private collectAllInsights;
     private collectAllEvidence;

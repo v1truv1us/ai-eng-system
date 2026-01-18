@@ -21,6 +21,7 @@ import {
     type ResearchQuery,
     ResearchScope,
     type Risk,
+    type SynthesisConfig,
     type SynthesisHandler,
     type SynthesisReport,
 } from "./types";
@@ -30,9 +31,9 @@ import {
  * Generates comprehensive research reports from analysis results
  */
 export class SynthesisHandlerImpl implements SynthesisHandler {
-    private config: any;
+    private config: SynthesisConfig;
 
-    constructor(config: any) {
+    constructor(config: SynthesisConfig = {}) {
         this.config = config;
     }
 

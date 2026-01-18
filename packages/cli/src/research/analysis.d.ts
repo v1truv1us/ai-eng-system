@@ -2,15 +2,15 @@
  * Analysis phase handlers for research orchestration.
  * Implements sequential analysis with 2 specialized agents.
  */
-import { type AnalysisAgent, type AnalysisResult, type DiscoveryResult, type Evidence, type Insight, type Relationship, type ResearchQuery } from "./types";
+import { type AnalysisAgent, type AnalysisConfig, type AnalysisResult, type DiscoveryResult, type Evidence, type Insight, type Relationship, type ResearchQuery } from "./types";
 /**
  * Codebase Analyzer Agent
  * Analyzes code files for insights and relationships
  */
 export declare class CodebaseAnalyzer implements AnalysisAgent {
     private config;
-    constructor(config: any);
-    analyze(discoveryResults: DiscoveryResult[], context?: any): Promise<AnalysisResult>;
+    constructor(config?: AnalysisConfig);
+    analyze(discoveryResults: DiscoveryResult[], context?: Record<string, unknown>): Promise<AnalysisResult>;
     private collectAllFiles;
     private extractEvidence;
     private analyzeFileForEvidence;
@@ -33,8 +33,8 @@ export declare class CodebaseAnalyzer implements AnalysisAgent {
  */
 export declare class ResearchAnalyzer implements AnalysisAgent {
     private config;
-    constructor(config: any);
-    analyze(discoveryResults: DiscoveryResult[], context?: any): Promise<AnalysisResult>;
+    constructor(config?: AnalysisConfig);
+    analyze(discoveryResults: DiscoveryResult[], context?: Record<string, unknown>): Promise<AnalysisResult>;
     private collectAllDocumentation;
     private extractDocumentationEvidence;
     private analyzeDocumentationForEvidence;
@@ -57,7 +57,7 @@ export declare class AnalysisHandler {
     private codebaseAnalyzer;
     private researchAnalyzer;
     private config;
-    constructor(config: any);
+    constructor(config?: AnalysisConfig);
     executeAnalysis(discoveryResults: DiscoveryResult[], query?: ResearchQuery): Promise<{
         codebaseAnalysis: AnalysisResult;
         researchAnalysis: AnalysisResult;

@@ -153,7 +153,7 @@ export class AgentRegistry {
                 // Check if this starts a nested object
                 if (valuePart === "") {
                     // Look ahead to see if this is a nested object
-                    const nestedLines = [];
+                    const nestedLines: string[] = [];
                     let j = i + 1;
                     while (
                         j < lines.length &&
