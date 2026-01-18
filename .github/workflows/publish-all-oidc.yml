@@ -110,7 +110,7 @@ jobs:
         if: steps.check-package.outputs.should_publish == 'true'
         run: |
           cd packages/${{ matrix.package }}
-          bun run ../../scripts/version-set.ts $VERSION
+          bun ../../scripts/version-set.ts $VERSION
 
       - name: Verify package integrity
         if: steps.check-package.outputs.should_publish == 'true'

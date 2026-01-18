@@ -85,7 +85,7 @@ jobs:
       - name: Update package.json version
         run: |
           cd packages/core
-          bun run ../../scripts/version-set.ts $VERSION
+          bun ../../scripts/version-set.ts $VERSION
 
       - name: Verify package integrity
         working-directory: ./packages/core
