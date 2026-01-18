@@ -112,7 +112,6 @@ jobs:
         run: |
           echo "@ai-eng-system:registry=https://registry.npmjs.org/" > ~/.npmrc
           echo "registry=https://registry.npmjs.org/" >> ~/.npmrc
-          echo "//registry.npmjs.org/:_authToken=\${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
 
       - name: Generate provenance metadata
         run: |
@@ -133,8 +132,6 @@ jobs:
       - name: Publish to NPM with OIDC provenance
         if: github.event.inputs.dry_run != 'true'
         working-directory: ./packages/cli
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           echo "🚀 Publishing @ai-eng-system/cli@$VERSION with OIDC trusted publishing"
           echo "Provenance: enabled"
