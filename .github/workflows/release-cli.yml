@@ -53,7 +53,7 @@ jobs:
 
       - name: Update package.json version
         working-directory: ./packages/cli
-        run: bun package.json-version-set $VERSION
+        run: bun run version-set $VERSION
 
       - name: Configure NPM registry
         run: |
