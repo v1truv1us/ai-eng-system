@@ -51,6 +51,31 @@ async function buildCLI(): Promise<void> {
         throw new Error(`Failed to build CLI:\n${messages}`);
     }
 
+    // Build CLI router
+    const cliMainPath = join(ROOT, "src", "cli", "run.ts");
+    if (existsSync(cliMainPath)) {
+        const mainResult = await Bun.build({
+            entrypoints: [cliMainPath],
+            outdir: join(DIST_DIR, "cli"),
+            target: "node",
+            format: "esm",
+            sourcemap: "inline",
+            minify: false,
+            splitting: false,
+            external: ["@ai-eng-system/core"],
+            naming: {
+                entry: "[name].js",
+            },
+        });
+
+        if (!mainResult.success) {
+            const messages = mainResult.logs
+                .map((l) => `${l.level}: ${l.message}`)
+                .join("\n");
+            throw new Error(`Failed to build CLI main:\n${messages}`);
+        }
+    }
+
     // Build CLI runner
     const cliRunPath = join(ROOT, "src", "cli", "run-cli.ts");
     if (existsSync(cliRunPath)) {
@@ -63,6 +88,9 @@ async function buildCLI(): Promise<void> {
             minify: false,
             splitting: false,
             external: ["@ai-eng-system/core"],
+            naming: {
+                entry: "[name].js",
+            },
         });
 
         if (!cliResult.success) {

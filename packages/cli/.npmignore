@@ -1,0 +1,29 @@
+# Development and build files
+src/
+tests/
+*.test.ts
+*.config.js
+tsconfig*.json
+build.ts
+workspace.json
+biome.json
+package.json.dev
+
+# Dependencies and lockfiles  
+node_modules/
+bun.lockb
+package-lock.json
+yarn.lock
+
+# Only include built CLI files and essentials
+dist/index.js
+dist/index.d.ts
+dist/cli/
+dist/run-cli.js
+dist/run-cli.js.d.ts
+bun.ts
+scripts/
+README.md
+LICENSE
+package.json
+package.json.publish

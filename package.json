@@ -1,6 +1,6 @@
 {
   "name": "ai-eng-system-workspace",
-  "version": "0.4.4",
+  "version": "0.4.7",
   "description": "Compounding engineering system for Claude Code and OpenCode. Shared agents, commands, skills, and plugin development tools.",
   "type": "module",
   "private": true,
@@ -32,10 +32,13 @@
     "changelog:dry-run": "standard-version --dry-run",
     "version-set": "bun scripts/version-set.ts",
     "dev": "bun install && bun run build:core && bun run build:cli",
-    "publish": "bun run publish:core && bun run publish:cli",
-    "publish:all": "bun run publish:core && bun run publish:cli",
+    "publish": "bun run update-publish-versions && bun update && bun run publish:core && bun run publish:cli",
+    "publish:all": "bun run update-publish-versions && bun update && bun run publish:core && bun run publish:cli",
     "publish:core": "cd packages/core && bun publish",
-    "publish:cli": "cd packages/cli && bun publish"
+    "publish:cli": "bun run prepublish:cli && cd packages/cli && bun publish && bun run postpublish:cli",
+    "prepublish:cli": "bun run scripts/prepublish-cli.ts",
+    "postpublish:cli": "bun run scripts/postpublish-cli.ts",
+    "update-publish-versions": "bun run scripts/update-publish-versions.ts"
   },
   "publishConfig": {
     "access": "public",

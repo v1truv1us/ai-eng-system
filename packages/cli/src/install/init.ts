@@ -3,72 +3,12 @@
  */
 
 import { existsSync } from "node:fs";
-import { writeFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import YAML from "yaml";
 import type { InitFlags } from "../cli/flags";
 import { UI } from "../cli/ui";
 import { DEFAULT_CONFIG } from "../config/schema";
-
-/**
- * Default configuration template
- */
-const CONFIG_TEMPLATE = {
-    version: 1,
-    runner: {
-        backend: "opencode",
-        review: "opencode",
-        artifactsDir: ".ai-eng/runs",
-        maxIters: 3,
-        printLogs: false,
-        logLevel: "INFO",
-    },
-    loop: {
-        maxCycles: 50,
-        cycleRetries: 2,
-        checkpointFrequency: 1,
-        stuckThreshold: 5,
-    },
-    debug: {
-        work: false,
-    },
-    opencode: {
-        model: "claude-3-5-sonnet-latest",
-        temperature: 0.2,
-        promptTimeoutMs: 120000,
-    },
-    anthropic: {
-        enabled: false,
-        model: "claude-3-5-sonnet-latest",
-    },
-    gates: {
-        lint: { command: "bun run lint" },
-        typecheck: { command: "bun run typecheck" },
-        test: { command: "bun test" },
-        build: { command: "bun run build" },
-        acceptance: { command: "git diff --name-only" },
-    },
-    models: {
-        research: "github-copilot/gpt-5.2",
-        planning: "github-copilot/gpt-5.2",
-        exploration: "github-copilot/gpt-5.2",
-        coding: "github-copilot/gpt-5.2",
-        default: "github-copilot/gpt-5.2",
-    },
-    notifications: {
-        discord: {
-            enabled: false,
-            username: "Ralph",
-            webhook: {
-                source: "env",
-                envVar: "DISCORD_WEBHOOK_URL",
-            },
-        },
-    },
-    ui: {
-        silent: false,
-    },
-};
 
 /**
  * Initialize configuration file
@@ -95,7 +35,10 @@ export async function initConfig(flags: InitFlags): Promise<void> {
 
     // Write default configuration
     try {
-        const yamlContent = YAML.stringify(CONFIG_TEMPLATE, {
+        // Create .ai-eng directory if it doesn't exist
+        await mkdir(configDir, { recursive: true });
+
+        const yamlContent = YAML.stringify(DEFAULT_CONFIG, {
             indent: 2,
             lineWidth: 0,
         });
@@ -110,7 +53,10 @@ export async function initConfig(flags: InitFlags): Promise<void> {
             "  4. Run 'ai-eng ralph \"your task\"' to start development",
         );
     } catch (error) {
-        console.error("Failed to write configuration file");
+        console.error(`Failed to write configuration file: ${configPath}`);
+        if (error instanceof Error) {
+            console.error(`Error: ${error.message}`);
+        }
         process.exit(1);
     }
 }

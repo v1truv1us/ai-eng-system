@@ -1,12 +1,12 @@
 {
   "name": "@ai-eng-system/cli",
-  "version": "0.4.6",
+  "version": "0.5.3",
   "description": "Compounding engineering system for Claude Code and OpenCode. Shared agents, commands, skills, and plugin development tools.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "ai-eng": "dist/cli/run-cli.js"
+    "ai-eng": "bun.ts"
   },
   "exports": {
     ".": {
@@ -85,7 +85,7 @@
     "bun": ">=1.0.0"
   },
   "dependencies": {
-    "@ai-eng-system/core": "^0.4.6",
+    "@ai-eng-system/core": "workspace:*",
     "@astrojs/mdx": "^4.3.13",
     "@astrojs/starlight": "^0.37.1",
     "@clack/prompts": "^0.11.0",
