@@ -25,6 +25,9 @@ dist/backends/
 dist/config/
 dist/util/
 
+# OpenCode build artifacts (development only)
+dist/.opencode/
+
 # Build scratch
 build.ts.tmp
 
@@ -33,3 +36,6 @@ build.ts.tmp
 
 # NPM tarballs
 *.tgz
+
+# Development package.json backups (for dual package.json system)
+packages/*/package.json.dev

@@ -8,7 +8,7 @@ agent: build
 
 Interactive optimization tool that enhances content using research-backed techniques, web-researched best practices, and iterative refinement based on user feedback.
 
- approach this optimization systematically. Analyze content, apply appropriate techniques, and iteratively refine based on feedback.
+ Systematic optimization approach. Analyze content, apply appropriate techniques, iteratively refine based on feedback.
 
 ## Why This Matters
 

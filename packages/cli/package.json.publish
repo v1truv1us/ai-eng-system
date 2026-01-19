@@ -43,7 +43,8 @@
     "changelog:minor": "standard-version --release-as minor",
     "changelog:major": "standard-version --release-as major",
     "changelog:dry-run": "standard-version --dry-run",
-    "version-set": "bun scripts/version-set.ts"
+    "version-set": "bun scripts/version-set.ts",
+    "publish": "npm publish"
   },
   "keywords": [
     "engineering",

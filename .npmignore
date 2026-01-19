@@ -1,8 +1,20 @@
-# Exclude bundled dependencies (peer dependencies, installed by users)
-dist/node_modules/
+# Development and build files
+src/
+tests/
+*.test.ts
+*.config.js
+tsconfig*.json
 
-# Exclude CLI build artifacts (development-only, not for npm package)
-dist/cli/
+# Dependencies and lockfiles  
+node_modules/
+bun.lockb
+package-lock.json
+yarn.lock
+
+# CLI content (exclude everything except built CLI files)
+!.npmignore
+!dist/
+dist/node_modules/
 dist/backends/
 dist/config/
 dist/util/
@@ -14,14 +26,14 @@ dist/types/
 dist/agents/
 dist/prompt-optimization/
 
-# Exclude test and development files from hooks
-dist/.claude-plugin/hooks/test_prompt_optimizer.py
-dist/.claude-plugin/hooks/test_runner.py
-dist/.claude-plugin/hooks/validate.py
-dist/.claude-plugin/hooks/session-start.py.bak
-
-# Exclude backup files
-dist/**/*.bak
-dist/**/*.old
-dist/**/*.tmp
-dist/**/*~
+# Only include what's needed for CLI package
+!dist/index.js
+!dist/index.d.ts
+!dist/cli/run.js
+!dist/cli/run-cli.js
+!dist/cli/run-cli.js.d.ts
+!dist/cli/run-cli.js.map
+!bun.ts
+!scripts/install.js
+!README.md
+!LICENSE

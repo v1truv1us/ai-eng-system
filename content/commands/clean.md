@@ -8,7 +8,7 @@ agent: build
 
 Clean the provided content by removing AI-generated verbosity patterns: $ARGUMENTS
 
-Approach this cleanup task systematically. Analyze the content type, apply appropriate cleanup rules, and preserve core meaning while removing unnecessary fluff.
+ Systematic cleanup approach. Analyze content type, apply appropriate cleanup rules, preserve core meaning while removing unnecessary fluff.
 
 ## Why This Matters
 
