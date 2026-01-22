@@ -1,0 +1,45 @@
+version: 1
+runner:
+  backend: opencode
+  review: opencode
+  artifactsDir: .ai-eng/runs
+  maxIters: 3
+  printLogs: false
+  logLevel: INFO
+loop:
+  maxCycles: 10
+  cycleRetries: 2
+  checkpointFrequency: 1
+  stuckThreshold: 5
+debug:
+  work: false
+opencode:
+  model: opencode/big-pickle
+  temperature: 0.2
+  promptTimeoutMs: 120000
+gates:
+  lint:
+    command: bun run lint
+  typecheck:
+    command: bun run typecheck
+  test:
+    command: bun test
+  build:
+    command: bun run build
+  acceptance:
+    command: git diff --name-only
+models:
+  research: openai/gpt-5.2
+  planning: openai/gpt-5.2
+  exploration: opencode/glm-4.7-free
+  coding: opencode/bigpickle
+  default: opencode/bigpickle
+notifications:
+  discord:
+    enabled: false
+    username: Ralph
+    webhook:
+      source: env
+      envVar: DISCORD_WEBHOOK_URL
+ui:
+  silent: false

@@ -627,14 +627,29 @@ async function runBuild(): Promise<void> {
     // Run build from project root, but set environment to use test directory
     return new Promise((resolve, reject) => {
         try {
+            // Go up 3 levels from packages/cli/tests to project root
+            const projectRoot = dirname(dirname(dirname(__dirname)));
             execSync("bun build.ts", {
-                cwd: process.cwd(), // Run from project root
+                cwd: projectRoot, // Run from actual project root
                 env: { ...process.env, TEST_ROOT }, // Pass test root environment
-                stdio: "inherit",
+                stdio: "pipe", // Capture output instead of inherit
             });
             resolve();
-        } catch (error) {
-            reject(error);
+        } catch (error: any) {
+            // Propagate the actual stderr from the build process
+            if (error.stderr) {
+                const stderr = Buffer.isBuffer(error.stderr)
+                    ? error.stderr.toString("utf-8")
+                    : String(error.stderr);
+                // Look for the expected "Build failed with code 1" message
+                if (stderr.includes("Build failed with code 1")) {
+                    reject(new Error("Build failed with code 1"));
+                } else {
+                    reject(error);
+                }
+            } else {
+                reject(error);
+            }
         }
     });
 }

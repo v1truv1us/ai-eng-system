@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0.0",
+  "runId": "run-mklqwmbq-1o204m",
+  "prompt": "iterate on the ralph wiggum and other prompts to make them more token efficient",
+  "status": "failed",
+  "completionPromise": "",
+  "maxCycles": 50,
+  "stuckThreshold": 5,
+  "gates": [
+    "test",
+    "lint",
+    "acceptance"
+  ],
+  "currentCycle": 0,
+  "completedCycles": 0,
+  "failedCycles": 3,
+  "stuckCount": 3,
+  "createdAt": "2026-01-19T22:37:18.472Z",
+  "updatedAt": "2026-01-19T23:19:04.388Z",
+  "stopReason": "gate_failure",
+  "completedAt": "2026-01-19T23:19:04.388Z"
+}

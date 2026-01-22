@@ -111,7 +111,7 @@ OPTIONS:
   --completion <tok>  Loop exit token (required, e.g., --completion "<promise>DONE</promise>")
   --ship              Auto-exit when agent outputs "<promise>SHIP</promise>"
   --draft             Run for max-cycles then stop for your review (default behavior)
-  --max-cycles <n>    Maximum loop cycles (default: 50)
+  --max-cycles <n>    Maximum loop cycles (default: 10)
   --stuck-threshold <n> Abort after N cycles with no progress (default: 5)
   --checkpoint <n>    Save checkpoint every N cycles (default: 1)
   --debug-work        Print every tool invocation input/output to console and logs

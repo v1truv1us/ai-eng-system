@@ -26,6 +26,7 @@
   "scripts": {
     "build": "bun run build:cli",
     "build:cli": "bun run build.ts",
+
     "build:watch": "bun run build:cli --watch",
     "clean": "rm -rf dist",
     "validate": "tsc --noEmit",

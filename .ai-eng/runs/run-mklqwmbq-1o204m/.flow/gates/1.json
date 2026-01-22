@@ -1,0 +1,34 @@
+[
+  {
+    "gate": "test",
+    "passed": false,
+    "message": "Some tests failed",
+    "details": {
+      "command": "bun test",
+      "exitCode": 1,
+      "stdout": "bun test v1.3.6 (d530ed99)\n🔧 Transpiling TypeScript to JavaScript...\n  ✅ Transpilation complete: 0 files, 50 skipped\n⚠️  Skipping npm entrypoint build (src/index.ts not found)\n\n📦 Syncing to marketplace directories...\n  ✓ Synced to .claude/\n  ✓ Synced prompt optimization library\n  ✓ Synced to .claude-plugin/\n  ✓ Synced to plugins/ai-eng-system/\n✅ All agents validated successfully\n\n✅ Build complete in 63ms -> /tmp/ai-eng-test-1768864622604/dist\n🔧 Transpiling TypeScript to JavaScript...\n  ✅ Transpilation complete: 0 files, 50 skipped\n⚠️  Skipping npm entrypoint build (src/index.ts not found)\n\n📦 Syncing to marketplace directories...\n  ✓ Synced to .claude/\n  ✓ Synced prompt optimization library\n  ✓ Synced to .claude-plugin/\n  ✓ Synced to plugins/ai-eng-system/\n✅ All agents validated successfully\n\n✅ Build complete in 96ms -> /tmp/ai-eng-test-1768864622604/dist\n🔧 Transpiling TypeScript to JavaScript...\n  ✅ Transpilation complete: 0 files, 50 skipped\n⚠️  Skipping npm entrypoint build (src/index.ts not found)\n\n📦 Syncing to marketplace directories...\n  ✓ Synced to .claude/\n  ✓ Synced prompt optimization library\n  ✓ Synced to .claude-plugin/\n  ✓ Synced to plugins/ai-eng-system/\n✅ All agents validated successfully\n\n✅ Build complete in 72ms -> /tmp/ai-eng-test-1768864622604/dist\n🔧 Transpiling TypeScript to JavaScript...\n  ✅ Transpilation complete: 0 files, 50 skipped\n⚠️  Skipping npm entrypoint build (src/index.ts not found)\n\n📦 Syncing to marketplace directories...\n  ✓ Synced to .claude/\n  ✓ Synced prompt optimization library\n  ✓ Synced to .claude-plugin/\n  ✓ Synced to plugins/ai-eng-system/\n✅ All agents validated successfully\n\n✅ Build complete in 69ms -> /tmp/ai-eng-test-1768864622604/dist\n🔧 Transpiling TypeScript to JavaScript...\n  ✅ Transpilation complete: 0 files, 50 skipped\n⚠️  Skipping npm entrypoint build (src/index.ts not found)\n\n📦 Syncing to marketplace directories...\n  ✓ Synced to .claude/\n  ✓ Synced prompt optimization library\n  ✓ Synced to .claude-plugin/\n \n... [truncated 2376 chars]",
+      "stderr": "\ntests/build.test.ts:\n(pass) Ferg Engineering System - Build System > Frontmatter Parsing > should parse YAML frontmatter correctly [1.00ms]\n(pass) Ferg Engineering System - Build System > Frontmatter Parsing > should handle content without frontmatter [2.00ms]\n(pass) Ferg Engineering System - Build System > Frontmatter Parsing > should parse boolean values correctly [1.00ms]\n(pass) Ferg Engineering System - Build System > Frontmatter Parsing > should handle nested structures\n(pass) Ferg Engineering System - Build System > File Operations > should create dist directory structure\n(pass) Ferg Engineering System - Build System > File Operations > should read markdown files recursively [2.00ms]\n(pass) Ferg Engineering System - Build System > File Operations > should handle empty directories gracefully\n(pass) Ferg Engineering System - Build System > Content Validation > should validate command frontmatter [2.00ms]\n(pass) Ferg Engineering System - Build System > Content Validation > should v\n... [truncated 88920 chars]",
+      "durationMs": 120103
+    },
+    "timestamp": "2026-01-19T23:17:02.422Z"
+  },
+  {
+    "gate": "lint",
+    "passed": false,
+    "message": "Linting issues found",
+    "details": {
+      "command": "bun run lint",
+      "exitCode": 1,
+      "stdout": "The number of diagnostics exceeds the number allowed by Biome.\nDiagnostics not shown: 40.\nChecked 264 files in 1601ms. No fixes applied.\nFound 60 errors.\n",
+      "stderr": "$ biome check . --diagnostic-level=error\n./packages/cli/src/agents/code-review-executor.d.ts:6:8 lint/style/useImportType  FIXABLE  ━━━━━━━━━━\n\n  × All these imports are only used as types.\n  \n    4 │  */\n    5 │ import type { AgentCoordinator } from \"./coordinator\";\n  > 6 │ import { type CodeReviewInput, type CodeReviewOutput } from \"./types\";\n      │        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    7 │ export declare class CodeReviewExecutor {\n    8 │     private coordinator;\n  \n  i Importing the types with import type ensures that they are removed by the compilers and avoids loading unnecessary modules.\n  \n  i Safe fix: Use import type.\n  \n     4  4 │    */\n     5  5 │   import type { AgentCoordinator } from \"./coordinator\";\n     6    │ - import·{·type·CodeReviewInput,·type·CodeReviewOutput·}·from·\"./types\";\n        6 │ + import·type·{·CodeReviewInput,·CodeReviewOutput·}·from·\"./types\";\n     7  7 │   export declare class CodeReviewExecutor {\n     8  8 │     \n... [truncated 29239 chars]",
+      "durationMs": 1858
+    },
+    "timestamp": "2026-01-19T23:17:02.422Z"
+  },
+  {
+    "gate": "acceptance",
+    "passed": true,
+    "message": "Acceptance criteria met",
+    "timestamp": "2026-01-19T23:17:02.422Z"
+  }
+]

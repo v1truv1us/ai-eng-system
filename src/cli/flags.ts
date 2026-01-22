@@ -48,7 +48,7 @@ export interface RalphFlags {
     ship?: boolean;
     /** Draft mode - loop runs for max-cycles then stops, ready for your review */
     draft?: boolean;
-    /** Maximum number of loop cycles (default: 50) */
+    /** Maximum number of loop cycles (default: 10) */
     maxCycles?: number;
     /** Checkpoint frequency (save state every N cycles, default: 1) */
     checkpointFrequency?: number;

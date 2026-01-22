@@ -178,7 +178,7 @@ export const DEFAULT_CONFIG: AiEngConfig = {
         logLevel: "INFO",
     },
     loop: {
-        maxCycles: 50,
+        maxCycles: 10,
         cycleRetries: 2,
         checkpointFrequency: 1,
         stuckThreshold: 5,

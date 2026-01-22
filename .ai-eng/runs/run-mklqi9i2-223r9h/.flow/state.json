@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "1.0.0",
+  "runId": "run-mklqi9i2-223r9h",
+  "prompt": "test task to run this",
+  "status": "running",
+  "completionPromise": "",
+  "maxCycles": 50,
+  "stuckThreshold": 5,
+  "gates": [
+    "test",
+    "lint",
+    "acceptance"
+  ],
+  "currentCycle": 0,
+  "completedCycles": 0,
+  "failedCycles": 0,
+  "stuckCount": 0,
+  "createdAt": "2026-01-19T22:26:08.667Z",
+  "updatedAt": "2026-01-19T22:26:08.668Z"
+}
