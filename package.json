@@ -8,7 +8,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "bun run build:core && bun run build:cli && bun run copy:content",
+    "build": "bun run build:core && bun run build:cli && npm run copy:content",
     "build:core": "cd packages/core && bun run build && cd ../.. && cp -r packages/core/opencode packages/core/dist/.opencode",
     "build:cli": "cd packages/cli && bun run build:cli",
     "copy:content": "cp packages/core/dist/index.js dist/ && cp packages/core/dist/*.d.ts dist/",
