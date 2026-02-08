@@ -30,9 +30,11 @@ claude plugin link .
 ### Verification
 
 After installation, verify in Claude Code:
-- **19 Commands available**: `/plan`, `/review`, `/seo`, `/work`, `/compound`, `/deploy`, `/optimize`, `/clean`, `/recursive-init`, `/research`, `/context`, `/create-plugin`, `/create-agent`, `/create-command`, `/create-skill`, `/create-tool`, `/init`, `/specify`, `/ralph-wiggum`
+- **15 Commands available**: `/plan`, `/review`, `/seo`, `/work`, `/deploy`, `/research`, `/context`, `/create-plugin`, `/create-agent`, `/create-command`, `/create-skill`, `/create-tool`, `/init`, `/specify`, `/ralph-wiggum`
 - **28 Agents available**: All specialized agents for development, testing, deployment, and architecture
-- **Skills**: DevOps, prompting, and research skills
+- **12+ Skills**: knowledge-capture, monorepo-initialization, content-optimization, text-cleanup, devops, prompting, research, and more
+
+**Note**: `compound`, `recursive-init`, `clean`, and `optimize` commands were converted to skills for better organization. See `docs/COMMAND-MIGRATION.md`.
 
 ## OpenCode Installation
 
