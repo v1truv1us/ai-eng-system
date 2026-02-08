@@ -96,33 +96,60 @@ Requests confidence ratings and uncertainty identification.
 
 ### Optimize AI Prompts
 ```bash
-/optimize "Help me debug auth" --prompt
+# Use the content-optimization skill to enhance prompts
+use_skill("content-optimization", {
+  "content": "Help me debug auth",
+  "type": "prompt"
+})
+
 # Interactive approval workflow:
 # - Shows detected domain (security)
 # - Suggests optimization steps
 # - Asks approve/reject/modify for each step
 # - Calculates expected improvement
 
-/optimize "Help me debug auth" --prompt --verbose
+use_skill("content-optimization", {
+  "content": "Help me debug auth",
+  "type": "prompt",
+  "verbose": true
+})
 # Detailed walkthrough with reasoning for each optimization
 
-/optimize "Help me debug auth" --prompt --mode=aggressive
+use_skill("content-optimization", {
+  "content": "Help me debug auth",
+  "type": "prompt",
+  "mode": "aggressive"
+})
 # Apply maximum optimization (more aggressive than default)
 
-/optimize "Help me debug auth" --prompt --mode=conservative
+use_skill("content-optimization", {
+  "content": "Help me debug auth",
+  "type": "prompt",
+  "mode": "conservative"
+})
 # Minimal changes, preserve original intent
 
-# Skip optimization
-/optimize "! Help me debug auth" --prompt
+# Skip optimization with exclamation mark prefix
+use_skill("content-optimization", {
+  "content": "! Help me debug auth",
+  "type": "prompt"
+})
 # Exclamation mark prefix bypasses optimization
 ```
 
 ### Optimize Source Code
 ```bash
-/optimize src/auth.js --code
+use_skill("content-optimization", {
+  "file": "src/auth.js",
+  "type": "code"
+})
 # Suggests: performance improvements, readability, error handling
 
-/optimize src/auth.js --code --preview
+use_skill("content-optimization", {
+  "file": "src/auth.js",
+  "type": "code",
+  "preview": true
+})
 # Show changes before applying
 
 /optimize src/auth.js --code --apply

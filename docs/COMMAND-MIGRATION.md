@@ -31,7 +31,7 @@ Refactored 4 commands into skills for better organization and clarity.
 - `/ai-eng/ralph-wiggum` - Full-cycle orchestration
 - `/ai-eng/context` - Session/memory management
 
-**Creation Tools** (6):
+**Creation Tools** (5):
 - `/ai-eng/create-agent` - Agent scaffolding
 - `/ai-eng/create-command` - Command scaffolding
 - `/ai-eng/create-plugin` - Plugin development
@@ -101,8 +101,8 @@ use_skill("monorepo-initialization", {"depth": 2})
 ```bash
 # text-cleanup skill now includes clean patterns
 Use text-cleanup skill to remove AI verbosity from: [content]
-# Combined with:
-/ai-eng/optimize --type=docs --mode=aggressive
+# Combined with content-optimization skill:
+use_skill("content-optimization", {"type": "docs", "mode": "aggressive"})
 ```
 
 ### If you were using `/ai-eng/optimize`

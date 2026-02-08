@@ -57,7 +57,7 @@ src/lib/components dir:   +5 points
 Config file present:      +3 points
 >10 source files:         +3 points
 README/docs present:      +2 points
-Threshold: > 5 points = initialize
+Threshold: ≥ 5 points (default --min-score) = initialize
 ```
 
 ### Phase 2: Root Analysis
@@ -240,23 +240,25 @@ git commit -m "chore: initialize monorepo AGENTS.md hierarchy"
 
 ## Usage
 
-### CLI (from root):
-```bash
-# Initialize entire project (interactive)
-/monorepo-initialization
+### Skill Invocation
 
-# Dry-run: preview without changes
-/monorepo-initialization --dry-run
+This skill is invoked through your AI environment's skill system, not via a standalone shell command.
 
-# Initialize with specific depth
-/monorepo-initialization --depth=3
-
-# Re-initialize (overwrite existing)
-/monorepo-initialization --preserve=false
-
-# Initialize specific directory
-/monorepo-initialization packages/my-new-service
+**In Claude Code or similar AI environments:**
 ```
+Use the monorepo-initialization skill to initialize AGENTS.md across the repository
+```
+
+**Programmatic usage (OpenCode):**
+```typescript
+use_skill("monorepo-initialization", {
+  depth: 3,
+  dry_run: true,
+  preserve: true
+})
+```
+
+Parameters are passed through your AI tool's skill invocation mechanism following the same structure shown in the OpenCode example below.
 
 ### OpenCode:
 ```python

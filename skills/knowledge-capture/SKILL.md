@@ -99,7 +99,7 @@ docs/solutions/
 ```markdown
 # [Problem Title]
 
-**Date Added**: 2026-02-08  
+**Date Added**: [YYYY-MM-DD]  
 **Category**: [performance|security|deployment|debugging|architecture]  
 **Audience**: [frontend|backend|devops|all]  
 **Complexity**: [easy|medium|hard]  
@@ -196,7 +196,10 @@ After creating a solution, update:
 ### After `/ai-eng/review`
 
 ```bash
-/ai-eng/compound "database query optimization breakthrough"
+use_skill("knowledge-capture", {
+  "title": "database query optimization breakthrough",
+  "source": "/ai-eng/review"
+})
 ```
 
 ### After Solving Incidents
@@ -313,19 +316,19 @@ Track:
 | Onboarding time | -30% | [Check] |
 | Time to solve known problems | -50% | [Check] |
 
-## Integration with `/ai-eng/compound`
+## Using this Skill in the Compound Phase
 
-In Claude Code, the `/ai-eng/compound` command uses this skill automatically:
+In the post-migration workflow, the **knowledge-capture** skill is invoked directly during the Compound phase (or after any significant piece of work) rather than via a built-in `/ai-eng/compound` command.
 
-```bash
-/ai-eng/compound "redis connection pooling breakthrough"
-# Automatically:
-# 1. Gathers context about the solution
-# 2. Creates docs/solutions/[category]/[topic].md
-# 3. Updates category index
-# 4. Updates global index
-# 5. Creates git commit
-```
+A typical usage pattern looks like:
+
+1. Complete your implementation and run `/ai-eng/spec` and `/ai-eng/review` as usual.
+2. Call the **knowledge-capture** skill with the final context (spec, key decisions, code links, and gotchas).
+3. Save the generated write-up into `docs/solutions/[category]/[topic].md` (or your chosen knowledge base location).
+4. Update any relevant indexes or navigation files.
+5. Commit the new/updated documentation to version control.
+
+If your team still prefers a single `/ai-eng/compound`-style command, you can configure your own alias or wrapper that calls this skill with the appropriate context, but that alias is no longer provided automatically by the plugin manifest.
 
 ## Your Turn
 
