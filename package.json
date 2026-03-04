@@ -45,6 +45,11 @@
     "access": "public",
     "registry": "https://registry.npmjs.org"
   },
+  "dependencies": {
+    "@ai-eng-system/core": "workspace:*",
+    "@opencode-ai/plugin": "^1.1.13",
+    "@opencode-ai/sdk": "^1.1.13"
+  },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "bun-types": "latest",

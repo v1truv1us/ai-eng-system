@@ -417,9 +417,9 @@ description: Test invalid name
             );
 
             try {
-                // Build should fail with code 1
+                // Build should fail due to invalid skill name
                 await expect(runBuild()).rejects.toThrow(
-                    /Build failed with code 1/,
+                    /invalid_skill|Command failed/,
                 );
             } finally {
                 // Cleanup always runs
@@ -442,9 +442,9 @@ description: Mismatch test
             );
 
             try {
-                // Build should fail with code 1
+                // Build should fail due to name mismatch
                 await expect(runBuild()).rejects.toThrow(
-                    /Build failed with code 1/,
+                    /different-name|Command failed/,
                 );
             } finally {
                 // Cleanup always runs

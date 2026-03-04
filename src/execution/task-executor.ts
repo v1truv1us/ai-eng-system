@@ -325,6 +325,7 @@ export class TaskExecutor {
 
             const child = spawn(shellTask.command, [], {
                 shell: true,
+                detached: true,
                 cwd:
                     shellTask.workingDirectory ?? this.options.workingDirectory,
                 env: {
@@ -354,10 +355,22 @@ export class TaskExecutor {
             });
 
             const timeoutId = setTimeout(() => {
-                child.kill("SIGTERM");
                 this.log(
                     `Task ${shellTask.id} timed out after ${shellTask.timeout}s`,
                 );
+                // Kill the entire process group to ensure child processes are terminated
+                try {
+                    if (child.pid) {
+                        process.kill(-child.pid, "SIGKILL");
+                    }
+                } catch {
+                    // Process group already exited; fall back to direct kill
+                    try {
+                        child.kill("SIGKILL");
+                    } catch {
+                        // Process already exited
+                    }
+                }
             }, timeout);
 
             child.on(

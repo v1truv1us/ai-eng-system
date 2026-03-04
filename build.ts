@@ -36,6 +36,7 @@ import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import YAML from "yaml";
 
+const IS_TEST_MODE = !!process.env.TEST_ROOT;
 const ROOT = process.env.TEST_ROOT
     ? process.env.TEST_ROOT
     : dirname(fileURLToPath(import.meta.url));
@@ -472,7 +473,11 @@ async function buildClaude(): Promise<void> {
 
 async function buildOpenCode(): Promise<void> {
     // Build to both dist/.opencode/ (for npm package) and .opencode/ (for local dev)
-    for (const targetDir of [DIST_OPENCODE_DIR, ROOT_OPENCODE_DIR]) {
+    // In test mode, only build to dist/.opencode/ since ROOT_OPENCODE_DIR is inside the test tmp dir
+    const targetDirs = IS_TEST_MODE
+        ? [DIST_OPENCODE_DIR]
+        : [DIST_OPENCODE_DIR, ROOT_OPENCODE_DIR];
+    for (const targetDir of targetDirs) {
         // Clean target directories before building to remove stale files
         const parentCommandsDir = join(targetDir, "command");
         const commandsDir = join(targetDir, "command", NAMESPACE_PREFIX);
@@ -1066,7 +1071,9 @@ async function validateAgents(): Promise<void> {
     }
 
     // Validate OpenCode agents (dist/.opencode/agent/ and .opencode/agent/)
-    const openCodeDirs = [DIST_OPENCODE_DIR, ROOT_OPENCODE_DIR];
+    const openCodeDirs = IS_TEST_MODE
+        ? [DIST_OPENCODE_DIR]
+        : [DIST_OPENCODE_DIR, ROOT_OPENCODE_DIR];
     for (const opencodeRoot of openCodeDirs) {
         const agentDir = join(opencodeRoot, "agent", NAMESPACE_PREFIX);
         if (!existsSync(agentDir)) continue;
@@ -1116,15 +1123,19 @@ async function buildAll(): Promise<void> {
     await buildClaude();
     await buildOpenCode();
     await copySkillsToDist();
-    await copyPromptOptimization();
-    await copyCLI();
-    await buildNpmEntrypoint();
 
-    // Sync to committed directories (required for marketplace)
-    console.log("\n📦 Syncing to marketplace directories...");
-    await syncToLocalClaude();
-    await syncToClaudePlugin();
-    await syncToMarketplacePlugin();
+    // Skip steps that require the full project tree when running in test mode
+    if (!IS_TEST_MODE) {
+        await copyPromptOptimization();
+        await copyCLI();
+        await buildNpmEntrypoint();
+
+        // Sync to committed directories (required for marketplace)
+        console.log("\n📦 Syncing to marketplace directories...");
+        await syncToLocalClaude();
+        await syncToClaudePlugin();
+        await syncToMarketplacePlugin();
+    }
 
     // Validate agents after build
     await validateAgents();

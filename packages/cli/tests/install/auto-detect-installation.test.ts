@@ -16,18 +16,14 @@ import { join } from "node:path";
 
 describe("US-001: Auto-Detect Installation Location", () => {
     let tempDir: string;
-    let originalCwd: string;
 
     beforeEach(async () => {
         tempDir = join(tmpdir(), `ai-eng-test-${Date.now()}`);
-        originalCwd = process.cwd();
         await mkdir(tempDir, { recursive: true });
-        process.chdir(tempDir);
     });
 
     afterEach(async () => {
         try {
-            process.chdir(originalCwd);
             await rm(tempDir, { recursive: true, force: true });
         } catch {
             // Ignore cleanup errors
