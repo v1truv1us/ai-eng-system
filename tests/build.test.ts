@@ -419,7 +419,7 @@ description: Test invalid name
             try {
                 // Build should fail due to invalid skill name
                 await expect(runBuild()).rejects.toThrow(
-                    /invalid_skill|Command failed/,
+                    /must be lowercase alphanumeric with single hyphens/,
                 );
             } finally {
                 // Cleanup always runs
@@ -444,7 +444,7 @@ description: Mismatch test
             try {
                 // Build should fail due to name mismatch
                 await expect(runBuild()).rejects.toThrow(
-                    /different-name|Command failed/,
+                    /must match directory name/,
                 );
             } finally {
                 // Cleanup always runs
@@ -630,11 +630,20 @@ async function runBuild(): Promise<void> {
             execSync("bun build.ts", {
                 cwd: process.cwd(), // Run from project root
                 env: { ...process.env, TEST_ROOT }, // Pass test root environment
-                stdio: "inherit",
+                stdio: "pipe", // Capture output to propagate specific errors
             });
             resolve();
-        } catch (error) {
-            reject(error);
+        } catch (error: any) {
+            // Propagate the actual stderr from the build process so assertions
+            // can match specific validation error text
+            if (error.stderr) {
+                const stderr = Buffer.isBuffer(error.stderr)
+                    ? error.stderr.toString("utf-8")
+                    : String(error.stderr);
+                reject(new Error(stderr || error.message));
+            } else {
+                reject(error);
+            }
         }
     });
 }

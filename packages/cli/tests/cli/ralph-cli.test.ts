@@ -10,7 +10,7 @@
  */
 
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "bun:test";
-import { mkdtempSync } from "node:fs";
+import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { parseArgs } from "node:util";
@@ -70,15 +70,20 @@ describe("CLI Flag Parsing", () => {
 
 describe("Configuration Loading", () => {
     let savedTestRoot: string | undefined;
+    let tempDir: string | undefined;
     beforeAll(() => {
         savedTestRoot = process.env.TEST_ROOT;
-        process.env.TEST_ROOT = mkdtempSync(join(tmpdir(), "ralph-cli-test-"));
+        tempDir = mkdtempSync(join(tmpdir(), "ralph-cli-test-"));
+        process.env.TEST_ROOT = tempDir;
     });
     afterAll(() => {
         if (savedTestRoot !== undefined) {
             process.env.TEST_ROOT = savedTestRoot;
         } else {
             delete process.env.TEST_ROOT;
+        }
+        if (tempDir) {
+            rmSync(tempDir, { recursive: true, force: true });
         }
     });
 
