@@ -3,7 +3,7 @@
  */
 
 import { afterAll, beforeAll, describe, expect, it } from "bun:test";
-import { mkdirSync, rmSync } from "node:fs";
+import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { OpenCodeClient } from "../../src/backends/opencode/client";
@@ -14,11 +14,11 @@ import type { AiEngConfig } from "../../src/config/schema";
 
 // Use a temporary directory for tests that call loadConfig
 // to avoid loading the project's .ai-eng/config.yaml
-const TEST_TMP = join(tmpdir(), `ai-eng-config-test-${Date.now()}`);
+let TEST_TMP: string;
 let originalTestRoot: string | undefined;
 
 beforeAll(() => {
-    mkdirSync(TEST_TMP, { recursive: true });
+    TEST_TMP = mkdtempSync(join(tmpdir(), "ai-eng-config-test-"));
     originalTestRoot = process.env.TEST_ROOT;
     process.env.TEST_ROOT = TEST_TMP;
 });

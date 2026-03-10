@@ -3,7 +3,7 @@
  * Handles task execution, dependency resolution, and result tracking.
  */
 
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import { promisify } from "node:util";
 import type { AgentCoordinator } from "../agents/coordinator";
 import {
@@ -356,19 +356,34 @@ export class TaskExecutor {
 
             const timeoutId = setTimeout(() => {
                 this.log(
-                    `Task ${shellTask.id} timed out after ${shellTask.timeout}s`,
+                    `Task ${shellTask.id} timed out after ${timeout / 1000}s`,
                 );
-                // Kill the entire process group to ensure child processes are terminated
-                try {
-                    if (child.pid) {
-                        process.kill(-child.pid, "SIGKILL");
-                    }
-                } catch {
-                    // Process group already exited; fall back to direct kill
-                    try {
-                        child.kill("SIGKILL");
-                    } catch {
-                        // Process already exited
+                // Kill the entire process tree to ensure child processes are terminated
+                if (child.pid) {
+                    if (process.platform === "win32") {
+                        // On Windows, use taskkill to terminate the process tree synchronously
+                        try {
+                            spawnSync("taskkill", [
+                                "/PID",
+                                child.pid.toString(),
+                                "/T",
+                                "/F",
+                            ]);
+                        } catch {
+                            // Ignore errors if the process has already exited
+                        }
+                    } else {
+                        // On POSIX, kill the entire process group
+                        try {
+                            process.kill(-child.pid, "SIGKILL");
+                        } catch {
+                            // Process group already exited; fall back to direct kill
+                            try {
+                                child.kill("SIGKILL");
+                            } catch {
+                                // Process already exited
+                            }
+                        }
                     }
                 }
             }, timeout);
