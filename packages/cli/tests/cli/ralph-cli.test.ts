@@ -70,7 +70,7 @@ describe("CLI Flag Parsing", () => {
 
 describe("Configuration Loading", () => {
     let savedTestRoot: string | undefined;
-    let tempDir: string;
+    let tempDir: string | undefined;
     beforeAll(() => {
         savedTestRoot = process.env.TEST_ROOT;
         tempDir = mkdtempSync(join(tmpdir(), "ralph-cli-test-"));
@@ -82,7 +82,9 @@ describe("Configuration Loading", () => {
         } else {
             delete process.env.TEST_ROOT;
         }
-        rmSync(tempDir, { recursive: true, force: true });
+        if (tempDir) {
+            rmSync(tempDir, { recursive: true, force: true });
+        }
     });
 
     it("should load default configuration", async () => {

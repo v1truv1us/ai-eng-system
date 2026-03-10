@@ -363,14 +363,26 @@ export class TaskExecutor {
                     if (process.platform === "win32") {
                         // On Windows, use taskkill to terminate the process tree synchronously
                         try {
-                            spawnSync("taskkill", [
-                                "/PID",
-                                child.pid.toString(),
-                                "/T",
-                                "/F",
-                            ]);
+                            const result = spawnSync(
+                                "taskkill",
+                                ["/PID", child.pid.toString(), "/T", "/F"],
+                                { windowsHide: true, stdio: "ignore" },
+                            );
+                            // spawnSync won't throw on non-zero exit; fall back to direct kill
+                            if (result.error || result.status !== 0) {
+                                try {
+                                    child.kill("SIGKILL");
+                                } catch {
+                                    // Process already exited
+                                }
+                            }
                         } catch {
-                            // Ignore errors if the process has already exited
+                            // spawning taskkill itself failed; fall back to direct kill
+                            try {
+                                child.kill("SIGKILL");
+                            } catch {
+                                // Process already exited
+                            }
                         }
                     } else {
                         // On POSIX, kill the entire process group
