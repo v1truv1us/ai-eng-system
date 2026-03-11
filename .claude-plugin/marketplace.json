@@ -13,7 +13,7 @@
         {
             "name": "ai-eng-system",
             "source": "./plugins/ai-eng-system",
-            "description": "AI Engineering System with context engineering, research orchestration, 19 commands, 28 specialized agents, and 7 skill files for Claude Code & OpenCode",
+            "description": "AI Engineering System with context engineering, research orchestration, 15 commands, 28 specialized agents, and 12+ reusable skills for Claude Code & OpenCode",
             "version": "0.5.5",
             "author": {
                 "name": "v1truv1us",
