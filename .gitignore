@@ -18,6 +18,13 @@ bun.lockb
 # Claude hook backups (local/dev artifacts)
 .claude/hooks.backup-*/
 
+# Runtime data (user-specific)
+.ai-eng/runs/
+.opencode/opencode.db*
+
+# Backup files
+*.bak
+
 # build.ts copies these into dist/ for local CLI runs; keep them out of git
 # unless/until we intentionally publish them.
 dist/cli/

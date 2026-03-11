@@ -2,12 +2,35 @@
  * Tests for Timeout and Model Configuration Fixes
  */
 
-import { describe, expect, it } from "bun:test";
+import { afterAll, beforeAll, describe, expect, it } from "bun:test";
+import { mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { OpenCodeClient } from "../../src/backends/opencode/client";
 import type { RalphFlags } from "../../src/cli/flags";
 import { loadConfig } from "../../src/config/loadConfig";
 import { getAllModels, resolveModel } from "../../src/config/modelResolver";
 import type { AiEngConfig } from "../../src/config/schema";
+
+// Use a temporary directory for tests that call loadConfig
+// to avoid loading the project's .ai-eng/config.yaml
+let TEST_TMP: string;
+let originalTestRoot: string | undefined;
+
+beforeAll(() => {
+    TEST_TMP = mkdtempSync(join(tmpdir(), "ai-eng-config-test-"));
+    originalTestRoot = process.env.TEST_ROOT;
+    process.env.TEST_ROOT = TEST_TMP;
+});
+
+afterAll(() => {
+    if (originalTestRoot !== undefined) {
+        process.env.TEST_ROOT = originalTestRoot;
+    } else {
+        delete process.env.TEST_ROOT;
+    }
+    rmSync(TEST_TMP, { recursive: true, force: true });
+});
 
 describe("Fix #1: Timeout + Rate-Limit Handling", () => {
     it("should create client with default timeout", () => {

@@ -12,7 +12,9 @@ import { DEFAULT_CONFIG as HARDCODED_DEFAULTS } from "./schema";
 
 // Use current working directory where command is called from
 // This ensures .ai-eng/config.yaml is loaded from user's project directory
-const ROOT = process.env.TEST_ROOT ?? process.cwd();
+function getRoot(): string {
+    return process.env.TEST_ROOT ?? process.cwd();
+}
 
 /**
  * Environment variable to config key mapping
@@ -222,7 +224,7 @@ export async function loadConfig(flags: RalphFlags): Promise<AiEngConfig> {
     };
 
     // Try to load from config file
-    const configPath = join(ROOT, ".ai-eng", "config.yaml");
+    const configPath = join(getRoot(), ".ai-eng", "config.yaml");
     try {
         const configContent = await readFile(configPath, "utf-8");
         const userConfig = YAML.parse(configContent);

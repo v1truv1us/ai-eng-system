@@ -31,14 +31,12 @@ const ORIGINAL_ROOT = process.cwd();
 describe("Ferg Engineering System - Integration Tests", () => {
     beforeAll(async () => {
         await mkdir(TEST_ROOT, { recursive: true });
-        process.chdir(TEST_ROOT);
 
         // Copy original project structure to test directory
         await copyProjectStructure();
     });
 
     afterAll(async () => {
-        process.chdir(ORIGINAL_ROOT);
         if (existsSync(TEST_ROOT)) {
             await rm(TEST_ROOT, { recursive: true });
         }
@@ -506,7 +504,7 @@ This is test agent ${i}.
 
 // Helper function to copy project structure
 async function copyProjectStructure(): Promise<void> {
-    const originalRoot = "/home/vitruvius/git/ai-eng-system";
+    const originalRoot = ORIGINAL_ROOT;
 
     // Copy essential files and directories
     const essentialItems = [
