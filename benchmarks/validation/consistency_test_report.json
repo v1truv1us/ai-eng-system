@@ -1,0 +1,163 @@
+{
+  "title": "Self-Consistency Test Report",
+  "description": "Analysis of LLM evaluation consistency across temperature variations",
+  "generated": "2025-12-06T23:31:50",
+  "task_results": {
+    "CR-002": {
+      "task_id": "CR-002",
+      "num_runs": 60,
+      "average_kappa": -0.19099099099099096,
+      "kappa_std": 0.2453727000455911,
+      "winner_consistency": 0.38333333333333336,
+      "score_variance": {
+        "winner_variance": 0.23638888888888895,
+        "temperature_variance": 0.05527707983925668,
+        "overall_stability": 0.9447229201607433
+      },
+      "temperature_effect": 0.05527707983925668,
+      "stable_evaluation": false
+    },
+    "CR-001": {
+      "task_id": "CR-001",
+      "num_runs": 60,
+      "average_kappa": -0.11939647177185958,
+      "kappa_std": 0.34692519402344385,
+      "winner_consistency": 0.5,
+      "score_variance": {
+        "winner_variance": 0.25,
+        "temperature_variance": 0.16666666666666666,
+        "overall_stability": 0.8333333333333334
+      },
+      "temperature_effect": 0.16666666666666666,
+      "stable_evaluation": false
+    },
+    "AR-001": {
+      "task_id": "AR-001",
+      "num_runs": 60,
+      "average_kappa": -0.09752043613245288,
+      "kappa_std": 0.22015387476201018,
+      "winner_consistency": 0.45,
+      "score_variance": {
+        "winner_variance": 0.24750000000000005,
+        "temperature_variance": 0.05527707983925666,
+        "overall_stability": 0.9447229201607433
+      },
+      "temperature_effect": 0.05527707983925666,
+      "stable_evaluation": false
+    },
+    "AR-003": {
+      "task_id": "AR-003",
+      "num_runs": 60,
+      "average_kappa": 0.18485115550332942,
+      "kappa_std": 0.12987878492616795,
+      "winner_consistency": 0.55,
+      "score_variance": {
+        "winner_variance": 0.2475,
+        "temperature_variance": 0.1190238071423808,
+        "overall_stability": 0.8809761928576192
+      },
+      "temperature_effect": 0.1190238071423808,
+      "stable_evaluation": false
+    },
+    "HP-001": {
+      "task_id": "HP-001",
+      "num_runs": 60,
+      "average_kappa": 0.15448076661397575,
+      "kappa_std": 0.1821021465475856,
+      "winner_consistency": 0.5333333333333333,
+      "score_variance": {
+        "winner_variance": 0.2488888888888889,
+        "temperature_variance": 0.04714045207910316,
+        "overall_stability": 0.9528595479208969
+      },
+      "temperature_effect": 0.04714045207910316,
+      "stable_evaluation": false
+    },
+    "HP-002": {
+      "task_id": "HP-002",
+      "num_runs": 60,
+      "average_kappa": 0.07893197797479928,
+      "kappa_std": 0.2579461940852456,
+      "winner_consistency": 0.5833333333333334,
+      "score_variance": {
+        "winner_variance": 0.24305555555555564,
+        "temperature_variance": 0.1280190957978101,
+        "overall_stability": 0.8719809042021899
+      },
+      "temperature_effect": 0.1280190957978101,
+      "stable_evaluation": false
+    },
+    "CT-002": {
+      "task_id": "CT-002",
+      "num_runs": 60,
+      "average_kappa": -0.08093127829969933,
+      "kappa_std": 0.29464910022236024,
+      "winner_consistency": 0.48333333333333334,
+      "score_variance": {
+        "winner_variance": 0.2497222222222222,
+        "temperature_variance": 0.07264831572567787,
+        "overall_stability": 0.9273516842743221
+      },
+      "temperature_effect": 0.07264831572567787,
+      "stable_evaluation": false
+    },
+    "CT-003": {
+      "task_id": "CT-003",
+      "num_runs": 60,
+      "average_kappa": -0.023952470293933752,
+      "kappa_std": 0.19199628668801252,
+      "winner_consistency": 0.55,
+      "score_variance": {
+        "winner_variance": 0.24750000000000003,
+        "temperature_variance": 0.16583123951776998,
+        "overall_stability": 0.83416876048223
+      },
+      "temperature_effect": 0.16583123951776998,
+      "stable_evaluation": false
+    },
+    "CT-001": {
+      "task_id": "CT-001",
+      "num_runs": 60,
+      "average_kappa": 0.004136619268198212,
+      "kappa_std": 0.2307626746491877,
+      "winner_consistency": 0.5166666666666667,
+      "score_variance": {
+        "winner_variance": 0.2497222222222222,
+        "temperature_variance": 0.07264831572567787,
+        "overall_stability": 0.9273516842743221
+      },
+      "temperature_effect": 0.07264831572567787,
+      "stable_evaluation": false
+    },
+    "HP-003": {
+      "task_id": "HP-003",
+      "num_runs": 60,
+      "average_kappa": -0.03797116955011687,
+      "kappa_std": 0.2891651116682751,
+      "winner_consistency": 0.48333333333333334,
+      "score_variance": {
+        "winner_variance": 0.2497222222222222,
+        "temperature_variance": 0.08660254037844384,
+        "overall_stability": 0.9133974596215562
+      },
+      "temperature_effect": 0.08660254037844384,
+      "stable_evaluation": false
+    }
+  },
+  "analysis": {
+    "total_tasks_tested": 10,
+    "average_inter_temperature_kappa": -0.012836229767875074,
+    "kappa_std": 0.11464844163623293,
+    "average_winner_consistency": 0.5033333333333333,
+    "average_temperature_effect": 0.09691345927120436,
+    "max_temperature_effect": 0.16666666666666666,
+    "stable_evaluations": 0,
+    "stability_percentage": 0.0,
+    "overall_consistency": "Poor consistency - temperature effects significant",
+    "recommendations": [
+      "Low inter-temperature agreement - consider using temperature=0 for consistency",
+      "Low agreement with gold standard - review evaluation methodology",
+      "Many evaluations are unstable - implement quality checks"
+    ]
+  }
+}
