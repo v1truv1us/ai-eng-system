@@ -1,0 +1,39 @@
+{
+  "task_id": "CT-001",
+  "pair_index": 5,
+  "baseline_response": "I would design a {{component}} with a clean layout using standard HTML and CSS. The component would have basic styling and functionality.",
+  "enhanced_response": "[DRY RUN] Mock response for CT-001 - enhanced variant",
+  "evaluation": {
+    "accuracy": {
+      "score": 3,
+      "reasoning": "Baseline accuracy assessment: 3.1/5"
+    },
+    "completeness": {
+      "score": 3,
+      "reasoning": "Baseline completeness assessment: 3.1/5"
+    },
+    "clarity": {
+      "score": 3,
+      "reasoning": "Baseline clarity assessment: 3.1/5"
+    },
+    "actionability": {
+      "score": 3,
+      "reasoning": "Baseline actionability assessment: 3.1/5"
+    },
+    "relevance": {
+      "score": 3,
+      "reasoning": "Baseline relevance assessment: 3.1/5"
+    },
+    "overall": {
+      "baseline_score": 3.0858431258712153,
+      "enhanced_score": 3.9723657069622416,
+      "winner": "enhanced",
+      "reasoning": "Enhanced response shows superior quality and depth"
+    }
+  },
+  "timestamp": "2025-12-07T05:33:45.328Z",
+  "metadata": {
+    "evaluator": "local-heuristic",
+    "method": "content-analysis"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "task_id": "CT-002",
+  "pair_index": 3,
+  "baseline_response": "[DRY RUN] Mock response for CT-002 - baseline variant",
+  "enhanced_response": "[DRY RUN] Mock response for CT-002 - enhanced variant",
+  "evaluation": {
+    "accuracy": {
+      "score": 4,
+      "reasoning": "Baseline accuracy assessment: 3.6/5"
+    },
+    "completeness": {
+      "score": 4,
+      "reasoning": "Baseline completeness assessment: 3.6/5"
+    },
+    "clarity": {
+      "score": 4,
+      "reasoning": "Baseline clarity assessment: 3.6/5"
+    },
+    "actionability": {
+      "score": 4,
+      "reasoning": "Baseline actionability assessment: 3.6/5"
+    },
+    "relevance": {
+      "score": 4,
+      "reasoning": "Baseline relevance assessment: 3.6/5"
+    },
+    "overall": {
+      "baseline_score": 3.5837006096760926,
+      "enhanced_score": 4.300144557479965,
+      "winner": "enhanced",
+      "reasoning": "Enhanced response shows superior quality and depth"
+    }
+  },
+  "timestamp": "2025-12-07T05:33:45.331Z",
+  "metadata": {
+    "evaluator": "local-heuristic",
+    "method": "content-analysis"
+  }
+}

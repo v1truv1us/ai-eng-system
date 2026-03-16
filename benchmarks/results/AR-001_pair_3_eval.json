@@ -1,0 +1,39 @@
+{
+  "task_id": "AR-001",
+  "pair_index": 3,
+  "baseline_response": "[DRY RUN] Mock response for AR-001 - baseline variant",
+  "enhanced_response": "[DRY RUN] Mock response for AR-001 - enhanced variant",
+  "evaluation": {
+    "accuracy": {
+      "score": 3,
+      "reasoning": "Baseline accuracy assessment: 3.4/5"
+    },
+    "completeness": {
+      "score": 3,
+      "reasoning": "Baseline completeness assessment: 3.4/5"
+    },
+    "clarity": {
+      "score": 3,
+      "reasoning": "Baseline clarity assessment: 3.4/5"
+    },
+    "actionability": {
+      "score": 3,
+      "reasoning": "Baseline actionability assessment: 3.4/5"
+    },
+    "relevance": {
+      "score": 3,
+      "reasoning": "Baseline relevance assessment: 3.4/5"
+    },
+    "overall": {
+      "baseline_score": 3.3597799250855394,
+      "enhanced_score": 4.582220884672545,
+      "winner": "enhanced",
+      "reasoning": "Enhanced response shows superior quality and depth"
+    }
+  },
+  "timestamp": "2025-12-07T05:33:45.333Z",
+  "metadata": {
+    "evaluator": "local-heuristic",
+    "method": "content-analysis"
+  }
+}

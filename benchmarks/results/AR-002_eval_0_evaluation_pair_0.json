@@ -1,0 +1,20 @@
+{
+  "task_id": "AR-002_eval_0",
+  "prompt_type": "evaluation",
+  "variant_id": "pair_0",
+  "prompt": "You are evaluating an AI assistant's response quality.\n\n**Task:** \n\n**Baseline Response:**",
+  "response": "\ud83d\udd27 Ferg Engineering System loaded\nVS Response Evaluation:\n\nResponse: \"exit\"\n\nEvaluation Criteria:\naccuracy: 1/5\ncompleteness: 1/5\nclarity: 1/5\nactionability: 1/5\nrelevance: 1/5\n\nOverall Score: 1.0/5\n\nContext: Evaluating AI assistant response quality for unspecified task\n\nRecommendation: Response needs significant improvement in VS methodology adherence",
+  "metadata": {
+    "task_id": "AR-002_eval_0",
+    "prompt_type": "evaluation",
+    "variant_id": "pair_0",
+    "timestamp": 1765066663.725321,
+    "provider": "opencode",
+    "model": "opencode-cli",
+    "tokens_used": 54,
+    "cost_estimate": null,
+    "response_time_ms": 36106,
+    "cached": false
+  },
+  "cached": false
+}
