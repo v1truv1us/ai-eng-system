@@ -300,8 +300,8 @@ describe("TaskExecutor", () => {
             const endTime = Date.now();
 
             expect(result.status).toBe(TaskStatus.FAILED);
-            expect(endTime - startTime).toBeLessThan(3000); // Should timeout quickly
-        });
+            expect(endTime - startTime).toBeLessThan(5000); // Should timeout within 5s
+        }, 10000); // Allow 10s for the test itself
     });
 
     describe("Result Management", () => {

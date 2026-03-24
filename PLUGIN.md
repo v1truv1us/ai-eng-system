@@ -30,9 +30,11 @@ claude plugin link .
 ### Verification
 
 After installation, verify in Claude Code:
-- **16 Commands available**: `/plan`, `/review`, `/seo`, `/work`, `/compound`, `/deploy`, `/optimize`, `/clean`, `/recursive-init`, `/research`, `/context`, `/create-plugin`, `/create-agent`, `/create-command`, `/create-skill`, `/create-tool`
-- **29 Agents available**: All specialized agents for development, testing, deployment, and architecture
-- **Skills**: DevOps, prompting, and research skills
+- **15 Commands available**: `/plan`, `/review`, `/seo`, `/work`, `/deploy`, `/research`, `/context`, `/create-plugin`, `/create-agent`, `/create-command`, `/create-skill`, `/create-tool`, `/init`, `/specify`, `/ralph-wiggum`
+- **28 Agents available**: All specialized agents for development, testing, deployment, and architecture
+- **12+ Skills**: knowledge-capture, monorepo-initialization, content-optimization, text-cleanup, devops, prompting, research, and more
+
+**Note**: `compound`, `recursive-init`, `clean`, and `optimize` commands were converted to skills for better organization. See `docs/COMMAND-MIGRATION.md`.
 
 ## OpenCode Installation
 
@@ -81,12 +83,13 @@ After installation, verify in OpenCode:
 Expected output shows all available commands and agents:
 
 ```
-Available commands (16): /ai-eng/plan, /ai-eng/review, /ai-eng/seo, /ai-eng/work,
+Available commands (19): /ai-eng/plan, /ai-eng/review, /ai-eng/seo, /ai-eng/work,
 /ai-eng/compound, /ai-eng/deploy, /ai-eng/optimize, /ai-eng/clean, /ai-eng/recursive-init,
 /ai-eng/research, /ai-eng/context, /ai-eng/create-plugin, /ai-eng/create-agent,
-/ai-eng/create-command, /ai-eng/create-skill, /ai-eng/create-tool
+/ai-eng/create-command, /ai-eng/create-skill, /ai-eng/create-tool, /ai-eng/init,
+/ai-eng/specify, /ai-eng/ralph-wiggum
 
-Available agents (24): ai-eng/architect-advisor, ai-eng/frontend-reviewer,
+Available agents (28): ai-eng/architect-advisor, ai-eng/frontend-reviewer,
 ai-eng/seo-specialist, ai-eng/prompt-optimizer, ai-eng/agent-creator,
 ai-eng/command-creator, ai-eng/skill-creator, ai-eng/tool-creator,
 ai-eng/plugin-validator, ai-eng/code-reviewer, ai-eng/database-optimizer,
@@ -94,7 +97,8 @@ ai-eng/api-builder-enhanced, ai-eng/full-stack-developer, ai-eng/deployment-engi
 ai-eng/ml-engineer, ai-eng/security-scanner, ai-eng/performance-engineer,
 ai-eng/test-generator, ai-eng/monitoring-expert, ai-eng/cost-optimizer,
 ai-eng/infrastructure-builder, ai-eng/backend-architect, ai-eng/java-pro,
-ai-eng/ai-engineer
+ai-eng/ai-engineer, ai-eng/documentation-specialist, ai-eng/docs-writer,
+ai-eng/text-cleaner, ai-eng/subagent-orchestration
 ```
 
 **If components are missing**, the system will show installation errors. Re-run the installation command for your chosen method.
@@ -150,7 +154,7 @@ Both Claude Code and OpenCode share the same command and agent definitions:
 - Applies expert personas, step-by-step reasoning, and stakes language
 - +45% quality improvement based on MBZUAI, DeepMind, ICLR 2024 research
 
-### Specialized Agents (24 Total)
+### Specialized Agents (28 Total)
 
 **Architecture & Planning**
 - `ai-eng/architect-advisor` - System architecture decisions and trade-off analysis
