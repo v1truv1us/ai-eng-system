@@ -211,7 +211,7 @@ Do NOT assume or make default choices. Mark it and let user clarify before imple
 
 **User Responses:**
 - Task: User login, password reset
-- Context: Adding to existing Next.js app with PostgreSQL
+- Context: Adding to existing web application with PostgreSQL
 - Requirements: Must-have: email/password, JWT sessions, password reset
 - Acceptance: All core flows work and are tested
 - Output: Full spec with NFRs
@@ -222,9 +222,9 @@ Do NOT assume or make default choices. Mark it and let user clarify before imple
 Task: Specify user authentication system with login and password reset capabilities
 Context:
   - Users: End users accessing web application
-  - System: Existing Next.js 14 application with PostgreSQL database
+  - System: Existing application with PostgreSQL database
   - Trigger: User feedback and business requirement to secure application
-  - Existing patterns: API routes in /pages/api/, Prisma ORM in /lib/db.ts
+  - Existing patterns: API routes follow REST conventions, database access via ORM layer
 Requirements:
   Must-have:
   1. User registration with email and password
@@ -293,7 +293,7 @@ Context:
   - Users: Already authenticated users managing their accounts
   - System: Existing JWT-based authentication system
   - Trigger: User self-service requirement to improve account security
-  - Existing patterns: Follow API route patterns in /pages/api/auth/, use Prisma for database operations
+  - Existing patterns: Follow REST API patterns, use ORM for database operations
 Requirements:
   Must-have:
   1. Authenticated users can change their password while logged in

@@ -373,3 +373,10 @@ This skill incorporates methodologies from:
 - **Bsharat et al. (2023)** - Principled prompting for quality
 - **Kong et al. (2023)** - Expert persona effectiveness
 - **Yang et al. (2023)** - Step-by-step reasoning optimization
+
+## See Also
+
+- `deep-web-research` — For web-focused research with source evaluation
+- `research-companion` — For research with document analysis and fact-checking
+- `prompt-refinement` — For structuring research prompts before execution
+- `incentive-prompting` — For enhancing research agent prompts

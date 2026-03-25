@@ -367,3 +367,9 @@ After loop completes:
 - [Awesome Claude - Ralph Wiggum](https://awesomeclaude.ai/ralph-wiggum) - Official documentation
 - [Geoffrey Huntley's Blog](https://ghuntley.com/ralph/) - Original technique creator
 - [Ralph Orchestrator](https://github.com/mikeyobrien/ralph-orchestrator) - Community management tool
+
+## See Also
+
+- `git-worktree` — For running parallel Ralph Wiggum loops on different branches
+- `simplify` — For simplifying code after iterations complete
+- `text-cleanup` — For removing verbosity after AI-generated fixes

@@ -3,6 +3,9 @@
   "version": "0.3.0",
   "description": "Ferg Engineering System: AI-powered engineering automation with comprehensive research, validation, and deployment workflows",
   "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
   "main": "dist/index.js",
   "bin": {
     "ferg-install": "scripts/install.js"
@@ -72,13 +75,10 @@
   "author": "John Ferguson",
   "license": "MIT",
   "dependencies": {
-    "@opencode-ai/sdk": "^1.0.134",
-    "yaml": "^2.8.2"
-  },
-  "dependencies": {
     "@ai-eng-system/core": "workspace:*",
     "@opencode-ai/plugin": "^1.1.13",
-    "@opencode-ai/sdk": "^1.1.13"
+    "@opencode-ai/sdk": "^1.1.13",
+    "yaml": "^2.8.2"
   },
   "devDependencies": {
     "@types/bun": "latest",

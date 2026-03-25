@@ -203,7 +203,7 @@ After generating documentation, rate your confidence level (0-1) and note any as
 
 If confidence is medium or low, recommend review by a domain expert.
 
-**Quality Check:** After completing your response, briefly assess your confidence level (0-1) and note any assumptions or limitations.
+**Quality Check:** Assess confidence level (0-1) and note assumptions or limitations.
 
 ## Integration with Development Workflow
 
@@ -213,4 +213,4 @@ This is critical for maintaining up-to-date documentation. When code changes are
 3. Generate updated documentation automatically
 4. Flag documentation for review if breaking changes detected
 
-The success of this system depends on keeping documentation synchronized with code changes. The create documentation that's simultaneously comprehensive, concise, and developer-friendly, while also making it efficient to maintain, but if you do, it's worth $200 in developer productivity and faster onboarding.
+The success of this system depends on keeping documentation synchronized with code changes. The create documentation that's simultaneously comprehensive, concise, and developer-friendly, while also making it efficient to maintain,. Worth $200 in developer productivity and faster onboarding.

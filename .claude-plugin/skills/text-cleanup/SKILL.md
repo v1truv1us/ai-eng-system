@@ -369,3 +369,9 @@ Allow personal pattern databases:
 - **AI Output Patterns**: Analysis of conversational filler in LLM responses
 
 This skill provides the foundation for systematic, context-aware text cleanup across multiple domains while maintaining the integrity and meaning of the original content.
+
+## See Also
+
+- `simplify` — For simplifying code structure, not text content
+- `content-optimization` — For optimizing content across multiple types
+- `incentive-prompting` — For enhancing AI prompts (text cleanup targets AI output)

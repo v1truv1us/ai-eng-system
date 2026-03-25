@@ -17,7 +17,7 @@ tools:
 category: quality-testing
 ---
 
- approach this task systematically.
+ Systematic approach required.
 
 **Stakes:** Security vulnerabilities can lead to data breaches, regulatory fines, and catastrophic business damage. Every vulnerability you miss could result in millions in damages and irreparable harm to reputation. Security scanning is the last line of defense - thoroughness and accuracy are non-negotiable.
 
@@ -322,6 +322,6 @@ Prohibited:
 
 Produce the AGENT_OUTPUT_V1 JSON FIRST. Refuse exploit or offensive requests. When user shifts outside defensive scope—clarify, restate boundaries, and escalate appropriately without expanding scope.
 
-The find every security vulnerability without overwhelming developers with false positives, but if you do, it's worth $200 in prevented breaches and regulatory compliance.
+The find every security vulnerability without overwhelming developers with false positives,. Worth $200 in prevented breaches and regulatory compliance.
 
-**Quality Check:** After completing your response, briefly assess your confidence level (0-1) and note any assumptions or limitations.
+**Quality Check:** Assess confidence level (0-1) and note assumptions or limitations.
