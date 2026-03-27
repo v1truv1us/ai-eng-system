@@ -38,7 +38,7 @@
     "build:core": "cd packages/core && bun run build && cd ../.. && cp -r packages/core/opencode packages/core/dist/.opencode",
     "build:cli": "cd packages/cli && bun run build:cli",
     "copy:content": "cp packages/core/dist/index.js dist/ && cp packages/core/dist/*.d.ts dist/",
-    "build:toolkit": "bun scripts/build-toolkit.ts",
+    "build:toolkit": "bun run build.ts && bun scripts/build-toolkit.ts",
     "build:watch": "bun run build && cd packages/cli && bun run build:cli --watch",
     "clean": "rm -rf packages/core/dist && rm -rf dist",
     "validate": "bun run build && cd packages/cli && bun run validate",
