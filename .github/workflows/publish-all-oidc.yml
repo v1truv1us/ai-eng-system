@@ -78,7 +78,7 @@ jobs:
         run: bun test
       - name: Run CLI tests
         working-directory: ./packages/cli
-        run: bun test
+        run: bun run test:build
       - name: Publish core (dry-run)
         if: contains(env.PACKAGES_TO_PUBLISH, 'core') && github.event.inputs.dry_run == 'true'
         working-directory: ./packages/core

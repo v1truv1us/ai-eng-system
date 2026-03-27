@@ -32,7 +32,7 @@ import {
     rm,
     writeFile,
 } from "node:fs/promises";
-import { basename, dirname, join } from "node:path";
+import { basename, dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import YAML from "yaml";
 
@@ -180,6 +180,7 @@ function validateSkillName(name: string, filePath: string): void {
 
 interface SkillInfo {
     name: string;
+    relativeDir: string;
     sourceDir: string; // Full path to skill directory
     skillFile: string; // Full path to SKILL.md
 }
@@ -229,17 +230,22 @@ async function discoverSkills(skillsRoot: string): Promise<SkillInfo[]> {
         // Validate skill name format
         validateSkillName(name, skillFile);
 
-        skills.push({ name, sourceDir, skillFile });
+        skills.push({
+            name,
+            relativeDir: relative(skillsRoot, sourceDir),
+            sourceDir,
+            skillFile,
+        });
     }
 
     return skills;
 }
 
 /**
- * Copy skills with flattened structure
- * Takes nested skills from source and copies them flat to destination
+ * Copy skills while preserving relative directory structure.
+ * This keeps namespaces like ai-eng/simplify intact in generated outputs.
  */
-async function copySkillsFlat(
+async function copySkillsPreservePath(
     skillsRoot: string,
     destDir: string,
 ): Promise<void> {
@@ -249,20 +255,9 @@ async function copySkillsFlat(
 
     await mkdir(destDir, { recursive: true });
 
-    // Check for duplicate skill names
-    const seenNames = new Map<string, string>();
+    // Copy each skill preserving relative namespace/category folders
     for (const skill of skills) {
-        if (seenNames.has(skill.name)) {
-            throw new Error(
-                `Duplicate skill name '${skill.name}' found in:\n  - ${seenNames.get(skill.name)}\n  - ${skill.sourceDir}`,
-            );
-        }
-        seenNames.set(skill.name, skill.sourceDir);
-    }
-
-    // Copy each skill to flat destination
-    for (const skill of skills) {
-        const destSkillDir = join(destDir, skill.name);
+        const destSkillDir = join(destDir, skill.relativeDir);
         await copyDirRecursive(skill.sourceDir, destSkillDir);
     }
 }
@@ -371,28 +366,20 @@ async function validateOpenCodeOutput(opencodeRoot: string): Promise<void> {
             );
     }
 
-    // Validate skills (if present)
+    // Validate skills (if present), preserving nested namespace folders.
     if (existsSync(skillRoot)) {
-        const skillDirs = await readdir(skillRoot, { withFileTypes: true });
-        for (const entry of skillDirs) {
-            if (!entry.isDirectory()) continue;
+        const skillFiles = await getMarkdownFiles(skillRoot);
+        for (const skillMdPath of skillFiles.filter((fp) => fp.endsWith("/SKILL.md"))) {
+            const skillDirName = basename(dirname(skillMdPath));
 
-            const skillMdPath = join(skillRoot, entry.name, "SKILL.md");
-            if (!existsSync(skillMdPath)) {
-                errors.push(`Skill directory missing SKILL.md: ${entry.name}/`);
-                continue;
-            }
-
-            // Validate skill name
             try {
-                validateSkillName(entry.name, skillMdPath);
+                validateSkillName(skillDirName, skillMdPath);
 
-                // Validate frontmatter name matches directory
                 const content = await readFile(skillMdPath, "utf-8");
                 const { meta } = parseFrontmatterStrict(content, skillMdPath);
-                if (meta.name && meta.name !== entry.name) {
+                if (meta.name && meta.name !== skillDirName) {
                     errors.push(
-                        `Skill frontmatter name '${meta.name}' must match directory name '${entry.name}': ${skillMdPath}`,
+                        `Skill frontmatter name '${meta.name}' must match directory name '${skillDirName}': ${skillMdPath}`,
                     );
                 }
             } catch (e) {
@@ -536,9 +523,9 @@ async function buildOpenCode(): Promise<void> {
             );
         }
 
-        // Skills: Copy to .opencode/skill/ (singular, flat structure)
-        // This is OpenCode's expected location: https://opencode.ai/docs/skills
-        await copySkillsFlat(SKILLS_DIR, skillsDir);
+        // Skills: Copy to .opencode/skill/ (singular) while preserving namespaces.
+        // This keeps paths like ai-eng/simplify intact in generated outputs.
+        await copySkillsPreservePath(SKILLS_DIR, skillsDir);
 
         // Copy OpenCode config
         const opencodeConfigSrc = join(ROOT, ".opencode", "opencode.jsonc");
@@ -806,10 +793,10 @@ async function syncToLocalClaude(): Promise<void> {
     await cleanDirectory(claudeCommandsDir);
     await copyMarkdownFiles(join(CONTENT_DIR, "commands"), claudeCommandsDir);
 
-    // Sync skills (flat structure for Claude Code)
+    // Sync skills while preserving namespace/category folders.
     const claudeSkillsDir = join(ROOT_CLAUDE_DIR, "skills");
     await cleanDirectory(claudeSkillsDir);
-    await copySkillsFlat(SKILLS_DIR, claudeSkillsDir);
+    await copySkillsPreservePath(SKILLS_DIR, claudeSkillsDir);
 
     // Sync hooks to .claude/hooks/ directory
     const claudeHooksDir = join(ROOT_CLAUDE_DIR, "hooks");
@@ -933,7 +920,7 @@ async function syncToMarketplacePlugin(): Promise<void> {
     // Sync skills
     const mpSkillsDir = join(MARKETPLACE_PLUGIN_DIR, "skills");
     await cleanDirectory(mpSkillsDir);
-    await copySkillsFlat(SKILLS_DIR, mpSkillsDir);
+    await copySkillsPreservePath(SKILLS_DIR, mpSkillsDir);
 
     // Sync plugin.json and hooks directory from dist/.claude-plugin/
     const distPluginJson = join(CLAUDE_DIR, "plugin.json");
