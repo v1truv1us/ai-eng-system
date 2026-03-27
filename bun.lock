@@ -18,7 +18,7 @@
     },
     "packages/cli": {
       "name": "@ai-eng-system/cli",
-      "version": "0.5.5",
+      "version": "0.5.6",
       "bin": {
         "ai-eng": "bun.ts",
       },
@@ -44,17 +44,23 @@
     },
     "packages/core": {
       "name": "@ai-eng-system/core",
-      "version": "0.5.5",
+      "version": "0.5.6",
       "devDependencies": {
         "@types/node": "^22.0.0",
         "typescript": "^5.9.3",
       },
+    },
+    "packages/toolkit": {
+      "name": "@ai-eng-system/toolkit",
+      "version": "0.5.6",
     },
   },
   "packages": {
     "@ai-eng-system/cli": ["@ai-eng-system/cli@workspace:packages/cli"],
 
     "@ai-eng-system/core": ["@ai-eng-system/core@workspace:packages/core"],
+
+    "@ai-eng-system/toolkit": ["@ai-eng-system/toolkit@workspace:packages/toolkit"],
 
     "@astrojs/compiler": ["@astrojs/compiler@2.13.1", "", {}, "sha512-f3FN83d2G/v32ipNClRKgYv30onQlMZX1vCeZMjPsMMPl1mDpmbl0+N5BYo4S/ofzqJyS5hvwacEo0CCVDn/Qg=="],
 
