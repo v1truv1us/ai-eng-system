@@ -34,6 +34,30 @@ try {
 
     await writeFile(packageJsonPath, `${JSON.stringify(pkg, null, 2)}\n`);
 
+    if (pkg.name === "@ai-eng-system/core") {
+        const coreIndexPath = resolve(process.cwd(), "src/index.ts");
+        const coreIndex = await readFile(coreIndexPath, "utf-8");
+        const updatedCoreIndex = coreIndex.replace(
+            /export const version = "[^"]+";/,
+            `export const version = "${VERSION}";`,
+        );
+        if (updatedCoreIndex !== coreIndex) {
+            await writeFile(coreIndexPath, updatedCoreIndex);
+        }
+    }
+
+    if (pkg.name === "@ai-eng-system/toolkit") {
+        const toolkitIndexPath = resolve(process.cwd(), "index.js");
+        const toolkitIndex = await readFile(toolkitIndexPath, "utf-8");
+        const updatedToolkitIndex = toolkitIndex.replace(
+            /export const version = "[^"]+";/,
+            `export const version = "${VERSION}";`,
+        );
+        if (updatedToolkitIndex !== toolkitIndex) {
+            await writeFile(toolkitIndexPath, updatedToolkitIndex);
+        }
+    }
+
     console.log(`Updated package.json version to ${VERSION}`);
 } catch (error) {
     console.error("Failed to update package.json:", error);

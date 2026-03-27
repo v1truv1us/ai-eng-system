@@ -1,6 +1,6 @@
 {
   "name": "@ai-eng-system/cli",
-  "version": "0.5.3",
+  "version": "0.5.6",
   "description": "Compounding engineering system for Claude Code and OpenCode. Shared agents, commands, skills, and plugin development tools.",
   "type": "module",
   "main": "./dist/index.js",
@@ -44,7 +44,7 @@
     "changelog:major": "standard-version --release-as major",
     "changelog:dry-run": "standard-version --dry-run",
     "version-set": "bun scripts/version-set.ts",
-    "publish": "npm publish"
+    "publish": "bun publish"
   },
   "keywords": [
     "engineering",

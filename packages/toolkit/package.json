@@ -1,0 +1,56 @@
+{
+  "name": "@ai-eng-system/toolkit",
+  "version": "0.5.6",
+  "description": "Packaged Claude, OpenCode, and marketplace integration assets for ai-eng-system",
+  "type": "module",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    }
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    ".claude-plugin/",
+    ".opencode/",
+    "plugins/",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "bun ../../scripts/build-toolkit.ts",
+    "clean": "rm -rf .claude-plugin .opencode plugins"
+  },
+  "keywords": [
+    "ai-engineering",
+    "claude-code",
+    "opencode",
+    "plugin",
+    "toolkit"
+  ],
+  "author": {
+    "name": "v1truv1us",
+    "email": "contact@v1truv1us.dev",
+    "url": "https://github.com/v1truv1us"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/v1truv1us/ai-eng-system.git"
+  },
+  "bugs": {
+    "url": "https://github.com/v1truv1us/ai-eng-system/issues"
+  },
+  "homepage": "https://github.com/v1truv1us/ai-eng-system#readme",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "bun": ">=1.0.0"
+  }
+}

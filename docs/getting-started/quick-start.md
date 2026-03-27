@@ -6,7 +6,7 @@ Get started with ai-eng-system in three steps.
 
 ## Install Package
 
-Install globally: `npm install -g ai-eng-system`
+Install globally: `npm install -g @ai-eng-system/cli`
 
 Run installation: `npm run install:global`
 

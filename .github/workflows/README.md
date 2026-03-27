@@ -26,9 +26,9 @@ This directory contains the fresh OIDC publishing workflows that bypass GitHub A
 - **Purpose**: Publish all packages together with coordinated versioning
 - **Trigger**: `v*` tags or manual dispatch
 - **Features**:
-  - Matrix strategy for parallel publishing
+  - Sequential publish order: core -> toolkit -> cli
   - Selective package publishing
-  - Unified GitHub release for all packages
+  - Root build once, then reuse generated toolkit assets
   - Coordinated version management
 
 ### 4. `test-oidc-publishing.yml`
@@ -66,14 +66,20 @@ registry=https://registry.npmjs.org/
 
 ### Core Package (`@ai-eng-system/core`)
 - **Location**: `packages/core/`
-- **Current Version**: 0.4.5
+- **Current Version**: 0.5.6
 - **Files**: dist/, content/, skills/, README.md, LICENSE
 
 ### CLI Package (`@ai-eng-system/cli`)
 - **Location**: `packages/cli/`
-- **Current Version**: 0.4.4
+- **Current Version**: 0.5.6
 - **Binary**: `ai-eng`
 - **Dependencies**: @ai-eng-system/core
+
+### Toolkit Package (`@ai-eng-system/toolkit`)
+- **Location**: `packages/toolkit/`
+- **Current Version**: 0.5.6
+- **Contents**: `.claude-plugin/`, `.opencode/`, `plugins/ai-eng-system/`
+- **Source of truth**: generated root build artifacts
 
 ## 🏷️ Tag Patterns
 
@@ -82,7 +88,7 @@ registry=https://registry.npmjs.org/
 - CLI: `cli-v0.5.1` → Publishes only CLI package
 
 ### Full Release Tags
-- Combined: `v0.5.0` → Publishes all packages with same version
+- Combined: `v0.5.6` → Publishes all packages with same version
 
 ## 🛡️ Security Features
 
@@ -120,29 +126,23 @@ gh workflow run test-oidc-publishing.yml -f dry_run=true -f package=all
 
 ### Production Publishing
 ```bash
-# Publish core package
-gh workflow run publish-core-oidc.yml -f version=0.5.0 -f dry_run=false
-
-# Publish CLI package
-gh workflow run publish-cli-oidc.yml -f version=0.5.0 -f dry_run=false
-
 # Publish all packages
-gh workflow run publish-all-oidc.yml -f version=0.5.0 -f packages=core,cli -f dry_run=false
+gh workflow run publish-all-oidc.yml -f version=0.5.6 -f packages=core,toolkit,cli -f dry_run=false
 ```
 
 ### Tag-Based Publishing
 ```bash
 # Tag for core package
-git tag core-v0.5.0
-git push origin core-v0.5.0
+git tag core-v0.5.6
+git push origin core-v0.5.6
 
 # Tag for CLI package
-git tag cli-v0.5.0
-git push origin cli-v0.5.0
+git tag cli-v0.5.6
+git push origin cli-v0.5.6
 
 # Tag for full release
-git tag v0.5.0
-git push origin v0.5.0
+git tag v0.5.6
+git push origin v0.5.6
 ```
 
 ## 🔍 Verification
@@ -150,8 +150,9 @@ git push origin v0.5.0
 ### Provenance Verification
 ```bash
 # Check package provenance
-npm view @ai-eng-system/core@0.5.0 --json | jq '.dist'
-npm view @ai-eng-system/cli@0.5.0 --json | jq '.dist'
+npm view @ai-eng-system/core@0.5.6 --json | jq '.dist'
+npm view @ai-eng-system/toolkit@0.5.6 --json | jq '.dist'
+npm view @ai-eng-system/cli@0.5.6 --json | jq '.dist'
 ```
 
 ### GitHub Release Verification
@@ -227,7 +228,7 @@ npm config list
 ## 🚨 Important Notes
 
 1. **Cache Bypass**: New workflow names ensure no GitHub Actions caching issues
-2. **Provenance Required**: All packages now require OIDC provenance
+2. **Provenance Required**: All published packages now require OIDC provenance
 3. **Security First**: Minimal permissions and zero-trust publishing model
 4. **Automated Testing**: Comprehensive validation before every publish
 5. **Rollback Ready**: Automated rollback capabilities for failed publishes

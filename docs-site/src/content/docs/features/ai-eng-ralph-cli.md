@@ -24,7 +24,7 @@ Each iteration automatically improves based on results, creating a continuous lo
 Install globally via npm (works with Node.js or Bun):
 
 ```bash
-npm install -g ai-eng-system
+npm install -g @ai-eng-system/cli
 
 # Run the CLI
 ai-eng ralph "implement user authentication"

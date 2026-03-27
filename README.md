@@ -73,7 +73,7 @@ See [docs/spec-driven-workflow.md](./docs/spec-driven-workflow.md) for complete 
 
 ```bash
 # Install globally via npm (requires Node.js or Bun)
-npm install -g ai-eng-system
+npm install -g @ai-eng-system/cli
 ai-eng ralph "implement user authentication"
 
 # Or run directly from source (requires Bun)

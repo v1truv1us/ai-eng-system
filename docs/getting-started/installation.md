@@ -12,7 +12,7 @@ Node.js 18+ required. Python 3+ needed for hooks.
 
 ## npm Installation
 
-Install globally: `npm install -g ai-eng-system`
+Install globally: `npm install -g @ai-eng-system/cli`
 
 Install locally: `npm install ai-eng-system`
 

@@ -1,6 +1,6 @@
 {
   "name": "@ai-eng-system/core",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "description": "AI Engineering System - Core agents, skills, and commands",
   "type": "module",
   "main": "./dist/index.js",
@@ -29,7 +29,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "bun run typecheck && bun build src/index.ts --outdir dist --target node --format esm",
+    "build": "bun run typecheck && bun build src/index.ts --outdir dist --target node --format esm && rm -rf dist/.opencode dist/.claude-plugin && cp -R opencode dist/.opencode && cp -R claude dist/.claude-plugin",
     "dev": "bun build src/index.ts --outdir dist --target node --format esm --watch",
     "clean": "rm -rf dist",
     "typecheck": "tsc --project tsconfig.json --emitDeclarationOnly",

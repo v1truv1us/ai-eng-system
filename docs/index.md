@@ -6,7 +6,7 @@ Comprehensive documentation for the AI Engineering System toolkit.
 
 ## Quick Start
 
-Install the package globally: `npm install -g ai-eng-system`
+Install the CLI globally: `npm install -g @ai-eng-system/cli`
 
 Run the install script: `npm run install:global`
 

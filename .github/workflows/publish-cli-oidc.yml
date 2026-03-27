@@ -3,11 +3,11 @@ name: Publish CLI Package (OIDC)
 on:
   push:
     tags:
-      - 'cli-v*'  # Matches: cli-v0.4.5, cli-v0.5.0
+      - 'cli-v*'
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to publish (e.g., 0.5.1)'
+        description: 'Version to publish (e.g., 0.5.6)'
         required: true
         type: string
       dry_run:
@@ -21,14 +21,14 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      id-token: write  # Required for OIDC trusted publishing
+      id-token: write
     environment: production
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Ensure full history for provenance
+          fetch-depth: 0
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
@@ -40,16 +40,30 @@ jobs:
         with:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
-          
+
       - name: Configure environment variables
         run: |
           echo "NPM_CONFIG_PROVENANCE=true" >> $GITHUB_ENV
           echo "NPM_CONFIG_AUDIT=false" >> $GITHUB_ENV
           echo "NPM_CONFIG_FUND=false" >> $GITHUB_ENV
 
-      - name: Install dependencies
-        working-directory: ./packages/cli
+      - name: Install workspace dependencies
         run: bun install --ignore-scripts --frozen-lockfile
+
+      - name: Set version from tag
+        if: github.event_name == 'push'
+        run: echo "VERSION=${GITHUB_REF#refs/tags/cli-v}" >> $GITHUB_ENV
+
+      - name: Set version from input
+        if: github.event_name == 'workflow_dispatch'
+        run: echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+
+      - name: Validate version format
+        run: |
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.-]+)?$ ]]; then
+            echo "❌ Invalid version format: $VERSION"
+            exit 1
+          fi
 
       - name: Build CLI package
         working-directory: ./packages/cli
@@ -59,151 +73,41 @@ jobs:
         working-directory: ./packages/cli
         run: bun test
 
+      - name: Prepare publish manifest
+        run: bun scripts/update-publish-versions.ts $VERSION
+
       - name: Validate CLI binary
         run: |
-          echo "🔍 Validating CLI binary..."
-          if [ -f "./packages/cli/dist/cli/run-cli.js" ]; then
-            echo "✅ CLI binary found"
-            ls -la ./packages/cli/dist/cli/
-          else
-            echo "❌ CLI binary missing"
-            exit 1
-          fi
+          test -f ./packages/cli/dist/cli/run-cli.js
+          test -f ./packages/cli/dist/cli/run.js
 
-      - name: Set version from tag
-        if: github.event_name == 'push'
-        run: |
-          VERSION="${GITHUB_REF#refs/tags/cli-v}"
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "Tag detected: $VERSION"
-
-      - name: Set version from input
-        if: github.event_name == 'workflow_dispatch'
-        run: |
-          VERSION="${{ github.event.inputs.version }}"
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "Manual version: $VERSION"
-
-      - name: Validate version format
-        run: |
-          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.-]+)?$ ]]; then
-            echo "❌ Invalid version format: $VERSION"
-            echo "Expected format: x.y.z or x.y.z-prerelease"
-            exit 1
-          fi
-          echo "✅ Version format valid: $VERSION"
-
-      - name: Update package.json version
-        run: |
-          cd packages/cli
-          bun ../../scripts/version-set.ts $VERSION
+      - name: Swap in publish manifest
+        run: bun scripts/prepublish-cli.ts
 
       - name: Verify package integrity
         working-directory: ./packages/cli
         run: |
-          echo "📦 Verifying CLI package contents..."
           echo "Version: $(jq -r .version package.json)"
           echo "Name: $(jq -r .name package.json)"
-          echo "Binary: $(jq -r .bin.ai-eng package.json)"
-          echo "Files to publish:"
-          jq -r '.files[]' package.json | head -10
+          echo "Core dependency: $(jq -r '.dependencies["@ai-eng-system/core"]' package.json)"
+          npm pack --dry-run > /tmp/cli-pack.txt
+          cat /tmp/cli-pack.txt
 
       - name: Configure NPM registry with OIDC
         run: |
           echo "@ai-eng-system:registry=https://registry.npmjs.org/" > ~/.npmrc
           echo "registry=https://registry.npmjs.org/" >> ~/.npmrc
 
-      - name: Generate provenance metadata
-        run: |
-          echo "🔐 Generating OIDC provenance metadata..."
-          echo "Repository: ${{ github.repository }}"
-          echo "Commit: ${{ github.sha }}"
-          echo "Workflow: ${{ github.workflow }}"
-          echo "Runner: ${{ runner.os }}"
-
       - name: Publish to NPM (dry-run)
         if: github.event.inputs.dry_run == 'true'
         working-directory: ./packages/cli
-        run: |
-          echo "🧪 Running dry-run publish for @ai-eng-system/cli@$VERSION"
-          npm publish --dry-run --access public --provenance
-          echo "✅ Dry-run completed successfully"
+        run: npm publish --dry-run --access public --provenance
 
       - name: Publish to NPM with OIDC provenance
         if: github.event.inputs.dry_run != 'true'
         working-directory: ./packages/cli
-        run: |
-          echo "🚀 Publishing @ai-eng-system/cli@$VERSION with OIDC trusted publishing"
-          echo "Provenance: enabled"
-          echo "Registry: https://registry.npmjs.org"
-          
-          npm publish --access public --provenance
-          
-          echo "✅ CLI package published successfully"
-          echo "📊 Package info: npm info @ai-eng-system/cli@$VERSION"
+        run: npm publish --access public --provenance
 
-      - name: Verify published package
-        if: github.event.inputs.dry_run != 'true'
-        run: |
-          echo "⏳ Waiting for package to be available..."
-          sleep 30
-          
-          # Verify package exists and has provenance
-          if npm view @ai-eng-system/cli@$VERSION --json | jq -e '.version' > /dev/null; then
-            echo "✅ Package verified on npm registry"
-            echo "🔐 Checking provenance..."
-            npm view @ai-eng-system/cli@$VERSION --json | jq '.dist'
-          else
-            echo "❌ Package verification failed"
-            exit 1
-          fi
-
-      - name: Create GitHub Release
-        if: github.event.inputs.dry_run != 'true'
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: cli-v${{ env.VERSION }}
-          name: CLI v${{ env.VERSION }}
-          draft: false
-          prerelease: false
-          body: |
-            ## @ai-eng-system/cli v${{ env.VERSION }}
-            
-            ### 🔐 OIDC Trusted Publishing
-            This package was published using **OIDC trusted publishing** with cryptographic provenance.
-            
-            ### 📦 Installation
-            ```bash
-            npm install -g @ai-eng-system/cli@${{ env.VERSION }}
-            ```
-            
-            ### 🚀 Quick Start
-            ```bash
-            ai-eng init                    # Initialize config
-            ai-eng "implement feature"     # Start development
-            ai-eng --help                  # Show all commands
-            ```
-            
-            ### ✨ What's Included
-            - Complete CLI interface with 29 specialized agents
-            - Built-in research, planning, and review workflows
-            - Plugin development tools and SDK integration
-            - Cross-platform support (Linux, macOS, Windows)
-            - Enhanced security with OIDC provenance
-            
-            ### 🔗 Package Information
-            - **Registry**: https://www.npmjs.com/package/@ai-eng-system/cli
-            - **Provenance**: Cryptographically signed via GitHub OIDC
-            - **Repository**: https://github.com/${{ github.repository }}
-            - **Documentation**: https://github.com/${{ github.repository }}/blob/main/packages/cli/README.md
-            
-            ---
-            Published with 🚀 via automated OIDC trusted publishing
-
-      - name: Notification
-        if: github.event.inputs.dry_run != 'true'
-        run: |
-          echo "🎉 CLI publish completed!"
-          echo "📦 Package: @ai-eng-system/cli@$VERSION"
-          echo "🔐 Provenance: Verified"
-          echo "🔗 Release: https://github.com/${{ github.repository }}/releases/tag/cli-v$VERSION"
+      - name: Restore development manifest
+        if: always()
+        run: bun scripts/postpublish-cli.ts

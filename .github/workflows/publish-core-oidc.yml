@@ -3,11 +3,11 @@ name: Publish Core Package (OIDC)
 on:
   push:
     tags:
-      - 'core-v*'  # Matches: core-v0.4.6, core-v0.5.0
+      - 'core-v*'
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to publish (e.g., 0.4.6)'
+        description: 'Version to publish (e.g., 0.5.6)'
         required: true
         type: string
       dry_run:
@@ -21,14 +21,14 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      id-token: write  # Required for OIDC trusted publishing
+      id-token: write
     environment: production
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Ensure full history for provenance
+          fetch-depth: 0
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
@@ -40,16 +40,35 @@ jobs:
         with:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
-          
+
       - name: Configure environment variables
         run: |
           echo "NPM_CONFIG_PROVENANCE=true" >> $GITHUB_ENV
           echo "NPM_CONFIG_AUDIT=false" >> $GITHUB_ENV
           echo "NPM_CONFIG_FUND=false" >> $GITHUB_ENV
 
-      - name: Install dependencies
-        working-directory: ./packages/core
+      - name: Install workspace dependencies
         run: bun install --ignore-scripts --frozen-lockfile
+
+      - name: Set version from tag
+        if: github.event_name == 'push'
+        run: echo "VERSION=${GITHUB_REF#refs/tags/core-v}" >> $GITHUB_ENV
+
+      - name: Set version from input
+        if: github.event_name == 'workflow_dispatch'
+        run: echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+
+      - name: Validate version format
+        run: |
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.-]+)?$ ]]; then
+            echo "❌ Invalid version format: $VERSION"
+            exit 1
+          fi
+
+      - name: Update core version
+        run: |
+          cd packages/core
+          bun ../../scripts/version-set.ts $VERSION
 
       - name: Build core package
         working-directory: ./packages/core
@@ -59,130 +78,25 @@ jobs:
         working-directory: ./packages/core
         run: bun test
 
-      - name: Set version from tag
-        if: github.event_name == 'push'
-        run: |
-          VERSION="${GITHUB_REF#refs/tags/core-v}"
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "Tag detected: $VERSION"
-
-      - name: Set version from input
-        if: github.event_name == 'workflow_dispatch'
-        run: |
-          VERSION="${{ github.event.inputs.version }}"
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "Manual version: $VERSION"
-
-      - name: Validate version format
-        run: |
-          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.-]+)?$ ]]; then
-            echo "❌ Invalid version format: $VERSION"
-            echo "Expected format: x.y.z or x.y.z-prerelease"
-            exit 1
-          fi
-          echo "✅ Version format valid: $VERSION"
-
-      - name: Update package.json version
-        run: |
-          cd packages/core
-          bun ../../scripts/version-set.ts $VERSION
-
       - name: Verify package integrity
         working-directory: ./packages/core
         run: |
-          echo "📦 Verifying package contents..."
           echo "Version: $(jq -r .version package.json)"
           echo "Name: $(jq -r .name package.json)"
-          echo "Files to publish:"
-          jq -r '.files[]' package.json | head -10
+          npm pack --dry-run > /tmp/core-pack.txt
+          cat /tmp/core-pack.txt
 
       - name: Configure NPM registry with OIDC
         run: |
           echo "@ai-eng-system:registry=https://registry.npmjs.org/" > ~/.npmrc
           echo "registry=https://registry.npmjs.org/" >> ~/.npmrc
 
-      - name: Generate provenance metadata
-        run: |
-          echo "🔐 Generating OIDC provenance metadata..."
-          echo "Repository: ${{ github.repository }}"
-          echo "Commit: ${{ github.sha }}"
-          echo "Workflow: ${{ github.workflow }}"
-          echo "Runner: ${{ runner.os }}"
-
       - name: Publish to NPM (dry-run)
         if: github.event.inputs.dry_run == 'true'
         working-directory: ./packages/core
-        run: |
-          echo "🧪 Running dry-run publish for @ai-eng-system/core@$VERSION"
-          npm publish --dry-run --access public --provenance
-          echo "✅ Dry-run completed successfully"
+        run: npm publish --dry-run --access public --provenance
 
       - name: Publish to NPM with OIDC provenance
         if: github.event.inputs.dry_run != 'true'
         working-directory: ./packages/core
-        run: |
-          echo "🚀 Publishing @ai-eng-system/core@$VERSION with OIDC trusted publishing"
-          echo "Provenance: enabled"
-          echo "Registry: https://registry.npmjs.org"
-          
-          npm publish --access public --provenance
-          
-          echo "✅ Core package published successfully"
-          echo "📊 Package info: npm info @ai-eng-system/core@$VERSION"
-
-      - name: Verify published package
-        if: github.event.inputs.dry_run != 'true'
-        run: |
-          echo "⏳ Waiting for package to be available..."
-          sleep 30
-          
-          # Verify package exists and has provenance
-          if npm view @ai-eng-system/core@$VERSION --json | jq -e '.version' > /dev/null; then
-            echo "✅ Package verified on npm registry"
-            echo "🔐 Checking provenance..."
-            npm view @ai-eng-system/core@$VERSION --json | jq '.dist'
-          else
-            echo "❌ Package verification failed"
-            exit 1
-          fi
-
-      - name: Create GitHub Release
-        if: github.event.inputs.dry_run != 'true'
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: core-v${{ env.VERSION }}
-          name: Core v${{ env.VERSION }}
-          draft: false
-          prerelease: false
-          body: |
-            ## @ai-eng-system/core v${{ env.VERSION }}
-            
-            ### 🔐 OIDC Trusted Publishing
-            This package was published using **OIDC trusted publishing** with cryptographic provenance.
-            
-            ### 📦 Installation
-            ```bash
-            npm install @ai-eng-system/core@${{ env.VERSION }}
-            ```
-            
-            ### ✨ What's Included
-            - Core agents, skills, and commands
-            - Content loading system with modular architecture
-            - Type definitions and comprehensive exports
-            - Zero-trust security model
-            
-            ### 🔗 Package Information
-            - **Registry**: https://www.npmjs.com/package/@ai-eng-system/core
-            - **Provenance**: Cryptographically signed via GitHub OIDC
-            - **Repository**: https://github.com/${{ github.repository }}
-            
-            ---
-            Published with 🚀 via automated OIDC trusted publishing
-
-      - name: Notification
-        if: github.event.inputs.dry_run != 'true'
-        run: |
-          echo "🎉 Publish completed!"
-          echo "📦 Package: @ai-eng-system/core@$VERSION"
-          echo "🔐 Provenance: Verified"
-          echo "🔗 Release: https://github.com/${{ github.repository }}/releases/tag/core-v$VERSION"
+        run: npm publish --access public --provenance

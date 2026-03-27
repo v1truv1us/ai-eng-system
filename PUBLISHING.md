@@ -1,194 +1,107 @@
-# Publishing Guide for ai-eng-system
+# Publishing Guide
 
-## Structure Overview
+This repository is a private workspace with three publishable npm packages:
 
-After modularization, ai-eng-system is now a **workspace** with two publishable packages:
+- `@ai-eng-system/core`
+- `@ai-eng-system/toolkit`
+- `@ai-eng-system/cli`
 
-- `@ai-eng-system/core` - Contains all agents, skills, commands, and content
-- `@ai-eng-system/cli` - Contains CLI orchestration and installation logic
+Do not publish the repo root package.
 
-## Publishing Commands
+## Prerequisites
 
-### Publish Core Package
-```bash
-cd packages/core
-bun publish
-```
+- Bun installed
+- Node/npm installed
+- npm auth configured, or GitHub OIDC trusted publishing configured
+- Clean working tree
 
-### Publish CLI Package
-```bash
-cd packages/cli
-bun publish
-```
+## Local Release Flow
 
-### Publish Both Packages
-```bash
-bun run publish
-```
-
-## Package Dependencies
-
-- **CLI depends on Core**: `@ai-eng-system/cli` requires `@ai-eng-system/core`
-- **Core is standalone**: No dependencies on CLI package
-- **Users install CLI**: When users install `@ai-eng-system/cli`, they get both packages
-
-## Version Management
-
-### Synchronized Publishing
-Both packages should be published together to maintain version alignment:
+From the repo root:
 
 ```bash
-# Update version in both packages
-bun run changelog:patch  # Updates both package.json files
-
-# Publish both packages
-bun run publish
-```
-
-### Individual Publishing (Advanced)
-If you need to publish packages separately:
-
-```bash
-# Publish only core (content updates)
-cd packages/core && bun publish
-
-# Publish only CLI (tooling updates) 
-cd packages/cli && bun publish
-```
-
-## Workflow Examples
-
-### Typical Release
-```bash
-# 1. Update versions
-bun run changelog:minor
-
-# 2. Build both packages
-bun run build
-
-# 3. Test both packages
-bun test
-
-# 4. Publish both packages
-bun run publish
-
-# 5. Install and test locally
-npm install -g @ai-eng-system/cli
-ai-eng --help
-```
-
-### Content-Only Update
-```bash
-# 1. Update core package
-cd packages/core
-# ... make changes to agents/skills/commands ...
-
-# 2. Build core
-bun run build:core
-
-# 3. Publish core
-bun publish
-
-# 4. Users get content updates without CLI changes
-```
-
-## Installation for Users
-
-Users will install and use the CLI package as before:
-
-```bash
-# Install CLI (includes core dependency)
-npm install -g @ai-eng-system/cli
-
-# Use as normal
-ai-eng --help
-ai-eng install
-ai-eng ralph "your prompt"
-```
-
-The CLI automatically pulls in the core package as a dependency, so users get everything they need.
-
-## Development Workflow
-
-### Setup Development Environment
-```bash
-# Clone and setup
-git clone <repo>
-cd ai-eng-system
 bun install
-
-# Start development (builds both packages)
-bun run dev
+bun run build
+bun test
 ```
 
-### Working on Specific Package
+Publish `core` first:
+
 ```bash
-# Work only on core content
+bun run publish:core:dry-run
+bun run publish:core
+```
+
+`publish:core:dry-run` uses `bun publish --dry-run` to verify the tarball without uploading it.
+
+Then publish `toolkit`:
+
+```bash
+bun run publish:toolkit:dry-run
+bun run publish:toolkit
+```
+
+`publish:toolkit:dry-run` runs `bun publish --dry-run` against the built package.
+
+Then publish `cli`:
+
+```bash
+bun run publish:cli:dry-run
+bun run publish:cli
+```
+
+`publish:cli:dry-run` swaps in the publish manifest and runs `bun publish --dry-run`.
+
+The CLI publish script:
+- updates `packages/cli/package.json.publish`
+- swaps it into `packages/cli/package.json`
+- runs `bun publish` or `bun publish --dry-run`
+- restores the development manifest automatically
+
+## Versioning
+
+- `packages/core/package.json` is the source of truth for the release version
+- `scripts/update-publish-versions.ts` syncs:
+  - `packages/cli/package.json`
+  - `packages/cli/package.json.dev`
+  - `packages/cli/package.json.publish` version
+  - `packages/cli/package.json.publish` dependency on `@ai-eng-system/core`
+  - `packages/toolkit/package.json`
+- `scripts/version-set.ts` updates package versions and also syncs `packages/core/src/index.ts`
+
+Example:
+
+```bash
 cd packages/core
-bun run dev
-
-# Work only on CLI tooling
-cd packages/cli  
-bun run dev
+bun ../../scripts/version-set.ts 0.5.6
+cd ../..
+bun run update-publish-versions 0.5.6
 ```
 
-This structure provides clean separation of concerns while maintaining the same user experience.
+## Dry-Run Verification
 
----
+You can inspect the packaged tarball without publishing:
 
-## 🎯 **Quick Start: Publishing Your Packages**
-
-Since your workspace is now properly structured, here's how to publish:
-
-### Step 1: Navigate to Package Directory
 ```bash
-# To publish the core package (content)
-cd packages/core
-
-# To publish the CLI package (tooling)
-cd packages/cli
+cd packages/core && bun publish --dry-run --access public --provenance
+cd ../toolkit && bun publish --dry-run --access public --provenance
+cd ../cli && bun publish --dry-run
 ```
 
-### Step 2: Publish the Package
-```bash
-bun publish
-```
+## GitHub Actions / OIDC
 
-### Step 3: Use Workspace Scripts (Recommended)
-```bash
-# From workspace root:
-bun run publish:core  # Publish core package
-bun run publish:cli   # Publish CLI package
-bun run publish        # Publish both packages
-```
+Recommended workflows:
 
-**Now you should be able to publish successfully!** 🚀
----
+- `.github/workflows/publish-core-oidc.yml`
+- `.github/workflows/publish-cli-oidc.yml`
+- `.github/workflows/publish-all-oidc.yml`
 
-## 🎯 **Quick Start: Publishing Your Packages**
+Use `core`, then `toolkit`, then `cli`. Local release scripts use Bun, while the coordinated OIDC workflow remains the canonical CI publish path. The CLI package depends on the published core version, and toolkit is built from generated root artifacts.
 
-Since your workspace is now properly structured, here'"'s how to publish:
+## Notes
 
-### Step 1: Navigate to Package Directory
-\`\`\`bash
-# To publish the core package (content)
-cd packages/core
-
-# To publish the CLI package (tooling)
-cd packages/cli
-\`\`\`
-
-### Step 2: Publish the Package
-\`\`\`bash
-bun publish
-\`\`\`
-
-### Step 3: Use Workspace Scripts (Recommended)
-\`\`\`bash
-# From workspace root:
-bun run publish:core  # Publish core package
-bun run publish:cli   # Publish CLI package
-bun run publish        # Publish both packages
-\`\`\`
-
-**Now you should be able to publish successfully!** 🚀
+- `packages/cli/package.json` is the development manifest and keeps `@ai-eng-system/core` as `workspace:*`
+- `packages/cli/package.json.publish` is the publish-ready manifest with a real semver dependency
+- `packages/cli/package.json.dev` mirrors the development manifest for recovery/reference
+- `packages/toolkit/` is a real publishable workspace package built from `dist/.claude-plugin`, `dist/.opencode`, and `plugins/ai-eng-system`
+- The repo root package remains private and is never published

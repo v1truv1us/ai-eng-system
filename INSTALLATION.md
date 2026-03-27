@@ -5,7 +5,7 @@ This guide covers installation methods for the AI Engineering System across Clau
 ## 🚀 Quick Start
 
 ```bash
-npm install -g ai-eng-system
+npm install -g @ai-eng-system/cli
 ```
 
 This single command installs the AI Engineering System for both **Claude Code** and **OpenCode**.
@@ -15,7 +15,7 @@ This single command installs the AI Engineering System for both **Claude Code** 
 ### Global Installation
 
 ```bash
-npm install -g ai-eng-system
+npm install -g @ai-eng-system/cli
 ```
 
 **What gets installed:**
@@ -35,7 +35,7 @@ npm install -g ai-eng-system
 For project-specific installation:
 
 ```bash
-npm install --save-dev ai-eng-system
+npm install --save-dev @ai-eng-system/cli
 ```
 
 **Benefits:**
@@ -69,8 +69,8 @@ npm install --save-dev ai-eng-system
 /plugin list
 
 # Reinstall if needed
-npm uninstall -g ai-eng-system
-npm install -g ai-eng-system
+npm uninstall -g @ai-eng-system/cli
+npm install -g @ai-eng-system/cli
 ```
 
 **"Command not found" in OpenCode**
@@ -87,14 +87,14 @@ ls ~/.config/opencode/agent/ai-eng/
 /ai-eng/plan "test installation"
 
 # Reinstall if needed
-npm uninstall -g ai-eng-system
-npm install -g ai-eng-system
+npm uninstall -g @ai-eng-system/cli
+npm install -g @ai-eng-system/cli
 ```
 
 **Permission errors**
 ```bash
 # Use sudo for global installs
-sudo npm install -g ai-eng-system
+sudo npm install -g @ai-eng-system/cli
 
 # Or fix npm permissions
 mkdir -p ~/.npm-global
@@ -124,7 +124,7 @@ After installation, verify everything works:
 ## 🔄 Updates
 
 ```bash
-npm update -g ai-eng-system
+npm update -g @ai-eng-system/cli
 ```
 
 This updates the system for both Claude Code and OpenCode simultaneously.
