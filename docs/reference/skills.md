@@ -1,53 +1,33 @@
 # Skills Reference
 
-Available skill packs for specialized workflows.
+ai-eng-system currently ships 12 canonical skills.
 
----
+## Namespaced Skills
 
-## Research Skills
+- `ai-eng/simplify` - loaded from `skills/ai-eng/simplify/SKILL.md`
+- `workflow/ralph-wiggum` - loaded from `skills/workflow/ralph-wiggum/SKILL.md`
 
-comprehensive-research - Multi-phase research orchestration
+## Research and Prompting
 
-Discovery, analysis, synthesis phases
+- `comprehensive-research`
+- `prompt-refinement`
+- `incentive-prompting`
+- `content-optimization`
+- `text-cleanup`
 
----
+## Development and Operations
 
-## DevOps Skills
+- `coolify-deploy`
+- `git-worktree`
+- `knowledge-capture`
+- `monorepo-initialization`
 
-coolify-deploy - Coolify deployment best practices
+## Plugin and Extension Development
 
-git-worktree - Git worktree management
+- `plugin-dev`
 
----
+## Notes
 
-## Prompting Skills
-
-incentive-prompting - Research-backed prompting techniques
-
-+45-115% quality improvement
-
-persona, reasoning, stakes, challenge framing
-
----
-
-prompt-refinement - TCRO structuring and clarification
-
-Phase-specific prompt enhancement
-
----
-
-## Quality Skills
-
-text-cleanup - Remove AI-generated verbosity
-
-Preambles, hedging, politeness, transitions
-
----
-
-## Plugin Development
-
-plugin-dev - Plugin development knowledge
-
-Format specifications, best practices
-
-Build system integration
+- Generated outputs now preserve namespaced skill paths instead of flattening them.
+- `/ai-eng/simplify` is backed by the `ai-eng/simplify` skill path.
+- `/ai-eng/ralph-wiggum` is backed by the `workflow/ralph-wiggum` skill path.

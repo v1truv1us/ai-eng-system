@@ -1,55 +1,53 @@
 # Commands Reference
 
-All /ai-eng/* commands available.
+Primary ai-eng commands are namespaced under `/ai-eng/`.
 
----
+## Core Workflow
 
-## Core Commands
+- `/ai-eng/research` - research and discovery
+- `/ai-eng/specify` - feature/spec generation
+- `/ai-eng/plan` - implementation planning
+- `/ai-eng/work` - guided execution
+- `/ai-eng/review` - multi-agent review
 
-/ai-eng/research - Multi-phase research orchestration
+## Workflow and Cleanup
 
-/ai-eng/specify - Create feature specifications
+- `/ai-eng/ralph-wiggum` - iterative full-cycle workflow
+- `/ai-eng/simplify` - simplify changed code for reuse, quality, and efficiency
+- `/ai-eng/context` - session and memory management
 
-/ai-eng/plan - Create implementation plans
+## Creation
 
-/ai-eng/work - Execute plans with quality gates
+- `/ai-eng/create-plugin`
+- `/ai-eng/create-agent`
+- `/ai-eng/create-command`
+- `/ai-eng/create-skill`
+- `/ai-eng/create-tool`
 
-/ai-eng/review - Multi-agent code review
+## Analysis and Quality
 
----
+- `/ai-eng/code-review`
+- `/ai-eng/agent-analyzer`
+- `/ai-eng/fact-check`
+- `/ai-eng/deep-research`
+- `/ai-eng/research-companion`
+- `/ai-eng/content-optimize`
 
-## Development Commands
+## Platform and Ops
 
-/ai-eng/seo - SEO audit with Core Web Vitals
+- `/ai-eng/deploy`
+- `/ai-eng/docker`
+- `/ai-eng/cloudflare`
+- `/ai-eng/github`
+- `/ai-eng/k8s`
+- `/ai-eng/monitoring`
+- `/ai-eng/security-scan`
 
-/ai-eng/deploy - Pre-deployment checklist for Coolify
+## Other Utilities
 
-/ai-eng/optimize - Prompt enhancement (+45% quality)
+- `/ai-eng/init`
+- `/ai-eng/seo`
+- `/ai-eng/knowledge-capture`
+- `/ai-eng/optimize`
 
-/ai-eng/clean - Remove AI-generated verbosity
-
----
-
-## Creation Commands
-
-/ai-eng/create-plugin - Guided plugin creation workflow
-
-/ai-eng/create-agent - AI-assisted agent generation
-
-/ai-eng/create-command - AI-assisted command generation
-
-/ai-eng/create-skill - AI-assisted skill creation
-
-/ai-eng/create-tool - AI-assisted tool creation
-
----
-
-## Utility Commands
-
-/ai-eng/recursive-init - Initialize AGENTS.md across dirs
-
-/ai-eng/context - Context management and retrieval
-
-/ai-eng/compound - Document solved problems
-
-See individual command files for detailed usage
+For implementation details, see `content/commands/`.

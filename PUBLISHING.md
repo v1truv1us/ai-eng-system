@@ -1,6 +1,6 @@
 # Publishing Guide
 
-This repository is a private workspace with three publishable npm packages:
+This repository is a private workspace with three publishable packages:
 
 - `@ai-eng-system/core`
 - `@ai-eng-system/toolkit`
@@ -8,100 +8,78 @@ This repository is a private workspace with three publishable npm packages:
 
 Do not publish the repo root package.
 
-## Prerequisites
+## Recommended Path
 
-- Bun installed
-- Node/npm installed
-- npm auth configured, or GitHub OIDC trusted publishing configured
-- Clean working tree
+Use GitHub OIDC trusted publishing through `.github/workflows/publish-all-oidc.yml`.
 
-## Local Release Flow
+That workflow is the canonical release path and publishes in this order:
 
-From the repo root:
+1. `core`
+2. `toolkit`
+3. `cli`
+
+## Local Verification
+
+Use Bun locally for build and dry-run verification:
 
 ```bash
 bun install
 bun run build
-bun test
-```
-
-Publish `core` first:
-
-```bash
 bun run publish:core:dry-run
-bun run publish:core
-```
-
-`publish:core:dry-run` uses `bun publish --dry-run` to verify the tarball without uploading it.
-
-Then publish `toolkit`:
-
-```bash
 bun run publish:toolkit:dry-run
-bun run publish:toolkit
+bun run publish:cli:dry-run
 ```
 
-`publish:toolkit:dry-run` runs `bun publish --dry-run` against the built package.
-
-Then publish `cli`:
+## Local Publish Commands
 
 ```bash
-bun run publish:cli:dry-run
+bun run publish:core
+bun run publish:toolkit
 bun run publish:cli
 ```
 
-`publish:cli:dry-run` swaps in the publish manifest and runs `bun publish --dry-run`.
+These scripts are intended for local verification and emergency/manual publishing flows. The coordinated CI release should still go through OIDC.
 
-The CLI publish script:
-- updates `packages/cli/package.json.publish`
-- swaps it into `packages/cli/package.json`
-- runs `bun publish` or `bun publish --dry-run`
-- restores the development manifest automatically
+## CLI Publish Manifest
 
-## Versioning
+The CLI uses separate development and publish manifests:
 
-- `packages/core/package.json` is the source of truth for the release version
-- `scripts/update-publish-versions.ts` syncs:
-  - `packages/cli/package.json`
-  - `packages/cli/package.json.dev`
-  - `packages/cli/package.json.publish` version
-  - `packages/cli/package.json.publish` dependency on `@ai-eng-system/core`
-  - `packages/toolkit/package.json`
-- `scripts/version-set.ts` updates package versions and also syncs `packages/core/src/index.ts`
+- `packages/cli/package.json` - development manifest with `workspace:*`
+- `packages/cli/package.json.dev` - recovery/reference copy
+- `packages/cli/package.json.publish` - publish manifest with real semver dependency on `@ai-eng-system/core`
 
-Example:
+The CLI publish helper swaps in the publish manifest, runs the publish command, then restores the development manifest.
+
+## Version Sync
+
+The release version source of truth starts from `packages/core/package.json`.
+
+To align all package versions:
 
 ```bash
 cd packages/core
-bun ../../scripts/version-set.ts 0.5.6
+bun ../../scripts/version-set.ts 0.5.10
 cd ../..
-bun run update-publish-versions 0.5.6
+bun run update-publish-versions 0.5.10
 ```
 
-## Dry-Run Verification
+This updates:
+- `packages/core/package.json`
+- `packages/core/src/index.ts`
+- `packages/toolkit/package.json`
+- `packages/cli/package.json`
+- `packages/cli/package.json.dev`
+- `packages/cli/package.json.publish`
 
-You can inspect the packaged tarball without publishing:
+## Toolkit Package Notes
 
-```bash
-cd packages/core && bun publish --dry-run --access public --provenance
-cd ../toolkit && bun publish --dry-run --access public --provenance
-cd ../cli && bun publish --dry-run
-```
+`packages/toolkit/` is a real publishable workspace package built from generated artifacts, not source folders.
 
-## GitHub Actions / OIDC
+Packaged directories include:
+- `.claude-plugin/`
+- `.opencode/`
+- `plugins/ai-eng-system/`
 
-Recommended workflows:
+## Current Release
 
-- `.github/workflows/publish-core-oidc.yml`
-- `.github/workflows/publish-cli-oidc.yml`
-- `.github/workflows/publish-all-oidc.yml`
-
-Use `core`, then `toolkit`, then `cli`. Local release scripts use Bun, while the coordinated OIDC workflow remains the canonical CI publish path. The CLI package depends on the published core version, and toolkit is built from generated root artifacts.
-
-## Notes
-
-- `packages/cli/package.json` is the development manifest and keeps `@ai-eng-system/core` as `workspace:*`
-- `packages/cli/package.json.publish` is the publish-ready manifest with a real semver dependency
-- `packages/cli/package.json.dev` mirrors the development manifest for recovery/reference
-- `packages/toolkit/` is a real publishable workspace package built from `dist/.claude-plugin`, `dist/.opencode`, and `plugins/ai-eng-system`
-- The repo root package remains private and is never published
+Latest coordinated release: `0.5.10`

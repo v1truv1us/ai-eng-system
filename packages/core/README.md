@@ -1,49 +1,49 @@
 # @ai-eng-system/core
 
-Core package containing all agents, skills, commands, and content for the AI Engineering System.
+Shared library package for the AI Engineering System.
 
-## Installation
+`@ai-eng-system/core` contains the packaged content loaders and path helpers used by the CLI, installers, and other consumers.
+
+## Install
 
 ```bash
 npm install @ai-eng-system/core
 ```
 
+## Package role
+
+`@ai-eng-system/core` is one of three published packages:
+
+- `@ai-eng-system/core` - shared library and content loading helpers
+- `@ai-eng-system/toolkit` - packaged Claude/OpenCode/plugin assets
+- `@ai-eng-system/cli` - executable installer and command-line workflows
+
+Use `core` when you need programmatic access to ai-eng-system content. Use `cli` for end-user installation. Use `toolkit` when you need packaged asset directories directly.
+
 ## Usage
 
-```typescript
-import { 
-  getAgentContent, 
-  getCommandContent, 
+```ts
+import {
+  getAgentContent,
+  getCommandContent,
   getSkillContent,
-  getOpenCodeContent 
-} from '@ai-eng-system/core/content';
+  getOpenCodeContent,
+} from "@ai-eng-system/core/content";
 
-// Get all agents
 const agents = await getAgentContent();
-
-// Get OpenCode installation content
+const commands = await getCommandContent();
+const skills = await getSkillContent();
 const openCodeContent = await getOpenCodeContent();
 ```
 
-## Package Structure
-
-```
-packages/core/
-├── content/          # Source content (agents, commands)
-├── skills/           # Skill definitions
-├── opencode/         # OpenCode-specific content
-├── claude/           # Claude Code-specific content
-└── dist/            # Built content for installation
-    ├── .opencode/
-    └── .claude-plugin/
-```
+You can also import path helpers from `@ai-eng-system/core/paths`.
 
 ## Exports
 
-- `./` - Main package exports
-- `./content` - Content loading utilities
-- `./paths` - Path resolution utilities
+- `.` - main library entrypoint
+- `./content` - content loading utilities
+- `./paths` - path resolution helpers
 
-## License
+## Release status
 
-MIT
+Current published version: `0.5.10`

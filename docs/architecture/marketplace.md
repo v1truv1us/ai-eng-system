@@ -1,53 +1,41 @@
-# Marketplace
+# Marketplace and Distribution
 
-Distribution via npm and marketplace.
+ai-eng-system is distributed as a three-package npm model plus marketplace/plugin outputs.
 
----
+## Published Packages
 
-## Marketplace Package
+- `@ai-eng-system/core` - library and content-loading helpers
+- `@ai-eng-system/toolkit` - generated Claude/OpenCode/plugin assets
+- `@ai-eng-system/cli` - installer and command-line workflows
 
-plugins/ai-eng-system/ is canonical source
+The repo root package is private and is not published.
 
-Bundled for npm publishing as ai-eng-system
+## Generated Asset Outputs
 
----
+Generated plugin content is copied into:
 
-## Package Contents
+- `dist/.claude-plugin/`
+- `dist/.opencode/`
+- `plugins/ai-eng-system/`
 
-Commands and agents (Markdown)
-
-Skills (SKILL.md files)
-
-Hooks (Python + JSON configuration)
-
-Plugin manifest files
-
----
+`@ai-eng-system/toolkit` packages those generated assets for consumption as a real npm package.
 
 ## Installation Behavior
 
-npm install triggers postinstall script
+The supported end-user path is:
 
-Hooks copied to consumer .claude/hooks/
+```bash
+npm install -g @ai-eng-system/cli
+ai-eng install --scope project
+```
 
-Existing hooks backed up
-
----
-
-## Verification
-
-Check hooks installed: ls -la .claude/hooks/
-
-Verify functionality with test prompts
-
-Run integration tests: node scripts/integration-test.js
-
----
+Do not rely on npm postinstall hooks or `npm install ai-eng-system`.
 
 ## Updating
 
-npm update ai-eng-system
+Update the CLI package, then rerun install if needed:
 
-Rebuild: bun run build
-
-New hooks installed with backup
+```bash
+npm install -g @ai-eng-system/cli@latest
+ai-eng install --scope project
+```

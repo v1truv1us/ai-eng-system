@@ -1,175 +1,46 @@
-# Install Command Modularization - Complete
+# Modularization Status
 
-## Summary
+The repository now uses a three-package model.
 
-Successfully modularized the ai-eng-system install command by separating concerns into two distinct packages:
+## Current Package Topology
 
-### Architecture Overview
-
-```
-ai-eng-system/
-├── packages/
-│   ├── core/                     # @ai-eng-system/core
-│   │   ├── src/
-│   │   │   ├── index.ts         # Main exports
-│   │   │   ├── paths.ts         # Path resolution utilities
-│   │   │   └── content-loader.ts # Content loading utilities
-│   │   └── dist/
-│   │       ├── index.js
-│   │       ├── content-loader.js
-│   │       ├── paths.js
-│   │       └── .opencode/         # Built content
-│   ├── content/                  # Source content
-│   ├── skills/                   # Skill definitions
-│   └── opencode/                 # OpenCode-specific layout
-│
-└── cli/                         # @ai-eng-system/cli (moved from src/)
-    ├── src/
-    │   ├── install/
-    │   │   └── install.ts      # Now uses core package
-    │   ├── cli/                  # CLI orchestration
-    │   └── index.ts              # Plugin (uses core package)
-    └── dist/                     # Built CLI
+```text
+packages/core/     @ai-eng-system/core
+packages/toolkit/  @ai-eng-system/toolkit
+packages/cli/      @ai-eng-system/cli
 ```
 
-### Key Changes
+The repo root package is private and acts only as the workspace coordinator.
 
-#### 1. Core Package (`@ai-eng-system/core`)
-- **Purpose**: Contains all installable content (agents, skills, commands, tools)
-- **Exports**: 
-  - `getDistOpenCodeContent()` - Get structured content for installation
-  - `getOpenCodeContent()` - Get content from source
-  - Path utilities for content resolution
-  - Type definitions for all content structures
+## Package Responsibilities
 
-#### 2. CLI Package (`@ai-eng-system/cli`)
-- **Purpose**: Orchestration layer (install, init, ralph commands)
-- **Dependencies**: Now depends on `@ai-eng-system/core` for content
-- **Install Logic**: Uses `getDistOpenCodeContent()` from core package
-- **Fallback**: Maintains backward compatibility with original file-copy method
+### `@ai-eng-system/core`
+- shared library exports
+- content-loading helpers
+- packaged content and path utilities
 
-#### 3. Updated Plugin
-- **Installation**: Uses core package content instead of static dist/.opencode/
-- **Fallback**: Maintains original method if core unavailable
-- **Backward Compatibility**: All existing APIs preserved
+### `@ai-eng-system/toolkit`
+- generated `.claude-plugin/` assets
+- generated `.opencode/` assets
+- generated `plugins/ai-eng-system/` assets
+- stable helper functions for packaged asset paths
 
-### Build Process
+### `@ai-eng-system/cli`
+- executable `ai-eng` command
+- install workflow for project/global scopes
+- release-safe CLI smoke tests and runtime commands
 
-#### New Commands
-```bash
-# Build everything
-bun run build
+## Release Model
 
-# Build individual packages
-bun run build:core    # Build core package
-bun run build:cli     # Build CLI package
+The coordinated release path is:
 
-# Development
-bun run dev          # Build core + CLI with watch
+1. publish `core`
+2. publish `toolkit`
+3. publish `cli`
 
-# Clean
-bun run clean          # Remove all build artifacts
-```
+Trusted publishing runs through `.github/workflows/publish-all-oidc.yml`.
 
-### API Preservation
+## Notes
 
-All existing user APIs remain unchanged:
-- `ai-eng install` ✅
-- `ai-eng init` ✅  
-- `ai-eng ralph` ✅
-- `ai-eng --help` ✅
-
-### Content Loading
-
-#### Core Package Content Structure
-```typescript
-interface OpenCodeContent {
-  commands: ContentItem[];  // AI-eng namespaced commands
-  agents: ContentItem[];    // AI-eng namespaced agents
-  skills: ContentItem[];    // Skills (not namespaced)
-  tools: ContentItem[];     // Tools (if any)
-}
-
-interface ContentItem {
-  name: string;     // Item name (without extension)
-  path: string;     // Relative path within namespace
-  type: 'agent' | 'command' | 'skill' | 'tool';
-  content?: string;  // File content when loaded
-}
-```
-
-#### Installation Process
-1. **CLI calls** `getDistOpenCodeContent()` from core package
-2. **Core loads** content from `dist/.opencode/` directory
-3. **CLI writes** content to appropriate target directories
-4. **Namespace handling** preserved (commands/agents under `ai-eng/`, skills root level)
-
-### Benefits
-
-#### ✅ Separation of Concerns
-- **Core**: Pure content, can evolve independently
-- **CLI**: Pure orchestration, can focus on tooling
-- **Plugin**: Uses same content API as CLI
-
-#### ✅ Independent Versioning
-- Core package can be updated separately from CLI
-- Content updates don't require CLI changes
-- Tooling improvements don't affect content
-
-#### ✅ Future Flexibility
-- Content can be consumed by other tools (not just CLI)
-- Core package can be published independently
-- CLI can add features without affecting content structure
-
-#### ✅ Backward Compatibility
-- All existing commands work unchanged
-- Installation behavior preserved
-- Plugin behavior identical
-
-### File Structure Changes
-
-#### Before (Monolithic)
-```
-src/install/install.ts → Copies from dist/.opencode/
-src/index.ts       → Plugin copies from dist/.opencode/
-```
-
-#### After (Modular)  
-```
-packages/core/src/content-loader.ts → Loads from packages/core/dist/.opencode/
-packages/cli/src/install/install.ts → Uses core.getContent()
-src/index.ts → Plugin uses core.getContent()
-```
-
-### Testing Validation
-
-All functionality verified:
-- ✅ `ai-eng install --dry-run` shows correct file counts
-- ✅ `ai-eng install --scope project` installs correctly
-- ✅ `ai-eng init` works unchanged  
-- ✅ `ai-eng --help` shows all commands
-- ✅ Plugin installation via OpenCode loads core content
-- ✅ Fallback method maintains compatibility
-
-### Migration Strategy
-
-For users upgrading:
-1. **No action required** - all APIs preserved
-2. **Installation behavior identical** - same files to same locations
-3. **Build process unchanged** - `bun run build` works as before
-4. **Dependencies managed automatically** - core package included
-
----
-
-## Result
-
-🎉 **Complete modularization achieved**
-
-The install command now:
-- ✅ **Uses core package content** instead of static dist files
-- ✅ **Maintains full API compatibility** 
-- ✅ **Enables independent evolution** of content vs tooling
-- ✅ **Provides clean separation** of concerns
-- ✅ **Preserves all user workflows**
-
-This modular architecture positions ai-eng-system for future growth while maintaining the robust, user-friendly experience users expect.
+- The older two-package description is now historical.
+- The toolkit package was introduced to make generated integration assets publishable without overloading the CLI or private workspace root.

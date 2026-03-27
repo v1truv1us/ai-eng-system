@@ -30,6 +30,12 @@ npm install -g @ai-eng-system/cli
 ai-eng ralph "implement user authentication"
 ```
 
+The CLI is one of three published packages in the current release model:
+
+- `@ai-eng-system/core` - shared library and content-loading helpers
+- `@ai-eng-system/toolkit` - generated Claude/OpenCode/plugin assets
+- `@ai-eng-system/cli` - executable installer and workflow package
+
 ### Quick Start
 
 ```bash

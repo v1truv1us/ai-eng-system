@@ -4,54 +4,45 @@ title: Common Issues
 
 # Common Issues
 
-Troubleshooting guide for common problems.
-
----
-
-## Hooks Not Working
-
-Verify .claude/hooks/ directory exists
-
-Check hooks.json has UserPromptSubmit entry
-
-Ensure Python 3 installed: `python3 --version`
-
----
-
-## Build Failures
-
-Check Node.js version: 18+ required
-
-Clear dist/ directory: `bun run clean`
-
-Verify build.ts has no syntax errors
-
----
+Troubleshooting guide for common installation and build problems.
 
 ## Install Issues
 
-Run with verbose mode: `node scripts/install.js --verbose`
+If installation fails:
 
-Check permissions on .claude/ directory
+```bash
+ai-eng install --scope project
+```
 
-Verify npm global installation path
+Check:
+- the CLI is installed: `ai-eng --help`
+- your target directory permissions
+- that you are not relying on old `node scripts/install.js` flows
 
----
+## Build Failures
 
-## Prompt Optimization Bypassed
+Check your local toolchain:
 
-Check config file: enabled must be true
+- Node.js 20+
+- Bun installed
 
-Verify ! prefix only used when intended
+Then retry:
 
-Check session auto-approve setting
+```bash
+bun install
+bun run build
+```
 
----
+## Claude Hook Issues
 
-## OpenCode Tool Not Found
+Check:
+- `.claude/hooks/` exists when expected
+- Python 3 is installed
+- your Claude/plugin installation is current
 
-Verify tool in dist/.opencode/tool/
+## OpenCode Issues
 
-Check .opencode directory exists
-
-Rebuild: `bun run build`
+Check:
+- `.opencode/` exists for project installs
+- OpenCode plugin config includes `ai-eng-system`
+- generated assets exist after `bun run build`

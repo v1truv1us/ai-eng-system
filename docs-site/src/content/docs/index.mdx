@@ -1,49 +1,38 @@
 ---
 title: Welcome
-description: Advanced engineering toolkit with 29 specialized agents, 18 commands, and 8 skills
+description: AI engineering toolkit with 28 agents, 42 commands, and 12 skills
 ---
 
 # Welcome to ai-eng-system
 
-Advanced engineering toolkit with 29 specialized agents, 18 commands, and 8 skills for Claude Code and OpenCode platforms.
+AI engineering toolkit with 28 agents, 42 commands, and 12 skills for Claude Code and OpenCode.
 
 ## Quick Start
 
 ```bash
-# Install globally
-npm install -g ai-eng-system
-
-# Run installation script
-npm run install:global
-
-# Verify installation
-bun run build
+npm install -g @ai-eng-system/cli
+ai-eng install --scope project
 ```
 
-## What is ai-eng-system?
+## Package Model
 
-ai-eng-system provides a comprehensive suite of specialized AI agents, custom commands, and modular skills designed to accelerate engineering workflows and improve code quality through AI-powered collaboration.
+- `@ai-eng-system/core` - library and content-loading helpers
+- `@ai-eng-system/toolkit` - generated Claude/OpenCode/plugin assets
+- `@ai-eng-system/cli` - executable installer and workflow package
 
-## Key Features
+## Core Workflow
 
-- **29 Specialized Agents** - Expert agents for architecture, development, quality, DevOps, AI/ML, SEO, and plugin development
-- **18 Custom Commands** - Streamlined commands for research, specification, planning, execution, orchestration, and code review
-- **8 Modular Skills** - Reusable skills for enhanced prompting, research, workflow automation, and iterative refinement
-- **Automatic Optimization** - Every prompt is automatically enhanced with research-backed techniques (+45-115% quality)
-- **🔄 Ralph Wiggum Integration** - Persistent iteration patterns across all phase commands for quality refinement
-
-## Why ai-eng-system?
-
-1. **Specialized Expertise** - Each agent is optimized for specific engineering tasks
-2. **Quality-First** - Built-in code review, testing, and security scanning
-3. **Research-Backed** - Techniques based on peer-reviewed research
-4. **Cross-Platform** - Works with Claude Code and OpenCode
-5. **Extensible** - Build custom agents, commands, and skills
+- `/ai-eng/research`
+- `/ai-eng/specify`
+- `/ai-eng/plan`
+- `/ai-eng/work`
+- `/ai-eng/review`
+- `/ai-eng/simplify`
 
 ## Get Started
 
-- [Quick Start](./getting-started/quick-start.md) - Start using ai-eng-system
-- [Agents Reference](./reference/agents.md) - Explore all 29 agents
-- [Commands Reference](./reference/commands.md) - Learn all 18 commands
-- [Features](./features/prompt-optimization.md) - Deep dive into key features
-- **🔄 [Ralph Wiggum Integration](./features/ralph-wiggum/)** - Master iterative refinement patterns
+- [Quick Start](./getting-started/quick-start.md)
+- [Installation](./getting-started/installation.md)
+- [Commands Reference](./reference/commands.md)
+- [Skills Reference](./reference/skills.md)
+- [Marketplace and Distribution](./architecture/marketplace.md)

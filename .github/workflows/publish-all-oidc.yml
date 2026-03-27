@@ -24,6 +24,8 @@ on:
 jobs:
   publish-packages:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
     permissions:
       contents: read
       id-token: write
@@ -63,6 +65,25 @@ jobs:
             echo "❌ Invalid version format: $VERSION"
             exit 1
           fi
+      - name: Detect already published versions
+        run: |
+          if npm view @ai-eng-system/core@$VERSION version >/dev/null 2>&1; then
+            echo "CORE_ALREADY_PUBLISHED=true" >> $GITHUB_ENV
+          else
+            echo "CORE_ALREADY_PUBLISHED=false" >> $GITHUB_ENV
+          fi
+
+          if npm view @ai-eng-system/toolkit@$VERSION version >/dev/null 2>&1; then
+            echo "TOOLKIT_ALREADY_PUBLISHED=true" >> $GITHUB_ENV
+          else
+            echo "TOOLKIT_ALREADY_PUBLISHED=false" >> $GITHUB_ENV
+          fi
+
+          if npm view @ai-eng-system/cli@$VERSION version >/dev/null 2>&1; then
+            echo "CLI_ALREADY_PUBLISHED=true" >> $GITHUB_ENV
+          else
+            echo "CLI_ALREADY_PUBLISHED=false" >> $GITHUB_ENV
+          fi
       - name: Align workspace package versions
         run: |
           cd packages/core
@@ -84,7 +105,7 @@ jobs:
         working-directory: ./packages/core
         run: npm publish --dry-run --access public --provenance
       - name: Publish core
-        if: contains(env.PACKAGES_TO_PUBLISH, 'core') && github.event.inputs.dry_run != 'true'
+        if: contains(env.PACKAGES_TO_PUBLISH, 'core') && github.event.inputs.dry_run != 'true' && env.CORE_ALREADY_PUBLISHED != 'true'
         working-directory: ./packages/core
         run: npm publish --access public --provenance
       - name: Publish toolkit (dry-run)
@@ -92,7 +113,7 @@ jobs:
         working-directory: ./packages/toolkit
         run: npm publish --dry-run --access public --provenance
       - name: Publish toolkit
-        if: contains(env.PACKAGES_TO_PUBLISH, 'toolkit') && github.event.inputs.dry_run != 'true'
+        if: contains(env.PACKAGES_TO_PUBLISH, 'toolkit') && github.event.inputs.dry_run != 'true' && env.TOOLKIT_ALREADY_PUBLISHED != 'true'
         working-directory: ./packages/toolkit
         run: npm publish --access public --provenance
       - name: Swap in CLI publish manifest
@@ -103,7 +124,7 @@ jobs:
         working-directory: ./packages/cli
         run: npm publish --dry-run --access public --provenance
       - name: Publish CLI
-        if: contains(env.PACKAGES_TO_PUBLISH, 'cli') && github.event.inputs.dry_run != 'true'
+        if: contains(env.PACKAGES_TO_PUBLISH, 'cli') && github.event.inputs.dry_run != 'true' && env.CLI_ALREADY_PUBLISHED != 'true'
         working-directory: ./packages/cli
         run: npm publish --access public --provenance
       - name: Restore development manifest

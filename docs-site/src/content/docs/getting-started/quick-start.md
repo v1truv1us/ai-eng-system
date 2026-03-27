@@ -1,46 +1,43 @@
 ---
 title: Quick Start
-description: Get started with ai-eng-system in three steps
+description: Get started with ai-eng-system in four steps
 ---
 
 # Quick Start
 
-Get started with ai-eng-system in three steps.
+Get started with ai-eng-system in four steps.
 
----
+## 1. Install the CLI
 
-## Install Package
+```bash
+npm install -g @ai-eng-system/cli
+```
 
-Install globally: `npm install -g @ai-eng-system/cli`
+## 2. Install project assets
 
-Run installation: `npm run install:global`
+```bash
+ai-eng install --scope project
+```
 
----
+## 3. Verify setup
 
-## Verify Setup
+```bash
+ai-eng --help
+bun run build
+```
 
-Build system: `bun run build`
+## 4. Use the workflow
 
-Check hooks: `ls -la .claude/hooks/`
+Start with:
 
-Run integration tests: `node scripts/integration-test.js`
+- `/ai-eng/research`
+- `/ai-eng/specify`
+- `/ai-eng/plan`
+- `/ai-eng/work`
+- `/ai-eng/review`
 
----
-
-## First Prompt
-
-Start Claude Code with project
-
-Type natural prompt; optimization applies automatically
-
-Use `!` prefix to bypass optimization
-
----
-
-## Interactive Review
-
-Review optimization steps: `/ai-eng/optimize "your prompt"`
-
-Approve all steps or modify individually
-
-Get confidence improvement estimate
+Useful follow-ups:
+- `/ai-eng/ralph-wiggum`
+- `/ai-eng/simplify`
+- `/ai-eng/context`
+- `/ai-eng/optimize`

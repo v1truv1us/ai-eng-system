@@ -1,6 +1,6 @@
 {
   "name": "@ferg-engineering/system",
-  "version": "0.5.5",
+  "version": "0.5.10",
   "description": "Ferg Engineering System: AI-powered engineering automation with comprehensive research, validation, and deployment workflows",
   "private": true,
   "type": "module",

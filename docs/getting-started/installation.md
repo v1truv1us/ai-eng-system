@@ -1,45 +1,50 @@
 # Installation
 
-Install ai-eng-system for Claude Code or OpenCode platforms.
-
----
+Install ai-eng-system for Claude Code or OpenCode using the published CLI package.
 
 ## Prerequisites
 
-Node.js 18+ required. Python 3+ needed for hooks.
+- Node.js 20+
+- Bun for local development from source
+- Python 3 if you plan to use Claude hook helpers locally
 
----
+## End-user Install
 
-## npm Installation
+```bash
+npm install -g @ai-eng-system/cli
+```
 
-Install globally: `npm install -g @ai-eng-system/cli`
+Install packaged assets into the current project:
 
-Install locally: `npm install ai-eng-system`
+```bash
+ai-eng install --scope project
+```
 
----
+Or install into your global OpenCode directory:
 
-## Build System
+```bash
+ai-eng install --scope global
+```
 
-Build from source: `bun run build`
+## Claude Code Marketplace Install
 
-Watch mode: `bun run build:watch`
+```bash
+/plugin marketplace add v1truv1us/ai-eng-system
+/plugin install ai-eng-system@ai-eng-marketplace
+```
 
----
+## Build From Source
 
-## Hook Installation
-
-Run install script: `node scripts/install.js`
-
-Hooks placed in `.claude/hooks/` automatically
-
-Existing hooks backed up with timestamp
-
----
+```bash
+bun install
+bun run build
+```
 
 ## Verification
 
-Check build artifacts: `ls -la dist/`
+```bash
+ai-eng --help
+bun run build
+```
 
-Verify hooks: `ls -la .claude/hooks/`
-
-Run tests: `node scripts/integration-test.js`
+The root workspace package is private; do not install `ai-eng-system` from the repo root.

@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.5.10] - 2026-03-27
+
+### Added
+- Published the first coordinated three-package release:
+  - `@ai-eng-system/core`
+  - `@ai-eng-system/toolkit`
+  - `@ai-eng-system/cli`
+- Added `@ai-eng-system/toolkit` as a real workspace package built from generated `.claude-plugin`, `.opencode`, and marketplace plugin artifacts.
+- Added stable toolkit path helpers for consumers that need packaged asset locations.
+- Added the new `/ai-eng/simplify` command backed by the namespaced skill at `skills/ai-eng/simplify/SKILL.md`.
+
+### Changed
+- Standardized release automation around the coordinated OIDC workflow in `.github/workflows/publish-all-oidc.yml`.
+- Preserved namespaced skill paths such as `ai-eng/simplify` and `workflow/ralph-wiggum` across generated Claude, OpenCode, marketplace, and toolkit outputs.
+- Updated installation, marketplace, publishing, and package-role documentation to reflect the three-package model.
+
+### Fixed
+- Fixed trusted-publishing workflow issues involving workspace lockfiles, toolkit artifact generation in CI, and CLI publish manifest recursion.
+- Fixed release workflow validation to use a release-safe CLI smoke-test suite.
+- Fixed generated skill packaging so nested skill directories are no longer flattened incorrectly.
+
 ### [0.4.7](https://github.com/v1truv1us/ai-eng-system/compare/v0.4.6...v0.4.7) (2026-01-19)
 
 ### [0.4.4](https://github.com/v1truv1us/ai-eng-system/compare/v0.2.3...v0.4.4) (2026-01-17)
