@@ -1,6 +1,6 @@
 # Agents Reference
 
-29 specialized agents for engineering workflows.
+32 specialized agents for engineering workflows.
 
 ---
 
@@ -11,6 +11,8 @@ architect-advisor - System architecture decisions
 backend-architect - Backend system design
 
 infrastructure-builder - Cloud infrastructure design
+
+aws-architect - AWS architecture and Well-Architected guidance
 
 ---
 
@@ -26,6 +28,14 @@ database-optimizer - Database performance optimization
 
 java-pro - Java development with modern features
 
+mobile-developer - iOS, Android, React Native, and Flutter development
+
+data-engineer - Data pipelines, warehousing, and streaming systems
+
+documentation-specialist - Comprehensive technical documentation
+
+docs-writer - Concise product and feature documentation
+
 ---
 
 ## Quality & Testing
@@ -38,9 +48,13 @@ security-scanner - Security vulnerability detection
 
 performance-engineer - Application performance optimization
 
+plugin-validator - Plugin structure validation
+
+text-cleaner - AI-generated verbosity cleanup
+
 ---
 
-## DevOps & Deployment
+## DevOps & Operations
 
 deployment-engineer - CI/CD pipeline design
 
@@ -56,13 +70,15 @@ ai-engineer - AI integration and LLM apps
 
 ml-engineer - ML model development
 
+prompt-optimizer - Prompt enhancement techniques
+
+agent-developer - MCP, A2A, tool calling, and orchestration
+
 ---
 
 ## Content & SEO
 
 seo-specialist - Technical and on-page SEO
-
-prompt-optimizer - Prompt enhancement techniques
 
 ---
 
@@ -76,7 +92,11 @@ skill-creator - AI-assisted skill creation
 
 tool-creator - AI-assisted tool creation
 
-plugin-validator - Plugin structure validation
+---
+
+## Coordination
+
+subagent-orchestration - Specialist routing and multi-agent coordination
 
 ---
 

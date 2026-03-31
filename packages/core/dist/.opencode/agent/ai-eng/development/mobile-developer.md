@@ -1,5 +1,4 @@
 ---
-name: mobile-developer
 description: |
   Expert mobile application developer specializing in iOS (Swift/SwiftUI), Android (Kotlin/Jetpack Compose), React Native, and Flutter.
   Implements platform-specific patterns, state management, navigation, push notifications, and app store deployment.
@@ -15,7 +14,6 @@ tools:
   glob: true
   list: true
   webfetch: true
-category: development
 ---
 
 **primary_objective**: Build production-quality mobile applications for iOS, Android, and cross-platform with platform-native patterns.

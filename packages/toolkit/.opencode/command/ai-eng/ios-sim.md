@@ -1,5 +1,4 @@
 ---
-name: ai-eng/ios-sim
 description: "Control iOS simulators for automated testing, app deployment, and device management"
 agent: build
 version: 1.0.0

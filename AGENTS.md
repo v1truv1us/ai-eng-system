@@ -14,12 +14,13 @@ This document defines the **agents and tools** available in this system. For the
 | build | edit | Implements changes |
 | review | read-only | Code review |
 
-## Specialized Agents (28 Total)
+## Specialized Agents (32 Total)
 
 ### Architecture & Planning
 - `architect-advisor` - System architecture decisions and trade-off analysis
 - `backend-architect` - Backend system design and scalability
 - `infrastructure-builder` - Cloud infrastructure design and IaC
+- `aws-architect` - AWS service selection, cloud architecture, and Well-Architected guidance
 
 ### Development & Coding
 - `frontend-reviewer` - Frontend code review (React, TypeScript, accessibility)
@@ -27,14 +28,20 @@ This document defines the **agents and tools** available in this system. For the
 - `api-builder-enhanced` - REST/GraphQL API development with documentation
 - `database-optimizer` - Database performance and query optimization
 - `java-pro` - Java development with modern features and patterns
+- `mobile-developer` - iOS, Android, React Native, and Flutter development
+- `data-engineer` - Pipelines, warehousing, streaming, and data quality
+- `documentation-specialist` - Comprehensive technical documentation generation
+- `docs-writer` - Concise product and feature documentation
 
 ### Quality & Testing
 - `code-reviewer` - Comprehensive code quality assessment
 - `test-generator` - Automated test suite generation
 - `security-scanner` - Security vulnerability detection and fixes
 - `performance-engineer` - Application performance optimization
+- `plugin-validator` - Plugin structure validation and best practices
+- `text-cleaner` - AI-generated verbosity cleanup and content tightening
 
-### DevOps & Deployment
+### DevOps & Operations
 - `deployment-engineer` - CI/CD pipeline design and deployment automation
 - `monitoring-expert` - Observability, alerting, and system monitoring
 - `cost-optimizer` - Cloud cost optimization and resource efficiency
@@ -42,17 +49,20 @@ This document defines the **agents and tools** available in this system. For the
 ### AI & Machine Learning
 - `ai-engineer` - AI integration and LLM application development
 - `ml-engineer` - Machine learning model development and deployment
+- `prompt-optimizer` - Prompt enhancement using research-backed techniques
+- `agent-developer` - MCP, A2A, tool calling, and multi-agent orchestration
 
 ### Content & SEO
 - `seo-specialist` - Technical and on-page SEO expertise
-- `prompt-optimizer` - Prompt enhancement using research-backed techniques
 
 ### Plugin Development
 - `agent-creator` - AI-assisted agent generation
 - `command-creator` - AI-assisted command generation
 - `skill-creator` - AI-assisted skill creation
 - `tool-creator` - AI-assisted custom tool creation
-- `plugin-validator` - Plugin structure validation and best practices
+
+### Coordination
+- `subagent-orchestration` - Routes work to the most appropriate specialist agent
 
 **All agents enhanced with research-backed prompting techniques** (+45-115% quality improvement)
 
@@ -271,28 +281,27 @@ Use the architect-advisor to evaluate: Should we use microservices or a monolith
 | comprehensive-research | skills/research/ | Multi-phase research orchestration |
 | plugin-dev | skills/plugin-dev/ | Plugin development knowledge base |
 
-## Commands Available
+## Key Commands
 
- | Command | Description | Agent Mode |
+| Command | Description | Agent Mode |
 |---------|-------------|------------|
- | /research | Multi-phase research orchestration | read-only |
+| /research | Multi-phase research orchestration | read-only |
 | /specify | Create feature specifications | read-only |
 | /plan | Create detailed implementation plans | read-only |
 | /work | Execute plans with quality gates and tracking | build |
-| /review | Multi-perspective code review (28 agents) | read-only |
-| /seo | SEO audit with Core Web Vitals | read-only |
-| /deploy | Pre-deployment checklist for Coolify | build |
-| /optimize | Prompt enhancement (+45% quality) | build |
-| /clean | Remove AI-generated verbosity and redundant content | build |
-| /recursive-init | Initialize AGENTS.md across directories | read-only |
+| /review | Multi-perspective code review (32 agents) | read-only |
+| /ralph-wiggum | Full-cycle feature development with continuous iteration through all spec-driven workflow phases | build |
+| /deploy | Pre-deployment checklist and deployment workflows | build |
+| /content-optimize | Content and prompt enhancement | build |
 | /context | Context management and retrieval | read-only |
 | /create-plugin | Guided plugin creation workflow | build |
 | /create-agent | AI-assisted agent generation | build |
 | /create-command | AI-assisted command generation | build |
 | /create-skill | AI-assisted skill creation | build |
 | /create-tool | AI-assisted tool creation | build |
-| /ralph-wiggum | Full-cycle feature development with continuous iteration through all spec-driven workflow phases (Research → Specify → Plan → Work → Review) until feature is complete | build |
-| /compound | Document solved problems for team | build |
+| /knowledge-capture | Document solved problems for team | build |
+
+See `docs/reference/commands.md` for the full 42-command inventory.
 
 ### Using /research
 

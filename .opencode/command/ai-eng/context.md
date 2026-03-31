@@ -1,5 +1,4 @@
 ---
-name: ai-eng/context
 description: Manage session state, memories, and context engineering
 agent: build
 ---

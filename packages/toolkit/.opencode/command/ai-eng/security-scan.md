@@ -1,5 +1,4 @@
 ---
-name: ai-eng/security-scan
 description: "Conduct comprehensive security audits, vulnerability assessments, and security best practices"
 agent: build
 version: 1.0.0

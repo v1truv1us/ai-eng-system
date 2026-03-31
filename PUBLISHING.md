@@ -58,9 +58,9 @@ To align all package versions:
 
 ```bash
 cd packages/core
-bun ../../scripts/version-set.ts 0.5.10
+bun ../../scripts/version-set.ts 0.6.0
 cd ../..
-bun run update-publish-versions 0.5.10
+bun run update-publish-versions 0.6.0
 ```
 
 This updates:
@@ -82,4 +82,4 @@ Packaged directories include:
 
 ## Current Release
 
-Latest coordinated release: `0.5.10`
+Latest coordinated release: `0.6.0`

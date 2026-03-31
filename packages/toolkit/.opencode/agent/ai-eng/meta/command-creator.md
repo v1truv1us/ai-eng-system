@@ -1,8 +1,5 @@
 ---
-description: AI-assisted command generation for Claude Code and OpenCode.
-  Creates properly formatted command files for either platform. Use when user
-  asks to "create a command", "make a command", "build a command that...", or
-  needs command development assistance.
+description: AI-assisted command generation for Claude Code and OpenCode. Creates properly formatted command files for either platform. Use when user asks to "create a command", "make a command", "build a command that...", or needs command development assistance.
 mode: subagent
 temperature: 0.3
 tools:
@@ -79,9 +76,10 @@ Analyze user's description to understand:
 #### For OpenCode Format
 
 ```markdown
-| description | agent |
-|---|---|
-| Brief description | build |
+---
+description: Brief description
+agent: build
+---
 ```
 
 ### 3. Generate Command Content

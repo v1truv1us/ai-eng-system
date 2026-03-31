@@ -1,7 +1,7 @@
 # TODO: AI Engineering System
 
-**Current Version**: 0.5.10
-**Last Updated**: 2026-03-27
+**Current Version**: 0.6.0
+**Last Updated**: 2026-03-30
 
 ## High Priority
 
@@ -30,6 +30,15 @@
 - [x] Verified the coordinated OIDC workflow in dry-run and production modes
 - [x] Preserved namespaced generated skills such as `ai-eng/simplify` and `workflow/ralph-wiggum`
 - [x] Updated release, publishing, installation, and marketplace documentation
+
+### Agent Coverage Expansion and 0.6.0 Release Prep (2026-03-30) ✅
+
+- [x] Added `mobile-developer`
+- [x] Added `data-engineer`
+- [x] Added `aws-architect`
+- [x] Added `agent-developer`
+- [x] Normalized canonical and generated agent inventories to 32 active agents
+- [x] Updated registry, marketplace, and reference docs for the 0.6.0 release line
 
 ### Simplify Skill and Skill Best-Practice Audit (2026-03-27) ✅
 

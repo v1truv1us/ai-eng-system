@@ -1,5 +1,4 @@
 ---
-name: ai-eng/context7-docs
 description: "Research and retrieve comprehensive library documentation using Context7 API"
 agent: plan
 version: 1.0.0

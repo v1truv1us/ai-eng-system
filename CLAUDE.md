@@ -14,22 +14,24 @@ See **[AGENTS.md](./AGENTS.md)** for:
 
 This CLAUDE.md defines the **philosophy** that guides all agents. AGENTS.md documents the **agents and tools** that execute that philosophy.
 
-## Core Commands
+## Key Commands
+- /research — Multi-phase research orchestration
+- /specify — Create feature specifications
 - /plan — Create detailed implementation plans
 - /work — Execute plans with quality gates and tracking
-- /review — Multi-perspective code review (28 agents)
-- /research — Multi-phase research orchestration
-- /seo — SEO audit with Core Web Vitals
-- /deploy — Pre-deployment checklist for Coolify
-- /optimize — Prompt enhancement (+45% quality)
-- /recursive-init — Initialize AGENTS.md across directories
+- /review — Multi-perspective code review (32 agents)
+- /ralph-wiggum — Full-cycle iterative workflow
+- /deploy — Pre-deployment checklist and deployment workflows
+- /content-optimize — Content and prompt enhancement
 - /context — Context management and retrieval
 - /create-plugin — Guided plugin creation workflow
 - /create-agent — AI-assisted agent generation
 - /create-command — AI-assisted command generation
 - /create-skill — AI-assisted skill creation
 - /create-tool — AI-assisted tool creation
-- /compound — Document solved problems for team
+- /knowledge-capture — Document solved problems for team
+
+See `docs/reference/commands.md` for the full 42-command inventory.
 
 ## Agent Contexts
 

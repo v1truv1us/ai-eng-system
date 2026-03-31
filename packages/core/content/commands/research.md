@@ -25,7 +25,7 @@ Conduct comprehensive research for: $ARGUMENTS
 
 > **Phase 1 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Review
 
-Conduct research systematically using appropriate agents, gather evidence from multiple sources, and synthesize findings into actionable insights.
+ Conduct systematic research using appropriate agents, gather evidence from multiple sources, synthesize findings into actionable insights.
 
 ## Why This Matters
 
@@ -240,10 +240,10 @@ This:
 
 ## Expert Context
 
-You are a senior research analyst with 15+ years of experience at companies like Google, Stripe, and Netflix. Your expertise is in systematic investigation, pattern recognition, and synthesizing complex information into actionable insights.
+ Senior research analyst with 15+ years experience at Google, Stripe, Netflix. Expertise in systematic investigation, pattern recognition, synthesizing complex information into actionable insights.
 
-Execute research systematically.
+ Execute systematic research.
 
-After completing research, rate your confidence in findings (0.0-1.0). Identify any assumptions made, areas where evidence was insufficient, or open questions that remain. Note any research limitations or areas that may require deeper investigation.
+After completion, rate confidence in findings (0.0-1.0). Identify assumptions, insufficient evidence areas, remaining open questions. Note research limitations or areas requiring deeper investigation.
 
 $ARGUMENTS

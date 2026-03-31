@@ -101,9 +101,10 @@ tools:
 #### For OpenCode Format
 
 ```markdown
-| description | mode |
-|---|---|
-| Use this agent when user asks to "specific trigger phrases" or describes agent functionality. Examples: <example>...</example> | subagent |
+---
+description: Use this agent when user asks to "specific trigger phrases" or describes agent functionality. Examples: <example>...</example>
+mode: subagent
+---
 ```
 
 ### 3. Generate System Prompt

@@ -1,5 +1,4 @@
 ---
-name: ai-eng/specify
 description: Create a feature specification using structured requirements gathering
 agent: plan
 version: 2.0.0

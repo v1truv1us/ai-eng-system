@@ -78,9 +78,10 @@ Analyze user's description to understand:
 #### For OpenCode Format
 
 ```markdown
-| description | agent |
-|---|---|
-| Brief description | build |
+---
+description: Brief description
+agent: build
+---
 ```
 
 ### 3. Generate Command Content

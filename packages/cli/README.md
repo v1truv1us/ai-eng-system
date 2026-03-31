@@ -64,4 +64,4 @@ bun run test:build
 
 ## Current Release
 
-Current published version: `0.5.10`
+Current published version: `0.6.0`

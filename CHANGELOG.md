@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.6.0] - 2026-03-30
+
+### Added
+- Added four new specialists to close high-priority coverage gaps:
+  - `mobile-developer`
+  - `data-engineer`
+  - `aws-architect`
+  - `agent-developer`
+- Added coordinated registry and reference updates so the published agent inventory now reflects the actual 32-agent system.
+
+### Changed
+- Normalized canonical and generated agent inventories across `content/`, `.claude-plugin/`, `.opencode/`, `plugins/ai-eng-system/`, `packages/core/`, and `packages/toolkit/`.
+- Updated marketplace metadata, installation docs, and agent registries to use the current 32-agent count.
+- Bumped the coordinated package version to `0.6.0` for `@ai-eng-system/core`, `@ai-eng-system/toolkit`, and `@ai-eng-system/cli`.
+
+### Fixed
+- Fixed stale subagent orchestration references so routing guidance now points to the correct current specialists, including `api-builder-enhanced`.
+
 ## [0.5.10] - 2026-03-27
 
 ### Added

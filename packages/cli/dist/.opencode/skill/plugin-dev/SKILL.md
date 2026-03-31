@@ -99,11 +99,12 @@ tools:                 # Optional: tool restrictions
 
 **Claude Code Output:** Same format (YAML frontmatter)
 
-**OpenCode Output:** Table format
+**OpenCode Output:** YAML frontmatter with OpenCode-compatible fields
 ```markdown
-| description | agent |
-|---|---|
-| Description here | build |
+---
+description: Description here
+agent: build
+---
 ```
 
 ### Agent Frontmatter
@@ -124,11 +125,12 @@ tools:
 
 **Claude Code Output:** Same format (YAML frontmatter)
 
-**OpenCode Output:** Table format
+**OpenCode Output:** YAML frontmatter with OpenCode-compatible fields
 ```markdown
-| description | mode |
-|---|---|
-| Description here | subagent |
+---
+description: Description here
+mode: subagent
+---
 ```
 
 ### Skill Structure

@@ -1,5 +1,4 @@
 ---
-name: ai-eng/knowledge-capture
 description: "Document solved problems to build cumulative team knowledge with context, code examples, and gotchas"
 agent: build
 version: 1.0.0

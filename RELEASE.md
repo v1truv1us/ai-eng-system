@@ -37,8 +37,8 @@ That order matters because the CLI publish manifest depends on the published cor
 Example full release tag:
 
 ```bash
-git tag v0.5.10
-git push origin v0.5.10
+git tag v0.6.0
+git push origin v0.6.0
 ```
 
 ## Manual Release via GitHub Actions
@@ -46,7 +46,7 @@ git push origin v0.5.10
 1. Open GitHub Actions
 2. Select `Publish All Packages (OIDC)`
 3. Run the workflow with:
-   - `version`: `0.5.10` or the next release version
+   - `version`: `0.6.0` or the next release version
    - `packages`: `core,toolkit,cli`
    - `dry_run`: `true` first, then `false`
 
@@ -83,13 +83,13 @@ To align the workspace to a release version:
 
 ```bash
 cd packages/core
-bun ../../scripts/version-set.ts 0.5.10
+bun ../../scripts/version-set.ts 0.6.0
 cd ../..
-bun run update-publish-versions 0.5.10
+bun run update-publish-versions 0.6.0
 ```
 
 This keeps `core`, `toolkit`, and the CLI manifests aligned.
 
 ## Current Release
 
-Latest coordinated release: `0.5.10`
+Latest coordinated release: `0.6.0`

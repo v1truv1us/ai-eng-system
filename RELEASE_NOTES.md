@@ -1,19 +1,32 @@
-# ai-eng-system v0.5.10 Release Notes
+# ai-eng-system v0.6.0 Release Notes
 
-Release date: 2026-03-27
+Release date: 2026-03-30
 
 ## Overview
 
-`v0.5.10` is the first fully verified three-package release for ai-eng-system.
+`v0.6.0` expands ai-eng-system's specialist coverage with four new high-priority agents and normalizes the published inventories around the current 32-agent system.
 
 Published packages:
 - `@ai-eng-system/core`
 - `@ai-eng-system/toolkit`
 - `@ai-eng-system/cli`
 
-This release also completes the move to GitHub OIDC trusted publishing with provenance for coordinated releases.
+This release continues the coordinated three-package model with refreshed registry, marketplace, and package metadata.
 
 ## Highlights
+
+### Expanded specialist coverage
+
+- `mobile-developer` adds first-class iOS, Android, React Native, and Flutter coverage.
+- `data-engineer` adds modern data-stack coverage for Airflow, dbt, Kafka, Spark, and warehouses.
+- `aws-architect` adds dedicated AWS architecture guidance and Well-Architected coverage.
+- `agent-developer` adds MCP, A2A, tool-calling, and multi-agent orchestration expertise.
+
+### Inventory normalization
+
+- Canonical and generated artifacts now agree on the current 32-agent inventory.
+- Subagent orchestration documentation now routes to the correct current specialists.
+- Marketplace metadata and public references no longer report stale 28/29-agent counts.
 
 ### Three-package release model
 
@@ -37,7 +50,7 @@ This release also completes the move to GitHub OIDC trusted publishing with prov
 
 - Installation guides now point to the CLI-based install flow.
 - Marketplace and publishing docs now reflect the three-package model.
-- Release notes, changelog, and package READMEs were updated for the `0.5.10` release.
+- Release notes, changelog, and package READMEs were updated for the `0.6.0` release.
 
 ## User-facing changes
 
@@ -52,26 +65,14 @@ ai-eng install --scope project
 
 The root workspace package is private and should not be installed or published.
 
-### New command and skill alignment
+### New specialist alignment
 
-- Command: `/ai-eng/simplify`
-- Skill path: `skills/ai-eng/simplify/SKILL.md`
+- Agent inventory: `32 specialized agents`
+- New specialists: `mobile-developer`, `data-engineer`, `aws-architect`, `agent-developer`
 
 ## Release verification
 
-Release validation completed successfully for:
-- repository build
-- core tests
-- release-safe CLI smoke tests
-- core publish dry-run
-- toolkit publish dry-run
-- CLI publish dry-run
-- full production OIDC publish
-
-Published npm versions:
-- `@ai-eng-system/core@0.5.10`
-- `@ai-eng-system/toolkit@0.5.10`
-- `@ai-eng-system/cli@0.5.10`
+Use the coordinated release workflow in `RELEASE.md` and `PUBLISHING.md` for dry-run and production publication.
 
 ## Related files
 

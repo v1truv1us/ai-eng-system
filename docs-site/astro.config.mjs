@@ -12,7 +12,7 @@ export default defineConfig({
         starlight({
             title: "ai-eng-system",
             description:
-                "Advanced engineering toolkit with 29 specialized agents, 17 commands, and 7 skills",
+                "Advanced engineering toolkit with 32 specialized agents, 42 commands, and 12 skills",
             locales: {
                 root: {
                     label: "English",

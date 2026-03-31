@@ -14,7 +14,7 @@ Successfully implemented a launch-ready documentation site for ai-eng-system usi
 
 ### 2. Starlight Configuration
 - Site title: "ai-eng-system"
-- Description: "Advanced engineering toolkit with 29 specialized agents, 17 commands, and 7 skills"
+- Description: "Advanced engineering toolkit with 32 specialized agents, 42 commands, and 12 skills"
 - GitHub integration with edit links
 - Sitemap generation
 - Dark/light mode support (built-in to Starlight)

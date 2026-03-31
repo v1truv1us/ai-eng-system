@@ -1,8 +1,5 @@
 ---
-description: AI-assisted agent generation for Claude Code and OpenCode. Creates
-  properly formatted agent files for either platform. Use when user asks to
-  "create an agent", "generate an agent", "make an agent that...", or describes
-  agent functionality needed.
+description: AI-assisted agent generation for Claude Code and OpenCode. Creates properly formatted agent files for either platform. Use when user asks to "create an agent", "generate an agent", "make an agent that...", or describes agent functionality needed.
 mode: subagent
 temperature: 0.3
 tools:
@@ -102,9 +99,10 @@ tools:
 #### For OpenCode Format
 
 ```markdown
-| description | mode |
-|---|---|
-| Use this agent when user asks to "specific trigger phrases" or describes agent functionality. Examples: <example>...</example> | subagent |
+---
+description: Use this agent when user asks to "specific trigger phrases" or describes agent functionality. Examples: <example>...</example>
+mode: subagent
+---
 ```
 
 ### 3. Generate System Prompt

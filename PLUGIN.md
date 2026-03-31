@@ -30,8 +30,8 @@ claude plugin link .
 ### Verification
 
 After installation, verify in Claude Code:
-- **15 Commands available**: `/plan`, `/review`, `/seo`, `/work`, `/deploy`, `/research`, `/context`, `/create-plugin`, `/create-agent`, `/create-command`, `/create-skill`, `/create-tool`, `/init`, `/specify`, `/ralph-wiggum`
-- **28 Agents available**: All specialized agents for development, testing, deployment, and architecture
+- **42 Claude/OpenCode commands available**: see [Commands Reference](./docs/reference/commands.md) for the full list
+- **32 Agents available**: All specialized agents for development, testing, deployment, architecture, data, mobile, and AI systems
 - **12+ Skills**: knowledge-capture, monorepo-initialization, content-optimization, text-cleanup, devops, prompting, research, and more
 
 **Note**: `compound`, `recursive-init`, `clean`, and `optimize` commands were converted to skills for better organization. See `docs/COMMAND-MIGRATION.md`.
@@ -83,22 +83,30 @@ After installation, verify in OpenCode:
 Expected output shows all available commands and agents:
 
 ```
-Available commands (19): /ai-eng/plan, /ai-eng/review, /ai-eng/seo, /ai-eng/work,
-/ai-eng/compound, /ai-eng/deploy, /ai-eng/optimize, /ai-eng/clean, /ai-eng/recursive-init,
-/ai-eng/research, /ai-eng/context, /ai-eng/create-plugin, /ai-eng/create-agent,
-/ai-eng/create-command, /ai-eng/create-skill, /ai-eng/create-tool, /ai-eng/init,
-/ai-eng/specify, /ai-eng/ralph-wiggum
+Available commands (42): /ai-eng/research, /ai-eng/specify, /ai-eng/plan,
+/ai-eng/work, /ai-eng/review, /ai-eng/ralph-wiggum, /ai-eng/create-plugin,
+/ai-eng/create-agent, /ai-eng/create-command, /ai-eng/create-skill,
+/ai-eng/create-tool, /ai-eng/deploy, /ai-eng/coolify, /ai-eng/docker,
+/ai-eng/k8s, /ai-eng/cloudflare, /ai-eng/github, /ai-eng/git-workflow,
+/ai-eng/monitoring, /ai-eng/sentry, /ai-eng/code-review, /ai-eng/security-scan,
+/ai-eng/simplify, /ai-eng/socket-security, /ai-eng/fact-check,
+/ai-eng/knowledge-capture, /ai-eng/api-test, /ai-eng/playwright,
+/ai-eng/chrome-debug, /ai-eng/ios-sim, /ai-eng/xcodebuild,
+/ai-eng/verbalize, /ai-eng/content-optimize, /ai-eng/agent-analyzer,
+/ai-eng/research-companion, /ai-eng/deep-research, /ai-eng/context7-docs,
+/ai-eng/db-optimize, /ai-eng/slack, /ai-eng/context, /ai-eng/init, /ai-eng/seo
 
-Available agents (28): ai-eng/architect-advisor, ai-eng/frontend-reviewer,
-ai-eng/seo-specialist, ai-eng/prompt-optimizer, ai-eng/agent-creator,
-ai-eng/command-creator, ai-eng/skill-creator, ai-eng/tool-creator,
-ai-eng/plugin-validator, ai-eng/code-reviewer, ai-eng/database-optimizer,
-ai-eng/api-builder-enhanced, ai-eng/full-stack-developer, ai-eng/deployment-engineer,
-ai-eng/ml-engineer, ai-eng/security-scanner, ai-eng/performance-engineer,
-ai-eng/test-generator, ai-eng/monitoring-expert, ai-eng/cost-optimizer,
-ai-eng/infrastructure-builder, ai-eng/backend-architect, ai-eng/java-pro,
-ai-eng/ai-engineer, ai-eng/documentation-specialist, ai-eng/docs-writer,
-ai-eng/text-cleaner, ai-eng/subagent-orchestration
+Available agents (32): ai-eng/architect-advisor, ai-eng/backend-architect,
+ai-eng/infrastructure-builder, ai-eng/aws-architect, ai-eng/full-stack-developer,
+ai-eng/frontend-reviewer, ai-eng/api-builder-enhanced, ai-eng/database-optimizer,
+ai-eng/java-pro, ai-eng/mobile-developer, ai-eng/data-engineer,
+ai-eng/documentation-specialist, ai-eng/docs-writer, ai-eng/code-reviewer,
+ai-eng/test-generator, ai-eng/security-scanner, ai-eng/performance-engineer,
+ai-eng/plugin-validator, ai-eng/text-cleaner, ai-eng/deployment-engineer,
+ai-eng/monitoring-expert, ai-eng/cost-optimizer, ai-eng/ai-engineer,
+ai-eng/ml-engineer, ai-eng/prompt-optimizer, ai-eng/agent-developer,
+ai-eng/seo-specialist, ai-eng/agent-creator, ai-eng/command-creator,
+ai-eng/skill-creator, ai-eng/tool-creator, ai-eng/subagent-orchestration
 ```
 
 **If components are missing**, the system will show installation errors. Re-run the installation command for your chosen method.
@@ -154,12 +162,13 @@ Both Claude Code and OpenCode share the same command and agent definitions:
 - Applies expert personas, step-by-step reasoning, and stakes language
 - +45% quality improvement based on MBZUAI, DeepMind, ICLR 2024 research
 
-### Specialized Agents (28 Total)
+### Specialized Agents (32 Total)
 
 **Architecture & Planning**
 - `ai-eng/architect-advisor` - System architecture decisions and trade-off analysis
 - `ai-eng/backend-architect` - Backend system design and scalability
 - `ai-eng/infrastructure-builder` - Cloud infrastructure design and IaC
+- `ai-eng/aws-architect` - AWS service selection, cloud architecture, and Well-Architected guidance
 
 **Development & Coding**
 - `ai-eng/frontend-reviewer` - Frontend code review (React, TypeScript, accessibility)
@@ -167,12 +176,18 @@ Both Claude Code and OpenCode share the same command and agent definitions:
 - `ai-eng/api-builder-enhanced` - REST/GraphQL API development with documentation
 - `ai-eng/database-optimizer` - Database performance and query optimization
 - `ai-eng/java-pro` - Java development with modern features and patterns
+- `ai-eng/mobile-developer` - iOS, Android, React Native, and Flutter development
+- `ai-eng/data-engineer` - Pipelines, warehousing, streaming, and data quality
+- `ai-eng/documentation-specialist` - Comprehensive technical documentation generation
+- `ai-eng/docs-writer` - Concise product and feature documentation
 
 **Quality & Testing**
 - `ai-eng/code-reviewer` - Comprehensive code quality assessment
 - `ai-eng/test-generator` - Automated test suite generation
 - `ai-eng/security-scanner` - Security vulnerability detection and fixes
 - `ai-eng/performance-engineer` - Application performance optimization
+- `ai-eng/plugin-validator` - Plugin structure validation and best practices
+- `ai-eng/text-cleaner` - AI-generated verbosity cleanup and content tightening
 
 **DevOps & Deployment**
 - `ai-eng/deployment-engineer` - CI/CD pipeline design and deployment automation
@@ -182,10 +197,11 @@ Both Claude Code and OpenCode share the same command and agent definitions:
 **AI & Machine Learning**
 - `ai-eng/ai-engineer` - AI integration and LLM application development
 - `ai-eng/ml-engineer` - Machine learning model development and deployment
+- `ai-eng/prompt-optimizer` - Prompt enhancement using research-backed techniques
+- `ai-eng/agent-developer` - MCP, A2A, tool calling, and multi-agent orchestration
 
 **Content & SEO**
 - `ai-eng/seo-specialist` - Technical and on-page SEO expertise
-- `ai-eng/prompt-optimizer` - Prompt enhancement using research-backed techniques
 
 **Plugin Development**
 - `ai-eng/agent-creator` - AI-assisted agent generation
@@ -217,8 +233,8 @@ Both Claude Code and OpenCode share the same command and agent definitions:
 ```
 ai-eng-system/
 ├── content/                  # ✏️ Single source of truth for commands & agents
-│   ├── commands/             # Command definitions (15 total)
-│   └── agents/               # Agent definitions (29 total)
+│   ├── commands/             # Command definitions (42 total)
+│   └── agents/               # Agent definitions (32 total)
 ├── skills/                   # Reusable skills (DevOps, prompting, research)
 │   ├── devops/
 │   │   ├── coolify-deploy/
@@ -229,14 +245,14 @@ ai-eng-system/
 │       └── comprehensive-research/
 ├── dist/                     # 🚫 Auto-generated platform outputs
 │   ├── .claude-plugin/       # Claude Code format
-│   │   ├── commands/         # 15 commands
-│   │   ├── agents/           # 28 agents
+│   │   ├── commands/         # 42 commands
+│   │   ├── agents/           # 32 agents
 │   │   ├── skills/           # All skills
 │   │   ├── plugin.json       # Plugin metadata
 │   │   └── marketplace.json  # Marketplace configuration
 │   └── .opencode/            # OpenCode format (ai-eng- namespace)
-│       ├── command/           # 15 commands (ai-eng-*.md)
-│       └── agent/ai-eng/     # 28 agents (nested by category)
+│       ├── command/           # 42 commands (ai-eng-*.md)
+│       └── agent/ai-eng/     # 32 agents (nested by category)
 ├── scripts/                  # Build and installation utilities
 │   ├── install.js            # Global/local installation
 │   └── build.ts              # Build system

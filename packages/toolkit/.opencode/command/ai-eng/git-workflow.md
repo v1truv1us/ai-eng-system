@@ -1,5 +1,4 @@
 ---
-name: ai-eng/git-workflow
 description: "Manage Git workflows, branching strategies, and repository operations with team collaboration"
 agent: build
 version: 1.0.0

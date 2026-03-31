@@ -181,7 +181,7 @@ async function getSkillNames() {
   const skills = await getSkillContent();
   return skills.map((skill) => skill.name);
 }
-var __filename2, __dirname2, ROOT, version = "0.5.10";
+var __filename2, __dirname2, ROOT, version = "0.6.0";
 var init_dist = __esm(() => {
   __filename2 = fileURLToPath(import.meta.url);
   __dirname2 = dirname(__filename2);

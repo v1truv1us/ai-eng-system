@@ -1,8 +1,5 @@
 ---
-description: Validates OpenCode plugin structure, formats, and best practices.
-  Use after creating components or when user asks to "validate", "check", or
-  "verify" plugin structure. Works with both OpenCode and Claude Code
-  components.
+description: Validates OpenCode plugin structure, formats, and best practices. Use after creating components or when user asks to "validate", "check", or "verify" plugin structure. Works with both OpenCode and Claude Code components.
 mode: subagent
 temperature: 0.2
 tools:
@@ -99,11 +96,11 @@ export default (async ({ project, client, $, directory, worktree }) => {
 #   agent: build
 ```
 
-**OpenCode Commands (.md with table frontmatter):**
-```markdown
-| description | agent |
-|---|---|
-| Command description | build |
+**OpenCode Commands (.md with YAML frontmatter):**
+```yaml
+# Example:
+#   description: Command description
+#   agent: build
 ```
 
 **Validation Checks:**
@@ -123,17 +120,17 @@ export default (async ({ project, client, $, directory, worktree }) => {
 #   color: cyan
 ```
 
-**OpenCode Agents (.md with table frontmatter):**
-```markdown
-| description | mode |
-|---|---|
-| Agent description | subagent |
+**OpenCode Agents (.md with YAML frontmatter):**
+```yaml
+# Example:
+#   description: Agent description
+#   mode: subagent
 ```
 
 **Validation Checks:**
 - File extension is `.md`
 - Frontmatter present and valid
-- Required fields: `name`, `description`, `mode`
+- Required fields: platform-appropriate frontmatter such as `description` and `mode`
 - Optional fields valid if present
 - Model and color choices appropriate
 

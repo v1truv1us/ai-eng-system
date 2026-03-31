@@ -1,5 +1,4 @@
 ---
-name: ai-eng/simplify
 description: Review recently changed files for code reuse, quality, and efficiency issues, then fix them
 agent: build
 version: 1.0.0

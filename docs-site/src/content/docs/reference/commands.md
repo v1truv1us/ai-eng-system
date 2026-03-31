@@ -4,23 +4,18 @@ title: Commands
 
 # Commands Reference
 
-Primary ai-eng commands are namespaced under `/ai-eng/`.
+42 commands are currently shipped under the `ai-eng/` namespace.
 
-## Core Workflow
+## Spec-Driven Workflow
 
 - `/ai-eng/research`
 - `/ai-eng/specify`
 - `/ai-eng/plan`
 - `/ai-eng/work`
 - `/ai-eng/review`
-
-## Workflow and Cleanup
-
 - `/ai-eng/ralph-wiggum`
-- `/ai-eng/simplify`
-- `/ai-eng/context`
 
-## Creation
+## Plugin Development
 
 - `/ai-eng/create-plugin`
 - `/ai-eng/create-agent`
@@ -28,11 +23,54 @@ Primary ai-eng commands are namespaced under `/ai-eng/`.
 - `/ai-eng/create-skill`
 - `/ai-eng/create-tool`
 
-## Analysis and Quality
+## DevOps and Deployment
+
+- `/ai-eng/deploy`
+- `/ai-eng/coolify`
+- `/ai-eng/docker`
+- `/ai-eng/k8s`
+- `/ai-eng/cloudflare`
+- `/ai-eng/github`
+- `/ai-eng/git-workflow`
+- `/ai-eng/monitoring`
+- `/ai-eng/sentry`
+- `/ai-eng/slack`
+
+## Code Quality and Security
 
 - `/ai-eng/code-review`
-- `/ai-eng/agent-analyzer`
+- `/ai-eng/security-scan`
+- `/ai-eng/simplify`
+- `/ai-eng/socket-security`
 - `/ai-eng/fact-check`
-- `/ai-eng/deep-research`
-- `/ai-eng/research-companion`
+- `/ai-eng/knowledge-capture`
+
+## Testing and Debugging
+
+- `/ai-eng/api-test`
+- `/ai-eng/playwright`
+- `/ai-eng/chrome-debug`
+- `/ai-eng/ios-sim`
+- `/ai-eng/xcodebuild`
+
+## AI, Prompting, and Research
+
+- `/ai-eng/verbalize`
 - `/ai-eng/content-optimize`
+- `/ai-eng/agent-analyzer`
+- `/ai-eng/research-companion`
+- `/ai-eng/deep-research`
+- `/ai-eng/context7-docs`
+
+## Database and Data
+
+- `/ai-eng/db-optimize`
+
+## Context and Utilities
+
+- `/ai-eng/context`
+- `/ai-eng/init`
+
+## SEO
+
+- `/ai-eng/seo`

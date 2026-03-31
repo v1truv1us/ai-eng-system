@@ -65,4 +65,4 @@ bun run build:toolkit
 
 ## Release status
 
-Current published version: `0.5.10`
+Current published version: `0.6.0`

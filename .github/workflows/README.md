@@ -41,25 +41,25 @@ Packages:
 ### Trigger a dry-run release
 
 ```bash
-gh workflow run publish-all-oidc.yml -f version=0.5.10 -f packages=core,toolkit,cli -f dry_run=true
+gh workflow run publish-all-oidc.yml -f version=0.6.0 -f packages=core,toolkit,cli -f dry_run=true
 ```
 
 ### Trigger a production release
 
 ```bash
-gh workflow run publish-all-oidc.yml -f version=0.5.10 -f packages=core,toolkit,cli -f dry_run=false
+gh workflow run publish-all-oidc.yml -f version=0.6.0 -f packages=core,toolkit,cli -f dry_run=false
 ```
 
 ### Tag-based release
 
 ```bash
-git tag v0.5.10
-git push origin v0.5.10
+git tag v0.6.0
+git push origin v0.6.0
 ```
 
 ## Current Status
 
-The `0.5.10` coordinated publish path has been verified successfully with:
+The `0.5.10` coordinated publish path was verified successfully with:
 
 - OIDC dry-run workflow success
 - OIDC production publish success
@@ -69,4 +69,4 @@ The canonical workflow also skips non-dry-run publish steps when the requested p
 
 ## Note
 
-If GitHub shows action-runtime deprecation warnings for Node 20 inside third-party actions, treat those as action-runtime warnings, not package-runtime failures. The `0.5.10` release flow still completed successfully.
+If GitHub shows action-runtime deprecation warnings for Node 20 inside third-party actions, treat those as action-runtime warnings, not package-runtime failures. Use the same workflow for `0.6.0`.

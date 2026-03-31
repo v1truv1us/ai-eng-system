@@ -151,7 +151,7 @@ async function getSkillNames() {
 }
 
 // src/index.ts
-var version = "0.5.10";
+var version = "0.6.0";
 export {
   version,
   getSkillsPath,

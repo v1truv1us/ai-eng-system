@@ -1,7 +1,7 @@
 ---
 name: docs-writer
 description: Write concise documentation pages in required format.
-mode: primary
+mode: subagent
 color: cyan
 temperature: 0.3
 tools:

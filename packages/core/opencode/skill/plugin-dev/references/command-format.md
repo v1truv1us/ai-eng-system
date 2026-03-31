@@ -8,7 +8,7 @@ Commands are the primary way to provide reusable workflows in both Claude Code a
 
 | Aspect | Claude Code | OpenCode | Canonical (content/) |
 |---------|-------------|----------|------------------|
-| **Frontmatter** | YAML block | YAML table | YAML block |
+| **Frontmatter** | YAML block | YAML block | YAML block |
 | **File Extension** | `.md` | `.md` | `.md` |
 | **Arguments** | `$ARGUMENTS`, `$1`, `$2` | `$ARGUMENTS`, `$1`, `$2` | `$ARGUMENTS`, `$1`, `$2` |
 | **File References** | `@file.txt` | `@file.txt` | `@file.txt` |
@@ -56,12 +56,18 @@ Command instructions here with $ARGUMENTS placeholder...
 
 ## OpenCode Output
 
-Build.ts transforms canonical to OpenCode format (table frontmatter):
+Build.ts transforms canonical to OpenCode format (YAML frontmatter with OpenCode-compatible fields):
 
 ```markdown
-| description | agent |
-|---|---|
-| Brief description | build |
+---
+description: Brief description of what this command does
+agent: build
+subtask: true
+temperature: 0.3
+tools:
+  read: true
+  write: true
+---
 
 # Command Content
 

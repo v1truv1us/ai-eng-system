@@ -11,9 +11,9 @@
 This guide explains how to **configure subagent orchestration** when using ai-eng-system with OpenCode or Claude Code. 
 
 **ai-eng-system provides**:
-- ✅ 28 specialized agents (code-reviewer, architect-advisor, etc.)
-- ✅ 7 agent skills (prompt-refinement, text-cleanup, etc.)
-- ✅ 17 custom commands
+- ✅ 32 specialized agents (code-reviewer, architect-advisor, mobile-developer, etc.)
+- ✅ 12 reusable skills (prompt-refinement, text-cleanup, etc.)
+- ✅ 42 custom commands across the ai-eng namespace
 
 **This guide explains**:
 - How to configure automatic routing to these agents
@@ -45,7 +45,7 @@ In OpenCode, orchestrator is **injected into the primary agent's prompt**:
 **How it works**:
 1. Build agent loads with orchestration instructions
 2. User submits: "Write a function"
-3. Build agent (with orchestrator lens) routes to @implementation-agent
+3. Build agent (with orchestrator lens) routes to @full-stack-developer
 4. Specialist executes
 
 ### Claude Code (No Primary Agent Concept)
@@ -76,7 +76,7 @@ In Claude Code, orchestrator is applied via **UserPromptSubmit Hook**:
 **How it works**:
 1. User submits: "Write a function"
 2. **Hook fires** (before every prompt)
-3. Hook analyzes: "write", "function" → @implementation-agent
+3. Hook analyzes: "write", "function" → @full-stack-developer
 4. Hook adds routing guidance to prompt
 5. Main conversation routes to specialist
 
@@ -150,7 +150,7 @@ See [AGENTS.md](../AGENTS.md) for complete list. Key specialists:
 |--------|---------|---------------|
 | @frontend-reviewer | Frontend code review | frontend, react, vue, ui |
 | @full-stack-developer | End-to-end application development | implement, feature, build |
-| @api-builder-advanced | REST/GraphQL API development | api, endpoint, graphql |
+| @api-builder-enhanced | REST/GraphQL API development | api, endpoint, graphql |
 
 ### Quality & Testing
 | Agent | Purpose | Trigger Words |
@@ -270,7 +270,7 @@ ALWAYS delegate to appropriate ai-eng-system specialist rather than handling tas
 |--------|---------|---------------|
 | @frontend-reviewer | Frontend code review | frontend, react, vue, ui, component |
 | @full-stack-developer | End-to-end application development | implement, feature, build, code |
-| @api-builder-advanced | REST/GraphQL API development | api, endpoint, graphql, rest |
+| @api-builder-enhanced | REST/GraphQL API development | api, endpoint, graphql, rest |
 
 ### Quality & Testing
 | Agent | Purpose | Trigger Words |
@@ -345,7 +345,7 @@ AI_ENG_AGENTS = {
         "triggers": ["implement", "feature", "build", "code"],
         "description": "End-to-end application development"
     },
-    "api-builder-advanced": {
+    "api-builder-enhanced": {
         "triggers": ["api", "endpoint", "graphql", "rest"],
         "description": "REST/GraphQL API development"
     },
@@ -398,7 +398,7 @@ You are working with ai-eng-system's specialized agents. Route to the appropriat
 
 Key agent categories:
 - **Architecture**: @architect-advisor, @backend-architect, @infrastructure-builder
-- **Development**: @frontend-reviewer, @full-stack-developer, @api-builder-advanced
+- **Development**: @frontend-reviewer, @full-stack-developer, @api-builder-enhanced
 - **Quality**: @code-reviewer, @test-generator, @security-scanner
 - **DevOps**: @deployment-engineer, @monitoring-expert
 
@@ -490,9 +490,9 @@ You are working in a project that uses **ai-eng-system**, an advanced engineerin
 ## What is ai-eng-system?
 
 ai-eng-system provides:
-- **28 specialized agents** for engineering workflows
-- **7 agent skills** for enhanced prompting
-- **17 custom commands** for common tasks
+- **32 specialized agents** for engineering workflows
+- **12 reusable skills** for enhanced prompting and workflows
+- **42 custom commands** for common tasks
 - Research-backed prompting techniques (+45-115% quality improvement)
 
 ## Core Directive: Use Specialized Agents
@@ -511,7 +511,7 @@ Use these for system design and architectural decisions:
 Use these for implementation work:
 - **@full-stack-developer** - End-to-end development
 - **@frontend-reviewer** - Frontend code review
-- **@api-builder-advanced** - API development
+- **@api-builder-enhanced** - API development
 
 ### Quality & Testing
 Use these for quality assurance:

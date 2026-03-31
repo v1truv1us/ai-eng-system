@@ -243,3 +243,9 @@ Use this skill to enhance:
 - `/review` multi-agent coordination  
 - Subagent persona definitions
 - Complex debugging sessions
+
+## See Also
+
+- `prompt-refinement` — For structuring prompts with TCRO framework
+- `content-optimization` — For applying these techniques across content types
+- `comprehensive-research` — For research agent enhancement with these techniques

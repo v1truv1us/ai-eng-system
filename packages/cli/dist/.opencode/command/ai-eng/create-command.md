@@ -1,5 +1,4 @@
 ---
-name: ai-eng/create-command
 description: Create a new OpenCode command with AI assistance. Uses command-creator for intelligent command generation.
 agent: command-creator
 subtask: true

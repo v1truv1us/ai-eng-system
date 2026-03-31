@@ -1,5 +1,4 @@
 ---
-name: ai-eng/k8s
 description: "Automate Kubernetes deployments, scaling, and cluster management for production workloads"
 agent: build
 version: 1.0.0

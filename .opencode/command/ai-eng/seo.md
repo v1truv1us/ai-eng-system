@@ -1,5 +1,4 @@
 ---
-name: ai-eng/seo
 description: Run SEO audit on a page or site
 agent: review
 ---

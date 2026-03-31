@@ -32,4 +32,4 @@ export {
 } from "./content-loader.js";
 
 // Export version
-export const version = "0.5.10";
+export const version = "0.6.0";

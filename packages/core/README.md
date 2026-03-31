@@ -46,4 +46,4 @@ You can also import path helpers from `@ai-eng-system/core/paths`.
 
 ## Release status
 
-Current published version: `0.5.10`
+Current published version: `0.6.0`

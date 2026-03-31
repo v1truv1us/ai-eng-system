@@ -1,5 +1,4 @@
 ---
-name: ai-eng/agent-analyzer
 description: "Analyze AI agent performance, behavior patterns, and workflow effectiveness"
 agent: build
 version: 1.0.0

@@ -1,5 +1,4 @@
 ---
-name: ai-eng/slack
 description: "Integrate applications with Slack for notifications, commands, and team collaboration"
 agent: build
 version: 1.0.0

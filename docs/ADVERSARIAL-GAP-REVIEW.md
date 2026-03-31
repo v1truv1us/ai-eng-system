@@ -7,7 +7,7 @@
 
 ## Executive Summary
 
-The ai-eng-system has **28 agents**, **12 skills**, **42 commands**, and **1 tool** covering core development, quality, and operations domains. 
+The ai-eng-system now has **32 agents**, **12 skills**, **42 commands**, and **1 tool** covering core development, quality, and operations domains.
 
 **Critical Finding**: While coverage is strong in meta-agents (plugin development) and general development/quality, there are **15+ critical gaps** across specialized frameworks, mobile development, data engineering, and emerging technologies. These gaps represent significant blind spots for modern software development.
 

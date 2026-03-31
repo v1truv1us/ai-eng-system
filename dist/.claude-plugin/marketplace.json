@@ -6,15 +6,15 @@
     "email": "contact@v1truv1us.dev"
   },
   "metadata": {
-    "description": "AI Engineering System - Advanced development tools with context engineering, research orchestration, and 28 specialized agents",
-    "version": "0.5.10"
+    "description": "AI Engineering System - Advanced development tools with context engineering, research orchestration, and 32 specialized agents",
+    "version": "0.6.0"
   },
   "plugins": [
     {
       "name": "ai-eng-system",
       "source": "./plugins/ai-eng-system",
-      "description": "AI Engineering System with context engineering, research orchestration, 15 commands, 28 specialized agents, and 12+ reusable skills for Claude Code & OpenCode",
-      "version": "0.5.10",
+      "description": "AI Engineering System with context engineering, research orchestration, 42 commands, 32 specialized agents, and 12+ reusable skills for Claude Code & OpenCode",
+      "version": "0.6.0",
       "author": {
         "name": "v1truv1us",
         "email": "contact@v1truv1us.dev"
