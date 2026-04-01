@@ -107,7 +107,7 @@ jobs:
       - name: Publish core
         if: contains(env.PACKAGES_TO_PUBLISH, 'core') && github.event.inputs.dry_run != 'true' && env.CORE_ALREADY_PUBLISHED != 'true'
         working-directory: ./packages/core
-        run: npm publish --access public --provenance
+        run: npm publish --access public --provenance --tag latest
       - name: Publish toolkit (dry-run)
         if: contains(env.PACKAGES_TO_PUBLISH, 'toolkit') && github.event.inputs.dry_run == 'true'
         working-directory: ./packages/toolkit
@@ -115,7 +115,7 @@ jobs:
       - name: Publish toolkit
         if: contains(env.PACKAGES_TO_PUBLISH, 'toolkit') && github.event.inputs.dry_run != 'true' && env.TOOLKIT_ALREADY_PUBLISHED != 'true'
         working-directory: ./packages/toolkit
-        run: npm publish --access public --provenance
+        run: npm publish --access public --provenance --tag latest
       - name: Swap in CLI publish manifest
         if: contains(env.PACKAGES_TO_PUBLISH, 'cli')
         run: bun scripts/prepublish-cli.ts
@@ -126,7 +126,7 @@ jobs:
       - name: Publish CLI
         if: contains(env.PACKAGES_TO_PUBLISH, 'cli') && github.event.inputs.dry_run != 'true' && env.CLI_ALREADY_PUBLISHED != 'true'
         working-directory: ./packages/cli
-        run: npm publish --access public --provenance
+        run: npm publish --access public --provenance --tag latest
       - name: Restore development manifest
         if: always() && contains(env.PACKAGES_TO_PUBLISH, 'cli')
         run: bun scripts/postpublish-cli.ts
