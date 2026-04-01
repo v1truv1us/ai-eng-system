@@ -1,6 +1,6 @@
 {
   "name": "ai-eng-plugin-dev",
-  "version": "1.0.224",
+  "version": "1.0.0",
   "description": "Meta-tooling for creating plugins, agents, commands, and skills",
   "author": {
     "name": "v1truv1us"
