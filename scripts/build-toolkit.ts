@@ -8,6 +8,15 @@ const scriptsDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(scriptsDir, "..");
 const toolkitRoot = resolve(repoRoot, "packages/toolkit");
 
+const PLUGIN_NAMES = [
+  "ai-eng-core",
+  "ai-eng-research",
+  "ai-eng-devops",
+  "ai-eng-quality",
+  "ai-eng-content",
+  "ai-eng-plugin-dev",
+];
+
 const sources = [
   {
     source: resolve(repoRoot, "dist/.claude-plugin"),
@@ -17,16 +26,18 @@ const sources = [
     source: resolve(repoRoot, "dist/.opencode"),
     target: resolve(toolkitRoot, ".opencode"),
   },
-  {
-    source: resolve(repoRoot, "plugins/ai-eng-system"),
-    target: resolve(toolkitRoot, "plugins/ai-eng-system"),
-  },
+  ...PLUGIN_NAMES.map((name) => ({
+    source: resolve(repoRoot, `plugins/${name}`),
+    target: resolve(toolkitRoot, `plugins/${name}`),
+  })),
 ];
 
 const requiredMarkers = [
   resolve(toolkitRoot, ".claude-plugin/plugin.json"),
   resolve(toolkitRoot, ".opencode/opencode.jsonc"),
-  resolve(toolkitRoot, "plugins/ai-eng-system/plugin.json"),
+  ...PLUGIN_NAMES.map((name) =>
+    resolve(toolkitRoot, `plugins/${name}/plugin.json`),
+  ),
 ];
 
 async function assertExists(path: string) {

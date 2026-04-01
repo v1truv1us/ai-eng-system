@@ -1,0 +1,16 @@
+{
+  "name": "ai-eng-research",
+  "version": "0.7.0",
+  "description": "Deep research, knowledge capture, and documentation tools",
+  "author": {
+    "name": "v1truv1us"
+  },
+  "license": "MIT",
+  "commands": [
+    "./commands/deep-research.md",
+    "./commands/research-companion.md",
+    "./commands/context7-docs.md",
+    "./commands/fact-check.md",
+    "./commands/knowledge-capture.md"
+  ]
+}

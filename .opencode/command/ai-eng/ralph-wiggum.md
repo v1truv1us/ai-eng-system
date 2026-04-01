@@ -1,4 +1,5 @@
 ---
+name: ai-eng/ralph-wiggum
 description: Full-cycle feature development with continuous iteration through all spec-driven workflow phases (Research → Specify → Plan → Work → Review) until feature is complete.
 agent: build
 version: 1.0.0

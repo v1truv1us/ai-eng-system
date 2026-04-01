@@ -1,4 +1,5 @@
 ---
+name: ai-eng/init
 description: Initialize ai-eng-system configuration and project setup
 agent: plan
 version: 1.0.0

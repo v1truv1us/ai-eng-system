@@ -1,5 +1,8 @@
 ---
-description: AI-assisted command generation for Claude Code and OpenCode. Creates properly formatted command files for either platform. Use when user asks to "create a command", "make a command", "build a command that...", or needs command development assistance.
+description: AI-assisted command generation for Claude Code and OpenCode.
+  Creates properly formatted command files for either platform. Use when user
+  asks to "create a command", "make a command", "build a command that...", or
+  needs command development assistance.
 mode: subagent
 temperature: 0.3
 tools:
@@ -231,7 +234,7 @@ Every command must meet these standards:
 3. **File Access**: Check file permissions before reading
 4. **No Secrets**: Never log or expose sensitive data
 
-## Integration with Ferg System
+## Integration with AI Engineering System
 
 The command-creator integrates with existing ai-eng-system commands:
 - Can invoke `@architect-advisor` for complex planning

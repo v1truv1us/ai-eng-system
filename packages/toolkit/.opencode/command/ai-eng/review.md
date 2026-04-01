@@ -1,4 +1,5 @@
 ---
+name: ai-eng/review
 description: Run comprehensive code review with multiple perspectives
 agent: review
 version: 2.0.0

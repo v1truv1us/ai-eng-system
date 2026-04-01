@@ -1,20 +1,19 @@
 {
-  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "ai-eng-marketplace",
+  "name": "ai-eng-system",
   "owner": {
     "name": "v1truv1us",
     "email": "contact@v1truv1us.dev"
   },
   "metadata": {
-    "description": "AI Engineering System - Advanced development tools with context engineering, research orchestration, and 32 specialized agents",
-    "version": "0.6.0"
+    "description": "AI Engineering System - Modular development tools with context engineering, research orchestration, and specialized agents",
+    "version": "0.7.0"
   },
   "plugins": [
     {
-      "name": "ai-eng-system",
-      "source": "./plugins/ai-eng-system",
-      "description": "AI Engineering System with context engineering, research orchestration, 42 commands, 32 specialized agents, and 12+ reusable skills for Claude Code & OpenCode",
-      "version": "0.6.0",
+      "name": "ai-eng-core",
+      "source": "./plugins/ai-eng-core",
+      "description": "Core workflow: plan, work, review cycle with research and context engineering",
+      "version": "0.7.0",
       "author": {
         "name": "v1truv1us",
         "email": "contact@v1truv1us.dev"
@@ -25,29 +24,146 @@
       "keywords": [
         "ai",
         "engineering",
-        "context",
-        "research",
-        "orchestration",
-        "agents",
         "workflow",
         "planning",
         "review",
-        "deployment",
-        "seo",
-        "optimization",
-        "atomic-tasks",
-        "quality-gates"
+        "context-engineering"
       ],
-      "category": "AI & Development Tools",
+      "category": "development",
       "tags": [
         "productivity",
-        "code-review",
-        "architecture",
         "workflow",
-        "context-engineering",
+        "architecture",
+        "context-engineering"
+      ]
+    },
+    {
+      "name": "ai-eng-research",
+      "source": "./plugins/ai-eng-research",
+      "description": "Deep research, knowledge capture, and documentation tools",
+      "version": "0.7.0",
+      "author": {
+        "name": "v1truv1us",
+        "email": "contact@v1truv1us.dev"
+      },
+      "homepage": "https://github.com/v1truv1us/ai-eng-system#readme",
+      "repository": "https://github.com/v1truv1us/ai-eng-system",
+      "license": "MIT",
+      "keywords": [
+        "research",
+        "documentation",
+        "knowledge",
+        "fact-checking"
+      ],
+      "category": "development",
+      "tags": [
         "research-orchestration",
-        "atomic-planning",
-        "quality-assurance"
+        "documentation",
+        "knowledge-capture"
+      ]
+    },
+    {
+      "name": "ai-eng-devops",
+      "source": "./plugins/ai-eng-devops",
+      "description": "Infrastructure, deployment, and DevOps automation",
+      "version": "0.7.0",
+      "author": {
+        "name": "v1truv1us",
+        "email": "contact@v1truv1us.dev"
+      },
+      "homepage": "https://github.com/v1truv1us/ai-eng-system#readme",
+      "repository": "https://github.com/v1truv1us/ai-eng-system",
+      "license": "MIT",
+      "keywords": [
+        "devops",
+        "deployment",
+        "infrastructure",
+        "monitoring",
+        "kubernetes"
+      ],
+      "category": "development",
+      "tags": [
+        "devops",
+        "deployment",
+        "infrastructure",
+        "monitoring"
+      ]
+    },
+    {
+      "name": "ai-eng-quality",
+      "source": "./plugins/ai-eng-quality",
+      "description": "Testing, security scanning, code review, and quality assurance",
+      "version": "0.7.0",
+      "author": {
+        "name": "v1truv1us",
+        "email": "contact@v1truv1us.dev"
+      },
+      "homepage": "https://github.com/v1truv1us/ai-eng-system#readme",
+      "repository": "https://github.com/v1truv1us/ai-eng-system",
+      "license": "MIT",
+      "keywords": [
+        "testing",
+        "security",
+        "code-review",
+        "quality",
+        "performance"
+      ],
+      "category": "development",
+      "tags": [
+        "quality-assurance",
+        "security",
+        "code-review",
+        "testing"
+      ]
+    },
+    {
+      "name": "ai-eng-content",
+      "source": "./plugins/ai-eng-content",
+      "description": "Content optimization, SEO, and communication tools",
+      "version": "0.7.0",
+      "author": {
+        "name": "v1truv1us",
+        "email": "contact@v1truv1us.dev"
+      },
+      "homepage": "https://github.com/v1truv1us/ai-eng-system#readme",
+      "repository": "https://github.com/v1truv1us/ai-eng-system",
+      "license": "MIT",
+      "keywords": [
+        "content",
+        "seo",
+        "optimization",
+        "communication"
+      ],
+      "category": "development",
+      "tags": [
+        "content-optimization",
+        "seo",
+        "communication"
+      ]
+    },
+    {
+      "name": "ai-eng-plugin-dev",
+      "source": "./plugins/ai-eng-plugin-dev",
+      "description": "Meta-tooling for creating plugins, agents, commands, and skills",
+      "version": "0.7.0",
+      "author": {
+        "name": "v1truv1us",
+        "email": "contact@v1truv1us.dev"
+      },
+      "homepage": "https://github.com/v1truv1us/ai-eng-system#readme",
+      "repository": "https://github.com/v1truv1us/ai-eng-system",
+      "license": "MIT",
+      "keywords": [
+        "plugin",
+        "agent",
+        "meta-tooling",
+        "code-generation"
+      ],
+      "category": "development",
+      "tags": [
+        "plugin-development",
+        "meta-tooling",
+        "code-generation"
       ]
     }
   ]

@@ -1,4 +1,5 @@
 ---
+name: ai-eng/db-optimize
 description: "Optimize database performance, analyze query patterns, and implement efficient data structures"
 agent: build
 version: 1.0.0

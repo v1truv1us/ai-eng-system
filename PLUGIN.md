@@ -1,24 +1,58 @@
-# Ferg Engineering System - Plugin Installation & Usage
+# AI Engineering System - Plugin Installation & Usage
 
-The Ferg Engineering System is available as plugins for both **Claude Code** and **OpenCode**, providing a unified engineering workflow across both platforms.
+The AI Engineering System is available as a **modular marketplace** with 6 focused plugins for **Claude Code**, plus a unified package for **OpenCode**.
 
 ## Claude Code Installation
 
-### Option 1: Marketplace (Recommended)
+### Step 1: Add the Marketplace
 
 ```bash
-/plugin marketplace add v1truv1us/ai-eng-marketplace
-/plugin install ai-eng-system@v1truv1us
+claude plugin marketplace add v1truv1us/ai-eng-system
 ```
 
-### Option 2: Direct Repository
+### Step 2: Install Plugins
+
+Install individual plugins based on your needs:
 
 ```bash
-# Install directly from repository
-claude plugin add https://github.com/v1truv1us/ai-eng-system
+# Core workflow (recommended - start here)
+claude plugin install ai-eng-core ai-eng-system
+
+# Deep research & documentation
+claude plugin install ai-eng-research ai-eng-system
+
+# DevOps & deployment
+claude plugin install ai-eng-devops ai-eng-system
+
+# Testing, security & quality
+claude plugin install ai-eng-quality ai-eng-system
+
+# Content, SEO & communication
+claude plugin install ai-eng-content ai-eng-system
+
+# Plugin/agent/command creation tools
+claude plugin install ai-eng-plugin-dev ai-eng-system
 ```
 
-### Option 3: Local Development
+Or install all plugins at once:
+```bash
+for plugin in ai-eng-core ai-eng-research ai-eng-devops ai-eng-quality ai-eng-content ai-eng-plugin-dev; do
+  claude plugin install $plugin ai-eng-system
+done
+```
+
+### Available Plugins
+
+| Plugin | Commands | Agents | Description |
+|--------|----------|--------|-------------|
+| **ai-eng-core** | 8 | 6 | Plan/work/review cycle, research, context engineering |
+| **ai-eng-research** | 5 | 4 | Deep research, knowledge capture, documentation |
+| **ai-eng-devops** | 9 | 6 | Deploy, Docker, K8s, monitoring, infrastructure |
+| **ai-eng-quality** | 9 | 7 | Code review, security, testing, debugging |
+| **ai-eng-content** | 5 | 3 | SEO, content optimization, communication |
+| **ai-eng-plugin-dev** | 6 | 6 | Create agents, commands, skills, plugins |
+
+### Local Development
 
 Clone and link the repository:
 ```bash
@@ -29,12 +63,7 @@ claude plugin link .
 
 ### Verification
 
-After installation, verify in Claude Code:
-- **42 Claude/OpenCode commands available**: see [Commands Reference](./docs/reference/commands.md) for the full list
-- **32 Agents available**: All specialized agents for development, testing, deployment, architecture, data, mobile, and AI systems
-- **12+ Skills**: knowledge-capture, monorepo-initialization, content-optimization, text-cleanup, devops, prompting, research, and more
-
-**Note**: `compound`, `recursive-init`, `clean`, and `optimize` commands were converted to skills for better organization. See `docs/COMMAND-MIGRATION.md`.
+After installation, verify with `claude plugin list`. You should see your installed plugins listed as enabled.
 
 ## OpenCode Installation
 
@@ -289,20 +318,20 @@ Both Claude Code and OpenCode enforce this through:
 **Plugin not appearing in command list?**
 ```bash
 # Check plugin status
-/plugin list
+claude plugin list
 
-# Reinstall the plugin
-/plugin uninstall ai-eng-system@v1truv1us
-/plugin install ai-eng-system@v1truv1us
+# Update marketplace and reinstall
+claude plugin marketplace update ai-eng-system
+claude plugin install ai-eng-core ai-eng-system
 ```
 
 **Marketplace not available?**
 ```bash
-# Add marketplace manually
-/plugin marketplace add v1truv1us/ai-eng-marketplace
+# Add marketplace
+claude plugin marketplace add v1truv1us/ai-eng-system
 
-# Then install
-/plugin install ai-eng-system@v1truv1us
+# Then install plugins
+claude plugin install ai-eng-core ai-eng-system
 ```
 
 ### OpenCode

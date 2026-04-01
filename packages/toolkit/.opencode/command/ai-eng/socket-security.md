@@ -1,4 +1,5 @@
 ---
+name: ai-eng/socket-security
 description: "Analyze npm package security and quality using Socket.dev to identify supply chain risks"
 agent: build
 version: 1.0.0

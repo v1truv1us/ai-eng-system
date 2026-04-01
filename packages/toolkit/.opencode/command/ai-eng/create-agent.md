@@ -1,4 +1,5 @@
 ---
+name: ai-eng/create-agent
 description: Create a new OpenCode agent with AI assistance. Uses agent-creator for intelligent agent generation.
 agent: agent-creator
 subtask: true
@@ -35,7 +36,7 @@ The balance specificity with flexibility in agent design. The challenge is defin
 Agent will be saved to:
 - Project-local: `.opencode/agent/[name].md`
 - Global: `~/.config/opencode/agent/[name].md`
-- Ferg content: `content/agents/[name].md`
+- Canonical content: `content/agents/[name].md`
 
 ## Examples
 

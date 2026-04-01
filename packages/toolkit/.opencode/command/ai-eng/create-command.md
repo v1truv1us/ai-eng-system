@@ -1,4 +1,5 @@
 ---
+name: ai-eng/create-command
 description: Create a new OpenCode command with AI assistance. Uses command-creator for intelligent command generation.
 agent: command-creator
 subtask: true
@@ -35,7 +36,7 @@ The design command interface that balances simplicity with power. The challenge 
 Command will be saved to:
 - Project-local: `.opencode/command/[name].md`
 - Global: `~/.config/opencode/command/[name].md`
-- Ferg content: `content/commands/[name].md`
+- Canonical content: `content/commands/[name].md`
 
 ## Examples
 

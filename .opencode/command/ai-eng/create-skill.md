@@ -1,4 +1,5 @@
 ---
+name: ai-eng/create-skill
 description: Create a new OpenCode skill with AI assistance. Uses skill-creator for intelligent skill generation.
 agent: skill-creator
 subtask: true
@@ -35,7 +36,7 @@ The balance depth with conciseness in skill design. The challenge is providing c
 Skill will be saved to:
 - Project-local: `.opencode/skill/[skill-name]/SKILL.md`
 - Global: `~/.config/opencode/skill/[skill-name]/SKILL.md`
-- Ferg content: `content/skills/[skill-name]/SKILL.md`
+- Canonical content: `content/skills/[skill-name]/SKILL.md`
 
 ## Examples
 

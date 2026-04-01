@@ -1,8 +1,13 @@
 ---
-description: |
-  Expert mobile application developer specializing in iOS (Swift/SwiftUI), Android (Kotlin/Jetpack Compose), React Native, and Flutter.
-  Implements platform-specific patterns, state management, navigation, push notifications, and app store deployment.
-  Use PROACTIVELY for any mobile development task, cross-platform apps, or mobile CI/CD.
+description: >
+  Expert mobile application developer specializing in iOS (Swift/SwiftUI),
+  Android (Kotlin/Jetpack Compose), React Native, and Flutter.
+
+  Implements platform-specific patterns, state management, navigation, push
+  notifications, and app store deployment.
+
+  Use PROACTIVELY for any mobile development task, cross-platform apps, or
+  mobile CI/CD.
 mode: subagent
 temperature: 0.1
 tools:

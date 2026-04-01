@@ -1,0 +1,16 @@
+{
+  "hooks": [
+    {
+      "matcher": {
+        "event": "notification",
+        "type": "session_start"
+      },
+      "hooks": [
+        {
+          "type": "command",
+          "command": "echo '🔧 AI Engineering System loaded. Key commands: /plan, /work, /review, /research'"
+        }
+      ]
+    }
+  ]
+}

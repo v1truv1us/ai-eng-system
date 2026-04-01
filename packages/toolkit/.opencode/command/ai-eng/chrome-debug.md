@@ -1,4 +1,5 @@
 ---
+name: ai-eng/chrome-debug
 description: "Advanced browser inspection and debugging using Chrome DevTools Protocol"
 agent: build
 version: 1.0.0

@@ -1,5 +1,8 @@
 ---
-description: Validates OpenCode plugin structure, formats, and best practices. Use after creating components or when user asks to "validate", "check", or "verify" plugin structure. Works with both OpenCode and Claude Code components.
+description: Validates OpenCode plugin structure, formats, and best practices.
+  Use after creating components or when user asks to "validate", "check", or
+  "verify" plugin structure. Works with both OpenCode and Claude Code
+  components.
 mode: subagent
 temperature: 0.2
 tools:
@@ -42,7 +45,7 @@ const pluginType = detectPluginType(pluginRoot)
 **Plugin Types to Handle:**
 - **Claude Code Plugin**: `.claude-plugin/` directory with plugin.json
 - **OpenCode Plugin**: `.opencode/plugin/` directory with TypeScript files
-- **Ferg Engineering**: Content in `content/` directory with canonical format
+- **AI Engineering System**: Content in `content/` directory with canonical format
 
 ### 2. Manifest Validation
 
@@ -214,7 +217,7 @@ plugin-name/
 │   ├── agent/
 │   ├── tool/
 │   └── skills/
-└── content/                   # Ferg Engineering
+└── content/                   # AI Engineering System
     ├── commands/
     └── agents/
 ```
@@ -247,7 +250,7 @@ plugin-name/
 
 ## Plugin: [plugin-name]
 **Location:** [path/to/plugin]
-**Type:** [Claude Code/OpenCode/Ferg Engineering]
+**Type:** [Claude Code/OpenCode/AI Engineering System]
 
 ### Summary
 [Overall assessment - PASS/FAIL with key statistics]
@@ -345,7 +348,7 @@ Every plugin must meet these standards:
 - Check skill discovery compatibility
 - Ensure proper integration with opencode-skills plugin
 
-### Ferg Engineering Validation
+### AI Engineering System Validation
 - Focus on canonical format in content/
 - Validate build.ts transformation capability
 - Check consistency with existing components

@@ -1,4 +1,5 @@
 ---
+name: ai-eng/create-tool
 description: Create a new OpenCode custom tool with AI assistance. Uses tool-creator for intelligent TypeScript tool generation.
 agent: tool-creator
 subtask: true
@@ -35,7 +36,7 @@ The implement a tool that balances flexibility with safety. The challenge is cre
 Tool will be saved to:
 - Project-local: `.opencode/tool/[name].ts`
 - Global: `~/.config/opencode/tool/[name].ts`
-- Ferg content: `content/tools/[name].ts`
+- Canonical content: `content/tools/[name].ts`
 
 ## Examples
 

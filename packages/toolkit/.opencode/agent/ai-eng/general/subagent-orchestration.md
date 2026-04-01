@@ -1,5 +1,7 @@
 ---
-description: Ensures proper delegation to ai-eng-system specialized agents. Apply before any development task. Use for routing decisions when working with ai-eng-system.
+description: Ensures proper delegation to ai-eng-system specialized agents.
+  Apply before any development task. Use for routing decisions when working with
+  ai-eng-system.
 mode: subagent
 ---
 

@@ -1,5 +1,8 @@
 ---
-description: AI-assisted agent generation for Claude Code and OpenCode. Creates properly formatted agent files for either platform. Use when user asks to "create an agent", "generate an agent", "make an agent that...", or describes agent functionality needed.
+description: AI-assisted agent generation for Claude Code and OpenCode. Creates
+  properly formatted agent files for either platform. Use when user asks to
+  "create an agent", "generate an agent", "make an agent that...", or describes
+  agent functionality needed.
 mode: subagent
 temperature: 0.3
 tools:
@@ -210,7 +213,7 @@ Every agent must meet these standards:
 - **Very complex requirements**: Break into multiple specialized agents
 - **User wants specific model**: Honor model preference in configuration
 
-## Integration with Ferg System
+## Integration with AI Engineering System
 
 The agent-creator integrates with existing ai-eng-system agents:
 - Can invoke `@architect-advisor` for complex architectural decisions

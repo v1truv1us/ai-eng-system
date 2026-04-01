@@ -7,7 +7,7 @@
 This AGENTS.md provides the **technical implementation** layer that translates the philosophy from CLAUDE.md into executable commands and agent integration points.
 
 ## Project Overview
-Claude Code command definitions for the Ferg Engineering System.
+Claude Code command definitions for the AI Engineering System.
 
 ## Directory Structure
 - `commands/` - Individual command markdown files

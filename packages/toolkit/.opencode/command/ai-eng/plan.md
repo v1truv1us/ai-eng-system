@@ -1,4 +1,5 @@
 ---
+name: ai-eng/plan
 description: Create detailed implementation plans from specifications
 agent: plan
 version: 2.0.0

@@ -1,4 +1,5 @@
 ---
+name: ai-eng/work
 description: Execute a plan or task with systematic tracking, quality gates, and comprehensive validation.
 agent: build
 version: 2.0.0

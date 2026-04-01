@@ -1,7 +1,7 @@
 {
-  "name": "@ferg-engineering/system",
-  "version": "0.6.0",
-  "description": "Ferg Engineering System: AI-powered engineering automation with comprehensive research, validation, and deployment workflows",
+  "name": "@ai-eng-system/workspace",
+  "version": "0.7.0",
+  "description": "AI Engineering System: AI-powered engineering automation with comprehensive research, validation, and deployment workflows",
   "private": true,
   "type": "module",
   "workspaces": [
@@ -9,7 +9,7 @@
   ],
   "main": "dist/index.js",
   "bin": {
-    "ferg-install": "scripts/install.js"
+    "ai-eng-install": "scripts/install.js"
   },
   "files": [
     "dist",
@@ -25,13 +25,13 @@
       "import": "./dist/agents/index.js"
     }
   },
-  "homepage": "https://github.com/v1truv1us/ferg-engineering-system",
+  "homepage": "https://github.com/v1truv1us/ai-eng-system",
   "repository": {
     "type": "git",
-    "url": "https://github.com/v1truv1us/ferg-engineering-system"
+    "url": "https://github.com/v1truv1us/ai-eng-system"
   },
   "bugs": {
-    "url": "https://github.com/v1truv1us/ferg-engineering-system/issues"
+    "url": "https://github.com/v1truv1us/ai-eng-system/issues"
   },
   "scripts": {
     "build": "bun run build:core && bun run build:cli && bun run copy:content && bun run build:toolkit",

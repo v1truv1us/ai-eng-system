@@ -1,8 +1,13 @@
 ---
-description: |
-  Expert AI agent developer specializing in building production-grade AI agents, MCP servers, and A2A protocol implementations.
-  Implements tool/function calling, agent orchestration, memory systems, and multi-agent coordination patterns.
-  Use PROACTIVELY for AI agent development, MCP server creation, tool integration, or agent orchestration.
+description: >
+  Expert AI agent developer specializing in building production-grade AI agents,
+  MCP servers, and A2A protocol implementations.
+
+  Implements tool/function calling, agent orchestration, memory systems, and
+  multi-agent coordination patterns.
+
+  Use PROACTIVELY for AI agent development, MCP server creation, tool
+  integration, or agent orchestration.
 mode: subagent
 temperature: 0.1
 tools:
