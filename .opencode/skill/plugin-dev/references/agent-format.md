@@ -58,7 +58,7 @@ Agent system prompt here...
 
 ## OpenCode Output
 
-Build.ts transforms canonical to OpenCode format (YAML frontmatter):
+Build.ts transforms canonical to OpenCode format (table frontmatter):
 
 ```markdown
 | description | mode |
@@ -227,7 +227,7 @@ permission:
 
 You are a senior code reviewer with 10+ years of experience...
 
-## Integration with AI Engineering System
+## Integration with Ferg System
 
 ### Existing Agents
 

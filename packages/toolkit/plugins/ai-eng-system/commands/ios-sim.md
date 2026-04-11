@@ -7,4 +7,4 @@ version: 1.0.0
 
 # iOS Simulator Control
 
-Load `skills/ios-simulator-control/SKILL.md` and follow its instructions.
+Use iOS simulator tooling to boot devices, install apps, capture logs, and reproduce target flows. Report the simulator target, commands run, and the observed result.

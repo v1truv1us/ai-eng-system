@@ -7,4 +7,4 @@ version: 1.0.0
 
 # Docker Container Management
 
-Load `skills/docker-container-management/SKILL.md` and follow its instructions.
+Inspect Dockerfiles, Compose files, and container state first. Use Docker tooling to build, run, debug, or clean containers and images, then return the exact commands used, observed output, and the smallest safe next action.

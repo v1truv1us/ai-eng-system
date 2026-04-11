@@ -45,7 +45,7 @@ const pluginType = detectPluginType(pluginRoot)
 **Plugin Types to Handle:**
 - **Claude Code Plugin**: `.claude-plugin/` directory with plugin.json
 - **OpenCode Plugin**: `.opencode/plugin/` directory with TypeScript files
-- **AI Engineering System**: Content in `content/` directory with canonical format
+- **Ferg Engineering**: Content in `content/` directory with canonical format
 
 ### 2. Manifest Validation
 
@@ -217,7 +217,7 @@ plugin-name/
 │   ├── agent/
 │   ├── tool/
 │   └── skills/
-└── content/                   # AI Engineering System
+└── content/                   # Ferg Engineering
     ├── commands/
     └── agents/
 ```
@@ -250,7 +250,7 @@ plugin-name/
 
 ## Plugin: [plugin-name]
 **Location:** [path/to/plugin]
-**Type:** [Claude Code/OpenCode/AI Engineering System]
+**Type:** [Claude Code/OpenCode/Ferg Engineering]
 
 ### Summary
 [Overall assessment - PASS/FAIL with key statistics]
@@ -348,7 +348,7 @@ Every plugin must meet these standards:
 - Check skill discovery compatibility
 - Ensure proper integration with opencode-skills plugin
 
-### AI Engineering System Validation
+### Ferg Engineering Validation
 - Focus on canonical format in content/
 - Validate build.ts transformation capability
 - Check consistency with existing components

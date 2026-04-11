@@ -7,4 +7,4 @@ version: 1.0.0
 
 # Context7 Documentation Research
 
-Load `skills/context7-documentation-research/SKILL.md` and follow its instructions.
+Load `skills/comprehensive-research/SKILL.md` and adapt it for vendor and framework documentation research, preferring primary docs, exact citations, and directly actionable guidance.

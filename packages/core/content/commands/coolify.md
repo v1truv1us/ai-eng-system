@@ -7,4 +7,4 @@ version: 1.0.0
 
 # Coolify Application Management
 
-Load `skills/coolify-application-management/SKILL.md` and follow its instructions.
+Load `skills/coolify-deploy/SKILL.md` and follow its instructions.

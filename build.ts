@@ -92,6 +92,7 @@ const NAMED_COLOR_TO_HEX: Record<string, string> = {
 const SKILL_NAME_REGEX = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const SKILL_NAME_MIN_LENGTH = 1;
 const SKILL_NAME_MAX_LENGTH = 64;
+const SKILL_REFERENCE_REGEX = /skills\/([A-Za-z0-9/_-]+)\/SKILL\.md/g;
 
 type FrontmatterParseResult = {
     meta: Record<string, any>;
@@ -176,6 +177,38 @@ function validateSkillName(name: string, filePath: string): void {
             `Skill name '${name}' must be lowercase alphanumeric with single hyphens (regex: ${SKILL_NAME_REGEX}): ${filePath}`,
         );
     }
+}
+
+function extractSkillReferences(markdown: string): string[] {
+    const refs = new Set<string>();
+
+    for (const match of markdown.matchAll(SKILL_REFERENCE_REGEX)) {
+        refs.add(match[1]);
+    }
+
+    return [...refs];
+}
+
+async function validateCommandSkillReferences(
+    commandFiles: string[],
+): Promise<string[]> {
+    const errors: string[] = [];
+
+    for (const fp of commandFiles) {
+        const content = await readFile(fp, "utf-8");
+        const skillRefs = extractSkillReferences(content);
+
+        for (const skillRef of skillRefs) {
+            const skillFile = join(SKILLS_DIR, skillRef, "SKILL.md");
+            if (!existsSync(skillFile)) {
+                errors.push(
+                    `${fp}: references missing skill 'skills/${skillRef}/SKILL.md'`,
+                );
+            }
+        }
+    }
+
+    return errors;
 }
 
 interface SkillInfo {
@@ -844,8 +877,8 @@ interface PluginConfig {
 const PLUGIN_MAP: Record<string, PluginConfig> = {
     "ai-eng-core": {
         commands: ["plan", "work", "review", "specify", "research", "simplify", "context", "init"],
-        agents: ["architect-advisor", "full_stack_developer", "backend_architect", "frontend-reviewer", "subagent-orchestration", "java-pro"],
-        skills: ["comprehensive-research", "prompt-refinement", "incentive-prompting", "text-cleanup", "ai-eng", "workflow"],
+        agents: ["architect-advisor", "full-stack-developer", "backend-architect", "frontend-reviewer", "subagent-orchestration", "java-pro"],
+        skills: ["comprehensive-research", "prompt-refinement", "incentive-prompting", "text-cleanup", "code-simplification", "incremental-implementation", "ai-eng", "workflow"],
         description: "Core workflow: plan, work, review cycle with research and context engineering",
         category: "development",
         keywords: ["ai", "engineering", "workflow", "planning", "review", "context-engineering"],
@@ -854,7 +887,7 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
     },
     "ai-eng-research": {
         commands: ["deep-research", "research-companion", "context7-docs", "fact-check", "knowledge-capture"],
-        agents: ["ai_engineer", "docs-writer", "documentation_specialist", "ml_engineer"],
+        agents: ["ai-engineer", "docs-writer", "documentation-specialist", "ml-engineer"],
         skills: ["knowledge-capture", "content-optimization"],
         description: "Deep research, knowledge capture, and documentation tools",
         category: "development",
@@ -863,7 +896,7 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
     },
     "ai-eng-devops": {
         commands: ["deploy", "coolify", "docker", "k8s", "cloudflare", "monitoring", "sentry", "github", "git-workflow"],
-        agents: ["deployment_engineer", "infrastructure_builder", "aws-architect", "monitoring_expert", "cost_optimizer", "data-engineer"],
+        agents: ["deployment-engineer", "infrastructure-builder", "aws-architect", "monitoring-expert", "cost-optimizer", "data-engineer"],
         skills: ["coolify-deploy", "git-worktree"],
         description: "Infrastructure, deployment, and DevOps automation",
         category: "development",
@@ -872,8 +905,8 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
     },
     "ai-eng-quality": {
         commands: ["code-review", "security-scan", "socket-security", "api-test", "playwright", "chrome-debug", "ios-sim", "xcodebuild", "db-optimize"],
-        agents: ["code_reviewer", "security_scanner", "test_generator", "performance_engineer", "database_optimizer", "mobile-developer", "api_builder_enhanced"],
-        skills: [],
+        agents: ["code-reviewer", "security-scanner", "test-generator", "performance-engineer", "database-optimizer", "mobile-developer", "api-builder-enhanced"],
+        skills: ["code-review-and-quality", "debugging-and-error-recovery"],
         description: "Testing, security scanning, code review, and quality assurance",
         category: "development",
         keywords: ["testing", "security", "code-review", "quality", "performance"],
@@ -916,7 +949,9 @@ async function copySelectedMarkdownFiles(
             await copyFile(src, join(destDir, `${name}.md`));
             copied.push(`./commands/${name}.md`);
         } else {
-            console.warn(`  ⚠ Command not found: ${src}`);
+            throw new Error(
+                `Command not found during marketplace sync: ${src}`,
+            );
         }
     }
     return copied;
@@ -936,7 +971,7 @@ async function copySelectedAgentFiles(
         if (existsSync(src)) {
             await copyFile(src, join(destDir, `${name}.md`));
         } else {
-            console.warn(`  ⚠ Agent not found: ${src}`);
+            throw new Error(`Agent not found during marketplace sync: ${src}`);
         }
     }
 }
@@ -956,7 +991,7 @@ async function copySelectedSkills(
         if (existsSync(src)) {
             await copyDirRecursive(src, join(destDir, name));
         } else {
-            console.warn(`  ⚠ Skill not found: ${src}`);
+            throw new Error(`Skill not found during marketplace sync: ${src}`);
         }
     }
 }
@@ -1180,6 +1215,8 @@ async function validateContentOnly(): Promise<void> {
             errors.push(`${fp}: missing 'description' in frontmatter`);
     }
 
+    errors.push(...(await validateCommandSkillReferences(commandFiles)));
+
     for (const fp of agentFiles) {
         const content = await readFile(fp, "utf-8");
         const { meta } = parseFrontmatterStrict(content, fp);
@@ -1265,6 +1302,8 @@ async function buildAll(): Promise<void> {
     if (!existsSync(CONTENT_DIR)) {
         throw new Error("content/ directory not found");
     }
+
+    await validateContentOnly();
 
     // Build to dist/
     await buildClaude();

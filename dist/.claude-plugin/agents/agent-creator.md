@@ -212,7 +212,7 @@ Every agent must meet these standards:
 - **Very complex requirements**: Break into multiple specialized agents
 - **User wants specific model**: Honor model preference in configuration
 
-## Integration with AI Engineering System
+## Integration with Ferg System
 
 The agent-creator integrates with existing ai-eng-system agents:
 - Can invoke `@architect-advisor` for complex architectural decisions

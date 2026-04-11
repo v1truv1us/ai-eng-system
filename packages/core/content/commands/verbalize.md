@@ -7,4 +7,4 @@ version: 1.0.0
 
 # Verbalized Sampling
 
-Load `skills/verbalized-sampling/SKILL.md` and follow its instructions.
+Use verbalized sampling to surface multiple candidate approaches, compare them explicitly, and present the strongest answer with key tradeoffs and discarded alternatives.

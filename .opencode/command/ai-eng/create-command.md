@@ -36,7 +36,7 @@ The design command interface that balances simplicity with power. The challenge 
 Command will be saved to:
 - Project-local: `.opencode/command/[name].md`
 - Global: `~/.config/opencode/command/[name].md`
-- Canonical content: `content/commands/[name].md`
+- Ferg content: `content/commands/[name].md`
 
 ## Examples
 

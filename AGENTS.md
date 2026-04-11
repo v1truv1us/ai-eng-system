@@ -270,15 +270,21 @@ Run recursive-init on a monorepo: /recursive-init --dry-run --estimate-cost
 Use the architect-advisor to evaluate: Should we use microservices or a monolith?
 ```
 
-## Skills Available
+## Selected Skills
+
+The table below highlights the most important lifecycle and alignment skills. The repository also contains additional namespaced and platform-specific skills under `skills/`.
 
  | Skill | Location | Purpose |
 |-------|----------|---------|
-| coolify-deploy | skills/devops/ | Coolify deployment best practices |
-| git-worktree | skills/devops/ | Git worktree workflow |
-| prompt-refinement | skills/prompting/prompt-refinement/ | TCRO structuring with phase-specific clarification |
-| incentive-prompting | skills/prompting/ | Research-backed prompting techniques |
-| comprehensive-research | skills/research/ | Multi-phase research orchestration |
+| comprehensive-research | skills/comprehensive-research/ | Multi-phase research orchestration |
+| code-review-and-quality | skills/code-review-and-quality/ | Multi-axis review before merge |
+| code-simplification | skills/code-simplification/ | Behavior-preserving code simplification |
+| coolify-deploy | skills/coolify-deploy/ | Coolify deployment best practices |
+| debugging-and-error-recovery | skills/debugging-and-error-recovery/ | Root-cause debugging workflow |
+| git-worktree | skills/git-worktree/ | Git worktree workflow |
+| incremental-implementation | skills/incremental-implementation/ | Thin-slice implementation discipline |
+| prompt-refinement | skills/prompt-refinement/ | TCRO structuring with phase-specific clarification |
+| incentive-prompting | skills/incentive-prompting/ | Research-backed prompting techniques |
 | plugin-dev | skills/plugin-dev/ | Plugin development knowledge base |
 
 ## Key Commands
@@ -302,6 +308,17 @@ Use the architect-advisor to evaluate: Should we use microservices or a monolith
 | /knowledge-capture | Document solved problems for team | build |
 
 See `docs/reference/commands.md` for the full 42-command inventory.
+
+### Lifecycle Mapping
+
+This repository keeps the `ai-eng/*` command namespace, but its main workflow now maps more clearly to the lifecycle used by `agent-skills`:
+
+| ai-eng-system | Common lifecycle name |
+|---------------|-----------------------|
+| `/specify` | `/spec` |
+| `/plan` | `/plan` |
+| `/work` | `/build` |
+| `/review` | `/review` |
 
 ### Using /research
 

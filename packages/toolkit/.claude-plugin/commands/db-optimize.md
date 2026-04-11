@@ -7,4 +7,4 @@ version: 1.0.0
 
 # Database Optimization
 
-Load `skills/database-optimization/SKILL.md` and follow its instructions.
+Inspect the schema, queries, indexes, and observed bottlenecks first. Use database evidence to recommend or apply the smallest high-impact optimization and include before/after validation when possible.

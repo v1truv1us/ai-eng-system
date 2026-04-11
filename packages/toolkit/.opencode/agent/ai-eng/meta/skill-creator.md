@@ -238,7 +238,7 @@ Every skill must meet these standards:
 - ✅ Provides working examples and clear references
 - ✅ Compatible with both Claude Code and OpenCode platforms
 
-## Integration with AI Engineering System
+## Integration with Ferg System
 
 The skill-creator integrates with existing ai-eng-system components:
 - Can create skills in the established `skills/` directory structure

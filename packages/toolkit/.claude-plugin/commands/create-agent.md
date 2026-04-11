@@ -36,7 +36,7 @@ The balance specificity with flexibility in agent design. The challenge is defin
 Agent will be saved to:
 - Project-local: `.opencode/agent/[name].md`
 - Global: `~/.config/opencode/agent/[name].md`
-- Canonical content: `content/agents/[name].md`
+- Ferg content: `content/agents/[name].md`
 
 ## Examples
 

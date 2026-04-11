@@ -7,4 +7,4 @@ version: 1.0.0
 
 # Deep Web Research
 
-Load `skills/deep-web-research/SKILL.md` and follow its instructions.
+Load `skills/comprehensive-research/SKILL.md` and extend it with broader external source gathering, explicit source-quality checks, and synthesized recommendations.

@@ -350,7 +350,7 @@ export default tool({
 })
 ```
 
-## Integration with AI Engineering System
+## Integration with Ferg System
 
 The tool-creator integrates with existing ai-eng-system components:
 - Creates tools in the established `.opencode/tool/` directory structure

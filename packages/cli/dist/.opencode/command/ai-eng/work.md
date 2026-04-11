@@ -1,4 +1,5 @@
 ---
+name: ai-eng/work
 description: Execute a plan or task with systematic tracking, quality gates, and comprehensive validation.
 agent: build
 version: 2.0.0
@@ -104,7 +105,7 @@ git checkout -b feat/[feature-slug]
 ```bash
 git worktree add --detach .worktrees/[feature-slug]
 ```
-Use skill: `skills_devops_git_worktree`
+Use skill: `git-worktree`
 
 ### 1.4 Initialize Todo Tracking
 

@@ -7,4 +7,4 @@ version: 1.0.0
 
 # Slack Integration
 
-Load `skills/slack-integration/SKILL.md` and follow its instructions.
+Draft or refine Slack messages for engineering coordination, status updates, or incident response. Keep the message concise, actionable, and tailored to the intended audience.

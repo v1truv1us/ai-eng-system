@@ -7,4 +7,4 @@ version: 1.0.0
 
 # Agent Analyzer
 
-Load `skills/agent-analyzer/SKILL.md` and follow its instructions.
+Inspect the relevant agent prompts, tools, and execution traces first. Focus on routing quality, missing context, prompt clarity, and concrete changes that improve agent behavior.

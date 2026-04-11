@@ -298,7 +298,7 @@ npm run test:e2e`
 All tests completed with coverage report.
 ```
 
-## Integration with AI Engineering System
+## Integration with Ferg System
 
 ### Existing Commands
 

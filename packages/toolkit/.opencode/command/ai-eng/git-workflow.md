@@ -7,4 +7,4 @@ version: 1.0.0
 
 # Git Workflow Management
 
-Load `skills/git-workflow-management/SKILL.md` and follow its instructions.
+Load `skills/git-worktree/SKILL.md` and adapt it for the current git workflow task, keeping changes atomic, reviewable, and non-destructive.

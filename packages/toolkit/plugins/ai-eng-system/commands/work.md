@@ -105,7 +105,7 @@ git checkout -b feat/[feature-slug]
 ```bash
 git worktree add --detach .worktrees/[feature-slug]
 ```
-Use skill: `skills_devops_git_worktree`
+Use skill: `git-worktree`
 
 ### 1.4 Initialize Todo Tracking
 

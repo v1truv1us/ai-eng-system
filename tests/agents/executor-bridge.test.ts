@@ -106,16 +106,16 @@ describe("ExecutorBridge", () => {
     describe("Task Tool Integration", () => {
         it("should map AgentType to correct subagent_type", () => {
             expect(bridge.mapToSubagentType(AgentType.CODE_REVIEWER)).toBe(
-                "quality-testing/code_reviewer",
+                "quality-testing/code-reviewer",
             );
             expect(bridge.mapToSubagentType(AgentType.ARCHITECT_ADVISOR)).toBe(
-                "development/system_architect",
+                "development/architect-advisor",
             );
             expect(bridge.mapToSubagentType(AgentType.SECURITY_SCANNER)).toBe(
-                "quality-testing/security_scanner",
+                "quality-testing/security-scanner",
             );
             expect(bridge.mapToSubagentType(AgentType.AI_ENGINEER)).toBe(
-                "ai-innovation/ai_engineer",
+                "ai-innovation/ai-engineer",
             );
         });
 

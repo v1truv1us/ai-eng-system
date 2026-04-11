@@ -236,7 +236,7 @@ Based on the confidence assessment, I recommend:
 - **Task-dependent:** Not all tasks benefit equally; most effective for complex problems
 - **Not actual motivation:** This is statistical pattern-matching, not AI understanding incentives
 
-## Integration with AI Engineering System
+## Integration with Ferg Engineering System
 
 Use this skill to enhance:
 - `/plan` command prompts

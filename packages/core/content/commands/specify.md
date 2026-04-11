@@ -69,11 +69,11 @@ The challenge is capturing all requirements while keeping specification manageab
 
 ## Phase 0: Prompt Refinement (CRITICAL - Do First)
 
-Load `skills/prompt-refinement/SKILL.md` and use phase: `specify` to transform your prompt into structured TCRO format (Task, Context, Requirements, Output). See `templates/specification.md` for output structure.
+Load `skills/prompt-refinement/SKILL.md` and use phase: `specify` to transform your prompt into structured TCRO format (Task, Context, Requirements, Output). See `templates/specify.md` for output structure.
 
 ## Specification Structure
 
-See `templates/specification.md` for complete template with:
+See `templates/specify.md` for the complete template with:
 - Overview, Context (personas, system, research)
 - User Stories with acceptance criteria
 - Non-Functional Requirements (security, performance, availability, maintainability, compliance, accessibility)

@@ -7,4 +7,4 @@ version: 1.0.0
 
 # XcodeBuild Automation
 
-Load `skills/xcodebuild-automation/SKILL.md` and follow its instructions.
+Use `xcodebuild` and related Apple tooling to build, test, or diagnose the target project. Report the exact destination, command output, and any blocking compiler or signing issues.

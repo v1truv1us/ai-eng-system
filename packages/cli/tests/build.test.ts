@@ -558,6 +558,30 @@ description: invalid yaml: unclosed "quote"
             await rm(invalidPath);
         });
 
+        it("should fail when a command references a missing skill", async () => {
+            const invalidSkillRef = `---
+name: invalid-skill-ref
+description: Command with missing skill reference
+---
+
+# Invalid Skill Reference
+
+Load \`skills/missing-skill/SKILL.md\` and follow its instructions.
+`;
+            const invalidPath = join(
+                CONTENT_DIR,
+                "commands",
+                "invalid-skill-ref.md",
+            );
+            await writeFile(invalidPath, invalidSkillRef);
+
+            await expect(runBuild()).rejects.toThrow(
+                /references missing skill 'skills\/missing-skill\/SKILL\.md'/,
+            );
+
+            await rm(invalidPath);
+        });
+
         it("should handle file permission errors gracefully", async () => {
             // This is more of an integration test
             // In a real scenario, we'd mock file system errors

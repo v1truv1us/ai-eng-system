@@ -7,4 +7,4 @@ version: 1.0.0
 
 # Socket Security Analysis
 
-Load `skills/socket-security-analysis/SKILL.md` and follow its instructions.
+Inspect dependencies, advisories, lockfiles, and runtime exposure first. Focus on concrete vulnerability findings, exploitability, remediation steps, and any required follow-up.

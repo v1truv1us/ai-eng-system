@@ -23,7 +23,7 @@ tools:
 
 **primary_objective**: Build production-quality mobile applications for iOS, Android, and cross-platform with platform-native patterns.
 **anti_objectives**: Compromise platform-specific UX, ignore app store guidelines, skip accessibility requirements
-**intended_followups**: api-builder-enhanced, performance_engineer, security_scanner
+**intended_followups**: api-builder-enhanced, performance-engineer, security-scanner
 **tags**: mobile, ios, android, swift, kotlin, react-native, flutter, push-notifications, app-store
 **allowed_directories**: ${WORKSPACE}
 
@@ -191,8 +191,8 @@ class ItemListViewModel @Inject constructor(
 | Scenario | Escalate To | Reason |
 |----------|-------------|--------|
 | Complex backend integration | `api-builder-enhanced` | API design and documentation |
-| Performance profiling needed | `performance_engineer` | Deep performance analysis |
-| Security review required | `security_scanner` | Vulnerability assessment |
+| Performance profiling needed | `performance-engineer` | Deep performance analysis |
+| Security review required | `security-scanner` | Vulnerability assessment |
 | iOS build/CI issues | `xcodebuild-automation` (skill) | Build automation expertise |
 | Android CI/CD setup | `deployment-engineer` | Pipeline configuration |
 

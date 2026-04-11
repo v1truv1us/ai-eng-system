@@ -7,4 +7,4 @@ version: 1.0.0
 
 # Monitoring Setup
 
-Load `skills/monitoring-setup/SKILL.md` and follow its instructions.
+Inspect existing telemetry, dashboards, alert rules, and service boundaries first. Recommend or apply the smallest monitoring change that improves detection, diagnosis, or coverage.

@@ -7,4 +7,4 @@ version: 1.0.0
 
 # Kubernetes Deployment Automation
 
-Load `skills/kubernetes-deployment-automation/SKILL.md` and follow its instructions.
+Inspect manifests, Helm values, and cluster context before making changes. Use Kubernetes tooling to diagnose or update workloads, then report the exact resources touched and how you verified the outcome.

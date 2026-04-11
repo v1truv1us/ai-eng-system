@@ -7,4 +7,4 @@ version: 1.0.0
 
 # API Testing
 
-Load `skills/api-testing/SKILL.md` and follow its instructions.
+Exercise the relevant API endpoints with realistic requests, capture the exact responses, and summarize contract mismatches, regressions, or failing scenarios.

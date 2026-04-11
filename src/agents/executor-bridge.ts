@@ -275,34 +275,34 @@ export class ExecutorBridge {
      */
     mapToSubagentType(type: AgentType): string {
         const mapping: Record<AgentType, string> = {
-            [AgentType.CODE_REVIEWER]: "quality-testing/code_reviewer",
-            [AgentType.ARCHITECT_ADVISOR]: "development/system_architect",
-            [AgentType.SECURITY_SCANNER]: "quality-testing/security_scanner",
+            [AgentType.CODE_REVIEWER]: "quality-testing/code-reviewer",
+            [AgentType.ARCHITECT_ADVISOR]: "development/architect-advisor",
+            [AgentType.SECURITY_SCANNER]: "quality-testing/security-scanner",
             [AgentType.PERFORMANCE_ENGINEER]:
-                "quality-testing/performance_engineer",
-            [AgentType.BACKEND_ARCHITECT]: "development/backend_architect",
-            [AgentType.FRONTEND_REVIEWER]: "design-ux/frontend-reviewer",
+                "quality-testing/performance-engineer",
+            [AgentType.BACKEND_ARCHITECT]: "development/backend-architect",
+            [AgentType.FRONTEND_REVIEWER]: "development/frontend-reviewer",
             [AgentType.FULL_STACK_DEVELOPER]:
-                "development/full_stack_developer",
+                "development/full-stack-developer",
             [AgentType.API_BUILDER_ENHANCED]:
-                "development/api_builder_enhanced",
-            [AgentType.DATABASE_OPTIMIZER]: "development/database_optimizer",
-            [AgentType.AI_ENGINEER]: "ai-innovation/ai_engineer",
-            [AgentType.ML_ENGINEER]: "ai-innovation/ml_engineer",
-            [AgentType.TEST_GENERATOR]: "quality-testing/test_generator",
-            [AgentType.SEO_SPECIALIST]: "business-analytics/seo_specialist",
-            [AgentType.DEPLOYMENT_ENGINEER]: "operations/deployment_engineer",
-            [AgentType.MONITORING_EXPERT]: "operations/monitoring_expert",
-            [AgentType.COST_OPTIMIZER]: "operations/cost_optimizer",
-            [AgentType.AGENT_CREATOR]: "ai-eng/agent-creator",
-            [AgentType.COMMAND_CREATOR]: "ai-eng/command-creator",
-            [AgentType.SKILL_CREATOR]: "ai-eng/skill-creator",
-            [AgentType.TOOL_CREATOR]: "ai-eng/tool-creator",
-            [AgentType.PLUGIN_VALIDATOR]: "ai-eng/plugin-validator",
+                "development/api-builder-enhanced",
+            [AgentType.DATABASE_OPTIMIZER]: "development/database-optimizer",
+            [AgentType.AI_ENGINEER]: "ai-innovation/ai-engineer",
+            [AgentType.ML_ENGINEER]: "ai-innovation/ml-engineer",
+            [AgentType.TEST_GENERATOR]: "quality-testing/test-generator",
+            [AgentType.SEO_SPECIALIST]: "business-analytics/seo-specialist",
+            [AgentType.DEPLOYMENT_ENGINEER]: "operations/deployment-engineer",
+            [AgentType.MONITORING_EXPERT]: "operations/monitoring-expert",
+            [AgentType.COST_OPTIMIZER]: "operations/cost-optimizer",
+            [AgentType.AGENT_CREATOR]: "meta/agent-creator",
+            [AgentType.COMMAND_CREATOR]: "meta/command-creator",
+            [AgentType.SKILL_CREATOR]: "meta/skill-creator",
+            [AgentType.TOOL_CREATOR]: "meta/tool-creator",
+            [AgentType.PLUGIN_VALIDATOR]: "quality-testing/plugin-validator",
             [AgentType.INFRASTRUCTURE_BUILDER]:
-                "operations/infrastructure_builder",
-            [AgentType.JAVA_PRO]: "development/java_pro",
-            [AgentType.PROMPT_OPTIMIZER]: "ai-innovation/prompt_optimizer",
+                "operations/infrastructure-builder",
+            [AgentType.JAVA_PRO]: "development/java-pro",
+            [AgentType.PROMPT_OPTIMIZER]: "ai-innovation/prompt-optimizer",
         };
 
         return mapping[type] || `unknown/${type}`;

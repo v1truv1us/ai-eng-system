@@ -7,4 +7,4 @@ version: 1.0.0
 
 # Code Review
 
-Load `skills/code-review/SKILL.md` and follow its instructions.
+Load `skills/code-review-and-quality/SKILL.md` and follow its instructions.

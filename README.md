@@ -1,6 +1,6 @@
 # AI Engineering System
 
-AI engineering workflow toolkit for Claude Code and OpenCode with 42 commands, 32 specialized agents, and 12 reusable skills.
+AI engineering workflow toolkit for Claude Code and OpenCode with 42 commands, 32 specialized agents, and 16 reusable skills.
 
 ## Packages
 
@@ -52,6 +52,15 @@ ai-eng install --scope global
 | Work | `/ai-eng/work` | Guided execution with quality gates |
 | Review | `/ai-eng/review` | Multi-agent code review |
 
+Lifecycle mapping to the more common `agent-skills` command names:
+
+| This repo | Common lifecycle alias |
+| --- | --- |
+| `/ai-eng/specify` | `/spec` |
+| `/ai-eng/plan` | `/plan` |
+| `/ai-eng/work` | `/build` |
+| `/ai-eng/review` | `/review` |
+
 Related commands:
 - `/ai-eng/ralph-wiggum` - iterative full-cycle workflow
 - `/ai-eng/simplify` - code reuse, quality, and efficiency simplification
@@ -60,7 +69,7 @@ Related commands:
 
 - 42 commands under the `ai-eng/` namespace
 - 32 specialized agents
-- 12 skills, including namespaced skills such as `ai-eng/simplify` and `workflow/ralph-wiggum`
+- 16 skills, including namespaced skills such as `ai-eng/simplify` and `workflow/ralph-wiggum`
 
 Selected commands beyond the core workflow:
 - creation: `/ai-eng/create-plugin`, `/ai-eng/create-agent`, `/ai-eng/create-command`, `/ai-eng/create-skill`, `/ai-eng/create-tool`
@@ -81,9 +90,19 @@ Examples:
 
 See `docs/reference/skills.md` for the full skill inventory.
 
+## Alignment Notes
+
+This repository now aligns more closely with the `addyosmani/agent-skills` lifecycle without dropping its existing `ai-eng/*` command namespace, marketplace build pipeline, or specialized agent model.
+
+Recent alignment work includes:
+
+- build-time validation for broken command-to-skill references
+- a smaller set of upstream-inspired skills such as `code-review-and-quality`, `code-simplification`, `debugging-and-error-recovery`, and `incremental-implementation`
+- explicit third-party attribution in `THIRD_PARTY_LICENSES.md`
+
 ## Release Model
 
-The current coordinated release version is `0.6.0` for:
+The current coordinated release version is `1.0.0` for:
 
 - `@ai-eng-system/core`
 - `@ai-eng-system/toolkit`

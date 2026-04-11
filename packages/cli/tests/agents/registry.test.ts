@@ -246,9 +246,9 @@ Test content
             }
         });
 
-        it("should handle underscore vs hyphen naming conventions", async () => {
+        it("should handle kebab-case naming conventions", async () => {
             const content = `---
-name: code_reviewer
+name: code-reviewer
 description: Test agent
 mode: subagent
 temperature: 0.1
@@ -266,7 +266,7 @@ tools:
 Test content
 `;
 
-            writeFileSync(join(tempDir, "agents", "code_reviewer.md"), content);
+            writeFileSync(join(tempDir, "agents", "code-reviewer.md"), content);
 
             await registry.loadFromDirectory(join(tempDir, "agents"));
 

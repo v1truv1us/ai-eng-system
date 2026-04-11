@@ -19,14 +19,20 @@ Claude Code command definitions for the AI Engineering System.
 - Include usage examples and parameter descriptions
 
 ## Key Commands
-- `compound.md` - Compound operations
-- `deploy.md` - Deployment workflows  
-- `optimize.md` - Optimization commands
-- `plan.md` - Planning operations
-- `recursive-init.md` - Recursive initialization
-- `review.md` - Code review workflows
-- `seo.md` - SEO optimization
-- `work.md` - Work management
+- `research.md` - Research and codebase investigation
+- `specify.md` - Specification generation
+- `plan.md` - Implementation planning
+- `work.md` - Guided execution
+- `review.md` - Multi-agent code review
+- `code-review.md` - Skill-backed code quality review
+- `deploy.md` - Deployment workflows
+- `simplify.md` - Code simplification workflow
+
+## Lifecycle Mapping
+- `/ai-eng/specify` corresponds to the common `/spec` lifecycle step
+- `/ai-eng/plan` corresponds to `/plan`
+- `/ai-eng/work` corresponds to `/build`
+- `/ai-eng/review` corresponds to `/review`
 
 ## Integration Notes
 - Commands integrate with parent AGENTS.md coordination system

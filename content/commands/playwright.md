@@ -7,4 +7,4 @@ version: 1.0.0
 
 # Playwright Web Automation
 
-Load `skills/playwright-web-automation/SKILL.md` and follow its instructions.
+Use Playwright to reproduce the target flow, capture failures, and summarize the exact steps, selectors, screenshots, and logs needed to confirm the result.
