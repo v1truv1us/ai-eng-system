@@ -12,10 +12,16 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
+    },
+    "./plugin": {
+      "types": "./dist/.claude-plugin/plugin.json",
+      "default": "./dist/.claude-plugin/plugin.json"
     }
   },
   "files": [
     "dist/",
+    "dist/.claude-plugin/",
+    "dist/.opencode/",
     "bun.ts",
     "plugins/",
     "scripts/install.js",
