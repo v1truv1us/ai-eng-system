@@ -1,6 +1,6 @@
 # AI Engineering System
 
-AI engineering workflow toolkit for Claude Code and OpenCode with 42 commands, 32 specialized agents, and 16 reusable skills.
+AI engineering workflow toolkit for Claude Code and OpenCode with 57 commands (42 ai-eng namespace + 5 lifecycle aliases + 5 runtime + 5 orchestration), 38 specialized agents, and 32 reusable skills covering the full development lifecycle from idea to production.
 
 ## Packages
 
@@ -67,9 +67,9 @@ Related commands:
 
 ## What Is Included
 
-- 42 commands under the `ai-eng/` namespace
+- 42 commands under the `ai-eng/` namespace plus 7 lifecycle aliases
 - 32 specialized agents
-- 16 skills, including namespaced skills such as `ai-eng/simplify` and `workflow/ralph-wiggum`
+- 32 skills covering the full development lifecycle (Define, Plan, Build, Verify, Review, Ship) plus repository-specific workflows
 
 Selected commands beyond the core workflow:
 - creation: `/ai-eng/create-plugin`, `/ai-eng/create-agent`, `/ai-eng/create-command`, `/ai-eng/create-skill`, `/ai-eng/create-tool`

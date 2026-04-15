@@ -1,6 +1,6 @@
 # Commands Reference
 
-42 commands are currently shipped under the `ai-eng/` namespace.
+47 commands are currently shipped under the `ai-eng/` namespace, plus 7 lifecycle alias commands and 5 runtime/orchestration commands (57 total content commands).
 
 ## Spec-Driven Workflow
 
@@ -10,6 +10,18 @@
 - `/ai-eng/work` - guided execution with quality gates
 - `/ai-eng/review` - multi-agent review
 - `/ai-eng/ralph-wiggum` - iterative full-cycle workflow
+
+## Lifecycle Aliases
+
+| Alias | Canonical Command |
+|-------|-------------------|
+| `/spec` | `/ai-eng/specify` |
+| `/plan` | `/ai-eng/plan` |
+| `/build` | `/ai-eng/work` |
+| `/test` | TDD entrypoint via `test-driven-development` skill |
+| `/review` | `/ai-eng/review` |
+| `/code-simplify` | `/ai-eng/simplify` |
+| `/ship` | `/ai-eng/deploy` |
 
 ## Plugin Development
 
@@ -71,4 +83,29 @@
 
 - `/ai-eng/seo` - technical SEO and Core Web Vitals review
 
+## Planned Runtime Commands
+
+| Command | Purpose | Status |
+|---------|---------|--------|
+| `/quality-gate` | Run standardized quality gate sequence | planned |
+| `/verify` | Full verification loop (lint, type, test, build) | planned |
+| `/model-route` | Route task to appropriate model | planned |
+| `/sessions` | List, search, and manage sessions | planned |
+| `/checkpoint` | Save session checkpoint | planned |
+| `/resume-session` | Resume from saved checkpoint | planned |
+| `/loop-start` | Start autonomous loop | planned |
+| `/loop-status` | Check loop status | planned |
+| `/harness-audit` | Audit harness configuration | planned |
+
+## Planned Orchestration Commands
+
+| Command | Purpose | Status |
+|---------|---------|--------|
+| `/multi-plan` | Multi-agent task decomposition | planned |
+| `/multi-execute` | Orchestrated multi-agent execution | planned |
+| `/multi-backend` | Backend-focused multi-agent work | planned |
+| `/multi-frontend` | Frontend-focused multi-agent work | planned |
+| `/orchestrate` | General multi-agent coordination | planned |
+
 Canonical command definitions live in `content/commands/`.
+See `docs/reference/workflow-surface-matrix.md` for the complete command-to-skill mapping.

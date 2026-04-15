@@ -14,13 +14,14 @@ This document defines the **agents and tools** available in this system. For the
 | build | edit | Implements changes |
 | review | read-only | Code review |
 
-## Specialized Agents (32 Total)
+## Specialized Agents (38 Total)
 
 ### Architecture & Planning
 - `architect-advisor` - System architecture decisions and trade-off analysis
 - `backend-architect` - Backend system design and scalability
 - `infrastructure-builder` - Cloud infrastructure design and IaC
 - `aws-architect` - AWS service selection, cloud architecture, and Well-Architected guidance
+- `planner` - Feature implementation planning and task decomposition
 
 ### Development & Coding
 - `frontend-reviewer` - Frontend code review (React, TypeScript, accessibility)
@@ -29,6 +30,9 @@ This document defines the **agents and tools** available in this system. For the
 - `database-optimizer` - Database performance and query optimization
 - `java-pro` - Java development with modern features and patterns
 - `mobile-developer` - iOS, Android, React Native, and Flutter development
+- `data-engineer` - Data pipelines, warehousing, and streaming systems
+- `docs-lookup` - Documentation retrieval and verification from official sources
+- `mobile-developer` - iOS, Android, React Native, and Flutter development
 - `data-engineer` - Pipelines, warehousing, streaming, and data quality
 - `documentation-specialist` - Comprehensive technical documentation generation
 - `docs-writer` - Concise product and feature documentation
@@ -36,8 +40,11 @@ This document defines the **agents and tools** available in this system. For the
 ### Quality & Testing
 - `code-reviewer` - Comprehensive code quality assessment
 - `test-generator` - Automated test suite generation
+- `tdd-guide` - Test-driven development enforcement
 - `security-scanner` - Security vulnerability detection and fixes
 - `performance-engineer` - Application performance optimization
+- `build-error-resolver` - Build and compilation error diagnosis
+- `e2e-runner` - End-to-end Playwright testing
 - `plugin-validator` - Plugin structure validation and best practices
 - `text-cleaner` - AI-generated verbosity cleanup and content tightening
 
@@ -45,6 +52,7 @@ This document defines the **agents and tools** available in this system. For the
 - `deployment-engineer` - CI/CD pipeline design and deployment automation
 - `monitoring-expert` - Observability, alerting, and system monitoring
 - `cost-optimizer` - Cloud cost optimization and resource efficiency
+- `harness-optimizer` - Agent harness reliability, cost, and configuration tuning
 
 ### AI & Machine Learning
 - `ai-engineer` - AI integration and LLM application development

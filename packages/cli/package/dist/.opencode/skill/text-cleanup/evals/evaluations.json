@@ -1,0 +1,39 @@
+{
+  "skills": ["text-cleanup"],
+  "evaluations": [
+    {
+      "id": "cleanup-01-slop",
+      "query": "Clean up this AI-generated text: 'Certainly! I'd be happy to help optimize this query. It's worth noting that SQL queries can be improved in many ways. Generally speaking, adding indexes is a good approach. Please let me know if you need anything else!'",
+      "files": [],
+      "expected_behavior": [
+        "Removes 'Certainly! I'd be happy to help' (slop pattern)",
+        "Removes 'It's worth noting that' (hedging language)",
+        "Removes 'Generally speaking' (hedging language)",
+        "Removes 'Please let me know if you need anything else' (excessive politeness)",
+        "Preserves the core message about SQL optimization"
+      ]
+    },
+    {
+      "id": "cleanup-02-comments",
+      "query": "Clean up the comments in src/database.ts",
+      "files": ["src/database.ts"],
+      "expected_behavior": [
+        "Identifies redundant comments that repeat function names",
+        "Removes self-evident comments like '// This function calculates the sum'",
+        "Preserves comments that add architectural context",
+        "Reports what was removed and why"
+      ]
+    },
+    {
+      "id": "cleanup-03-docs",
+      "query": "Clean up the documentation in README.md — remove verbose AI-generated patterns",
+      "files": ["README.md"],
+      "expected_behavior": [
+        "Removes conversational openers like 'Welcome to the documentation'",
+        "Removes redundant explanations like 'As you can see from the code above'",
+        "Preserves technical content and code examples",
+        "Maintains document structure and readability"
+      ]
+    }
+  ]
+}

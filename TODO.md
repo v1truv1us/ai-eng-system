@@ -1,56 +1,59 @@
 # TODO: AI Engineering System
 
-**Current Version**: 0.6.0
-**Last Updated**: 2026-03-30
+**Current Version**: 1.0.0
+**Last Updated**: 2026-04-14
 
 ## High Priority
 
-*All current high-priority release tasks are complete.*
+- [ ] Complete Phase 3: Command consolidation (lifecycle alias shims, research family, simplify/review)
+- [ ] Complete Phase 4: Runtime surface exposure (quality-gate, sessions, loops, model-route)
+- [ ] Complete Phase 5: Prompt optimization contract and hook unification
+- [ ] Complete Phase 6: Multi-agent orchestration commands
+- [ ] Complete Phase 7: Targeted agent team expansion (planner, tdd-guide, build-resolver)
+- [ ] Add content parity validation test for catalog consistency
 
 ## Medium Priority
 
-- [ ] Update remaining historical docs that still reference pre-0.5 packaging patterns
-- [ ] Decide whether to tag package-specific releases in addition to coordinated `vX.Y.Z` releases
-- [ ] Reduce GitHub Actions deprecation warnings by moving remaining workflow actions to Node 24-compatible runtime settings
+- [ ] Add runtime command docs and CLI wiring for sessions, quality gates, loops
+- [ ] Add orchestration contract and handoff envelope documentation
+- [ ] Define install manifest model for selective installation
+- [ ] Add catalog validation in build/test pipeline
+- [ ] Cross-harness install docs for Cursor, Codex, Gemini
 
 ## Low Priority
 
-- [ ] Review marketplace listing copy after the toolkit package rollout
-- [ ] Expand command and skills reference pages with more examples
-- [ ] Add a lightweight post-release verification checklist for future releases
+- [ ] Dashboard GUI investigation
+- [ ] Broader language-surface expansion (Go, Kotlin, Rust, C++ review/build)
+- [ ] Continuous learning / instinct evolution system
+- [ ] Context budget analysis operator surface
 
 ## Completed Tasks
 
-### Three-Package Release and OIDC Publishing (2026-03-27) ✅
+### Lifecycle Skills Expansion (2026-04-14)
+
+- [x] Added `idea-refine`, `spec-driven-development` (Define phase)
+- [x] Added `planning-and-task-breakdown` (Plan phase)
+- [x] Added `test-driven-development`, `context-engineering`, `source-driven-development` (Build foundational)
+- [x] Added `frontend-ui-engineering`, `api-and-interface-design` (Build domain overlay)
+- [x] Added `browser-testing-with-devtools` (Verify phase)
+- [x] Added `security-and-hardening`, `performance-optimization` (Review overlay)
+- [x] Added `git-workflow-and-versioning`, `ci-cd-and-automation`, `deprecation-and-migration`, `documentation-and-adrs`, `shipping-and-launch` (Ship phase)
+- [x] Created `docs/reference/skills-first-map.md` (canonical ownership map)
+- [x] Created `docs/reference/workflow-surface-matrix.md` (command-to-skill mapping)
+- [x] Updated skills reference to reflect 32-skill inventory
+
+### Three-Package Release and OIDC Publishing (2026-03-27)
 
 - [x] Added a real `packages/toolkit/` workspace package
-- [x] Published `@ai-eng-system/core@0.5.10`
-- [x] Published `@ai-eng-system/toolkit@0.5.10`
-- [x] Published `@ai-eng-system/cli@0.5.10`
-- [x] Verified the coordinated OIDC workflow in dry-run and production modes
-- [x] Preserved namespaced generated skills such as `ai-eng/simplify` and `workflow/ralph-wiggum`
-- [x] Updated release, publishing, installation, and marketplace documentation
+- [x] Published `@ai-eng-system/core`, `@ai-eng-system/toolkit`, `@ai-eng-system/cli`
+- [x] Verified the coordinated OIDC workflow
 
-### Agent Coverage Expansion and 0.6.0 Release Prep (2026-03-30) ✅
+### Agent Coverage Expansion and 0.6.0 Release Prep (2026-03-30)
 
-- [x] Added `mobile-developer`
-- [x] Added `data-engineer`
-- [x] Added `aws-architect`
-- [x] Added `agent-developer`
-- [x] Normalized canonical and generated agent inventories to 32 active agents
-- [x] Updated registry, marketplace, and reference docs for the 0.6.0 release line
+- [x] Added `mobile-developer`, `data-engineer`, `aws-architect`, `agent-developer`
+- [x] Normalized agent inventory to 32 active agents
 
-### Simplify Skill and Skill Best-Practice Audit (2026-03-27) ✅
+### Simplify Skill and Skill Best-Practice Audit (2026-03-27)
 
-- [x] Added `/ai-eng/simplify`
-- [x] Added `skills/ai-eng/simplify/SKILL.md`
-- [x] Added skill evaluation scaffolding
+- [x] Added `/ai-eng/simplify` and `skills/ai-eng/simplify/SKILL.md`
 - [x] Fixed missing skill templates and reference assets
-- [x] Expanded thin skills and aligned descriptions with current best practices
-
-### Earlier Completed Work
-
-- [x] CLI package TypeScript build fixes
-- [x] ai-eng ralph CLI implementation
-- [x] Ralph Wiggum command integration
-- [x] Initial modularization into published workspace packages
