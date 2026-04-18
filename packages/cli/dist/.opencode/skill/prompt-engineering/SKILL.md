@@ -1,6 +1,6 @@
 ---
 name: prompt-engineering
-description: Comprehensive prompt engineering for coding agents. Use when designing prompts for AI coding assistants, building agent workflows, optimizing multi-step reasoning, or improving prompt reliability. Covers core prompting, structured prompts, few-shot, chain-of-thought, decomposition, and agentic workflow patterns. Trigger phrases: "prompt engineering", "optimize prompts", "agent prompts", "coding agent prompts", "prompt patterns".
+description: "Comprehensive prompt engineering for coding agents covering structured instruction design, few-shot prompting, chain-of-thought, decomposition, agent workflow patterns, and reliability techniques for multi-step pipelines."
 version: 1.0.0
 tags: [prompt-engineering, coding-agents, agentic-workflows, few-shot, chain-of-thought, prompting]
 ---

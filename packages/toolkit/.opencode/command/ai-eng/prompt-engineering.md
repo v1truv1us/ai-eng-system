@@ -1,6 +1,6 @@
 ---
 name: ai-eng/prompt-engineering
-description: "Comprehensive prompt engineering for coding agents"
+description: "Comprehensive prompt engineering for coding agents. Covers structured instruction design, few-shot prompting, chain-of-thought, decomposition, agent workflow patterns, and reliability techniques."
 agent: build
 version: 1.0.0
 ---

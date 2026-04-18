@@ -41,7 +41,7 @@
       "name": "ai-eng-learning",
       "source": "./plugins/ai-eng-learning",
       "description": "Learning workflows for knowledge mapping, decisions, quality gates, and maintenance reviews",
-      "version": "1.0.0",
+      "version": "1.2.0",
       "author": {
         "name": "v1truv1us",
         "email": "contact@v1truv1us.dev"
