@@ -1,6 +1,6 @@
 # Skills Reference
 
-ai-eng-system currently ships 32 canonical skills organized by lifecycle phase and repository-specific purpose.
+ai-eng-system currently ships 33 canonical skills organized by lifecycle phase and repository-specific purpose.
 
 ## Namespaced Skills
 
@@ -50,6 +50,7 @@ ai-eng-system currently ships 32 canonical skills organized by lifecycle phase a
 ## Research and Prompting
 
 - `comprehensive-research` - multi-phase research orchestration
+- `prompt-engineering` - comprehensive prompt engineering for coding agents (structured prompts, few-shot, chain-of-thought, decomposition, agent workflow patterns)
 - `prompt-refinement` - TCRO prompt structuring
 - `incentive-prompting` - research-backed prompting techniques (+45-115% quality)
 - `content-optimization` - content and prompt enhancement

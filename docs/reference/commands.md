@@ -79,6 +79,7 @@ Marketplace packaging note:
 
 - `/ai-eng/verbalize` - verbalized sampling for response diversity
 - `/ai-eng/content-optimize` - optimize prompts and other content
+- `/ai-eng/prompt-engineering` - comprehensive prompt engineering for coding agents
 - `/ai-eng/agent-analyzer` - analyze agent performance and routing
 - `/ai-eng/research-companion` - guided research synthesis
 - `/ai-eng/deep-research` - deep multi-source web research
