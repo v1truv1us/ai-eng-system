@@ -213,7 +213,10 @@ async function installContentFromCore(
         fs.mkdirSync(commandsDir, { recursive: true });
 
         for (const command of content.commands) {
-            const targetPath = path.join(commandsDir, command.path);
+            const relativePath = command.path.startsWith(NAMESPACE_PREFIX + "/")
+                ? command.path.slice(NAMESPACE_PREFIX.length + 1)
+                : command.path;
+            const targetPath = path.join(commandsDir, relativePath);
             const targetDir = path.dirname(targetPath);
             fs.mkdirSync(targetDir, { recursive: true });
 
@@ -243,7 +246,10 @@ async function installContentFromCore(
         fs.mkdirSync(agentsDir, { recursive: true });
 
         for (const agent of content.agents) {
-            const targetPath = path.join(agentsDir, agent.path);
+            const relativePath = agent.path.startsWith(NAMESPACE_PREFIX + "/")
+                ? agent.path.slice(NAMESPACE_PREFIX.length + 1)
+                : agent.path;
+            const targetPath = path.join(agentsDir, relativePath);
             const targetDir = path.dirname(targetPath);
             fs.mkdirSync(targetDir, { recursive: true });
 
