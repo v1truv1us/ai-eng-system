@@ -1,5 +1,5 @@
 /**
- * Agent orchestration types and interfaces for the Ferg Engineering System.
+ * Agent orchestration types and interfaces for the AI Engineering System.
  * Defines the core abstractions for agent coordination and execution.
  */
 import type { Decision, Task } from "../context/types";

@@ -1,6 +1,6 @@
 # AI Engineering System - Plugin Installation & Usage
 
-The AI Engineering System is available as a **modular marketplace** with 6 focused plugins for **Claude Code**, plus a unified package for **OpenCode**.
+The AI Engineering System is available as a **modular marketplace** with 7 focused plugins for **Claude Code**, plus a unified package for **OpenCode**.
 
 ## Claude Code Installation
 
@@ -17,6 +17,9 @@ Install individual plugins based on your needs:
 ```bash
 # Core workflow (recommended - start here)
 claude plugin install ai-eng-core ai-eng-system
+
+# Learning workflows
+claude plugin install ai-eng-learning ai-eng-system
 
 # Deep research & documentation
 claude plugin install ai-eng-research ai-eng-system
@@ -36,7 +39,7 @@ claude plugin install ai-eng-plugin-dev ai-eng-system
 
 Or install all plugins at once:
 ```bash
-for plugin in ai-eng-core ai-eng-research ai-eng-devops ai-eng-quality ai-eng-content ai-eng-plugin-dev; do
+for plugin in ai-eng-core ai-eng-learning ai-eng-research ai-eng-devops ai-eng-quality ai-eng-content ai-eng-plugin-dev; do
   claude plugin install $plugin ai-eng-system
 done
 ```
@@ -45,7 +48,8 @@ done
 
 | Plugin | Commands | Agents | Description |
 |--------|----------|--------|-------------|
-| **ai-eng-core** | 8 | 6 | Plan/work/review cycle, research, context engineering |
+| **ai-eng-core** | 8 | 6 | Plan/work/review cycle, research, context |
+| **ai-eng-learning** | 4 | 0 | Knowledge architecture, decisions, quality gates, maintenance reviews |
 | **ai-eng-research** | 5 | 4 | Deep research, knowledge capture, documentation |
 | **ai-eng-devops** | 9 | 6 | Deploy, Docker, K8s, monitoring, infrastructure |
 | **ai-eng-quality** | 9 | 7 | Code review, security, testing, debugging |
@@ -112,7 +116,7 @@ After installation, verify in OpenCode:
 Expected output shows all available commands and agents:
 
 ```
-Available commands (42): /ai-eng/research, /ai-eng/specify, /ai-eng/plan,
+Available commands (46): /ai-eng/research, /ai-eng/specify, /ai-eng/plan,
 /ai-eng/work, /ai-eng/review, /ai-eng/ralph-wiggum, /ai-eng/create-plugin,
 /ai-eng/create-agent, /ai-eng/create-command, /ai-eng/create-skill,
 /ai-eng/create-tool, /ai-eng/deploy, /ai-eng/coolify, /ai-eng/docker,
@@ -123,7 +127,9 @@ Available commands (42): /ai-eng/research, /ai-eng/specify, /ai-eng/plan,
 /ai-eng/chrome-debug, /ai-eng/ios-sim, /ai-eng/xcodebuild,
 /ai-eng/verbalize, /ai-eng/content-optimize, /ai-eng/agent-analyzer,
 /ai-eng/research-companion, /ai-eng/deep-research, /ai-eng/context7-docs,
-/ai-eng/db-optimize, /ai-eng/slack, /ai-eng/context, /ai-eng/init, /ai-eng/seo
+/ai-eng/db-optimize, /ai-eng/slack, /ai-eng/context, /ai-eng/init,
+/ai-eng/knowledge-architecture, /ai-eng/decision-journal, /ai-eng/quality-gate,
+/ai-eng/maintenance-review, /ai-eng/seo
 
 Available agents (32): ai-eng/architect-advisor, ai-eng/backend-architect,
 ai-eng/infrastructure-builder, ai-eng/aws-architect, ai-eng/full-stack-developer,
@@ -274,13 +280,13 @@ ai-eng-system/
 │       └── comprehensive-research/
 ├── dist/                     # 🚫 Auto-generated platform outputs
 │   ├── .claude-plugin/       # Claude Code format
-│   │   ├── commands/         # 42 commands
+│   │   ├── commands/         # 49 commands
 │   │   ├── agents/           # 32 agents
 │   │   ├── skills/           # All skills
 │   │   ├── plugin.json       # Plugin metadata
 │   │   └── marketplace.json  # Marketplace configuration
 │   └── .opencode/            # OpenCode format (ai-eng- namespace)
-│       ├── command/           # 42 commands (ai-eng-*.md)
+│       ├── command/           # 49 commands (ai-eng-*.md)
 │       └── agent/ai-eng/     # 32 agents (nested by category)
 ├── scripts/                  # Build and installation utilities
 │   ├── install.js            # Global/local installation

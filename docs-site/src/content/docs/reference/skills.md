@@ -4,7 +4,7 @@ title: Skills
 
 # Skills Reference
 
-ai-eng-system currently ships 12 canonical skills.
+ai-eng-system currently ships 13 canonical skills.
 
 ## Namespaced Skills
 
@@ -20,6 +20,7 @@ ai-eng-system currently ships 12 canonical skills.
 - `text-cleanup`
 - `coolify-deploy`
 - `git-worktree`
+- `knowledge-architecture`
 - `knowledge-capture`
 - `monorepo-initialization`
 - `plugin-dev`

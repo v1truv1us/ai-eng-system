@@ -7,7 +7,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DIST_DIR="$SCRIPT_DIR/dist"
 
-echo "🔧 Setting up Ferg Engineering System..."
+echo "🔧 Setting up AI Engineering System..."
 echo ""
 
 # Build first

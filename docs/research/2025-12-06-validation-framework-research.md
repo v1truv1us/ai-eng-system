@@ -1,7 +1,7 @@
 ---
 date: 2025-12-06
 researcher: Assistant
-topic: Validating Ferg Engineering System Claims
+topic: Validating AI Engineering System Claims
 tags: [research, validation, testing, quality-assurance, claims-verification]
 status: complete
 confidence: 0.85
@@ -10,7 +10,7 @@ agents_used: [codebase-locator, codebase-pattern-finder, research-locator]
 
 ## Synopsis
 
-This research investigates how to validate that the ferg-engineering-system updates are delivering on their claimed benefits, revealing a significant gap between documented claims and empirical validation mechanisms.
+This research investigates how to validate that the ai-eng-system updates are delivering on their claimed benefits, revealing a significant gap between documented claims and empirical validation mechanisms.
 
 ## Summary
 
@@ -24,7 +24,7 @@ This research investigates how to validate that the ferg-engineering-system upda
 
 ### 1. Claims Made in Documentation
 
-The ferg-engineering-system makes the following research-backed claims:
+The ai-eng-system makes the following research-backed claims:
 
 | Claim | Source | Claimed Improvement |
 |-------|--------|---------------------|
@@ -139,7 +139,7 @@ Success Rate: 25.0%
 ### Current State
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    Ferg Engineering System                   │
+│                     AI Engineering System                    │
 ├─────────────────────────────────────────────────────────────┤
 │  content/         → Build System → dist/                     │
 │  (source docs)      (build.ts)     (.claude-plugin/)         │
@@ -156,7 +156,7 @@ Success Rate: 25.0%
 ### Needed State
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                 Validated Ferg Engineering System            │
+│                  Validated AI Engineering System             │
 ├─────────────────────────────────────────────────────────────┤
 │  Claims            → A/B Testing → Empirical Metrics         │
 │  (+45%, +115%)       Framework                               │

@@ -7,7 +7,7 @@
 
 ## Overview
 
-Implement a comprehensive testing and verification system to empirically validate that the ferg-engineering-system's incentive-based prompting techniques actually deliver the claimed improvements (+45% quality, +115% on hard tasks, etc.). The current system has mock/placeholder benchmark results and no real evaluation pipeline.
+Implement a comprehensive testing and verification system to empirically validate that the ai-eng-system's incentive-based prompting techniques actually deliver the claimed improvements (+45% quality, +115% on hard tasks, etc.). The current system has mock/placeholder benchmark results and no real evaluation pipeline.
 
 ## Success Criteria
 

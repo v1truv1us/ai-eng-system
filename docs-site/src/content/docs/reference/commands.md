@@ -4,7 +4,7 @@ title: Commands
 
 # Commands Reference
 
-42 commands are currently shipped under the `ai-eng/` namespace.
+49 commands are currently shipped under the `ai-eng/` namespace.
 
 ## Spec-Driven Workflow
 
@@ -44,6 +44,16 @@ title: Commands
 - `/ai-eng/socket-security`
 - `/ai-eng/fact-check`
 - `/ai-eng/knowledge-capture`
+
+## Learning and Knowledge
+
+- `/ai-eng/knowledge-architecture`
+- `/ai-eng/decision-journal`
+- `/ai-eng/quality-gate`
+- `/ai-eng/maintenance-review`
+- `/ai-eng/learning-approve`
+- `/ai-eng/learning-dismiss`
+- `/ai-eng/learning-snooze`
 
 ## Testing and Debugging
 

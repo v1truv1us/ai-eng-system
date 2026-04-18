@@ -328,7 +328,7 @@ Study existing components in ai-eng-system:
 - Invalid YAML syntax
 - Wrong file permissions
 
-## Integration with Ferg Engineering
+## Integration with AI Engineering System
 
 The plugin-dev system integrates seamlessly with existing ai-eng-system components:
 

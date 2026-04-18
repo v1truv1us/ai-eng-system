@@ -32,7 +32,7 @@ This starts the server on `http://localhost:4096`. The server will use the provi
 In another terminal:
 
 ```bash
-cd /path/to/ferg-engineering-system
+cd /path/to/ai-eng-system
 source venv_validation/bin/activate
 python3 benchmarks/run_validation.py
 ```

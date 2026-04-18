@@ -1,8 +1,13 @@
 /**
- * Quality gates runner for the Ferg Engineering System.
+ * Quality gates runner for the AI Engineering System.
  * Executes quality gates in sequence with proper error handling and reporting.
  */
-import { type ExecutionOptions, type QualityGateConfig, type QualityGateResult, type Task } from "./types";
+import type {
+    ExecutionOptions,
+    QualityGateConfig,
+    QualityGateResult,
+    Task,
+} from "./types";
 export declare class QualityGateRunner {
     private taskExecutor;
     private options;
@@ -10,7 +15,9 @@ export declare class QualityGateRunner {
     /**
      * Execute all quality gates for a plan
      */
-    executeQualityGates(gates: QualityGateConfig[]): Promise<QualityGateResult[]>;
+    executeQualityGates(
+        gates: QualityGateConfig[],
+    ): Promise<QualityGateResult[]>;
     /**
      * Execute a single quality gate
      */

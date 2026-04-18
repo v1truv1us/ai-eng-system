@@ -10,7 +10,7 @@ agents_used: codebase-locator, research-locator, codebase-pattern-finder, codeba
 
 ## Synopsis
 
-Analysis of AI provider integrations in the Ferg Engineering System reveals that Claude Code and OpenCode are the primary supported platforms, with GitHub Copilot as a secondary option. Cursor is incorrectly included as it lacks CLI support. Provider implementations are technically sound but have metadata inconsistencies.
+Analysis of AI provider integrations in the AI Engineering System reveals that Claude Code and OpenCode are the primary supported platforms, with GitHub Copilot as a secondary option. Cursor is incorrectly included as it lacks CLI support. Provider implementations are technically sound but have metadata inconsistencies.
 
 ## Summary
 
@@ -39,7 +39,7 @@ Analysis of AI provider integrations in the Ferg Engineering System reveals that
 
 **Primary Sources** (`README.md`, `PLUGIN.md`, `CLAUDE.md`):
 - **Claude Code**: Primary platform with marketplace and direct installation
-- **OpenCode**: Secondary platform with namespaced (`ferg/`) integration
+- **OpenCode**: Secondary platform with namespaced (`ai-eng/`) integration
 - **Plugin System**: Unified content system with automated platform transformation
 
 **Integration Methods**:

@@ -1,5 +1,5 @@
 /**
- * Agent orchestration types and interfaces for the Ferg Engineering System.
+ * Agent orchestration types and interfaces for the AI Engineering System.
  * Defines the core abstractions for agent coordination and execution.
  */
 import type { Decision, Task } from "../context/types";
@@ -30,7 +30,7 @@ export declare enum AgentType {
     COMMAND_CREATOR = "command-creator",
     SKILL_CREATOR = "skill-creator",
     TOOL_CREATOR = "tool-creator",
-    PLUGIN_VALIDATOR = "plugin-validator"
+    PLUGIN_VALIDATOR = "plugin-validator",
 }
 /**
  * Execution strategies for agent coordination
@@ -38,7 +38,7 @@ export declare enum AgentType {
 export declare enum ExecutionStrategy {
     PARALLEL = "parallel",
     SEQUENTIAL = "sequential",
-    CONDITIONAL = "conditional"
+    CONDITIONAL = "conditional",
 }
 /**
  * Confidence level for agent results
@@ -47,7 +47,7 @@ export declare enum ConfidenceLevel {
     LOW = "low",
     MEDIUM = "medium",
     HIGH = "high",
-    VERY_HIGH = "very_high"
+    VERY_HIGH = "very_high",
 }
 /**
  * Base interface for all agent inputs
@@ -112,7 +112,7 @@ export declare enum AgentTaskStatus {
     COMPLETED = "completed",
     FAILED = "failed",
     TIMEOUT = "timeout",
-    SKIPPED = "skipped"
+    SKIPPED = "skipped",
 }
 /**
  * Configuration for agent coordination
@@ -129,7 +129,13 @@ export interface AgentCoordinatorConfig {
  * Result aggregation strategy
  */
 export interface AggregationStrategy {
-    type: "merge" | "vote" | "weighted" | "priority" | "parallel" | "sequential";
+    type:
+        | "merge"
+        | "vote"
+        | "weighted"
+        | "priority"
+        | "parallel"
+        | "sequential";
     weights?: Partial<Record<AgentType, number>>;
     priority?: AgentType[];
     conflictResolution?: "highest_confidence" | "most_recent" | "manual";
@@ -198,7 +204,13 @@ export interface AgentExecutionContext {
  * Event types for agent coordination
  */
 export interface AgentEvent {
-    type: "task_started" | "task_completed" | "task_failed" | "task_timeout" | "aggregation_started" | "aggregation_completed";
+    type:
+        | "task_started"
+        | "task_completed"
+        | "task_failed"
+        | "task_timeout"
+        | "aggregation_started"
+        | "aggregation_completed";
     taskId: string;
     agentType: AgentType;
     timestamp: Date;

@@ -1,5 +1,5 @@
 /**
- * Core agent coordination engine for the Ferg Engineering System.
+ * Core agent coordination engine for the AI Engineering System.
  * Handles agent orchestration, execution strategies, and result aggregation.
  */
 import { EventEmitter } from "node:events";

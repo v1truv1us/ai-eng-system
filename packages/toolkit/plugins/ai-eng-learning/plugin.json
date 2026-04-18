@@ -1,0 +1,18 @@
+{
+  "name": "ai-eng-learning",
+  "version": "1.0.0",
+  "description": "Learning workflows for knowledge mapping, decisions, quality gates, and maintenance reviews",
+  "author": {
+    "name": "v1truv1us"
+  },
+  "license": "MIT",
+  "commands": [
+    "./commands/knowledge-architecture.md",
+    "./commands/decision-journal.md",
+    "./commands/quality-gate.md",
+    "./commands/maintenance-review.md",
+    "./commands/learning-approve.md",
+    "./commands/learning-dismiss.md",
+    "./commands/learning-snooze.md"
+  ]
+}

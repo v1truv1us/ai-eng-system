@@ -4,7 +4,7 @@
 **Parent:** [../AGENTS.md](../AGENTS.md)
 **Philosophy:** [../CLAUDE.md](../CLAUDE.md)
 
-This directory contains the comprehensive test suite for the Ferg Engineering System.
+This directory contains the comprehensive test suite for the AI Engineering System.
 
 ## Test Structure
 

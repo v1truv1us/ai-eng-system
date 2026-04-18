@@ -1,4 +1,4 @@
-# Validation Framework for Ferg Engineering System
+# Validation Framework for AI Engineering System
 
 This directory contains the validation framework for empirically testing the claimed benefits of incentive-based prompting techniques.
 

@@ -1,10 +1,19 @@
 /**
- * Task executor for the Ferg Engineering System.
+ * Task executor for the AI Engineering System.
  * Handles task execution, dependency resolution, and result tracking.
  */
 import type { AgentCoordinator } from "../agents/coordinator";
-import { type AgentTask, type AgentType, type AggregationStrategy } from "../agents/types";
-import { type ExecutableTask, type ExecutionOptions, type Plan, type TaskResult } from "./types";
+import type {
+    AgentTask,
+    AgentType,
+    AggregationStrategy,
+} from "../agents/types";
+import type {
+    ExecutableTask,
+    ExecutionOptions,
+    Plan,
+    TaskResult,
+} from "./types";
 export declare class TaskExecutor {
     private options;
     private taskResults;
@@ -55,7 +64,10 @@ export declare class TaskExecutor {
     /**
      * Execute multiple agent tasks with coordination
      */
-    executeAgentTasks(tasks: AgentTask[], strategy?: AggregationStrategy): Promise<TaskResult[]>;
+    executeAgentTasks(
+        tasks: AgentTask[],
+        strategy?: AggregationStrategy,
+    ): Promise<TaskResult[]>;
     /**
      * Get agent execution progress
      */

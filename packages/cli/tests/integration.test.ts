@@ -21,8 +21,8 @@ import {
 } from "bun:test";
 import { execSync } from "node:child_process";
 import { existsSync } from "node:fs";
-import { copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { mkdtempSync } from "node:fs";
+import { copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 
@@ -30,7 +30,7 @@ const TEST_ROOT = mkdtempSync(join(tmpdir(), "ai-eng-integration-"));
 // Derive the monorepo root from this file's location (packages/cli/tests/ -> ../../..)
 const ORIGINAL_ROOT = dirname(dirname(dirname(__dirname)));
 
-describe("Ferg Engineering System - Integration Tests", () => {
+describe("AI Engineering System - Integration Tests", () => {
     beforeAll(async () => {
         await mkdir(TEST_ROOT, { recursive: true });
 

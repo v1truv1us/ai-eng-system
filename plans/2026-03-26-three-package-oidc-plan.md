@@ -7,7 +7,7 @@ The repo currently has **two real workspace packages**:
 - `packages/cli` -> `@ai-eng-system/cli`
 
 The repo root `package.json` is now a **private workspace package**:
-- `@ferg-engineering/system`
+- `@ai-eng-system/workspace`
 - `private: true`
 - It should **not** be treated as the third published package.
 

@@ -2,6 +2,11 @@
 
 ai-eng-system currently ships 32 canonical skills organized by lifecycle phase and repository-specific purpose.
 
+## Namespaced Skills
+
+- `ai-eng/simplify` - loaded from `skills/ai-eng/simplify/SKILL.md`
+- `workflow/ralph-wiggum` - loaded from `skills/workflow/ralph-wiggum/SKILL.md`
+
 ## Lifecycle Skills
 
 ### Define
@@ -54,18 +59,18 @@ ai-eng-system currently ships 32 canonical skills organized by lifecycle phase a
 
 - `coolify-deploy` - Coolify deployment workflows
 - `git-worktree` - Git worktree management
+- `knowledge-architecture` - build static-first knowledge maps
 - `knowledge-capture` - document solved problems and patterns
 - `monorepo-initialization` - AGENTS.md hierarchy setup
 
+## Marketplace Packaging
+
+- `knowledge-architecture` ships in the `ai-eng-learning` Claude plugin group.
+- `knowledge-capture` remains packaged outside `ai-eng-learning`.
+
 ## Plugin and Extension Development
 
-- `plugin-dev` - plugin creation for Claude Code and OpenCode
-
-## Namespaced Skills
-
-- `ai-eng/simplify` - loaded from `skills/ai-eng/simplify/SKILL.md`
-- `workflow/ralph-wiggum` - loaded from `skills/workflow/ralph-wiggum/SKILL.md`
-
+- `plugin-dev`
 ## Notes
 
 - Lifecycle skills are canonical workflow surfaces. Commands are thin entrypoints.

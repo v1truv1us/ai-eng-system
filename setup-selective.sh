@@ -9,7 +9,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DIST_DIR="$SCRIPT_DIR/dist"
 GLOBAL_DIR="$HOME/.config/opencode"
 
-echo "🔧 Ferg Engineering System - Selective Global Install"
+echo "🔧 AI Engineering System - Selective Global Install"
 echo "======================================================="
 echo ""
 

@@ -4,7 +4,7 @@
 **Parent:** [../AGENTS.md](../AGENTS.md)
 **Philosophy:** [../CLAUDE.md](../CLAUDE.md)
 
-This directory contains comprehensive documentation for the Ferg Engineering System.
+This directory contains comprehensive documentation for the AI Engineering System.
 
 ## Documentation Structure
 

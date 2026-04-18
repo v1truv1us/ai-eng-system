@@ -1,13 +1,13 @@
 #!/bin/bash
 # import-codeflow-agents.sh
-# Import curated CodeFlow agents into Ferg Engineering System
+# Import curated CodeFlow agents into AI Engineering System
 
 set -e
 
 # Configuration
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CODEFLOW_ENHANCED_DIR="/home/vitruvius/git/codeflow/enhanced-agents"
-FERG_CONTENT_DIR="$SCRIPT_DIR/content/agents"
+AI_ENG_CONTENT_DIR="$SCRIPT_DIR/content/agents"
 
 # Selected high-quality agents from CodeFlow
 SELECTED_AGENTS=(
@@ -60,15 +60,15 @@ validate_prerequisites() {
     exit 1
   fi
 
-  if [ ! -d "$FERG_CONTENT_DIR" ]; then
-    log_error "Ferg content directory not found: $FERG_CONTENT_DIR"
+  if [ ! -d "$AI_ENG_CONTENT_DIR" ]; then
+    log_error "AI Engineering content directory not found: $AI_ENG_CONTENT_DIR"
     exit 1
   fi
 
   log_success "Prerequisites validated"
 }
 
-# Transform frontmatter for Ferg compatibility
+# Transform frontmatter for AI Engineering System compatibility
 transform_frontmatter() {
   local file="$1"
   local temp_file="${file}.tmp"
@@ -77,8 +77,8 @@ transform_frontmatter() {
   local content=$(cat "$file")
 
   # Transform frontmatter (basic transformation - can be enhanced)
-  # Change any CodeFlow-specific references to Ferg-compatible ones
-  echo "$content" | sed 's/codeflow/ferg/g' > "$temp_file"
+  # Change any CodeFlow-specific references to ai-eng-system-compatible ones
+  echo "$content" | sed 's/codeflow/ai-eng-system/g' > "$temp_file"
 
   # Replace the original file
   mv "$temp_file" "$file"
@@ -98,12 +98,12 @@ import_agent() {
     return 1
   fi
 
-  # Copy to Ferg content directory
-  cp "$full_source_path" "$FERG_CONTENT_DIR/"
+  # Copy to AI Engineering content directory
+  cp "$full_source_path" "$AI_ENG_CONTENT_DIR/"
 
-  # Transform for Ferg compatibility
-  local ferg_file="$FERG_CONTENT_DIR/$(basename "$source_path")"
-  transform_frontmatter "$ferg_file"
+  # Transform for AI Engineering System compatibility
+  local ai_eng_file="$AI_ENG_CONTENT_DIR/$(basename "$source_path")"
+  transform_frontmatter "$ai_eng_file"
 
   log_success "Imported $agent_name"
 }
@@ -151,7 +151,7 @@ EOF
 
 # Main import process
 main() {
-  echo "🚀 CodeFlow Agent Import to Ferg Engineering System"
+echo "🚀 CodeFlow Agent Import to AI Engineering System"
   echo "=================================================="
   echo "Source: $CODEFLOW_ENHANCED_DIR"
   echo "Target: $FERG_CONTENT_DIR"

@@ -187,7 +187,7 @@ The opencode-skills plugin validates:
 - **Writing Style**: Imperative form throughout
 - **References**: All referenced files exist
 
-## Integration with Ferg System
+## Integration with AI Engineering System
 
 ### Existing Skills
 

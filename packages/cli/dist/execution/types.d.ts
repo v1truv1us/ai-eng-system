@@ -1,5 +1,5 @@
 /**
- * Type definitions for the Ferg Engineering System execution engine.
+ * Type definitions for the AI Engineering System execution engine.
  * Provides comprehensive type safety for plan parsing, task execution, and quality gates.
  */
 import type { AgentTask } from "../agents/types";

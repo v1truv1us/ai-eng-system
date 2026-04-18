@@ -1,5 +1,5 @@
 /**
- * Type definitions for the Ferg Engineering System execution engine.
+ * Type definitions for the AI Engineering System execution engine.
  * Provides comprehensive type safety for plan parsing, task execution, and quality gates.
  */
 import type { AgentTask } from "../agents/types";
@@ -75,7 +75,7 @@ export declare enum TaskType {
     /** Integration tests */
     INTEGRATION = "integration",
     /** Deployment */
-    DEPLOY = "deploy"
+    DEPLOY = "deploy",
 }
 export declare enum TaskStatus {
     /** Task not yet started */
@@ -87,7 +87,7 @@ export declare enum TaskStatus {
     /** Task failed */
     FAILED = "failed",
     /** Task skipped due to dependency failure */
-    SKIPPED = "skipped"
+    SKIPPED = "skipped",
 }
 export interface RetryConfig {
     /** Maximum number of retry attempts */
@@ -145,7 +145,7 @@ export declare enum QualityGateType {
     /** Integration testing */
     INTEGRATION = "integration",
     /** Deployment validation */
-    DEPLOY = "deploy"
+    DEPLOY = "deploy",
 }
 export interface QualityGateResult {
     /** Quality gate identifier */
@@ -235,5 +235,5 @@ export declare enum ValidationErrorType {
     /** Duplicate identifier */
     DUPLICATE_ID = "duplicate_id",
     /** Unknown dependency */
-    UNKNOWN_DEPENDENCY = "unknown_dependency"
+    UNKNOWN_DEPENDENCY = "unknown_dependency",
 }

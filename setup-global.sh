@@ -1,5 +1,5 @@
 #!/bin/bash
-# Setup script for Ferg Engineering System - Namespaced Global Installation
+# Setup script for AI Engineering System - Namespaced Global Installation
 # Builds from content/ and installs to ~/.config/opencode under ai-eng/ namespace
 
 set -euo pipefail
@@ -8,7 +8,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DIST_DIR="$SCRIPT_DIR/dist"
 GLOBAL_DIR="${HOME}/.config/opencode"
 
-echo "🔧 Ferg Engineering System - Namespaced Global Install"
+echo "🔧 AI Engineering System - Namespaced Global Install"
 echo "========================================================"
 echo ""
 echo "All components will be installed under the 'ai-eng/' namespace:"
@@ -17,7 +17,7 @@ echo "  Agents:   ai-eng/architect-advisor, ai-eng/prompt-optimizer, etc."
 echo ""
 
 # Check for npm installation option
-if command -v npm &> /dev/null && npm list -g @ferg-cod3s/engineering-system &> /dev/null; then
+if command -v npm &> /dev/null && npm list -g @ai-eng-system/cli &> /dev/null; then
   echo "📦 Found npm installation. Using npm installer..."
   cd "$SCRIPT_DIR" && npm run install:global
   exit 0
@@ -26,13 +26,13 @@ fi
 # Offer npm option if available
 if command -v npm &> /dev/null; then
   echo "💡 Option: Install via npm for easier updates?"
-  echo "   npm install -g @ferg-cod3s/engineering-system"
+  echo "   npm install -g @ai-eng-system/cli"
   echo ""
   read -p "Use npm installation? (y/N): " -n 1 -r
   echo ""
   if [[ $REPLY =~ ^[Yy]$ ]]; then
     echo "📦 Installing via npm..."
-    npm install -g @ferg-cod3s/engineering-system
+    npm install -g @ai-eng-system/cli
     echo "✅ npm installation complete!"
     exit 0
   fi
@@ -49,7 +49,7 @@ else
   if [ ! -d "$DIST_DIR" ]; then
     echo "❌ Error: dist/ not found and bun not available to build."
     echo "   Install bun: curl -fsSL https://bun.sh/install | bash"
-    echo "   Or use npm: npm install -g @ferg-cod3s/engineering-system"
+    echo "   Or use npm: npm install -g @ai-eng-system/cli"
     exit 1
   fi
 fi

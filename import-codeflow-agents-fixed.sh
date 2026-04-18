@@ -1,13 +1,13 @@
 #!/bin/bash
 # import-codeflow-agents.sh - Simplified and robust version
-# Import curated CodeFlow agents into Ferg Engineering System
+# Import curated CodeFlow agents into AI Engineering System
 
 set -e
 
 # Configuration
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CODEFLOW_ENHANCED_DIR="/home/vitruvius/git/codeflow/enhanced-agents"
-FERG_CONTENT_DIR="$SCRIPT_DIR/content/agents"
+AI_ENG_CONTENT_DIR="$SCRIPT_DIR/content/agents"
 
 # Selected high-quality agents from CodeFlow (verified to exist)
 SELECTED_AGENTS=(
@@ -64,17 +64,17 @@ import_agent() {
     return 1
   fi
 
-  # Copy to Ferg content directory
-  if ! cp "$full_source_path" "$FERG_CONTENT_DIR/"; then
+  # Copy to AI Engineering content directory
+  if ! cp "$full_source_path" "$AI_ENG_CONTENT_DIR/"; then
     log_error "Failed to copy $agent_name"
     return 1
   fi
 
   # Basic transformation (optional - can be enhanced later)
-  local ferg_file="$FERG_CONTENT_DIR/$(basename "$source_path")"
-  if [ -f "$ferg_file" ]; then
+  local ai_eng_file="$AI_ENG_CONTENT_DIR/$(basename "$source_path")"
+  if [ -f "$ai_eng_file" ]; then
     # Simple sed replacement for basic compatibility
-    sed -i 's/codeflow/ferg/g' "$ferg_file" 2>/dev/null || true
+    sed -i 's/codeflow/ai-eng-system/g' "$ai_eng_file" 2>/dev/null || true
   fi
 
   log_success "Imported $agent_name"
@@ -135,7 +135,7 @@ EOF
 
 # Main import process
 main() {
-  echo "🚀 CodeFlow Agent Import to Ferg Engineering System"
+echo "🚀 CodeFlow Agent Import to AI Engineering System"
   echo "=================================================="
   echo "Source: $CODEFLOW_ENHANCED_DIR"
   echo "Target: $FERG_CONTENT_DIR"
@@ -149,7 +149,7 @@ main() {
     exit 1
   fi
   if [ ! -d "$FERG_CONTENT_DIR" ]; then
-    log_error "Ferg content directory not found: $FERG_CONTENT_DIR"
+    log_error "AI Engineering content directory not found: $AI_ENG_CONTENT_DIR"
     exit 1
   fi
   log_success "Prerequisites validated"

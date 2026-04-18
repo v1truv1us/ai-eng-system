@@ -4,7 +4,7 @@
 **Parent:** [../AGENTS.md](../AGENTS.md)
 **Philosophy:** [../CLAUDE.md](../CLAUDE.md)
 
-This directory contains the core TypeScript implementation of the Ferg Engineering System.
+This directory contains the core TypeScript implementation of the AI Engineering System.
 
 ## Architecture Overview
 

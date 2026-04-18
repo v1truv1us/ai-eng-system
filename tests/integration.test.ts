@@ -28,7 +28,7 @@ import { join } from "node:path";
 const TEST_ROOT = join(tmpdir(), `ai-eng-integration-${Date.now()}`);
 const ORIGINAL_ROOT = process.cwd();
 
-describe("Ferg Engineering System - Integration Tests", () => {
+describe("AI Engineering System - Integration Tests", () => {
     beforeAll(async () => {
         await mkdir(TEST_ROOT, { recursive: true });
 

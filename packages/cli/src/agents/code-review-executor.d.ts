@@ -1,9 +1,9 @@
 /**
- * Multi-agent code review executor for the Ferg Engineering System.
+ * Multi-agent code review executor for the AI Engineering System.
  * Coordinates multiple specialized agents to perform comprehensive code reviews.
  */
 import type { AgentCoordinator } from "./coordinator";
-import { type CodeReviewInput, type CodeReviewOutput } from "./types";
+import type { CodeReviewInput, CodeReviewOutput } from "./types";
 export declare class CodeReviewExecutor {
     private coordinator;
     constructor(coordinator: AgentCoordinator);
@@ -14,11 +14,17 @@ export declare class CodeReviewExecutor {
     /**
      * Execute a focused code review for specific aspects
      */
-    executeFocusedReview(input: CodeReviewInput, focus: "security" | "performance" | "frontend" | "general"): Promise<CodeReviewOutput>;
+    executeFocusedReview(
+        input: CodeReviewInput,
+        focus: "security" | "performance" | "frontend" | "general",
+    ): Promise<CodeReviewOutput>;
     /**
      * Execute incremental code review for changed files
      */
-    executeIncrementalReview(input: CodeReviewInput, baseBranch?: string): Promise<CodeReviewOutput>;
+    executeIncrementalReview(
+        input: CodeReviewInput,
+        baseBranch?: string,
+    ): Promise<CodeReviewOutput>;
     /**
      * Create review tasks for different code aspects
      */

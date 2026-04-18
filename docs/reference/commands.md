@@ -53,6 +53,20 @@
 - `/ai-eng/fact-check` - verify technical claims and references
 - `/ai-eng/knowledge-capture` - capture solved problems and patterns
 
+## Learning and Knowledge
+
+- `/ai-eng/knowledge-architecture` - build a static-first knowledge map
+- `/ai-eng/decision-journal` - record durable decisions and tradeoffs
+- `/ai-eng/quality-gate` - define file-backed quality gates
+- `/ai-eng/maintenance-review` - capture recurring maintenance reviews
+- `/ai-eng/learning-approve` - OpenCode-only approval for the active learning recommendation
+- `/ai-eng/learning-dismiss` - OpenCode-only dismissal for the active learning recommendation
+- `/ai-eng/learning-snooze` - OpenCode-only snooze for the active learning recommendation
+
+Marketplace packaging note:
+- These seven commands ship in the `ai-eng-learning` Claude plugin group.
+- `/ai-eng/knowledge-capture` remains outside that group.
+
 ## Testing and Debugging
 
 - `/ai-eng/api-test` - API testing and validation

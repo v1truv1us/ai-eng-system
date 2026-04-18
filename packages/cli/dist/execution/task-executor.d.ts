@@ -1,5 +1,5 @@
 /**
- * Task executor for the Ferg Engineering System.
+ * Task executor for the AI Engineering System.
  * Handles task execution, dependency resolution, and result tracking.
  */
 import type { AgentCoordinator } from "../agents/coordinator";

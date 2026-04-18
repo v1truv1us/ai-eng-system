@@ -11,8 +11,8 @@ async function runAgentCoordinationDemo() {
     console.log("🚀 Agent Coordination System Demo\n");
 
     console.log("🎯 System Overview:");
-    console.log("The Ferg Engineering System now includes:");
-    console.log("• 26 specialized agents working together");
+    console.log("The AI Engineering System now includes:");
+    console.log("• 32 specialized agents working together");
     console.log("• Intelligent task routing and execution");
     console.log("• Inter-agent communication and handoffs");
     console.log("• Self-improvement through performance analysis");
@@ -22,7 +22,7 @@ async function runAgentCoordinationDemo() {
     console.log("📋 Key Components Implemented:");
 
     console.log("\n1. Agent Registry (✅ Complete)");
-    console.log("   • Loads 26 agents from .claude-plugin/agents/");
+    console.log("   • Loads 32 agents from .claude-plugin/agents/");
     console.log("   • Parses frontmatter for capabilities and handoffs");
     console.log("   • Provides capability-based agent discovery");
 

@@ -35,7 +35,7 @@ The implement a tool that balances flexibility with safety. The challenge is cre
 Tool will be saved to:
 - Project-local: `.opencode/tool/[name].ts`
 - Global: `~/.config/opencode/tool/[name].ts`
-- Ferg content: `content/tools/[name].ts`
+- Canonical content: `content/tools/[name].ts`
 
 ## Examples
 

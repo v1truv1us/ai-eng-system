@@ -430,12 +430,14 @@ export class OpenCodeClient {
                 // Create a TransformStream to handle the streaming response
                 const stream = new TransformStream<Uint8Array, Uint8Array>();
                 const writer = stream.writable.getWriter();
+                let assistantMessageId: string | null = null;
 
                 // Track finalization to prevent double-close/abort
                 let finalized = false;
                 const closeOnce = async () => {
                     if (finalized) return;
                     finalized = true;
+
                     try {
                         await writer.close();
                     } catch {
@@ -616,7 +618,6 @@ export class OpenCodeClient {
                             signal: controller.signal,
                         });
 
-                        let assistantMessageId: string | null = null;
                         let content = "";
                         let emittedText = "";
                         let eventCount = 0;
@@ -951,10 +952,16 @@ export class OpenCodeClient {
                             idleTimedOut,
                             assistantMessageIdFound: !!assistantMessageId,
                         });
-                        // If we aborted, normalize to our timeout error AND ensure stream is finalized
+                        // Preserve the actual timeout reason so diagnostics stay accurate.
                         if (controller.signal.aborted) {
-                            await abortOnce(idleTimeoutError);
-                            throw idleTimeoutError;
+                            const abortError =
+                                controller.signal.reason instanceof Error
+                                    ? controller.signal.reason
+                                    : idleTimedOut
+                                      ? idleTimeoutError
+                                      : hardTimeoutError;
+                            await abortOnce(abortError);
+                            throw abortError;
                         }
                         await abortOnce(error);
                         throw error;

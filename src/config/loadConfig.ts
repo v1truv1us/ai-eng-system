@@ -88,7 +88,7 @@ function applyEnvOverrides(config: AiEngConfig): void {
             process.env.OPENCODE_PROMPT_TIMEOUT_MS,
             10,
         );
-        if (Number.isNaN(timeout)) {
+        if (!Number.isNaN(timeout)) {
             config.opencode.promptTimeoutMs = timeout;
         }
     }
@@ -173,10 +173,10 @@ function deepMerge<T extends Record<string, unknown>>(
                     sourceValue as any,
                 ) as any;
             } else {
-                result[key] = sourceValue;
+                result[key] = sourceValue as T[keyof T];
             }
         } else {
-            result[key] = sourceValue;
+            result[key] = sourceValue as T[keyof T];
         }
     }
     return result;

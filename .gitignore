@@ -10,7 +10,6 @@ bun.lockb
 # Run `bun run build` after editing content/ to regenerate
 
 # Context engineering local storage (user-specific, not committed)
-.ferg-context/
 .ai-context/
 
 # Local ai-eng config (user-specific)

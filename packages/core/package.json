@@ -1,6 +1,6 @@
 {
   "name": "@ai-eng-system/core",
-  "version": "1.2.0",
+"version": "1.2.0",
   "description": "AI Engineering System - Core agents, skills, and commands",
   "type": "module",
   "main": "./dist/index.js",
@@ -65,7 +65,7 @@
     "bun": ">=1.0.0"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
-    "typescript": "^5.9.3"
+    "@types/node": "^25.6.0",
+    "typescript": "^6.0.2"
   }
 }

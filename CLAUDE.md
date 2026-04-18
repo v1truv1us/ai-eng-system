@@ -1,4 +1,4 @@
-# Ferg Engineering System
+# AI Engineering System
 
 ## Who I Am
 I'm an architect leading AI-assisted development across UnFergettable-Designs (client web dev) and personal projects.
@@ -30,8 +30,12 @@ This CLAUDE.md defines the **philosophy** that guides all agents. AGENTS.md docu
 - /create-skill — AI-assisted skill creation
 - /create-tool — AI-assisted tool creation
 - /knowledge-capture — Document solved problems for team
+- /knowledge-architecture — Build static-first knowledge maps
+- /decision-journal — Record durable decisions
+- /quality-gate — Define file-backed quality gates
+- /maintenance-review — Review drift and maintenance debt
 
-See `docs/reference/commands.md` for the full 42-command inventory.
+See `docs/reference/commands.md` for the full 49-command inventory.
 
 ## Agent Contexts
 

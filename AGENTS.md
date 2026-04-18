@@ -1,4 +1,4 @@
-# Ferg Engineering Agents
+# AI Engineering Agents
 
 ## Agent Coordination
 
@@ -293,6 +293,7 @@ The table below highlights the most important lifecycle and alignment skills. Th
 | incremental-implementation | skills/incremental-implementation/ | Thin-slice implementation discipline |
 | prompt-refinement | skills/prompt-refinement/ | TCRO structuring with phase-specific clarification |
 | incentive-prompting | skills/incentive-prompting/ | Research-backed prompting techniques |
+| knowledge-architecture | skills/knowledge-architecture/ | Static-first knowledge architecture and learning workflows |
 | plugin-dev | skills/plugin-dev/ | Plugin development knowledge base |
 
 ## Key Commands
@@ -314,8 +315,12 @@ The table below highlights the most important lifecycle and alignment skills. Th
 | /create-skill | AI-assisted skill creation | build |
 | /create-tool | AI-assisted tool creation | build |
 | /knowledge-capture | Document solved problems for team | build |
+| /knowledge-architecture | Build static-first knowledge maps | build |
+| /decision-journal | Record durable decisions | build |
+| /quality-gate | Define file-backed quality gates | build |
+| /maintenance-review | Review drift and maintenance debt | read-only |
 
-See `docs/reference/commands.md` for the full 42-command inventory.
+See `docs/reference/commands.md` for the full 49-command inventory.
 
 ### Lifecycle Mapping
 

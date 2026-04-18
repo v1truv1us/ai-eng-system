@@ -1,9 +1,16 @@
 /**
- * Core research orchestration engine for Ferg Engineering System.
+ * Core research orchestration engine for AI Engineering System.
  * Coordinates 3-phase research process: discovery, analysis, and synthesis.
  */
 import { EventEmitter } from "node:events";
-import { type ResearchConfig, type ResearchEvent, type ResearchMetrics, type ResearchProgress, type ResearchQuery, type SynthesisReport } from "./types";
+import type {
+    ResearchConfig,
+    ResearchEvent,
+    ResearchMetrics,
+    ResearchProgress,
+    ResearchQuery,
+    SynthesisReport,
+} from "./types";
 /**
  * Main research orchestrator class
  */

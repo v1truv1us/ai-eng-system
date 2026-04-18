@@ -1,5 +1,5 @@
 /**
- * Multi-agent code review executor for the Ferg Engineering System.
+ * Multi-agent code review executor for the AI Engineering System.
  * Coordinates multiple specialized agents to perform comprehensive code reviews.
  */
 

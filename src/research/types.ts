@@ -1,5 +1,5 @@
 /**
- * Research orchestration types and interfaces for Ferg Engineering System.
+ * Research orchestration types and interfaces for AI Engineering System.
  * Defines core abstractions for research workflows, discovery, analysis, and synthesis.
  */
 

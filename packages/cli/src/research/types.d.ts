@@ -1,5 +1,5 @@
 /**
- * Research orchestration types and interfaces for Ferg Engineering System.
+ * Research orchestration types and interfaces for AI Engineering System.
  * Defines core abstractions for research workflows, discovery, analysis, and synthesis.
  */
 import { ConfidenceLevel } from "../agents/types";
@@ -11,15 +11,15 @@ export declare enum ResearchScope {
     CODEBASE = "codebase",
     DOCUMENTATION = "documentation",
     EXTERNAL = "external",
-    ALL = "all"
+    ALL = "all",
 }
 /**
  * Research depth enumeration
  */
 export declare enum ResearchDepth {
-    SHALLOW = "shallow",// Quick scan, surface-level
-    MEDIUM = "medium",// Standard analysis
-    DEEP = "deep"
+    SHALLOW = "shallow", // Quick scan, surface-level
+    MEDIUM = "medium", // Standard analysis
+    DEEP = "deep",
 }
 /**
  * Research phase enumeration
@@ -27,7 +27,7 @@ export declare enum ResearchDepth {
 export declare enum ResearchPhase {
     DISCOVERY = "discovery",
     ANALYSIS = "analysis",
-    SYNTHESIS = "synthesis"
+    SYNTHESIS = "synthesis",
 }
 /**
  * Research query interface
@@ -117,7 +117,14 @@ export interface DiscoveryResult {
  */
 export interface Evidence {
     id: string;
-    type: "code" | "documentation" | "pattern" | "import-statement" | "class-definition" | "function-definition" | "technical-debt";
+    type:
+        | "code"
+        | "documentation"
+        | "pattern"
+        | "import-statement"
+        | "class-definition"
+        | "function-definition"
+        | "technical-debt";
     source: string;
     content: string;
     file?: string;
@@ -207,7 +214,12 @@ export interface Recommendation {
  */
 export interface Risk {
     id: string;
-    type: "technical" | "architectural" | "security" | "performance" | "maintainability";
+    type:
+        | "technical"
+        | "architectural"
+        | "security"
+        | "performance"
+        | "maintainability";
     severity: "low" | "medium" | "high" | "critical";
     title: string;
     description: string;
@@ -293,7 +305,15 @@ export interface ResearchConfig {
  * Research event types
  */
 export interface ResearchEvent {
-    type: "research_started" | "phase_started" | "phase_completed" | "agent_started" | "agent_completed" | "agent_failed" | "research_completed" | "research_failed";
+    type:
+        | "research_started"
+        | "phase_started"
+        | "phase_completed"
+        | "agent_started"
+        | "agent_completed"
+        | "agent_failed"
+        | "research_completed"
+        | "research_failed";
     timestamp: Date;
     data?: Record<string, unknown>;
     phase?: ResearchPhase;
@@ -326,7 +346,10 @@ export interface AnalysisConfig {
  * Analysis agent interface
  */
 export interface AnalysisAgent {
-    analyze(discoveryResults: DiscoveryResult[], context?: Record<string, unknown>): Promise<AnalysisResult>;
+    analyze(
+        discoveryResults: DiscoveryResult[],
+        context?: Record<string, unknown>,
+    ): Promise<AnalysisResult>;
 }
 /**
  * Synthesis handler configuration interface
@@ -341,7 +364,10 @@ export interface SynthesisConfig {
  * Synthesis handler interface
  */
 export interface SynthesisHandler {
-    synthesize(query: ResearchQuery, analysisResults: AnalysisResult[]): Promise<SynthesisReport>;
+    synthesize(
+        query: ResearchQuery,
+        analysisResults: AnalysisResult[],
+    ): Promise<SynthesisReport>;
 }
 /**
  * Research statistics interface
@@ -353,11 +379,14 @@ export interface ResearchStatistics {
     averageConfidence: number;
     mostCommonScopes: Record<ResearchScope, number>;
     mostCommonDepths: Record<ResearchDepth, number>;
-    agentPerformance: Record<string, {
-        executionCount: number;
-        averageTime: number;
-        successRate: number;
-    }>;
+    agentPerformance: Record<
+        string,
+        {
+            executionCount: number;
+            averageTime: number;
+            successRate: number;
+        }
+    >;
 }
 /**
  * Research cache entry interface
@@ -394,7 +423,11 @@ export interface ResearchValidationResult {
  * Research validation error interface
  */
 export interface ResearchValidationError {
-    type: "invalid_query" | "invalid_scope" | "invalid_depth" | "invalid_constraints";
+    type:
+        | "invalid_query"
+        | "invalid_scope"
+        | "invalid_depth"
+        | "invalid_constraints";
     message: string;
     field?: string;
 }
@@ -411,18 +444,24 @@ export interface ResearchValidationWarning {
  */
 export interface ResearchMetrics {
     queryId: string;
-    phaseMetrics: Record<ResearchPhase, {
-        duration: number;
-        agentCount: number;
-        successCount: number;
-        errorCount: number;
-    }>;
+    phaseMetrics: Record<
+        ResearchPhase,
+        {
+            duration: number;
+            agentCount: number;
+            successCount: number;
+            errorCount: number;
+        }
+    >;
     totalDuration: number;
-    agentMetrics: Record<string, {
-        duration: number;
-        success: boolean;
-        confidence: ConfidenceLevel;
-    }>;
+    agentMetrics: Record<
+        string,
+        {
+            duration: number;
+            success: boolean;
+            confidence: ConfidenceLevel;
+        }
+    >;
     qualityMetrics: {
         evidenceCount: number;
         insightCount: number;
@@ -437,7 +476,7 @@ export declare enum ResearchExportFormat {
     MARKDOWN = "markdown",
     JSON = "json",
     PDF = "pdf",
-    HTML = "html"
+    HTML = "html",
 }
 /**
  * Research export options interface

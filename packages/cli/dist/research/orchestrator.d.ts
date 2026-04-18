@@ -1,5 +1,5 @@
 /**
- * Core research orchestration engine for Ferg Engineering System.
+ * Core research orchestration engine for AI Engineering System.
  * Coordinates 3-phase research process: discovery, analysis, and synthesis.
  */
 import { EventEmitter } from "node:events";

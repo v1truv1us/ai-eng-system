@@ -11,7 +11,7 @@ predecessor: 2025-12-06-validation-framework-research.md
 
 ## Synopsis
 
-This document provides a comprehensive, actionable framework for validating the claimed benefits of the ferg-engineering-system's incentive-based prompting techniques. It synthesizes industry best practices for LLM quality benchmarking with statistical validation methodologies.
+This document provides a comprehensive, actionable framework for validating the claimed benefits of the ai-eng-system's incentive-based prompting techniques. It synthesizes industry best practices for LLM quality benchmarking with statistical validation methodologies.
 
 ## Executive Summary
 
@@ -88,7 +88,7 @@ Output JSON:
 
 ### 1.4 Benchmark Task Categories
 
-For validating ferg-engineering-system claims, create benchmark tasks in these categories:
+For validating ai-eng-system claims, create benchmark tasks in these categories:
 
 | Category | Task Examples | Validates |
 |----------|---------------|-----------|
@@ -531,4 +531,4 @@ pip install scipy statsmodels scikit-learn numpy
 
 *Research completed: December 6, 2025*
 *Predecessor: 2025-12-06-validation-framework-research.md*
-*Purpose: Actionable framework for validating ferg-engineering-system claims*
+*Purpose: Actionable framework for validating ai-eng-system claims*

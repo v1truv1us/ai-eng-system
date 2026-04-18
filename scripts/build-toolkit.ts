@@ -10,6 +10,7 @@ const toolkitRoot = resolve(repoRoot, "packages/toolkit");
 
 const PLUGIN_NAMES = [
   "ai-eng-core",
+  "ai-eng-learning",
   "ai-eng-research",
   "ai-eng-devops",
   "ai-eng-quality",

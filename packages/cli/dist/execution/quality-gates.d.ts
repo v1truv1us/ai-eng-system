@@ -1,5 +1,5 @@
 /**
- * Quality gates runner for the Ferg Engineering System.
+ * Quality gates runner for the AI Engineering System.
  * Executes quality gates in sequence with proper error handling and reporting.
  */
 import { type ExecutionOptions, type QualityGateConfig, type QualityGateResult, type Task } from "./types";

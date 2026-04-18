@@ -1,10 +1,18 @@
 /**
- * Core agent coordination engine for the Ferg Engineering System.
+ * Core agent coordination engine for the AI Engineering System.
  * Handles agent orchestration, execution strategies, and result aggregation.
  */
 import { EventEmitter } from "node:events";
-import { AgentRegistry } from "./registry";
-import { type AgentCoordinatorConfig, type AgentMetrics, type AgentProgress, type AgentTask, type AgentTaskResult, AgentType, type AggregationStrategy } from "./types";
+import type { AgentRegistry } from "./registry";
+import type {
+    AgentCoordinatorConfig,
+    AgentMetrics,
+    AgentProgress,
+    AgentTask,
+    AgentTaskResult,
+    AgentType,
+    AggregationStrategy,
+} from "./types";
 export declare class AgentCoordinator extends EventEmitter {
     private config;
     private runningTasks;
@@ -17,7 +25,10 @@ export declare class AgentCoordinator extends EventEmitter {
     /**
      * Execute a collection of agent tasks with the specified strategy
      */
-    executeTasks(tasks: AgentTask[], strategy: AggregationStrategy): Promise<AgentTaskResult[]>;
+    executeTasks(
+        tasks: AgentTask[],
+        strategy: AggregationStrategy,
+    ): Promise<AgentTaskResult[]>;
     /**
      * Execute a single agent task
      */

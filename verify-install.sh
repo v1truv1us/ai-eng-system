@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-echo "🔍 Verifying Ferg Engineering System Installation"
+echo "🔍 Verifying AI Engineering System Installation"
 echo "=================================================="
 echo ""
 

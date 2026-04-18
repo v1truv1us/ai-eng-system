@@ -80,7 +80,7 @@ Provider System (Unchanged)
   - `PLUGIN.md` (verify)
 - **Acceptance Criteria**:
   - [ ] All files reference same canonical repository URL
-  - [ ] Choose between v1truv1us vs ferg-cod3s consistently
+  - [ ] Choose a single canonical owner identifier consistently
   - [ ] Update any outdated URLs
 - **Time**: 20 min
 - **Complexity**: Low

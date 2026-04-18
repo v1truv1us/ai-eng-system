@@ -33,6 +33,8 @@ const TEST_ROOT = join(tmpdir(), `ai-eng-test-${Date.now()}`);
 const CONTENT_DIR = join(TEST_ROOT, "content");
 const DIST_DIR = join(TEST_ROOT, "dist");
 const SKILLS_DIR = join(TEST_ROOT, "skills");
+const TEMPLATES_DIR = join(TEST_ROOT, "templates");
+const DOCS_DIR = join(TEST_ROOT, "docs");
 
 // Mock package.json for testing
 const MOCK_PACKAGE_JSON = {
@@ -116,7 +118,7 @@ Test skill overview content.
 Test skill usage instructions.
 `;
 
-describe("Ferg Engineering System - Build System", () => {
+describe("AI Engineering System - Build System", () => {
     beforeAll(async () => {
         // Setup test environment
         await mkdir(TEST_ROOT, { recursive: true });
@@ -127,6 +129,14 @@ describe("Ferg Engineering System - Build System", () => {
         await mkdir(join(CONTENT_DIR, "commands"), { recursive: true });
         await mkdir(join(CONTENT_DIR, "agents"), { recursive: true });
         await mkdir(join(SKILLS_DIR, "test-skill"), { recursive: true });
+        await mkdir(join(TEMPLATES_DIR, "knowledge"), { recursive: true });
+        await mkdir(join(TEMPLATES_DIR, "decisions"), { recursive: true });
+        await mkdir(join(TEMPLATES_DIR, "quality"), { recursive: true });
+        await mkdir(join(TEMPLATES_DIR, "review"), { recursive: true });
+        await mkdir(join(DOCS_DIR, "knowledge"), { recursive: true });
+        await mkdir(join(DOCS_DIR, "decisions"), { recursive: true });
+        await mkdir(join(DOCS_DIR, "quality"), { recursive: true });
+        await mkdir(join(DOCS_DIR, "reviews", "maintenance"), { recursive: true });
 
         // Write sample content
         await writeFile(
@@ -140,6 +150,38 @@ describe("Ferg Engineering System - Build System", () => {
         await writeFile(
             join(SKILLS_DIR, "test-skill", "SKILL.md"),
             SAMPLE_SKILL,
+        );
+        await writeFile(
+            join(TEMPLATES_DIR, "knowledge", "index.md"),
+            "# Knowledge Index\n",
+        );
+        await writeFile(
+            join(TEMPLATES_DIR, "decisions", "decision.md"),
+            "# Decision Template\n",
+        );
+        await writeFile(
+            join(TEMPLATES_DIR, "quality", "gate.md"),
+            "# Quality Gate Template\n",
+        );
+        await writeFile(
+            join(TEMPLATES_DIR, "review", "maintenance-review.md"),
+            "# Maintenance Review Template\n",
+        );
+        await writeFile(
+            join(DOCS_DIR, "knowledge", "README.md"),
+            "# Knowledge Docs\n",
+        );
+        await writeFile(
+            join(DOCS_DIR, "decisions", "README.md"),
+            "# Decisions Docs\n",
+        );
+        await writeFile(
+            join(DOCS_DIR, "quality", "README.md"),
+            "# Quality Docs\n",
+        );
+        await writeFile(
+            join(DOCS_DIR, "reviews", "maintenance", "README.md"),
+            "# Maintenance Docs\n",
         );
 
         // Write mock package.json
@@ -186,6 +228,72 @@ describe("Ferg Engineering System - Build System", () => {
             await writeFile(
                 join(SKILLS_DIR, "test-skill", "SKILL.md"),
                 SAMPLE_SKILL,
+            );
+        }
+
+        if (!existsSync(join(TEMPLATES_DIR, "knowledge", "index.md"))) {
+            await mkdir(join(TEMPLATES_DIR, "knowledge"), { recursive: true });
+            await writeFile(
+                join(TEMPLATES_DIR, "knowledge", "index.md"),
+                "# Knowledge Index\n",
+            );
+        }
+
+        if (!existsSync(join(TEMPLATES_DIR, "decisions", "decision.md"))) {
+            await mkdir(join(TEMPLATES_DIR, "decisions"), { recursive: true });
+            await writeFile(
+                join(TEMPLATES_DIR, "decisions", "decision.md"),
+                "# Decision Template\n",
+            );
+        }
+
+        if (!existsSync(join(TEMPLATES_DIR, "quality", "gate.md"))) {
+            await mkdir(join(TEMPLATES_DIR, "quality"), { recursive: true });
+            await writeFile(
+                join(TEMPLATES_DIR, "quality", "gate.md"),
+                "# Quality Gate Template\n",
+            );
+        }
+
+        if (!existsSync(join(TEMPLATES_DIR, "review", "maintenance-review.md"))) {
+            await mkdir(join(TEMPLATES_DIR, "review"), { recursive: true });
+            await writeFile(
+                join(TEMPLATES_DIR, "review", "maintenance-review.md"),
+                "# Maintenance Review Template\n",
+            );
+        }
+
+        if (!existsSync(join(DOCS_DIR, "knowledge", "README.md"))) {
+            await mkdir(join(DOCS_DIR, "knowledge"), { recursive: true });
+            await writeFile(
+                join(DOCS_DIR, "knowledge", "README.md"),
+                "# Knowledge Docs\n",
+            );
+        }
+
+        if (!existsSync(join(DOCS_DIR, "decisions", "README.md"))) {
+            await mkdir(join(DOCS_DIR, "decisions"), { recursive: true });
+            await writeFile(
+                join(DOCS_DIR, "decisions", "README.md"),
+                "# Decisions Docs\n",
+            );
+        }
+
+        if (!existsSync(join(DOCS_DIR, "quality", "README.md"))) {
+            await mkdir(join(DOCS_DIR, "quality"), { recursive: true });
+            await writeFile(
+                join(DOCS_DIR, "quality", "README.md"),
+                "# Quality Docs\n",
+            );
+        }
+
+        if (!existsSync(join(DOCS_DIR, "reviews", "maintenance", "README.md"))) {
+            await mkdir(join(DOCS_DIR, "reviews", "maintenance"), {
+                recursive: true,
+            });
+            await writeFile(
+                join(DOCS_DIR, "reviews", "maintenance", "README.md"),
+                "# Maintenance Docs\n",
             );
         }
 
@@ -400,6 +508,47 @@ Missing description field.
                 "SKILL.md",
             );
             expect(existsSync(testSkillPath)).toBe(true);
+        });
+
+        it("should copy learning plugin support assets", async () => {
+            await runBuild();
+
+            const learningPluginDir = join(TEST_ROOT, "plugins", "ai-eng-learning");
+            expect(existsSync(learningPluginDir)).toBe(true);
+            expect(
+                existsSync(
+                    join(learningPluginDir, "templates", "knowledge", "index.md"),
+                ),
+            ).toBe(true);
+            expect(
+                existsSync(join(learningPluginDir, "docs", "knowledge", "README.md")),
+            ).toBe(true);
+            expect(
+                existsSync(
+                    join(learningPluginDir, "templates", "decisions", "decision.md"),
+                ),
+            ).toBe(true);
+            expect(
+                existsSync(join(learningPluginDir, "docs", "decisions", "README.md")),
+            ).toBe(true);
+            expect(
+                existsSync(
+                    join(learningPluginDir, "templates", "quality", "gate.md"),
+                ),
+            ).toBe(true);
+            expect(
+                existsSync(join(learningPluginDir, "docs", "quality", "README.md")),
+            ).toBe(true);
+            expect(
+                existsSync(
+                    join(learningPluginDir, "templates", "review", "maintenance-review.md"),
+                ),
+            ).toBe(true);
+            expect(
+                existsSync(
+                    join(learningPluginDir, "docs", "reviews", "maintenance", "README.md"),
+                ),
+            ).toBe(true);
         });
 
         it("should validate skill names match regex", async () => {

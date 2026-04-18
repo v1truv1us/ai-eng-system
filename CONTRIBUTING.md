@@ -1,6 +1,6 @@
-# Contributing to Ferg Engineering System
+# Contributing to AI Engineering System
 
-Thank you for your interest in contributing to the Ferg Engineering System! This document provides guidelines and information for contributors.
+Thank you for your interest in contributing to the AI Engineering System! This document provides guidelines and information for contributors.
 
 ## 🚀 Quick Start for Contributors
 
@@ -195,7 +195,7 @@ Closes #123
 ```
 fix: correct package name references
 
-- Update all @ferg-cod3s/ references to @v1truv1us/
+- Update all legacy namespace references to current package/repository names
 ```
 
 ## 🔄 Pull Request Process
@@ -261,4 +261,4 @@ By contributing to this project, you agree that your contributions will be licen
 
 ## 🙏 Acknowledgments
 
-Thank you for contributing to the Ferg Engineering System! Your contributions help make engineering workflows more efficient and effective for everyone.
+Thank you for contributing to the AI Engineering System! Your contributions help make engineering workflows more efficient and effective for everyone.

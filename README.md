@@ -42,6 +42,8 @@ ai-eng install --scope global
 }
 ```
 
+OpenCode learning automation now surfaces toast-based suggestions for `/ai-eng/decision-journal` and `/ai-eng/quality-gate`, then waits for explicit `/ai-eng/learning-approve`, `/ai-eng/learning-dismiss`, or `/ai-eng/learning-snooze` consent. Local policy and state live under `.ai-context/learning/`.
+
 ## Core Workflow
 
 | Phase | Command | Purpose |
@@ -68,14 +70,19 @@ Related commands:
 ## What Is Included
 
 - 42 commands under the `ai-eng/` namespace plus 7 lifecycle aliases
-- 32 specialized agents
+- 38 specialized agents
 - 32 skills covering the full development lifecycle (Define, Plan, Build, Verify, Review, Ship) plus repository-specific workflows
 
 Selected commands beyond the core workflow:
 - creation: `/ai-eng/create-plugin`, `/ai-eng/create-agent`, `/ai-eng/create-command`, `/ai-eng/create-skill`, `/ai-eng/create-tool`
 - quality and analysis: `/ai-eng/code-review`, `/ai-eng/agent-analyzer`, `/ai-eng/fact-check`, `/ai-eng/deep-research`, `/ai-eng/content-optimize`
 - operations: `/ai-eng/deploy`, `/ai-eng/docker`, `/ai-eng/cloudflare`, `/ai-eng/github`, `/ai-eng/k8s`, `/ai-eng/monitoring`, `/ai-eng/security-scan`
-- utilities: `/ai-eng/context`, `/ai-eng/knowledge-capture`, `/ai-eng/init`, `/ai-eng/seo`
+- utilities: `/ai-eng/context`, `/ai-eng/knowledge-capture`, `/ai-eng/knowledge-architecture`, `/ai-eng/decision-journal`, `/ai-eng/quality-gate`, `/ai-eng/maintenance-review`, `/ai-eng/learning-approve`, `/ai-eng/learning-dismiss`, `/ai-eng/learning-snooze`, `/ai-eng/init`, `/ai-eng/seo`
+
+Claude marketplace packaging note:
+- `ai-eng-core` keeps the core plan/work/review workflow
+- `ai-eng-learning` now packages `/ai-eng/knowledge-architecture`, `/ai-eng/decision-journal`, `/ai-eng/quality-gate`, `/ai-eng/maintenance-review`, `/ai-eng/learning-approve`, `/ai-eng/learning-dismiss`, and `/ai-eng/learning-snooze`
+- `/ai-eng/knowledge-capture` remains outside that plugin group
 
 See `docs/reference/commands.md` for the full command list.
 
@@ -87,6 +94,7 @@ Examples:
 - `skills/ai-eng/simplify/SKILL.md` -> `/ai-eng/simplify`
 - `skills/workflow/ralph-wiggum/SKILL.md` -> `/ai-eng/ralph-wiggum`
 - `skills/comprehensive-research/SKILL.md` -> `/ai-eng/research`
+- `skills/knowledge-architecture/SKILL.md` -> `/ai-eng/knowledge-architecture`
 
 See `docs/reference/skills.md` for the full skill inventory.
 
@@ -146,6 +154,7 @@ dist/                   Generated root outputs
 - `docs/reference/commands.md`
 - `docs/reference/skills.md`
 - `docs/architecture/marketplace.md`
+- `docs/opencode-learning-automation.md`
 - `PUBLISHING.md`
 - `RELEASE.md`
 - `RELEASE_NOTES.md`

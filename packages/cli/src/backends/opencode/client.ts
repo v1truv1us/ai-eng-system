@@ -951,10 +951,16 @@ export class OpenCodeClient {
                             idleTimedOut,
                             assistantMessageIdFound: !!assistantMessageId,
                         });
-                        // If we aborted, normalize to our timeout error AND ensure stream is finalized
+                        // Preserve the actual timeout reason so diagnostics stay accurate.
                         if (controller.signal.aborted) {
-                            await abortOnce(idleTimeoutError);
-                            throw idleTimeoutError;
+                            const abortError =
+                                controller.signal.reason instanceof Error
+                                    ? controller.signal.reason
+                                    : idleTimedOut
+                                      ? idleTimeoutError
+                                      : hardTimeoutError;
+                            await abortOnce(abortError);
+                            throw abortError;
                         }
                         await abortOnce(error);
                         throw error;

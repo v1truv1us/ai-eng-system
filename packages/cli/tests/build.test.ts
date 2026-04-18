@@ -116,7 +116,7 @@ Test skill overview content.
 Test skill usage instructions.
 `;
 
-describe("Ferg Engineering System - Build System", () => {
+describe("AI Engineering System - Build System", () => {
     beforeAll(async () => {
         // Setup test environment
         await mkdir(TEST_ROOT, { recursive: true });

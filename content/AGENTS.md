@@ -20,7 +20,7 @@ Content repository for agents and commands documentation.
 
 ## Key Content
 
-### Original Ferg Engineering Agents
+### Original AI Engineering Agents
 - `architect-advisor.md` - System architecture guidance
 - `frontend-reviewer.md` - Frontend code review specialist
 - `prompt-optimizer.md` - Prompt enhancement techniques

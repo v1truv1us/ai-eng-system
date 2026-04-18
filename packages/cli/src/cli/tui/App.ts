@@ -82,7 +82,7 @@ class TuiApp {
         // Create renderer
         const config: CliRendererConfig = {
             exitOnCtrlC: true,
-            useAlternateScreen: true,
+            screenMode: "alternate-screen",
         };
 
         this.renderer = await createCliRenderer(config);

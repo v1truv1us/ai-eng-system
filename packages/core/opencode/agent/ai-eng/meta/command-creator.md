@@ -231,7 +231,7 @@ Every command must meet these standards:
 3. **File Access**: Check file permissions before reading
 4. **No Secrets**: Never log or expose sensitive data
 
-## Integration with Ferg System
+## Integration with AI Engineering System
 
 The command-creator integrates with existing ai-eng-system commands:
 - Can invoke `@architect-advisor` for complex planning

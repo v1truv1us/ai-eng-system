@@ -38,6 +38,33 @@
       ]
     },
     {
+      "name": "ai-eng-learning",
+      "source": "./plugins/ai-eng-learning",
+      "description": "Learning workflows for knowledge mapping, decisions, quality gates, and maintenance reviews",
+      "version": "1.0.0",
+      "author": {
+        "name": "v1truv1us",
+        "email": "contact@v1truv1us.dev"
+      },
+      "homepage": "https://github.com/v1truv1us/ai-eng-system#readme",
+      "repository": "https://github.com/v1truv1us/ai-eng-system",
+      "license": "MIT",
+      "keywords": [
+        "learning",
+        "knowledge",
+        "decisions",
+        "quality",
+        "maintenance"
+      ],
+      "category": "development",
+      "tags": [
+        "learning-workflows",
+        "knowledge-management",
+        "quality-gates",
+        "maintenance"
+      ]
+    },
+    {
       "name": "ai-eng-research",
       "source": "./plugins/ai-eng-research",
       "description": "Deep research, knowledge capture, and documentation tools",

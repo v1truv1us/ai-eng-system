@@ -20,7 +20,7 @@
  * - .claude/               (local development runtime)
  * - .claude-plugin/        (marketplace manifest only)
  * - .opencode/             (local development runtime)
- * - plugins/<name>/        (6 marketplace plugin directories)
+ * - plugins/<name>/        (7 marketplace plugin directories)
  */
 
 import { existsSync, watch } from "node:fs";
@@ -867,6 +867,7 @@ interface PluginConfig {
     commands: string[];
     agents: string[];
     skills: string[];
+    assetDirs?: string[];
     description: string;
     category: string;
     keywords: string[];
@@ -884,6 +885,25 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
         keywords: ["ai", "engineering", "workflow", "planning", "review", "context-engineering"],
         tags: ["productivity", "workflow", "architecture", "context-engineering"],
         hasHooks: true,
+    },
+    "ai-eng-learning": {
+        commands: ["knowledge-architecture", "decision-journal", "quality-gate", "maintenance-review", "learning-approve", "learning-dismiss", "learning-snooze"],
+        agents: [],
+        skills: ["knowledge-architecture"],
+        assetDirs: [
+            "docs/knowledge",
+            "docs/decisions",
+            "docs/quality",
+            "docs/reviews/maintenance",
+            "templates/knowledge",
+            "templates/decisions",
+            "templates/quality",
+            "templates/review",
+        ],
+        description: "Learning workflows for knowledge mapping, decisions, quality gates, and maintenance reviews",
+        category: "development",
+        keywords: ["learning", "knowledge", "decisions", "quality", "maintenance"],
+        tags: ["learning-workflows", "knowledge-management", "quality-gates", "maintenance"],
     },
     "ai-eng-research": {
         commands: ["deep-research", "research-companion", "context7-docs", "fact-check", "knowledge-capture"],
@@ -1036,6 +1056,11 @@ async function syncToMarketplacePlugins(): Promise<void> {
             join(pluginDir, "skills"),
             config.skills,
         );
+
+        // Copy plugin-specific support assets such as templates and docs.
+        for (const assetDir of config.assetDirs ?? []) {
+            await copyDirRecursive(join(ROOT, assetDir), join(pluginDir, assetDir));
+        }
 
         // Generate plugin.json
         const pluginJson = {

@@ -1,9 +1,9 @@
 /**
- * Plan parser for the Ferg Engineering System.
+ * Plan parser for the AI Engineering System.
  * Handles YAML parsing, validation, and dependency resolution for execution plans.
  */
-import { type AgentTask } from "../agents/types";
-import { type Plan, type Task, type ValidationError } from "./types";
+import type { AgentTask } from "../agents/types";
+import type { Plan, Task, ValidationError } from "./types";
 export declare class PlanParser {
     private errors;
     private warnings;

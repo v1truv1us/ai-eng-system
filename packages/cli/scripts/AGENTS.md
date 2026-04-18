@@ -7,7 +7,7 @@
 Build scripts and installation utilities that support the agent infrastructure defined in AGENTS.md.
 
 ## Project Overview
-Build and installation utilities for the Ferg Engineering System.
+Build and installation utilities for the AI Engineering System.
 
 ## Technology Stack
 - **Runtime**: Bun (ES modules)
