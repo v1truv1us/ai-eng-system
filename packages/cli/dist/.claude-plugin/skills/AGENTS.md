@@ -8,7 +8,7 @@ Modular, reusable skill definitions that support the agents defined in the paren
 
 ## Project Overview
 
-Flat directory structure of skill definitions for Claude Code and OpenCode. Each skill is self-contained in its own directory with a `SKILL.md` file and optional supporting files.
+Mostly flat skill definitions for Claude Code and OpenCode, with a small number of namespaced subdirectories such as `ai-eng/` and `workflow/`. Each skill is self-contained in its own directory with a `SKILL.md` file and optional supporting files.
 
 ## Directory Structure
 
@@ -16,9 +16,17 @@ Flat directory structure of skill definitions for Claude Code and OpenCode. Each
 skills/
 ├── comprehensive-research/   # Multi-phase research orchestration
 │   └── SKILL.md
+├── code-review-and-quality/   # Multi-axis review before merge
+│   └── SKILL.md
+├── code-simplification/       # Behavior-preserving simplification
+│   └── SKILL.md
 ├── coolify-deploy/           # Coolify deployment best practices
 │   └── SKILL.md
+├── debugging-and-error-recovery/ # Root-cause debugging workflow
+│   └── SKILL.md
 ├── git-worktree/             # Git worktree workflows
+│   └── SKILL.md
+├── incremental-implementation/ # Thin-slice implementation workflow
 │   └── SKILL.md
 ├── incentive-prompting/      # Research-backed prompting techniques
 │   └── SKILL.md
@@ -49,14 +57,20 @@ description: Brief description for semantic matching. Include trigger words.
 [Skill instructions and content]
 ```
 
-## Available Skills
+## Selected Skills
+
+The table below highlights the most commonly invoked skills in this repository. Additional namespaced and alignment skills are also available under `skills/`.
 
 | Skill | Description | Invoked By |
 |-------|-------------|------------|
 | `prompt-refinement` | Transform prompts into structured TCRO format | `/ai-eng/research`, `/ai-eng/plan`, `/ai-eng/work`, `/ai-eng/specify` |
 | `incentive-prompting` | Research-backed prompting techniques (+45-115% quality) | `/ai-eng/optimize`, agent enhancement |
 | `comprehensive-research` | Multi-phase research orchestration | `/ai-eng/research` |
-| `text-cleanup` | Remove AI-generated verbosity and slop | `/ai-eng/clean` |
+| `code-review-and-quality` | Multi-axis review before merge | `/ai-eng/code-review` |
+| `code-simplification` | Behavior-preserving simplification | Alignment with `/ai-eng/simplify` workflow |
+| `debugging-and-error-recovery` | Root-cause debugging and recovery | Failure analysis and break-fix work |
+| `incremental-implementation` | Thin vertical slice implementation | Multi-file feature and refactor work |
+| `text-cleanup` | Remove AI-generated verbosity and slop | Text cleanup and editing workflows |
 | `coolify-deploy` | Coolify deployment best practices | `/ai-eng/deploy` |
 | `git-worktree` | Git worktree workflow management | `/ai-eng/work` (large features) |
 | `plugin-dev` | Plugin development for Claude Code/OpenCode | `/ai-eng/create-*` commands |

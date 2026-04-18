@@ -1,7 +1,8 @@
 ---
+name: ai-eng/simplify
 description: Review recently changed files for code reuse, quality, and efficiency issues, then fix them
 agent: build
-version: 1.0.0
+version: 2.0.0
 inputs:
   - name: focus
     type: string
@@ -11,18 +12,19 @@ inputs:
 
 # Simplify Command
 
-Load `skills/ai-eng/simplify/SKILL.md` and follow its instructions. Spawn three parallel review agents (code reuse, quality, efficiency), aggregate findings, and apply fixes.
+Load `skills/code-simplification/SKILL.md`.
+
+Review recently changed files for code reuse, quality, and efficiency issues, then fix them.
 
 ## Workflow
 
 1. Run `git diff --stat` to identify recently changed files
-2. Spawn three parallel agents:
-   - **Code Reuse**: Duplicated logic, extractable functions
-   - **Quality**: Dead code, poor naming, complexity
-   - **Efficiency**: Performance, allocations, algorithms
-3. Aggregate and prioritize findings
-4. Apply fixes, verify tests pass
-5. Report confidence score
+2. For each changed file, apply the simplification skill:
+   - Understand before changing (Chesterton's Fence)
+   - Identify: deep nesting, long functions, duplicate logic, misleading names, unnecessary wrappers
+   - Apply one simplification at a time
+   - Verify tests pass after each change
+3. Report what was simplified with before/after summary
 
 ## Usage
 
@@ -34,7 +36,7 @@ Load `skills/ai-eng/simplify/SKILL.md` and follow its instructions. Spawn three 
 
 ## Integration
 
-Combine with the spec-driven workflow:
+Use within the spec-driven workflow:
 
 ```
 /ai-eng/work "implement feature X"

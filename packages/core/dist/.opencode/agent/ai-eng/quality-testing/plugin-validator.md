@@ -1,5 +1,8 @@
 ---
-description: Validates OpenCode plugin structure, formats, and best practices. Use after creating components or when user asks to "validate", "check", or "verify" plugin structure. Works with both OpenCode and Claude Code components.
+description: Validates OpenCode plugin structure, formats, and best practices.
+  Use after creating components or when user asks to "validate", "check", or
+  "verify" plugin structure. Works with both OpenCode and Claude Code
+  components.
 mode: subagent
 temperature: 0.2
 tools:
