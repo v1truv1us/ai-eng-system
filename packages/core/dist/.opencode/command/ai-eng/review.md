@@ -19,7 +19,7 @@ outputs:
 
 Review code changes: $ARGUMENTS
 
-> **Phase 5 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Review
+> **Phase 6 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Verify → Review
 
 Load `skills/code-review-and-quality/SKILL.md` and `skills/prompt-refinement/SKILL.md` (phase: review). If using `--ralph`, also load `skills/workflow/ralph-wiggum/SKILL.md`.
 

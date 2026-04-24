@@ -23,7 +23,7 @@ outputs:
 
 Conduct comprehensive research for: $ARGUMENTS
 
-> **Phase 1 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Review
+> **Phase 1 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Verify → Review
 
 Load `skills/comprehensive-research/SKILL.md` and `skills/prompt-refinement/SKILL.md` (phase: research).
 

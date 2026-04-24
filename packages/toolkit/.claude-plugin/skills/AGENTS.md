@@ -14,6 +14,8 @@ Mostly flat skill definitions for Claude Code and OpenCode, with a small number 
 
 ```
 skills/
+├── dependency-graph-analysis/ # Structural graph analysis and path tracing
+│   └── SKILL.md
 ├── comprehensive-research/   # Multi-phase research orchestration
 │   └── SKILL.md
 ├── code-review-and-quality/   # Multi-axis review before merge
@@ -24,11 +26,17 @@ skills/
 │   └── SKILL.md
 ├── debugging-and-error-recovery/ # Root-cause debugging workflow
 │   └── SKILL.md
+├── graph-rag/                 # Relationship-aware graph retrieval
+│   └── SKILL.md
+├── graphify/                  # Knowledge graph development for LLM apps
+│   └── SKILL.md
 ├── git-worktree/             # Git worktree workflows
 │   └── SKILL.md
 ├── incremental-implementation/ # Thin-slice implementation workflow
 │   └── SKILL.md
 ├── incentive-prompting/      # Research-backed prompting techniques
+│   └── SKILL.md
+├── multimodal-corpus-ingestion/ # Mixed corpus normalization and extraction
 │   └── SKILL.md
 ├── plugin-dev/               # Plugin development knowledge base
 │   ├── SKILL.md
@@ -69,7 +77,11 @@ The table below highlights the most commonly invoked skills in this repository. 
 | `code-review-and-quality` | Multi-axis review before merge | `/ai-eng/code-review` |
 | `code-simplification` | Behavior-preserving simplification | Alignment with `/ai-eng/simplify` workflow |
 | `debugging-and-error-recovery` | Root-cause debugging and recovery | Failure analysis and break-fix work |
+| `dependency-graph-analysis` | Structural graph analysis for architecture questions | Tracing paths, cycles, god nodes, surprise edges |
+| `graph-rag` | Relationship-aware retrieval over graph structure | Multi-hop and entity-heavy retrieval tasks |
+| `graphify` | Knowledge graph development for LLM applications | Knowledge graph build and graph-native LLM workflows |
 | `incremental-implementation` | Thin vertical slice implementation | Multi-file feature and refactor work |
+| `multimodal-corpus-ingestion` | Normalize mixed corpora before analysis or retrieval | Code + docs + PDFs + diagrams + transcripts |
 | `text-cleanup` | Remove AI-generated verbosity and slop | Text cleanup and editing workflows |
 | `coolify-deploy` | Coolify deployment best practices | `/ai-eng/deploy` |
 | `git-worktree` | Git worktree workflow management | `/ai-eng/work` (large features) |

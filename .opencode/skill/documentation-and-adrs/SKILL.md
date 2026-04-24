@@ -27,7 +27,7 @@ Record significant architectural decisions:
 - **Consequences**: What results from this decision (positive and negative)
 - **Status**: Proposed / Accepted / Deprecated / Superseded
 
-Save as: `docs/adr/{NNNN}-{title}.md`
+Save as: `docs/decisions/{YYYY-MM-DD}-{title}.md`
 
 ### API Documentation
 

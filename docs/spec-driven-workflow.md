@@ -1,18 +1,19 @@
 # Spec-Driven Development Workflow Guide
 
-This guide documents the complete **Research → Specify → Plan → Work → Review** workflow for systematic AI-assisted development.
+This guide documents the complete **Research → Specify → Plan → Work → Verify → Review** workflow for systematic AI-assisted development.
 
 ## Visual Workflow
 
 ```mermaid
 flowchart TD
-    A[🎯 Start: Research] -->|/ai-eng/research| B[📋 Specify]
-    B -->|/ai-eng/specify| C[📝 Plan]
-    C -->|/ai-eng/plan| D[🔨 Work]
-    D -->|/ai-eng/work| E[🔍 Review]
+    A[Start: Research] -->|/ai-eng/research| B[Specify]
+    B -->|/ai-eng/specify| C[Plan]
+    C -->|/ai-eng/plan| D[Work]
+    D -->|/ai-eng/work| E[Verify]
+    E -->|/verify| F[Review]
     
-    E -->|If changes needed| D
-    E -->|Approved| F[✅ Complete]
+    F -->|If changes needed| D
+    F -->|Approved| G[Complete]
     
     B -.->|Feed research| B
     C -.->|Feed spec| C
@@ -20,27 +21,32 @@ flowchart TD
     
     subgraph "Phase 1: Research"
         A
-        A1[(--ralph<br/>Iterative deepening)]
+        A1[(--ralph Iterative deepening)]
     end
     
     subgraph "Phase 2: Specify"
         B
-        B1[(--ralph<br/>Requirement refinement)]
+        B1[(--ralph Requirement refinement)]
     end
     
     subgraph "Phase 3: Plan"
         C
-        C1[(--ralph<br/>Task completeness)]
+        C1[(--ralph Task completeness)]
     end
     
     subgraph "Phase 4: Work"
         D
-        D1[(--ralph<br/>TDD cycles)]
+        D1[(--ralph TDD cycles)]
     end
     
-    subgraph "Phase 5: Review"
+    subgraph "Phase 5: Verify"
         E
-        E1[(--ralph<br/>Thorough analysis)]
+        E1[(lint typecheck test build)]
+    end
+    
+    subgraph "Phase 6: Review"
+        F
+        F1[(--ralph Thorough analysis)]
     end
     
     A --> A1
@@ -48,23 +54,19 @@ flowchart TD
     C --> C1
     D --> D1
     E --> E1
-    
-    style A1 fill:#e1f5fe,stroke:#01579b
-    style B1 fill:#e1f5fe,stroke:#01579b
-    style C1 fill:#e1f5fe,stroke:#01579b
-    style D1 fill:#e1f5fe,stroke:#01579b
-    style E1 fill:#e1f5fe,stroke:#01579b
+    F --> F1
 ```
 
 ## Workflow Phases
 
-| Phase | Command | Output | Ralph Wiggum 🔄 | Feeds Into |
-|-------|---------|--------|-----------------|------------|
-| **1. Research** | `/ai-eng/research` | Research findings in `docs/research/` | `--ralph` for iterative deepening and gap analysis | → Specify |
-| **2. Specify** | `/ai-eng/specify` | Feature spec in `specs/[feature]/spec.md` | `--ralph` for requirement refinement and completeness | → Plan |
-| **3. Plan** | `/ai-eng/plan` | Implementation plan in `specs/[feature]/plan.md` | `--ralph` for task atomicity and dependency mapping | → Work |
-| **4. Work** | `/ai-eng/work` | Implemented features with quality gates | `--ralph` for TDD cycles and implementation refinement | → Review |
-| **5. Review** | `/ai-eng/review` | Review report with approval status | `--ralph` for thorough analysis and escalating focus | → Complete or back to Work |
+| Phase | Command | Output | Ralph Wiggum | Feeds Into |
+|-------|---------|--------|--------------|------------|
+| **1. Research** | `/ai-eng/research` | Research findings in `docs/research/` | `--ralph` for iterative deepening | Specify |
+| **2. Specify** | `/ai-eng/specify` | Feature spec in `specs/[feature]/spec.md` | `--ralph` for requirement refinement | Plan |
+| **3. Plan** | `/ai-eng/plan` | Implementation plan in `specs/[feature]/plan.md` | `--ralph` for task atomicity | Work |
+| **4. Work** | `/ai-eng/work` | Implemented features with quality gates | `--ralph` for TDD cycles | Verify |
+| **5. Verify** | `/verify` | Pass/fail on lint, typecheck, test, build | runs full gate sequence | Review |
+| **6. Review** | `/ai-eng/review` | Review report with approval status | `--ralph` for thorough analysis | Complete or back to Work |
 
 ## Command Integration
 
@@ -92,10 +94,13 @@ flowchart TD
 /work FEAT-001
 ```
 
-### Work → Review
+### Work → Verify → Review
 ```bash
-# After work completes, review the changes
-/review
+# After work completes, run verification
+/verify
+
+# Then review the changes
+/ai-eng/review
 ```
 
 ## 🔄 Ralph Wiggum Iteration Mode
@@ -153,7 +158,8 @@ flowchart TD
 - [ ] **Phase 2**: Run `/ai-eng/specify [feature] --from-research=[research-file]` to create spec (add `--ralph` for vague requirements)
 - [ ] **Phase 3**: Run `/ai-eng/plan --from-spec=specs/[feature]/spec.md` to create plan (add `--ralph` for complex features)
 - [ ] **Phase 4**: Run `/ai-eng/work specs/[feature]/plan.md` to implement (add `--ralph` for TDD cycles)
-- [ ] **Phase 5**: Run `/ai-eng/review` to get multi-agent review (add `--ralph` for critical code)
+- [ ] **Phase 5**: Run `/verify` to pass lint, typecheck, test, and build gates
+- [ ] **Phase 6**: Run `/ai-eng/review` to get multi-agent review (add `--ralph` for critical code)
 - [ ] **Repeat**: If review finds issues, go back to Phase 4
 
 ## Best Practices
@@ -170,6 +176,7 @@ flowchart TD
 - Start planning without a clear specification
 - Implement without a plan
 - Skip quality gates during work
+- Skip verification before review
 - Skip review before merging
 
 ## Example: Complete Feature Development
@@ -185,20 +192,24 @@ flowchart TD
 /ai-eng/plan --from-spec=specs/payment/spec.md
 
 # 4. Execute the plan
-/work specs/payment/plan.md
+/ai-eng/work specs/payment/plan.md
 
-# 5. Get multi-agent review
-/review
+# 5. Verify quality gates pass
+/verify
+
+# 6. Get multi-agent review
+/ai-eng/review
 ```
 
 ## Related Documentation
 
-- [README.md](./README.md) - Project overview
-- [IMPLEMENTATION-ROADMAP.md](./IMPLEMENTATION-ROADMAP.md) - Technical roadmap
-- [TODO.md](./TODO.md) - Current task tracking
-- [content/commands/specify.md](./content/commands/specify.md) - Specify command details
-- [content/commands/plan.md](./content/commands/plan.md) - Plan command details
-- [content/commands/work.md](./content/commands/work.md) - Work command details
+- [../README.md](../README.md) - Project overview
+- [../IMPLEMENTATION-ROADMAP.md](../IMPLEMENTATION-ROADMAP.md) - Technical roadmap
+- [../TODO.md](../TODO.md) - Current task tracking
+- [../content/commands/specify.md](../content/commands/specify.md) - Specify command details
+- [../content/commands/plan.md](../content/commands/plan.md) - Plan command details
+- [../content/commands/work.md](../content/commands/work.md) - Work command details
+- [../content/commands/verify.md](../content/commands/verify.md) - Verify command details
 
 ## Methodology
 

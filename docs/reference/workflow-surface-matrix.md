@@ -10,6 +10,7 @@ Complete mapping of every command to its canonical owner: skill, runtime feature
 | `/ai-eng/specify` | skill-backed | `spec-driven-development` | `skills/spec-driven-development/SKILL.md` |
 | `/ai-eng/plan` | skill-backed | `planning-and-task-breakdown` | `skills/planning-and-task-breakdown/SKILL.md` |
 | `/ai-eng/work` | skill-backed | `incremental-implementation` + `test-driven-development` | `skills/incremental-implementation/SKILL.md` |
+| `/verify` | command-backed | quality gate loop | `content/commands/verify.md` |
 | `/ai-eng/review` | skill-backed | `code-review-and-quality` | `skills/code-review-and-quality/SKILL.md` |
 | `/ai-eng/simplify` | skill-backed | `code-simplification` | `skills/code-simplification/SKILL.md` |
 | `/ai-eng/ralph-wiggum` | skill-backed | `workflow/ralph-wiggum` | `skills/workflow/ralph-wiggum/SKILL.md` |
@@ -108,7 +109,6 @@ Complete mapping of every command to its canonical owner: skill, runtime feature
 | Surface | Backed By | Status |
 |---------|-----------|--------|
 | `/quality-gate` | `packages/cli/src/execution/quality-gates.ts` | planned |
-| `/verify` | quality-gates + lint/type/test/build loop | planned |
 | `/model-route` | `packages/cli/src/config/modelResolver.ts` | planned |
 | `/sessions` | `packages/cli/src/context/session.ts` | planned |
 | `/checkpoint` | `packages/cli/src/context/session.ts` | planned |

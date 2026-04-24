@@ -1,6 +1,6 @@
 # Commands Reference
 
-47 commands are currently shipped under the `ai-eng/` namespace, plus 7 lifecycle alias commands and 5 runtime/orchestration commands (57 total content commands).
+Commands shipped under the `ai-eng/` namespace, plus lifecycle shorthand entrypoints.
 
 ## Spec-Driven Workflow
 
@@ -8,20 +8,19 @@
 - `/ai-eng/specify` - feature/spec generation
 - `/ai-eng/plan` - implementation planning
 - `/ai-eng/work` - guided execution with quality gates
+- `/verify` - lint, typecheck, test, build verification loop
 - `/ai-eng/review` - multi-agent review
 - `/ai-eng/ralph-wiggum` - iterative full-cycle workflow
 
-## Lifecycle Aliases
+## Lifecycle Shorthand
 
-| Alias | Canonical Command |
+| Shorthand | Canonical Command |
 |-------|-------------------|
 | `/spec` | `/ai-eng/specify` |
-| `/plan` | `/ai-eng/plan` |
 | `/build` | `/ai-eng/work` |
-| `/test` | TDD entrypoint via `test-driven-development` skill |
-| `/review` | `/ai-eng/review` |
-| `/code-simplify` | `/ai-eng/simplify` |
-| `/ship` | `/ai-eng/deploy` |
+| `/verify` | lint, typecheck, test, build loop |
+
+`/ai-eng/plan` and `/ai-eng/review` are direct lifecycle entrypoints with no separate shorthand file.
 
 ## Plugin Development
 
@@ -98,19 +97,13 @@ Marketplace packaging note:
 
 - `/ai-eng/seo` - technical SEO and Core Web Vitals review
 
-## Planned Runtime Commands
+## Shorthand and Compatibility Commands
 
-| Command | Purpose | Status |
-|---------|---------|--------|
-| `/quality-gate` | Run standardized quality gate sequence | planned |
-| `/verify` | Full verification loop (lint, type, test, build) | planned |
-| `/model-route` | Route task to appropriate model | planned |
-| `/sessions` | List, search, and manage sessions | planned |
-| `/checkpoint` | Save session checkpoint | planned |
-| `/resume-session` | Resume from saved checkpoint | planned |
-| `/loop-start` | Start autonomous loop | planned |
-| `/loop-status` | Check loop status | planned |
-| `/harness-audit` | Audit harness configuration | planned |
+| Shorthand | Canonical Target |
+|-------|-------------------|
+| `/code-simplify` | `/ai-eng/simplify` |
+| `/ship` | `/ai-eng/deploy` |
+| `/test` | TDD entrypoint via `test-driven-development` skill |
 
 ## Planned Orchestration Commands
 

@@ -1,6 +1,6 @@
 {
   "name": "@ai-eng-system/cli",
-"version": "1.3.3",
+  "version": "1.4.0",
   "description": "Compounding engineering system for Claude Code and OpenCode. Shared agents, commands, skills, and plugin development tools.",
   "type": "module",
   "main": "./dist/index.js",
