@@ -411,3 +411,13 @@ For power users, extend with custom techniques:
 
 This skill provides the framework; you customize the techniques.
 
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "The original is fine, no need to optimize" | Good enough is the enemy of great. Systematic optimization catches missed opportunities. |
+| "Aggressive optimization changes too much" | Conservative mode exists for a reason. Start gentle, increase aggressiveness as needed. |
+| "I'll optimize after the first draft" | Optimization during creation prevents compounding bad patterns. |
+| "The confidence score is high enough" | High confidence does not mean perfect. Review before applying any optimization. |
+| "This content type doesn't need optimization" | Every content type has domain-specific improvements. Apply the right techniques. |
+

@@ -88,6 +88,7 @@
     "@ai-eng-system/core": "workspace:*",
     "@opencode-ai/plugin": "^1.4.3",
     "@opencode-ai/sdk": "^1.4.3",
+    "ai-eng-system": "^0.4.0",
     "yaml": "^2.8.3"
   },
   "devDependencies": {

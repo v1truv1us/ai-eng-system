@@ -67,3 +67,13 @@ Explicitly mark decisions that lack source confirmation:
 - [ ] Unverified decisions are explicitly flagged
 - [ ] Library versions are documented
 - [ ] No code depends on hallucinated or outdated API behavior
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "I know this library well enough" | Libraries change between versions. Confidence is not accuracy. |
+| "Looking up docs slows me down" | Debugging a wrong assumption is slower than verifying upfront. |
+| "The AI already knows the right API" | AI training data has a cutoff date. APIs change. Verify against current docs. |
+| "I'll verify after the implementation works" | If the API does not exist, the implementation will not work. Verify first. |
+| "Stack Overflow has the answer" | Stack Overflow answers may be outdated. Official docs are the source of truth. |

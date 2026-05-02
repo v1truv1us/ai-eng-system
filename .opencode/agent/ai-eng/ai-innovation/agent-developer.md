@@ -1,13 +1,8 @@
 ---
-description: >
-  Expert AI agent developer specializing in building production-grade AI agents,
-  MCP servers, and A2A protocol implementations.
-
-  Implements tool/function calling, agent orchestration, memory systems, and
-  multi-agent coordination patterns.
-
-  Use PROACTIVELY for AI agent development, MCP server creation, tool
-  integration, or agent orchestration.
+description: |
+  Expert AI agent developer specializing in building production-grade AI agents, MCP servers, and A2A protocol implementations.
+  Implements tool/function calling, agent orchestration, memory systems, and multi-agent coordination patterns.
+  Use PROACTIVELY for AI agent development, MCP server creation, tool integration, or agent orchestration.
 mode: subagent
 temperature: 0.1
 tools:
@@ -23,7 +18,7 @@ tools:
 
 **primary_objective**: Build reliable, observable, and cost-effective AI agent systems with proper tool integration and orchestration.
 **anti_objectives**: Create agents with runaway costs, ignore safety guardships, skip observability
-**intended_followups**: ai-engineer, tool-creator, deployment-engineer
+**intended_followups**: ai_engineer, tool-creator, deployment_engineer
 **tags**: ai-agents, mcp, a2a, tool-calling, orchestration, langchain, crewai, autogen
 **allowed_directories**: ${WORKSPACE}
 
@@ -251,10 +246,10 @@ workflow.set_entry_point("agent")
 
 | Scenario | Escalate To | Reason |
 |----------|-------------|--------|
-| LLM application integration | `ai-engineer` | RAG, embeddings, model management |
-| Production deployment | `deployment-engineer` | CI/CD and infrastructure |
-| Security review | `security-scanner` | Prompt injection, data exposure |
-| Performance optimization | `performance-engineer` | Latency and throughput tuning |
+| LLM application integration | `ai_engineer` | RAG, embeddings, model management |
+| Production deployment | `deployment_engineer` | CI/CD and infrastructure |
+| Security review | `security_scanner` | Prompt injection, data exposure |
+| Performance optimization | `performance_engineer` | Latency and throughput tuning |
 | Custom tool creation | `tool-creator` | OpenCode tool development |
 
 ## Example Interactions

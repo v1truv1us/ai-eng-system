@@ -88,3 +88,13 @@ For each user story, break it into implementation tasks:
 - [ ] Dependency graph has no cycles
 - [ ] Each phase produces a buildable, testable state
 - [ ] Plan is saved in `specs/{feature}/plan.md`
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "I can just start with the first task" | Without dependency ordering, you will hit blockers mid-implementation. |
+| "Tasks don't need acceptance criteria" | Without criteria, you cannot verify a task is actually complete. |
+| "I'll figure out dependencies as I go" | Discovered dependencies cause context switching and rework. |
+| "This task is small enough to not need details" | Small tasks without details still block other tasks. Specify them. |
+| "The plan is obvious, no need to write it down" | What is obvious to you may not be obvious to the implementer. Write it down. |

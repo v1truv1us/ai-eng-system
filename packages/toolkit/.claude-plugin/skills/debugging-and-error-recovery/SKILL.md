@@ -82,3 +82,13 @@ Run the relevant targeted checks, then the broader checks needed to prove the sy
 - [ ] Relevant tests pass
 - [ ] Build succeeds
 - [ ] Original failure scenario is verified
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "I know what's wrong, no need to reproduce" | Assumptions about root cause are often wrong. Reproduction confirms the actual problem. |
+| "I'll just try random fixes until it works" | Random fixes create more bugs. Systematic triage finds the real cause efficiently. |
+| "The error message tells me everything" | Error messages show symptoms, not causes. Root cause analysis prevents recurrence. |
+| "I'll fix it and move on, no guard test needed" | Without a guard test, the bug can regress. Guard tests prevent future occurrences. |
+| "It works on my machine, must be an environment issue" | Environment differences are often the bug. Reproduce in the failing environment. |

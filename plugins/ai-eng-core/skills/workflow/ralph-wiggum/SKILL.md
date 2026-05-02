@@ -373,3 +373,13 @@ After loop completes:
 - `git-worktree` — For running parallel Ralph Wiggum loops on different branches
 - `simplify` — For simplifying code after iterations complete
 - `text-cleanup` — For removing verbosity after AI-generated fixes
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "I'll let the loop run without a max iterations cap" | Unlimited loops waste tokens and run forever. Always set a safety cap. |
+| "The completion criteria are obvious" | What is obvious to you may not be detectable by the agent. Make criteria explicit and verifiable. |
+| "I don't need to monitor the loop" | Unmonitored loops can get stuck. Check progress periodically to detect cycling. |
+| "The task is complex but the loop will figure it out" | Loops work best on well-defined tasks. Break complex tasks into smaller loops. |
+| "I'll skip the completion promise" | Without a unique completion signal, the loop does not know when to stop. |

@@ -97,3 +97,13 @@ Standard pipeline stages:
 - [ ] Each stage has clear pass/fail criteria
 - [ ] Deployment is fully automated
 - [ ] Rollback takes under 1 minute
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "The pipeline can be fixed later" | Broken pipelines encourage bypassing them, which defeats their purpose. |
+| "Full automation is too much work" | Manual deployment is slower, more error-prone, and harder to audit. |
+| "Feature flags add complexity" | Feature flags add controlled complexity that prevents uncontrolled deployment risk. |
+| "We don't need staging, just deploy to production" | Staging catches environment-specific issues before they reach users. |
+| "The pipeline is fast enough" | Slow pipelines discourage frequent commits. Fast feedback enables trunk-based development. |

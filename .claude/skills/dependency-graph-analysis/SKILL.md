@@ -113,3 +113,13 @@ Summarize findings in actionable language:
 - [ ] Paths or centrality measures support the conclusion
 - [ ] Findings are translated into concrete architectural risks or actions
 - [ ] Any surprise edges are validated against source evidence
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "Search results are enough" | Search finds mentions, not actual structural paths. Graphs show real connections. |
+| "Only cycles matter" | High-centrality nodes can be just as risky as cycles. Check all structural signals. |
+| "One huge graph is best" | Subsystem-scoped graphs are easier to trust and act on. Start small. |
+| "I can eyeball the dependencies" | Human intuition misses indirect paths. Graph analysis reveals hidden coupling. |
+| "The graph is too complex to analyze" | Complexity is exactly why the graph is needed. Break it into subsystems. |

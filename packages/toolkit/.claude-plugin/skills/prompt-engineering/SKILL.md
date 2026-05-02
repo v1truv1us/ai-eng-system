@@ -336,3 +336,13 @@ This skill complements existing prompting skills:
 - `prompt-refinement` — TCRO structuring with phase-specific clarification
 - `content-optimization` — Content and prompt enhancement
 - `comprehensive-research` — Research agent enhancement
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "The prompt is clear enough in my head" | Mental prompts change during execution. Written prompts stay consistent. |
+| "Few-shot examples take too much time" | Few-shot examples prevent style drift and convention mismatches. They save review time. |
+| "Chain-of-thought is unnecessary for simple tasks" | Simple tasks benefit from reasoning too. It catches assumptions before they become bugs. |
+| "One big prompt is fine" | Large prompts lose context. Decomposed prompts maintain focus at each step. |
+| "I don't need output constraints" | Without output constraints, the agent invents its own format. Define it explicitly. |

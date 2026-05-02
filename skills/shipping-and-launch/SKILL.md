@@ -136,3 +136,13 @@ Work through every item. Any unchecked item is a blocker.
 - [ ] Monitoring and alerting are in place
 - [ ] Rollback procedure is tested
 - [ ] Stakeholders are informed of the launch timeline
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "It works on staging, ship it" | Staging does not perfectly replicate production traffic and data. |
+| "We can monitor after launch" | Monitoring should be configured before launch, not after. |
+| "Rollback is too slow, just fix forward" | Fixing forward under pressure introduces more risk than a clean rollback. |
+| "Staged rollout is too slow, just enable for everyone" | Staged rollouts catch issues before they affect all users. They are faster than incident response. |
+| "The feature flag cleanup can wait" | Uncleaned feature flags become permanent technical debt. Schedule cleanup immediately. |

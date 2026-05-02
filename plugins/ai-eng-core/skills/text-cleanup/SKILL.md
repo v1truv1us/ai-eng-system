@@ -368,7 +368,15 @@ Allow personal pattern databases:
 - **Technical Communication**: Research on optimal information density
 - **AI Output Patterns**: Analysis of conversational filler in LLM responses
 
-This skill provides the foundation for systematic, context-aware text cleanup across multiple domains while maintaining the integrity and meaning of the original content.
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "The verbosity adds personality" | Personality is not padding. Remove filler, keep voice. |
+| "I'll clean it up later" | Unclean text propagates into other documents. Clean it at the source. |
+| "The reader might need this explanation" | If the explanation is obvious, the reader does not need it. If it is not obvious, keep it. |
+| "Aggressive cleanup removes too much" | Start conservative. Preview changes. Increase aggressiveness gradually. |
+| "Code comments should explain everything" | Comments should explain why, not what. Remove self-evident comments. |
 
 ## See Also
 

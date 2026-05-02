@@ -90,3 +90,13 @@ After the refactor, ask whether a new teammate would understand the new version 
 - [ ] Build succeeds
 - [ ] No error handling was weakened
 - [ ] Diff stays focused on the targeted simplification
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "Fewer lines is always simpler" | A dense one-liner can be harder to understand than a clear five-line block. |
+| "I'll simplify this unrelated code while I'm here" | Drive-by refactors create noisy diffs and hidden regression risk. |
+| "This abstraction might be useful later" | Speculative abstractions are complexity without current value. |
+| "The code works, why touch it" | Working code that is hard to understand is a maintenance liability. |
+| "I'll add tests after simplifying" | Simplification without tests risks silently changing behavior. Tests first. |

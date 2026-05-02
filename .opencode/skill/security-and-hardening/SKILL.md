@@ -127,3 +127,13 @@ Data within a trusted module needs less validation, but:
 - [ ] Authentication and authorization tested for each role
 - [ ] Dependency audit shows no critical vulnerabilities
 - [ ] Error messages do not leak sensitive information
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "This is internal, security doesn't matter" | Internal systems are targets for lateral movement after perimeter breach. |
+| "We can add security later" | Retrofitting security is more expensive and less effective than building it in. |
+| "Validation is redundant" | Defense in depth means multiple layers of validation. Each layer catches what others miss. |
+| "The dependency audit is clean, we're safe" | Dependency audits catch known vulnerabilities. They do not catch logic errors or misconfigurations. |
+| "HTTPS is enough for data protection" | HTTPS protects data in transit. Data at rest, in logs, and in memory also need protection. |

@@ -374,6 +374,16 @@ This skill incorporates methodologies from:
 - **Kong et al. (2023)** - Expert persona effectiveness
 - **Yang et al. (2023)** - Step-by-step reasoning optimization
 
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "I've found enough, no need to keep searching" | Partial research leads to partial solutions. Multiple sources confirm accuracy. |
+| "The codebase is too large to research thoroughly" | Targeted scope definition prevents overwhelm. Focus on the relevant subsystem first. |
+| "I'll just start coding and figure it out as I go" | Coding without research repeats past mistakes and ignores existing patterns. |
+| "Cached documentation is good enough" | Cached docs may be stale. Current codebase state is the source of truth. |
+| "One agent is enough for this research" | Parallel agents provide overlapping validation. Single agents miss blind spots. |
+
 ## See Also
 
 - `deep-web-research` — For web-focused research with source evaluation

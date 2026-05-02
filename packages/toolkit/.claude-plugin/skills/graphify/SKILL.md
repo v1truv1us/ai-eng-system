@@ -403,3 +403,13 @@ As needed for debugging/documentation
 - [ ] Entity/relationship extraction prompts defined
 - [ ] Graph RAG pattern implemented
 - [ ] Visualization working for debugging
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "Start with Neo4j" | Start in-memory, upgrade when needed. Premature infrastructure adds operational cost. |
+| "Extract everything" | Focus on useful relationships. Over-extraction creates noise and slows queries. |
+| "Graph replaces vector" | Use hybrid approach. Graph and vector complement each other, they do not compete. |
+| "One-time build is enough" | Graphs need maintenance. Stale graphs produce stale answers. |
+| "I don't need confidence scores on relationships" | Without confidence, you cannot filter low-quality edges. Scores enable quality control. |

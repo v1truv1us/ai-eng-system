@@ -163,3 +163,13 @@ After completing each deployment, rate your confidence from **0.0 to 1.0**:
 - **0.0-0.2**: Deployment failed or completed with significant issues
 
 Document any uncertainty areas or risks identified during the deployment process.
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "I'll skip the pre-deploy checklist, it's just a small change" | Small changes break production too. The checklist catches what assumptions miss. |
+| "The health check is optional" | Without a health check, you cannot verify the deployment succeeded. |
+| "I'll configure environment variables after deploy" | Missing env vars cause startup failures. Configure them before deploying. |
+| "Rollback is too complex, I'll fix forward if it breaks" | Fixing forward under pressure introduces more risk than a clean rollback. |
+| "I don't need to monitor after deploy" | The first 15 minutes after deploy are when issues surface. Monitor actively. |

@@ -129,3 +129,13 @@ Check what was actually run:
 - [ ] Relevant tests pass
 - [ ] Build succeeds
 - [ ] Review summary documents what was checked
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "I'll review this quickly, it looks fine" | Quick reviews miss subtle bugs. Systematic five-axis review catches what glancing misses. |
+| "This change is too small for a full review" | Small changes can have large effects. Every change deserves systematic review. |
+| "I know this code, no need to review" | Familiarity breeds blind spots. Fresh eyes catch what the author misses. |
+| "The tests pass, the code is good" | Tests prove correctness, not quality. Review catches design issues tests can't see. |
+| "AI-generated code is probably okay" | AI code needs more scrutiny, not less. It is often plausible and confidently wrong. |

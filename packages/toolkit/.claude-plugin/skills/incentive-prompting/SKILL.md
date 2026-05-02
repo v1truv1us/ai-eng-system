@@ -150,99 +150,15 @@ Before finalizing, rate your confidence and identify any assumptions or limitati
 4. **Kong et al. (2023)** - Persona prompting research
    - 24% to 84% accuracy improvement with detailed personas
 
-## Self-Evaluation in Practice
+## Anti-Rationalization Table
 
-Self-Evaluation is one of the simplest yet most powerful techniques. Here's how to apply it effectively:
-
-### Basic Usage
-```markdown
-"Rate your confidence in this answer from 0-1 and explain your reasoning."
-```
-
-### Advanced Usage with Risk Assessment
-```markdown
-After providing your solution, please assess:
-
-1. **Confidence Rating (0.0-1.0)**: How confident are you in your solution?
-2. **Uncertainty Areas**: What aspects are you uncertain about?
-3. **Risk Assessment**: What could go wrong with this approach?
-4. **Mitigation Strategies**: How would you address potential issues?
-
-Format your response with these four sections clearly labeled.
-```
-
-### Example Output
-```markdown
-## Solution
-[detailed solution here]
-
-## Confidence Assessment
-
-### Confidence Rating: 0.85
-
-I'm highly confident in this approach, but not completely certain due to the following factors.
-
-### Uncertainty Areas
-
-1. **Edge Case Handling**: I'm 80% certain the error handling covers all cases, but race conditions in concurrent updates may need more testing.
-2. **Performance Impact**: The algorithm's time complexity is O(n log n), but real-world performance depends on database query optimization which I haven't benchmarked.
-
-### Risk Assessment
-
-- **High Risk**: The rollback mechanism assumes database transactions are available. If the underlying database doesn't support transactions, data corruption could occur.
-- **Medium Risk**: The caching strategy could lead to stale data if cache invalidation fails.
-- **Low Risk**: Input validation is thorough but might miss some unusual edge cases.
-
-### Mitigation Strategies
-
-1. **Transaction Safety**: Add explicit database capability checks before deployment
-2. **Cache Invalidation**: Implement a multi-layer invalidation strategy with fallback
-3. **Input Testing**: Create a comprehensive test suite with fuzzing for edge cases
-
-## Next Steps
-
-Based on the confidence assessment, I recommend:
-1. Testing with transaction-less databases before production deployment
-2. Adding monitoring for cache hit rates
-3. Expanding the test suite with additional edge cases
-```
-
-### Why Self-Evaluation Works
-
-- **Calibration**: Forces the AI to think about what it doesn't know
-- **Transparency**: Makes uncertainty explicit rather than hidden
-- **Risk Awareness**: Identifies potential problems before they occur
-- **Guidance**: Provides actionable next steps based on confidence level
-
-### When to Require Self-Evaluation
-
-**Always require self-evaluation for:**
-- Critical production code changes
-- Security-related implementations
-- Performance optimizations
-- Complex architectural decisions
-- Anything with significant cost implications
-
-**Optional for:**
-- Simple code refactors
-- Documentation updates
-- Non-critical bug fixes
-- Exploratory code
-
-## Caveats
-
-- **Model-dependent:** Results may vary across Claude versions
-- **Research vintage:** Original research from 2023; newer models may be more steerable
-- **Task-dependent:** Not all tasks benefit equally; most effective for complex problems
-- **Not actual motivation:** This is statistical pattern-matching, not AI understanding incentives
-
-## Integration with AI Engineering System
-
-Use this skill to enhance:
-- `/plan` command prompts
-- `/review` multi-agent coordination  
-- Subagent persona definitions
-- Complex debugging sessions
+| Excuse | Counter |
+|--------|---------|
+| "These techniques are gimmicks, not real improvements" | Peer-reviewed research shows 45-115% quality improvement. The data speaks. |
+| "I'll just use one technique, that's enough" | Combined techniques compound improvements. Use multiple for maximum effect. |
+| "The model is smart enough without prompting" | Even the smartest models benefit from structured prompts. Prompting guides pattern matching. |
+| "Stakes language is manipulative" | It triggers selection from higher-quality training distributions. It is statistical, not emotional. |
+| "Self-evaluation is just extra output" | Self-evaluation forces calibration and identifies uncertainty areas before they become problems. |
 
 ## See Also
 

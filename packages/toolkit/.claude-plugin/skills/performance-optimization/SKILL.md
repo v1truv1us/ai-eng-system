@@ -98,3 +98,13 @@ Measure again after the fix:
 - [ ] Targeted fix applied
 - [ ] Post-fix measurements show improvement
 - [ ] No regressions in other performance metrics
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "Premature optimization is the root of all evil" | That quote is about guessing, not about measuring and fixing known bottlenecks. |
+| "It's fast enough on my machine" | Your machine is not your users' machines. |
+| "We can optimize later" | Performance debt compounds like technical debt. |
+| "The Lighthouse score is good enough" | Lighthouse is a lab metric. Real user metrics tell the actual story. |
+| "One optimization should fix everything" | Performance issues are often multi-factor. Measure after each fix to find remaining bottlenecks. |

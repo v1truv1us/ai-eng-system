@@ -95,3 +95,13 @@ Write a comprehensive specification before writing any implementation code. The 
 - [ ] Acceptance criteria are testable
 - [ ] Boundaries include always-do, ask-first, and never-do rules
 - [ ] Spec is saved in `specs/{feature}/spec.md`
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "I'll write the spec as I code" | Coding without a spec leads to rework. A 5-minute spec prevents a 5-hour rewrite. |
+| "This is too simple for a spec" | Simple features become complex. A spec keeps scope clear and prevents scope creep. |
+| "The requirements are clear in my head" | Mental requirements change during implementation. Written specs catch ambiguities early. |
+| "I'll document it after implementation" | Post-implementation specs describe what was built, not what should be built. Spec first. |
+| "The spec will be outdated immediately" | Specs capture intent. Implementation details change; intent should not. |

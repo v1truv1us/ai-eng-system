@@ -127,3 +127,13 @@ The answer should explain:
 - [ ] Traversal is bounded by depth and relation type
 - [ ] Prompt context contains paths and evidence, not a raw graph dump
 - [ ] The final answer explains both the conclusion and the connection path
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "Vector search already found the files" | File relevance is not the same as relationship explanation. |
+| "Dump the whole graph into the prompt" | Large raw graphs waste context and hide the important path. |
+| "More hops is better" | Unbounded traversal quickly turns into noise. Bound the expansion. |
+| "Graph RAG is overkill for this question" | If the question involves connections, graph retrieval is the right tool. |
+| "I'll skip anchor resolution and just expand" | Without anchors, expansion is random. Resolve anchors first for targeted retrieval. |

@@ -107,3 +107,13 @@ Before writing tests, define the public interface:
 - [ ] Coverage meets 80% threshold
 - [ ] Critical paths have 100% coverage
 - [ ] Tests are isolated and order-independent
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "I'll add tests after the code works" | Tests written after code are biased to the implementation. TDD drives better design. |
+| "This function is too simple to test" | Simple functions become complex. Tests document expected behavior and catch regressions. |
+| "Testing takes too much time" | Untested code takes more time debugging. Tests are an investment, not a cost. |
+| "The manual testing is enough" | Manual testing isn't repeatable. Automated tests catch regressions that manual testing misses. |
+| "I need to implement first to know what to test" | Defining expected behavior first is exactly the point. Tests specify behavior before code. |

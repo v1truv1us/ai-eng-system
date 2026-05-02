@@ -336,3 +336,13 @@ After completing any meaningful work:
 
 Compounding engineering isn't about working harder—it's about working smarter by capturing and reusing knowledge.
 
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "I'll document this solution later" | Later never comes. Capture knowledge while the details are fresh. |
+| "This solution is too simple to document" | Simple solutions are the most reused. Document them so others find them quickly. |
+| "The code explains itself" | Code shows what was done. Knowledge capture explains why and what was learned. |
+| "No one will read this documentation" | People read docs when they are stuck. Good docs prevent being stuck. |
+| "I don't have time for knowledge capture" | Not capturing knowledge costs more time when the same problem is solved again. |
+

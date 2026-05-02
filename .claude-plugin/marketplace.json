@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "AI Engineering System - Modular development tools with context engineering, research orchestration, and specialized agents",
-    "version": "1.4.0"
+    "version": "1.2.0"
   },
   "plugins": [
     {
       "name": "ai-eng-core",
       "source": "./plugins/ai-eng-core",
       "description": "Core workflow: plan, work, review cycle with research and context engineering",
-      "version": "1.4.0",
+      "version": "1.2.0",
       "author": {
         "name": "v1truv1us",
         "email": "contact@v1truv1us.dev"
@@ -41,7 +41,7 @@
       "name": "ai-eng-learning",
       "source": "./plugins/ai-eng-learning",
       "description": "Learning workflows for knowledge mapping, decisions, quality gates, and maintenance reviews",
-      "version": "1.4.0",
+      "version": "1.2.0",
       "author": {
         "name": "v1truv1us",
         "email": "contact@v1truv1us.dev"
@@ -68,7 +68,7 @@
       "name": "ai-eng-research",
       "source": "./plugins/ai-eng-research",
       "description": "Deep research, knowledge capture, and documentation tools",
-      "version": "1.4.0",
+      "version": "1.2.0",
       "author": {
         "name": "v1truv1us",
         "email": "contact@v1truv1us.dev"
@@ -93,7 +93,7 @@
       "name": "ai-eng-devops",
       "source": "./plugins/ai-eng-devops",
       "description": "Infrastructure, deployment, and DevOps automation",
-      "version": "1.4.0",
+      "version": "1.2.0",
       "author": {
         "name": "v1truv1us",
         "email": "contact@v1truv1us.dev"
@@ -120,7 +120,7 @@
       "name": "ai-eng-quality",
       "source": "./plugins/ai-eng-quality",
       "description": "Testing, security scanning, code review, and quality assurance",
-      "version": "1.4.0",
+      "version": "1.2.0",
       "author": {
         "name": "v1truv1us",
         "email": "contact@v1truv1us.dev"
@@ -147,7 +147,7 @@
       "name": "ai-eng-content",
       "source": "./plugins/ai-eng-content",
       "description": "Content optimization, SEO, and communication tools",
-      "version": "1.4.0",
+      "version": "1.2.0",
       "author": {
         "name": "v1truv1us",
         "email": "contact@v1truv1us.dev"
@@ -172,7 +172,7 @@
       "name": "ai-eng-plugin-dev",
       "source": "./plugins/ai-eng-plugin-dev",
       "description": "Meta-tooling for creating plugins, agents, commands, and skills",
-      "version": "1.4.0",
+      "version": "1.2.0",
       "author": {
         "name": "v1truv1us",
         "email": "contact@v1truv1us.dev"

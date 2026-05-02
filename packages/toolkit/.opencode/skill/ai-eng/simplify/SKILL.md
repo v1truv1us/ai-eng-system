@@ -44,3 +44,13 @@ Pass a focus argument to weight the matching agent higher:
 - `code-simplification` — Canonical simplification skill
 - `code-review-and-quality` — Multi-axis code review
 - `text-cleanup` — AI verbosity removal (different from code simplification)
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "The multi-agent review is overkill for small changes" | Small changes can hide duplication and inefficiency. Parallel review catches what single review misses. |
+| "I'll skip the efficiency agent, readability is enough" | Performance regressions creep in silently. The efficiency agent catches them before they compound. |
+| "Aggregating findings takes too long" | Unaggregated findings lead to conflicting fixes. Deduplicate and prioritize before applying. |
+| "I'll simplify test code too" | Test code prioritizes clarity over brevity. Do not simplify tests for the sake of fewer lines. |
+| "The confidence score is just a number" | Confidence scores flag areas that need human review. Low confidence means "look closer." |

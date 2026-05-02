@@ -96,3 +96,13 @@ When delegating to a subagent, include:
 - [ ] Type definitions and interfaces are available
 - [ ] Test files are loaded for the affected area
 - [ ] Context window is not approaching limits
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "The agent can search the codebase itself" | Search is expensive and imprecise. Targeted context is faster and more accurate. |
+| "More context is always better" | Excess context wastes window space and increases noise. Pack only what is needed. |
+| "I'll load context once at the start" | Context needs change as tasks progress. Reassess and repack as you go. |
+| "The agent already knows the project" | Agents do not retain knowledge across sessions. Pack context every time. |
+| "Context packing takes too much time" | Poor context causes more time wasted on wrong answers than packing ever costs. |

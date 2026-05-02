@@ -327,3 +327,13 @@ clarification questions.
 
 Together they produce prompts that are both well-structured and
 enhanced for maximum AI response quality.
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "The user's prompt is clear enough" | What seems clear to the user may be ambiguous to the agent. Clarify before executing. |
+| "Asking clarifying questions slows things down" | Clarifying questions prevent wrong answers that take longer to fix. |
+| "TCRO is too structured for simple tasks" | Simple tasks still benefit from clear task, context, requirements, and output definitions. |
+| "I'll assume the context from CLAUDE.md" | CLAUDE.md may not exist or may be incomplete. Ask for context when missing. |
+| "The refined prompt is good enough, no need to confirm" | Confirmation catches misunderstandings before they become wasted work. |

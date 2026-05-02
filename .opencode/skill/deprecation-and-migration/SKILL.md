@@ -106,3 +106,13 @@ Identify and remove code that is no longer used:
 - [ ] Migration path is clear and tested
 - [ ] All consumers have migrated before removal
 - [ ] Old code, configuration, and documentation are removed
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "Old code doesn't hurt anything" | Dead code increases cognitive load, maintenance burden, and binary size. |
+| "Someone might be using this" | Usage audits and deprecation windows address this. Ship it or remove it. |
+| "Migration is too disruptive" | Gradual migration patterns minimize disruption. Sudden breakage maximizes it. |
+| "I'll deprecate it but never remove it" | Deprecation without removal is just documentation. The goal is removal. |
+| "The migration tool is too much work" | Manual migration is slower and more error-prone. Automate where possible. |

@@ -74,3 +74,13 @@ If one part of the task is uncertain or expensive, prove that part first before 
 - [ ] Relevant tests pass after the slice
 - [ ] Build succeeds
 - [ ] The next slice can start from a clean, working state
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "It's faster to do it all at once" | It only feels faster until you have to debug a large unverified diff. |
+| "These changes are too small to verify individually" | Small slices are exactly what make debugging and review cheaper. |
+| "I'll add the flag or guard later" | Incomplete work should not leak into user-visible behavior. |
+| "The slice doesn't do much on its own" | A slice does not need to be user-visible. It needs to be buildable and testable. |
+| "I can skip verification for this slice" | Unverified slices accumulate risk. Verify each one before moving to the next. |

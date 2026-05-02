@@ -132,3 +132,13 @@ Before large ingests, define limits:
 - [ ] Source-specific structure is kept where possible
 - [ ] Large or remote inputs are bounded by size and time
 - [ ] The resulting corpus can be queried without rereading raw files
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "Just chunk everything" | Flattening loses structure, modality, and provenance. |
+| "Images are optional context" | Architecture and intent often live only in screenshots or diagrams. |
+| "One extraction pass is enough" | Different sources need different extraction methods. |
+| "I'll skip provenance tracking" | Without provenance, you cannot verify extraction quality or trace back to sources. |
+| "The corpus is small enough to process manually" | Even small corpora benefit from structured extraction. It scales when the corpus grows. |

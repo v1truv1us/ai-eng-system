@@ -425,3 +425,13 @@ After running:
 
 This transforms your monorepo from "confusing structure" to "clear, navigable context for AI agents and humans alike."
 
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "I'll add AGENTS.md files as needed" | Proactive initialization prevents confusion. Set up the hierarchy before agents need it. |
+| "The scoring heuristic is too complex" | The heuristic prevents initializing unimportant directories. It saves more time than it costs. |
+| "One AGENTS.md at the root is enough" | Root-level guidance does not scale to 20+ packages. Each package needs focused guidance. |
+| "I don't need to document build commands" | Agents need to know how to run tests and builds. Document them or agents guess wrong. |
+| "The hierarchy metadata is boilerplate" | Hierarchy metadata enables agents to navigate from root to package. It is structural, not decorative. |
+

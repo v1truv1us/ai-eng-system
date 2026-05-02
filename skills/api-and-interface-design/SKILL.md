@@ -101,3 +101,13 @@ Review for:
 - [ ] Boundary validation covers all external inputs
 - [ ] Public surface is documented with examples
 - [ ] Contract tests verify implementation matches specification
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "I'll define the contract as I implement" | Without a contract, implementation drifts. Define it first to catch design flaws early. |
+| "This is an internal API, Hyrum's Law doesn't apply" | Internal APIs become external the moment another team depends on them. Design accordingly. |
+| "Adding one more endpoint is quick" | Every new endpoint increases the surface area consumers depend on. One-version rule prevents confusion. |
+| "Error handling can be added later" | Inconsistent error semantics are hard to retrofit. Define error responses upfront. |
+| "The contract tests are too much overhead" | Contract tests catch drift between spec and implementation. They prevent silent breaking changes. |

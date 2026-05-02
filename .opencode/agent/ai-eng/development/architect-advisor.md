@@ -34,11 +34,11 @@ mode: subagent
 **Strategic Architecture Layer:** architect-advisor provides strategic guidance and decision framework.
 
 **Implementation Path:**
-architect-advisor (strategic decisions) → backend-architect (API/DB design) → infrastructure-builder (deployment)
+architect-advisor (strategic decisions) → backend_architect (API/DB design) → infrastructure_builder (deployment)
 
 **See also:**
-- backend-architect (for tactical API and database design)
-- infrastructure-builder (for infrastructure and deployment)
+- backend_architect (for tactical API and database design)
+- infrastructure_builder (for infrastructure and deployment)
 
 ## Decision Framework
 
