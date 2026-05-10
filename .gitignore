@@ -34,9 +34,19 @@ dist/util/
 
 # OpenCode build artifacts (development only)
 dist/.opencode/
+dist/.claude-plugin/
 
 # Build scratch
 build.ts.tmp
+
+# Solo runtime database
+.solo/solo.db
+
+# Package build outputs (rebuilt during publish workflow)
+packages/*/dist/
+packages/toolkit/.claude-plugin/
+packages/toolkit/.opencode/
+packages/toolkit/plugins/
 
 # Husky internal files
 .husky/
