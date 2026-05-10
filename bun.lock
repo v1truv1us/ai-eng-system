@@ -19,7 +19,7 @@
     },
     "packages/cli": {
       "name": "@ai-eng-system/cli",
-      "version": "1.4.0",
+      "version": "1.5.0",
       "bin": {
         "ai-eng": "bun.ts",
       },
@@ -46,21 +46,27 @@
     },
     "packages/core": {
       "name": "@ai-eng-system/core",
-      "version": "1.4.0",
+      "version": "1.5.0",
       "devDependencies": {
         "@types/node": "^25.6.0",
         "typescript": "^6.0.2",
       },
     },
+    "packages/pi": {
+      "name": "@ai-eng-system/pi",
+      "version": "1.5.0",
+    },
     "packages/toolkit": {
       "name": "@ai-eng-system/toolkit",
-      "version": "1.4.0",
+      "version": "1.5.0",
     },
   },
   "packages": {
     "@ai-eng-system/cli": ["@ai-eng-system/cli@workspace:packages/cli"],
 
     "@ai-eng-system/core": ["@ai-eng-system/core@workspace:packages/core"],
+
+    "@ai-eng-system/pi": ["@ai-eng-system/pi@workspace:packages/pi"],
 
     "@ai-eng-system/toolkit": ["@ai-eng-system/toolkit@workspace:packages/toolkit"],
 
