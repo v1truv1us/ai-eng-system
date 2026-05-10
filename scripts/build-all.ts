@@ -29,13 +29,15 @@ async function copyIfExists(source: string, destination: string) {
 }
 
 async function main() {
+    // Build core first so workspace imports resolve during root build
+    await run("bun run build:core");
+
     await run(`bun run build.ts ${args.join(" ")}`.trim());
 
     if (isValidateOnly) {
         return;
     }
 
-    await run("bun run build:core");
     await run("bun run build:cli");
 
     await copyIfExists(
