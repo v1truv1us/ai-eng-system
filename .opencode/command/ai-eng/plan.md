@@ -75,6 +75,5 @@ Every atomic task must include: ID, Title, Depends On, Files, Acceptance Criteri
 
 - Reads from: `specs/{feature}/spec.md`, `docs/research/*.md`, `CLAUDE.md`
 - Feeds into: `/ai-eng/work`
-- Tasks created in: Solo (`~/Github/Solo`) if available, otherwise `specs/{feature}/tasks/*.md`
 
 $ARGUMENTS

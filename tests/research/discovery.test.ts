@@ -269,13 +269,13 @@ describe("Discovery Phase", () => {
             });
 
             // All docs should be within date range
+            const dateRange = constrainedQuery.constraints?.dateRange;
+            expect(dateRange).toBeDefined();
             const allInDateRange = result.documentation.every((doc) => {
-                if (!doc.lastModified) return true;
+                if (!doc.lastModified || !dateRange) return true;
                 return (
-                    doc.lastModified >=
-                        constrainedQuery.constraints?.dateRange?.from! &&
-                    doc.lastModified <=
-                        constrainedQuery.constraints?.dateRange?.to!
+                    doc.lastModified >= dateRange.from &&
+                    doc.lastModified <= dateRange.to
                 );
             });
             expect(allInDateRange).toBe(true);

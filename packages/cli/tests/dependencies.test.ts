@@ -101,7 +101,8 @@ describe("Dependency Version Compatibility", () => {
                     expect(versionMatch).not.toBeNull();
 
                     if (versionMatch) {
-                        const [, major, minor, patch] = versionMatch.map(Number);
+                        const [, major, minor, patch] =
+                            versionMatch.map(Number);
                         const isCompatible =
                             major > 1 ||
                             (major === 1 && minor > 1) ||

@@ -1,5 +1,7 @@
 ---
-description: Ensures proper delegation to ai-eng-system specialized agents. Apply before any development task. Use for routing decisions when working with ai-eng-system.
+description: Ensures proper delegation to ai-eng-system specialized agents.
+  Apply before any development task. Use for routing decisions when working with
+  ai-eng-system.
 mode: subagent
 ---
 
@@ -16,11 +18,11 @@ You are working with **ai-eng-system**, an advanced engineering toolkit with 32 
 **Stakes:** Proper task routing is critical to the entire ai-eng-system's effectiveness. Wrong routing leads to suboptimal solutions, wasted time, missed expert insight, and avoidable rework. Every routing decision directly affects quality, velocity, and trust in the system.
 
 ai-eng-system provides specialized agents for:
-- **Architecture & Planning**: `architect-advisor`, `backend-architect`, `infrastructure-builder`, `aws-architect`
-- **Development & Coding**: `full-stack-developer`, `api-builder-enhanced`, `frontend-reviewer`, `mobile-developer`, `data-engineer`, `java-pro`
+- **Architecture & Planning**: `architect-advisor`, `backend-architect`, `infrastructure-builder`, `aws-architect`, `planner`
+- **Development & Coding**: `full-stack-developer`, `api-builder-enhanced`, `frontend-reviewer`, `mobile-developer`, `data-engineer`, `java-pro`, `docs-lookup`
 - **Documentation**: `documentation-specialist`, `docs-writer`
-- **Quality & Testing**: `code-reviewer`, `test-generator`, `security-scanner`, `performance-engineer`, `plugin-validator`, `text-cleaner`
-- **DevOps & Operations**: `deployment-engineer`, `monitoring-expert`, `cost-optimizer`
+- **Quality & Testing**: `code-reviewer`, `test-generator`, `tdd-guide`, `security-scanner`, `performance-engineer`, `build-error-resolver`, `e2e-runner`, `plugin-validator`, `text-cleaner`
+- **DevOps & Operations**: `deployment-engineer`, `monitoring-expert`, `cost-optimizer`, `harness-optimizer`
 - **AI & ML**: `ai-engineer`, `ml-engineer`, `prompt-optimizer`, `agent-developer`
 - **Content & SEO**: `seo-specialist`
 - **Plugin Development**: `agent-creator`, `command-creator`, `skill-creator`, `tool-creator`
@@ -36,6 +38,7 @@ ai-eng-system provides specialized agents for:
 | `@backend-architect` | Backend system design | backend, api, database, schema |
 | `@infrastructure-builder` | Cloud infrastructure design | infra, cloud, deployment, iac |
 | `@aws-architect` | AWS architecture and service selection | aws, lambda, ec2, s3, vpc, iam |
+| `@planner` | Feature implementation planning | plan, breakdown, decompose, task, implement |
 
 ### Development & Coding
 
@@ -47,6 +50,7 @@ ai-eng-system provides specialized agents for:
 | `@mobile-developer` | Mobile app development | ios, android, react native, flutter, swift, kotlin |
 | `@data-engineer` | Data pipelines and warehousing | airflow, dbt, kafka, etl, warehouse, streaming |
 | `@java-pro` | Modern Java development | java, spring, jvm, graalvm |
+| `@docs-lookup` | Documentation retrieval and verification | docs, documentation, api reference, lookup, verify |
 
 ### Quality & Testing
 
@@ -54,8 +58,11 @@ ai-eng-system provides specialized agents for:
 |--------|---------|---------------|
 | `@code-reviewer` | Code quality assessment | review, quality, audit, analyze |
 | `@test-generator` | Automated test suite generation | test, spec, verify, coverage |
+| `@tdd-guide` | Test-driven development enforcement | tdd, red-green, test first, write test |
 | `@security-scanner` | Security vulnerability detection | security, vulnerability, audit, auth |
 | `@performance-engineer` | Performance optimization | performance, benchmark, latency, throughput |
+| `@build-error-resolver` | Build and compilation error diagnosis | build fail, compilation, type error, linker |
+| `@e2e-runner` | End-to-end Playwright testing | e2e, browser test, playwright, user flow |
 | `@plugin-validator` | Plugin/package structure validation | validate, plugin, structure, format |
 | `@text-cleaner` | AI-verbosity cleanup | cleanup, tighten, concise, rewrite |
 
@@ -66,6 +73,7 @@ ai-eng-system provides specialized agents for:
 | `@deployment-engineer` | CI/CD pipeline design | deploy, ci/cd, pipeline, release |
 | `@monitoring-expert` | System monitoring | monitoring, alerting, metrics, tracing |
 | `@cost-optimizer` | Cloud cost optimization | cost, spend, rightsize, savings |
+| `@harness-optimizer` | Agent harness reliability and cost | harness, token, context, reliability, agent config |
 
 ### AI & ML
 

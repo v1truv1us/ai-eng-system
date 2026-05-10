@@ -11,64 +11,57 @@
  * - MBZUAI Principled Prompting research
  */
 
-// Type exports
-export type {
-    Session,
-    SessionWorkbench,
-    SessionMetadata,
-    Task,
-    Decision,
-    MemoryEntry,
-    MemoryType,
-    MemorySource,
-    MemoryStore,
-    SkillMetadata,
-    SkillContent,
-    LoadedSkill,
-    SkillTier,
-    ContextTrigger,
-    AssembledContext,
-    ContextConfig,
-    CommandContextEnvelope,
-    CommandExecutionStatus,
-    ContextEvent,
-    ContextEventHandler,
-} from "./types";
-
-export { DEFAULT_CONFIG, loadConfig, createCommandEnvelope } from "./types";
-
-// Session Manager
-export { SessionManager, getSessionManager } from "./session";
-
+// Exporters
+export { type ContextExporter, MarkdownContextExporter } from "./exporters";
 // Memory Manager
-export { MemoryManager, getMemoryManager } from "./memory";
-
+export { getMemoryManager, MemoryManager } from "./memory";
 // Progressive Disclosure
 export {
-    ProgressiveSkillLoader,
     createSkillLoader,
+    ProgressiveSkillLoader,
     TIER_STRATEGIES,
 } from "./progressive";
-
 // Context Retrieval
 export {
     ContextRetriever,
     createContextRetriever,
 } from "./retrieval";
-
+// Session Manager
+export { getSessionManager, SessionManager } from "./session";
+// Type exports
+export type {
+    AssembledContext,
+    CommandContextEnvelope,
+    CommandExecutionStatus,
+    ContextConfig,
+    ContextEvent,
+    ContextEventHandler,
+    ContextTrigger,
+    Decision,
+    LoadedSkill,
+    MemoryEntry,
+    MemorySource,
+    MemoryStore,
+    MemoryType,
+    Session,
+    SessionMetadata,
+    SessionWorkbench,
+    SkillContent,
+    SkillMetadata,
+    SkillTier,
+    Task,
+} from "./types";
+export { createCommandEnvelope, DEFAULT_CONFIG, loadConfig } from "./types";
 // Vector Search
 export {
-    VectorMemoryManager,
-    VectorMath,
-    TextTokenizer,
     ContextRanker,
-    type VectorEmbedding,
-    type VectorStore,
     type SearchResult,
+    TextTokenizer,
+    type VectorEmbedding,
+    VectorMath,
+    VectorMemoryManager,
+    type VectorStore,
 } from "./vector";
-
-// Exporters
-export { MarkdownContextExporter, type ContextExporter } from "./exporters";
 
 /**
  * Initialize the complete context engineering system

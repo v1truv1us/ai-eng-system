@@ -4,11 +4,12 @@ AI engineering workflow toolkit for Claude Code and OpenCode with namespaced com
 
 ## Packages
 
-This repository ships three npm packages:
+This repository ships four npm packages:
 
 - `@ai-eng-system/core` - shared library and content-loading helpers
 - `@ai-eng-system/toolkit` - generated Claude Code, OpenCode, and marketplace assets
 - `@ai-eng-system/cli` - executable installer and command-line workflows
+- `@ai-eng-system/pi` - generated Pi skills and prompt templates
 
 The repo root package is private and is never published.
 
@@ -43,6 +44,14 @@ ai-eng install --scope global
 ```
 
 OpenCode learning automation now surfaces toast-based suggestions for `/ai-eng/decision-journal` and `/ai-eng/quality-gate`, then waits for explicit `/ai-eng/learning-approve`, `/ai-eng/learning-dismiss`, or `/ai-eng/learning-snooze` consent. Local policy and state live under `.ai-context/learning/`.
+
+### Pi
+
+```bash
+pi install npm:@ai-eng-system/pi
+```
+
+Pi loads ai-eng-system skills natively from the package `skills/` directory and exposes generated command prompts from `prompts/`.
 
 ## Core Workflow
 
@@ -146,6 +155,7 @@ templates/              Decision and quality gate templates
 packages/core/          Published core library package
 packages/toolkit/       Published toolkit assets package
 packages/cli/           Published CLI package
+packages/pi/            Published Pi package (generated skills/prompts)
 plugins/                Marketplace plugin output (generated)
 dist/                   Generated root outputs
 docs-site/              Published documentation site (mirror of docs/)

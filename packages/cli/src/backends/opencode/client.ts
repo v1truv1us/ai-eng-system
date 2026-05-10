@@ -7,9 +7,9 @@
 
 import { createServer } from "node:net";
 import {
-    type OpencodeClient,
     createOpencode,
     createOpencodeClient,
+    type OpencodeClient,
 } from "@opencode-ai/sdk";
 import { Log } from "../../util/log";
 

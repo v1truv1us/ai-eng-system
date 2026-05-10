@@ -1,8 +1,6 @@
 {
-    "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-    "organizeImports": {
-        "enabled": true
-    },
+    "$schema": "https://biomejs.dev/schemas/2.4.11/schema.json",
+    "assist": { "actions": { "source": { "organizeImports": "on" } } },
     "linter": {
         "enabled": true,
         "rules": {
@@ -27,14 +25,19 @@
         "indentWidth": 4
     },
     "files": {
-        "ignore": [
-            "node_modules",
-            "dist",
-            ".git",
-            "*.md",
-            ".opencode",
-            "*.json",
-            "docs-site/.astro"
+        "includes": [
+            "**",
+            "!**/node_modules",
+            "!**/dist",
+            "!**/.git",
+            "!**/*.md",
+            "!**/.opencode",
+            "!**/*.json",
+            "!**/docs-site/.astro",
+            "!**/venv",
+            "!**/.venv",
+            "!**/venv_validation",
+            "!**/*.d.ts"
         ]
     }
 }

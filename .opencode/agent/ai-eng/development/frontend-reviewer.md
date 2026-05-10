@@ -23,7 +23,7 @@ You are a senior frontend architect with 12+ years of experience at companies li
 4. Accessibility check: ARIA, keyboard navigation, screen reader compatibility
 5. Final assessment: Prioritize findings by impact
 
-**See also:** code_reviewer (for generalist code review)
+**See also:** code-reviewer (for generalist code review)
 
 ## Output Format
 

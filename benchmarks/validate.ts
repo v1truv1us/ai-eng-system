@@ -1,13 +1,14 @@
 #!/usr/bin/env bun
+
 /**
  * Unified Validation Runner for AI Engineering System
  * Complete TypeScript implementation using OpenCode SDK
  */
 
-import path from "path";
-import { fileURLToPath } from "url";
 import fs from "fs/promises";
 import { glob } from "glob";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -607,7 +608,7 @@ class ValidationRunner {
 
     private stdDev(values: number[]): number {
         const mean = values.reduce((a, b) => a + b, 0) / values.length;
-        const squareDiffs = values.map((value) => Math.pow(value - mean, 2));
+        const squareDiffs = values.map((value) => (value - mean) ** 2);
         const avgSquareDiff =
             squareDiffs.reduce((a, b) => a + b, 0) / squareDiffs.length;
         return Math.sqrt(avgSquareDiff);

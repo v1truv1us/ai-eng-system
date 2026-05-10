@@ -34,6 +34,10 @@ describe("AI Engineering System - Integration Tests", () => {
 
         // Copy original project structure to test directory
         await copyProjectStructure();
+        execSync("bun install", {
+            cwd: TEST_ROOT,
+            stdio: "ignore",
+        });
     });
 
     afterAll(async () => {
@@ -128,6 +132,30 @@ describe("AI Engineering System - Integration Tests", () => {
             // OpenCode skills are flattened
             expect(
                 existsSync(join(opencodeSkillDir, "plugin-dev", "SKILL.md")),
+            ).toBe(true);
+        });
+
+        it("should generate Pi package assets", async () => {
+            const piDistDir = join(TEST_ROOT, "dist", ".pi");
+            const piPackageDir = join(TEST_ROOT, "packages", "pi");
+
+            expect(
+                existsSync(join(piDistDir, "skills", "plugin-dev", "SKILL.md")),
+            ).toBe(true);
+            expect(
+                existsSync(
+                    join(piDistDir, "prompts", "ai-eng-create-plugin.md"),
+                ),
+            ).toBe(true);
+            expect(
+                existsSync(
+                    join(piPackageDir, "skills", "plugin-dev", "SKILL.md"),
+                ),
+            ).toBe(true);
+            expect(
+                existsSync(
+                    join(piPackageDir, "prompts", "ai-eng-create-plugin.md"),
+                ),
             ).toBe(true);
         });
     });
@@ -509,10 +537,20 @@ async function copyProjectStructure(): Promise<void> {
     // Copy essential files and directories
     const essentialItems = [
         "package.json",
+        "bun.lock",
         "build.ts",
         "content/",
         "skills/",
+        "docs/",
+        "templates/",
+        "src/",
+        "scripts/",
+        "packages/",
+        ".claude/",
+        ".opencode/",
         ".claude-plugin/",
+        "biome.json",
+        "tsconfig.json",
         "marketplace.json",
     ];
 

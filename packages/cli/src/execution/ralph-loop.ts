@@ -11,7 +11,7 @@
 
 import { execSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { readFile, readdir } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import { join, parse } from "node:path";
 import { OpenCodeClient, type Session } from "../backends/opencode/client";
 import type { RalphFlags } from "../cli/flags";

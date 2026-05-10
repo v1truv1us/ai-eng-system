@@ -8,8 +8,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import {
-    type OpenCodeContent,
     getDistOpenCodeContent,
+    type OpenCodeContent,
 } from "@ai-eng-system/core";
 
 const NAMESPACE_PREFIX = "ai-eng";

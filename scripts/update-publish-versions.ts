@@ -23,14 +23,8 @@ async function updatePublishVersions() {
         process.cwd(),
         "packages/core/package.json",
     );
-    const cliPackagePath = resolve(
-        process.cwd(),
-        "packages/cli/package.json",
-    );
-    const cliDevPath = resolve(
-        process.cwd(),
-        "packages/cli/package.json.dev",
-    );
+    const cliPackagePath = resolve(process.cwd(), "packages/cli/package.json");
+    const cliDevPath = resolve(process.cwd(), "packages/cli/package.json.dev");
     const cliPublishPath = resolve(
         process.cwd(),
         "packages/cli/package.json.publish",
@@ -39,6 +33,7 @@ async function updatePublishVersions() {
         process.cwd(),
         "packages/toolkit/package.json",
     );
+    const piPackagePath = resolve(process.cwd(), "packages/pi/package.json");
     const versionedManifestPaths = [
         resolve(process.cwd(), ".claude-plugin/plugin.json"),
         resolve(process.cwd(), ".claude-plugin/marketplace.json"),
@@ -46,8 +41,14 @@ async function updatePublishVersions() {
         resolve(process.cwd(), "dist/.claude-plugin/marketplace.json"),
         resolve(process.cwd(), "plugins/ai-eng-system/plugin.json"),
         resolve(process.cwd(), "packages/toolkit/.claude-plugin/plugin.json"),
-        resolve(process.cwd(), "packages/toolkit/.claude-plugin/marketplace.json"),
-        resolve(process.cwd(), "packages/toolkit/plugins/ai-eng-system/plugin.json"),
+        resolve(
+            process.cwd(),
+            "packages/toolkit/.claude-plugin/marketplace.json",
+        ),
+        resolve(
+            process.cwd(),
+            "packages/toolkit/plugins/ai-eng-system/plugin.json",
+        ),
     ];
 
     try {
@@ -59,8 +60,13 @@ async function updatePublishVersions() {
 
         if (OVERRIDE_VERSION && corePkg.version !== coreVersion) {
             corePkg.version = coreVersion;
-            await writeFile(corePackagePath, `${JSON.stringify(corePkg, null, 2)}\n`);
-            console.log(`🔄 Updated @ai-eng-system/core version to ${coreVersion}`);
+            await writeFile(
+                corePackagePath,
+                `${JSON.stringify(corePkg, null, 2)}\n`,
+            );
+            console.log(
+                `🔄 Updated @ai-eng-system/core version to ${coreVersion}`,
+            );
         }
 
         const cliPackagePaths = [cliPackagePath, cliDevPath, cliPublishPath];
@@ -81,14 +87,25 @@ async function updatePublishVersions() {
                 );
             }
 
-            await writeFile(packagePath, `${JSON.stringify(cliPkg, null, 2)}\n`);
+            await writeFile(
+                packagePath,
+                `${JSON.stringify(cliPkg, null, 2)}\n`,
+            );
         }
 
         await updateJsonFile(toolkitPackagePath, (toolkitPkg) => {
             toolkitPkg.version = coreVersion;
             return toolkitPkg;
         });
-        console.log(`🔄 Updated @ai-eng-system/toolkit version to ${coreVersion}`);
+        console.log(
+            `🔄 Updated @ai-eng-system/toolkit version to ${coreVersion}`,
+        );
+
+        await updateJsonFile(piPackagePath, (piPkg) => {
+            piPkg.version = coreVersion;
+            return piPkg;
+        });
+        console.log(`🔄 Updated @ai-eng-system/pi version to ${coreVersion}`);
 
         for (const manifestPath of versionedManifestPaths) {
             try {

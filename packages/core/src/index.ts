@@ -5,31 +5,30 @@
  * for the AI Engineering System
  */
 
-// Export path utilities
-export {
-    getCoreRoot,
-    getContentPath,
-    getSkillsPath,
-    getOpenCodePath,
-    getClaudePath,
-    getDistPath,
-    getDistOpenCodePath,
-    getDistClaudePath,
-} from "./paths.js";
-
 // Export content loading utilities
 export {
     type ContentItem,
-    type OpenCodeContent,
     getAgentContent,
-    getCommandContent,
-    getSkillContent,
-    getOpenCodeContent,
-    getDistOpenCodeContent,
     getAgentNames,
+    getCommandContent,
     getCommandNames,
+    getDistOpenCodeContent,
+    getOpenCodeContent,
+    getSkillContent,
     getSkillNames,
+    type OpenCodeContent,
 } from "./content-loader.js";
+// Export path utilities
+export {
+    getClaudePath,
+    getContentPath,
+    getCoreRoot,
+    getDistClaudePath,
+    getDistOpenCodePath,
+    getDistPath,
+    getOpenCodePath,
+    getSkillsPath,
+} from "./paths.js";
 
 // Export version
 export const version = "0.6.0";

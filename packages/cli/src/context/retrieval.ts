@@ -12,9 +12,9 @@ import type {
     AssembledContext,
     ContextConfig,
     ContextTrigger,
+    LoadedSkill,
     MemoryEntry,
 } from "./types";
-import type { LoadedSkill } from "./types";
 import { DEFAULT_CONFIG } from "./types";
 import { ContextRanker, VectorMath, VectorMemoryManager } from "./vector";
 

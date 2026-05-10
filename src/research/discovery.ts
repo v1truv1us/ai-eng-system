@@ -892,9 +892,15 @@ export class DiscoveryHandler {
             );
 
             // Add to seen sets
-            uniqueFiles.forEach((f) => seenFiles.add(f.path));
-            uniqueDocs.forEach((d) => seenDocs.add(d.path));
-            uniquePatterns.forEach((p) => seenPatterns.add(p.pattern));
+            uniqueFiles.forEach((f) => {
+                seenFiles.add(f.path);
+            });
+            uniqueDocs.forEach((d) => {
+                seenDocs.add(d.path);
+            });
+            uniquePatterns.forEach((p) => {
+                seenPatterns.add(p.pattern);
+            });
 
             if (
                 uniqueFiles.length > 0 ||

@@ -9,7 +9,14 @@
  * - OpenCode client wrapper
  */
 
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from "bun:test";
+import {
+    afterAll,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+} from "bun:test";
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";

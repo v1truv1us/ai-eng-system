@@ -7,7 +7,7 @@
  */
 
 import { existsSync } from "node:fs";
-import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import type {
     AgentType,
@@ -38,6 +38,7 @@ interface HandoffAuditRecord {
     reason?: string;
     sessionId: string;
 }
+
 import { DEFAULT_CONFIG } from "./types";
 
 export class SessionManager {
@@ -416,7 +417,11 @@ export class SessionManager {
         // Collect all keys
         const allKeys = new Set<string>();
         contexts.forEach((ctx) => {
-            if (ctx) Object.keys(ctx).forEach((key) => allKeys.add(key));
+            if (ctx) {
+                Object.keys(ctx).forEach((key) => {
+                    allKeys.add(key);
+                });
+            }
         });
 
         // Merge each key
@@ -434,9 +439,9 @@ export class SessionManager {
                 case "consensus": {
                     // Use most common value
                     const counts = new Map<any, number>();
-                    values.forEach((val) =>
-                        counts.set(val, (counts.get(val) || 0) + 1),
-                    );
+                    values.forEach((val) => {
+                        counts.set(val, (counts.get(val) || 0) + 1);
+                    });
                     let maxCount = 0;
                     let consensusValue = values[0];
                     counts.forEach((count, value) => {

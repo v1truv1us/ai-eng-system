@@ -1,5 +1,8 @@
 ---
-description: AI-assisted agent generation for Claude Code and OpenCode. Creates properly formatted agent files for either platform. Use when user asks to "create an agent", "generate an agent", "make an agent that...", or describes agent functionality needed.
+description: AI-assisted agent generation for Claude Code and OpenCode. Creates
+  properly formatted agent files for either platform. Use when user asks to
+  "create an agent", "generate an agent", "make an agent that...", or describes
+  agent functionality needed.
 mode: subagent
 temperature: 0.3
 tools:

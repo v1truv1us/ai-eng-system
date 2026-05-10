@@ -67,11 +67,67 @@ For each user story, break it into implementation tasks:
 - Validate that the total plan covers all spec acceptance criteria
 - Check that no task is too large or too vague
 
-### Step 5: Save the Plan
+### Step 5: Create Tasks
 
-- Save as `specs/{feature}/plan.md`
-- Include the full task list with all required fields
-- Include phase grouping and dependency graph
+**Primary: Solo (if available)**
+
+Check if Solo is available:
+```bash
+# Check if Solo directory exists and CLI is available
+test -d ~/Github/Solo && which solo >/dev/null 2>&1
+```
+
+If Solo is available, create each task using the `solo task create` command:
+```bash
+solo task create \
+  --title "Task title" \
+  --description "Full task description with acceptance criteria and files" \
+  --priority medium \
+  --deps T-1,T-2 \
+  --tags feature-name,phase-1 \
+  --json
+```
+
+Solo task fields:
+| Flag | Maps To |
+|------|---------|
+| `--title` | Task Title |
+| `--description` | Acceptance Criteria + Files + Spec Reference |
+| `--priority` | Derived from Complexity (Low→low, Medium→medium, High→high) |
+| `--deps` | Comma-separated Solo task IDs from previous creates |
+| `--tags` | Feature name and phase tags |
+
+Solo returns the assigned task ID (e.g., `T-142`). Use this ID for dependency references in subsequent tasks.
+
+**Fallback: File-based tasks (if Solo is not available)**
+
+If Solo is not available, create individual task files:
+```
+specs/{feature}/tasks/
+├── T-001.md
+├── T-002.md
+└── ...
+```
+
+Each task file follows this format:
+```markdown
+# T-001: [Task Title]
+
+**Depends On:** None
+**Priority:** medium
+**Estimated Time:** 30 min
+**Complexity:** Low
+
+## Acceptance Criteria
+- [ ] Criterion 1
+- [ ] Criterion 2
+
+## Files
+- `path/to/file.ts` - Create/modify description
+
+## Spec Reference
+- US-001: AC-2
+```
 
 ## Common Rationalizations
 
@@ -87,7 +143,8 @@ For each user story, break it into implementation tasks:
 - [ ] Every task has all required fields
 - [ ] Dependency graph has no cycles
 - [ ] Each phase produces a buildable, testable state
-- [ ] Plan is saved in `specs/{feature}/plan.md`
+- [ ] Tasks created in Solo (if available) OR saved as `specs/{feature}/tasks/*.md` (fallback)
+- [ ] Solo task IDs recorded for dependency tracking (if using Solo)
 
 ## Anti-Rationalization Table
 

@@ -8,7 +8,10 @@ import { join } from "node:path";
 import { AiEngSystem } from "../src/index.js";
 import { buildLearningCandidates } from "../src/learning-automation/heuristics.js";
 import { createLearningAutomationRuntime } from "../src/learning-automation/runtime.js";
-import { loadLearningPolicy, withLearningStateLock } from "../src/learning-automation/state.js";
+import {
+    loadLearningPolicy,
+    withLearningStateLock,
+} from "../src/learning-automation/state.js";
 import {
     applySurfacedSuggestion,
     normalizeLearningState,
@@ -37,7 +40,11 @@ async function createTempProject(): Promise<string> {
     return projectDir;
 }
 
-async function createPlugin(projectDir: string, directory = projectDir, worktree = projectDir) {
+async function createPlugin(
+    projectDir: string,
+    directory = projectDir,
+    worktree = projectDir,
+) {
     return AiEngSystem({
         project: {} as never,
         client: {
@@ -66,7 +73,9 @@ function createRecommendation(
         rationale: "example rationale",
         confidence,
         likelyTargetFiles: [
-            commandId === "decision-journal" ? "docs/decisions/" : "docs/quality/",
+            commandId === "decision-journal"
+                ? "docs/decisions/"
+                : "docs/quality/",
         ],
         dedupeKey: `${commandId}|plan|example`,
         mode: "suggestion-only",
@@ -97,9 +106,11 @@ const POLICY: LearningPolicy = {
 
 afterEach(async () => {
     await Promise.all(
-        createdDirs.splice(0).map((directory) =>
-            rm(directory, { recursive: true, force: true }),
-        ),
+        createdDirs
+            .splice(0)
+            .map((directory) =>
+                rm(directory, { recursive: true, force: true }),
+            ),
     );
     process.env.HOME = originalHome;
     mock.restore();
@@ -162,17 +173,49 @@ describe("learning automation suppression", () => {
             recommendationHistory: {},
         };
 
-        const surfacedState = applySurfacedSuggestion(initialState, recommendation, 0);
+        const surfacedState = applySurfacedSuggestion(
+            initialState,
+            recommendation,
+            0,
+        );
         const expiredState = normalizeLearningState(
             surfacedState,
             POLICY,
             (24 * 60 + 31) * 60 * 1000,
         );
 
-        expect(selectSuggestion([recommendation], surfacedState, POLICY, 5 * 60 * 1000)).toBeNull();
-        expect(selectSuggestion([recommendation], surfacedState, POLICY, 119 * 60 * 1000)).toBeNull();
-        expect(selectSuggestion([createRecommendation("decision-journal")], surfacedState, POLICY, 119 * 60 * 1000)).toBeNull();
-        expect(selectSuggestion([recommendation], surfacedState, POLICY, 121 * 60 * 1000)).toBeNull();
+        expect(
+            selectSuggestion(
+                [recommendation],
+                surfacedState,
+                POLICY,
+                5 * 60 * 1000,
+            ),
+        ).toBeNull();
+        expect(
+            selectSuggestion(
+                [recommendation],
+                surfacedState,
+                POLICY,
+                119 * 60 * 1000,
+            ),
+        ).toBeNull();
+        expect(
+            selectSuggestion(
+                [createRecommendation("decision-journal")],
+                surfacedState,
+                POLICY,
+                119 * 60 * 1000,
+            ),
+        ).toBeNull();
+        expect(
+            selectSuggestion(
+                [recommendation],
+                surfacedState,
+                POLICY,
+                121 * 60 * 1000,
+            ),
+        ).toBeNull();
         expect(
             selectSuggestion(
                 [createRecommendation("quality-gate")],
@@ -242,8 +285,16 @@ describe("learning automation runtime safety", () => {
         });
 
         expect(showToast).toHaveBeenCalledTimes(1);
-        expect(existsSync(join(projectDir, ".ai-context", "learning", "state.json"))).toBe(true);
-        expect(existsSync(join(nestedDirectory, ".ai-context", "learning", "state.json"))).toBe(false);
+        expect(
+            existsSync(
+                join(projectDir, ".ai-context", "learning", "state.json"),
+            ),
+        ).toBe(true);
+        expect(
+            existsSync(
+                join(nestedDirectory, ".ai-context", "learning", "state.json"),
+            ),
+        ).toBe(false);
     });
 
     it("detects project-root opencode.json and installs into project .opencode", async () => {
@@ -263,7 +314,9 @@ describe("learning automation runtime safety", () => {
 
         await createPlugin(projectDir);
 
-        expect(existsSync(join(projectDir, ".opencode", "command", "ai-eng"))).toBe(true);
+        expect(
+            existsSync(join(projectDir, ".opencode", "command", "ai-eng")),
+        ).toBe(true);
     });
 
     it("detects project-root opencode.jsonc and installs into project .opencode", async () => {
@@ -283,7 +336,9 @@ describe("learning automation runtime safety", () => {
 
         await createPlugin(projectDir);
 
-        expect(existsSync(join(projectDir, ".opencode", "command", "ai-eng"))).toBe(true);
+        expect(
+            existsSync(join(projectDir, ".opencode", "command", "ai-eng")),
+        ).toBe(true);
     });
 
     it("does not create learning state on session.created before any eligible command", async () => {
@@ -309,7 +364,9 @@ describe("learning automation runtime safety", () => {
             },
         });
 
-        expect(existsSync(join(projectDir, ".ai-context", "learning"))).toBe(false);
+        expect(existsSync(join(projectDir, ".ai-context", "learning"))).toBe(
+            false,
+        );
     });
 
     it("shows a toast, persists local state, and never executes commands or writes docs before approval", async () => {
@@ -345,7 +402,11 @@ describe("learning automation runtime safety", () => {
 
         expect(showToast).toHaveBeenCalledTimes(1);
         expect(executeCommand).not.toHaveBeenCalled();
-        expect(existsSync(join(projectDir, ".ai-context", "learning", "state.json"))).toBe(true);
+        expect(
+            existsSync(
+                join(projectDir, ".ai-context", "learning", "state.json"),
+            ),
+        ).toBe(true);
         expect(
             existsSync(
                 join(
@@ -432,13 +493,17 @@ describe("learning automation runtime safety", () => {
         expect(executeCommand).toHaveBeenCalledTimes(1);
         expect(executeCommand).toHaveBeenCalledWith({
             body: {
-                command: '/ai-eng/decision-journal "Document the durable decision and tradeoff decisions from this /ai-eng/work run for src/domain/model.ts"',
+                command:
+                    '/ai-eng/decision-journal "Document the durable decision and tradeoff decisions from this /ai-eng/work run for src/domain/model.ts"',
             },
             query: { directory: projectDir },
         });
 
         const state = JSON.parse(
-            await readFile(join(projectDir, ".ai-context", "learning", "state.json"), "utf-8"),
+            await readFile(
+                join(projectDir, ".ai-context", "learning", "state.json"),
+                "utf-8",
+            ),
         ) as LearningState;
 
         expect(state.activeRecommendation).toBeUndefined();
@@ -490,7 +555,10 @@ describe("learning automation runtime safety", () => {
             await readFile(recommendationPath, "utf-8"),
         ) as LearningRecommendation;
         tamperedRecommendation.commandLine = '/ai-eng/work "malicious"';
-        await writeFile(recommendationPath, JSON.stringify(tamperedRecommendation, null, 2));
+        await writeFile(
+            recommendationPath,
+            JSON.stringify(tamperedRecommendation, null, 2),
+        );
 
         await plugin.event?.({
             event: {
@@ -507,7 +575,8 @@ describe("learning automation runtime safety", () => {
         expect(executeCommand).toHaveBeenCalledTimes(1);
         expect(executeCommand).toHaveBeenCalledWith({
             body: {
-                command: '/ai-eng/decision-journal "Document the durable decision and tradeoff decisions from this /ai-eng/work run for src/domain/model.ts"',
+                command:
+                    '/ai-eng/decision-journal "Document the durable decision and tradeoff decisions from this /ai-eng/work run for src/domain/model.ts"',
             },
             query: { directory: projectDir },
         });
@@ -559,7 +628,10 @@ describe("learning automation runtime safety", () => {
         expect(executeCommand).not.toHaveBeenCalled();
 
         const state = JSON.parse(
-            await readFile(join(projectDir, ".ai-context", "learning", "state.json"), "utf-8"),
+            await readFile(
+                join(projectDir, ".ai-context", "learning", "state.json"),
+                "utf-8",
+            ),
         ) as LearningState;
 
         expect(state.activeRecommendation).toBeUndefined();
@@ -643,7 +715,9 @@ describe("learning automation runtime safety", () => {
     it("keeps approval actionable after surface cooldown within retention window", async () => {
         const projectDir = await createTempProject();
         const showToast = mock(async () => ({ data: {} }));
-        const executeCommand = mock(async (_command?: string) => ({ data: {} }));
+        const executeCommand = mock(async (_command?: string) => ({
+            data: {},
+        }));
         let now = 100;
         const plugin = createLearningAutomationRuntime({
             projectDir,
@@ -688,13 +762,17 @@ describe("learning automation runtime safety", () => {
 
     it("expires approval when custom actionable retention elapses", async () => {
         const projectDir = await createTempProject();
-        await mkdir(join(projectDir, ".ai-context", "learning"), { recursive: true });
+        await mkdir(join(projectDir, ".ai-context", "learning"), {
+            recursive: true,
+        });
         await writeFile(
             join(projectDir, ".ai-context", "learning", "policy.json"),
             JSON.stringify({ actionableRetentionMinutes: 5 }),
         );
         const showToast = mock(async () => ({ data: {} }));
-        const executeCommand = mock(async (_command?: string) => ({ data: {} }));
+        const executeCommand = mock(async (_command?: string) => ({
+            data: {},
+        }));
         let now = 100;
         const plugin = createLearningAutomationRuntime({
             projectDir,
@@ -813,7 +891,12 @@ describe("learning automation runtime safety", () => {
 
     it("recovers a stale cross-process state lock", async () => {
         const projectDir = await createTempProject();
-        const lockDir = join(projectDir, ".ai-context", "learning", "state.lock");
+        const lockDir = join(
+            projectDir,
+            ".ai-context",
+            "learning",
+            "state.lock",
+        );
         await mkdir(lockDir, { recursive: true });
         await writeFile(
             join(lockDir, "metadata.json"),
@@ -830,7 +913,9 @@ describe("learning automation runtime safety", () => {
 
     it("uses policy default snooze for missing and invalid durations", async () => {
         const projectDir = await createTempProject();
-        await mkdir(join(projectDir, ".ai-context", "learning"), { recursive: true });
+        await mkdir(join(projectDir, ".ai-context", "learning"), {
+            recursive: true,
+        });
         await writeFile(
             join(projectDir, ".ai-context", "learning", "policy.json"),
             JSON.stringify({
@@ -875,7 +960,10 @@ describe("learning automation runtime safety", () => {
         } as never);
 
         let state = JSON.parse(
-            await readFile(join(projectDir, ".ai-context", "learning", "state.json"), "utf-8"),
+            await readFile(
+                join(projectDir, ".ai-context", "learning", "state.json"),
+                "utf-8",
+            ),
         ) as LearningState;
 
         expect(
@@ -908,7 +996,10 @@ describe("learning automation runtime safety", () => {
         } as never);
 
         state = JSON.parse(
-            await readFile(join(projectDir, ".ai-context", "learning", "state.json"), "utf-8"),
+            await readFile(
+                join(projectDir, ".ai-context", "learning", "state.json"),
+                "utf-8",
+            ),
         ) as LearningState;
 
         expect(
@@ -951,7 +1042,16 @@ describe("learning automation runtime safety", () => {
 
         expect(executeCommand).not.toHaveBeenCalled();
         expect(showToast).toHaveBeenCalledTimes(1);
-        expect(existsSync(join(projectDir, ".ai-context", "learning", "latest-recommendation.json"))).toBe(false);
+        expect(
+            existsSync(
+                join(
+                    projectDir,
+                    ".ai-context",
+                    "learning",
+                    "latest-recommendation.json",
+                ),
+            ),
+        ).toBe(false);
     });
 
     it("approval with no active recommendation is a safe no-op", async () => {
@@ -986,7 +1086,11 @@ describe("learning automation runtime safety", () => {
 
         expect(executeCommand).not.toHaveBeenCalled();
         expect(showToast).toHaveBeenCalledTimes(1);
-        expect(existsSync(join(projectDir, ".ai-context", "learning", "state.json"))).toBe(false);
+        expect(
+            existsSync(
+                join(projectDir, ".ai-context", "learning", "state.json"),
+            ),
+        ).toBe(false);
     });
 
     it("failed approval preserves actionable state for retry", async () => {
@@ -1035,7 +1139,10 @@ describe("learning automation runtime safety", () => {
         });
 
         const state = JSON.parse(
-            await readFile(join(projectDir, ".ai-context", "learning", "state.json"), "utf-8"),
+            await readFile(
+                join(projectDir, ".ai-context", "learning", "state.json"),
+                "utf-8",
+            ),
         ) as LearningState;
 
         expect(executeCommand).toHaveBeenCalledTimes(1);
@@ -1051,7 +1158,9 @@ describe("learning automation runtime safety", () => {
 describe("learning automation policy parsing", () => {
     it("honors explicit zero values in local policy", async () => {
         const projectDir = await createTempProject();
-        await mkdir(join(projectDir, ".ai-context", "learning"), { recursive: true });
+        await mkdir(join(projectDir, ".ai-context", "learning"), {
+            recursive: true,
+        });
         await writeFile(
             join(projectDir, ".ai-context", "learning", "policy.json"),
             JSON.stringify({
@@ -1086,7 +1195,9 @@ describe("learning automation policy parsing", () => {
 
     it("rejects invalid boolean enabled values and clamps confidence", async () => {
         const projectDir = await createTempProject();
-        await mkdir(join(projectDir, ".ai-context", "learning"), { recursive: true });
+        await mkdir(join(projectDir, ".ai-context", "learning"), {
+            recursive: true,
+        });
         await writeFile(
             join(projectDir, ".ai-context", "learning", "policy.json"),
             JSON.stringify({

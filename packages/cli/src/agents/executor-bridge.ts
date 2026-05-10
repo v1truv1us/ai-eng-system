@@ -8,7 +8,7 @@
  * 4. Execute local operations for file/search tasks
  */
 
-import { readFile, readdir, stat } from "node:fs/promises";
+import { readdir, readFile, stat } from "node:fs/promises";
 import { join } from "node:path";
 import type { AgentRegistry } from "./registry";
 import {
