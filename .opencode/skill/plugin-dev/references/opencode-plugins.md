@@ -100,20 +100,19 @@ export default (async ({ project, client, $, directory, worktree }) => {
 
 ### Command Format
 
-Commands are Markdown files with YAML frontmatter:
+Commands are Markdown files with table frontmatter:
 
 ```markdown
----
-description: Command description
-agent: agent-name
----
+| description | agent |
+|---|---|
+| Command description | agent-name |
 
 # Command Content
 
 Command instructions here with $ARGUMENTS placeholder...
 ```
 
-### Frontmatter Fields
+### Frontmatter Table
 
 | Field | Description |
 |--------|-------------|
@@ -133,10 +132,9 @@ Command instructions here with $ARGUMENTS placeholder...
 ### Command Example
 
 ```markdown
----
-description: Run tests with coverage
-agent: build
----
+| description | agent |
+|---|---|
+| Run tests with coverage | build |
 
 # Test Command
 
@@ -149,20 +147,19 @@ Focus on the failing tests and suggest fixes.
 
 ### Agent Format
 
-Agents are Markdown files with YAML frontmatter:
+Agents are Markdown files with table frontmatter:
 
 ```markdown
----
-description: Agent description
-mode: subagent
----
+| description | mode |
+|---|---|
+| Agent description | subagent |
 
 # System Prompt
 
 Agent system prompt here...
 ```
 
-### Frontmatter Fields
+### Frontmatter Table
 
 | Field | Description |
 |--------|-------------|
@@ -175,10 +172,9 @@ Agent system prompt here...
 ### Agent Example
 
 ```markdown
----
-description: Reviews code for quality and best practices
-mode: subagent
----
+| description | mode |
+|---|---|
+| Reviews code for quality and best practices | subagent |
 
 You are a senior code reviewer with 10+ years of experience...
 

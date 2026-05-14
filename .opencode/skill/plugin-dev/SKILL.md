@@ -99,12 +99,11 @@ tools:                 # Optional: tool restrictions
 
 **Claude Code Output:** Same format (YAML frontmatter)
 
-**OpenCode Output:** YAML frontmatter with OpenCode-compatible fields
+**OpenCode Output:** Table format
 ```markdown
----
-description: Description here
-agent: build
----
+| description | agent |
+|---|---|
+| Description here | build |
 ```
 
 ### Agent Frontmatter
@@ -125,12 +124,11 @@ tools:
 
 **Claude Code Output:** Same format (YAML frontmatter)
 
-**OpenCode Output:** YAML frontmatter with OpenCode-compatible fields
+**OpenCode Output:** Table format
 ```markdown
----
-description: Description here
-mode: subagent
----
+| description | mode |
+|---|---|
+| Description here | subagent |
 ```
 
 ### Skill Structure
@@ -328,7 +326,7 @@ Study existing components in ai-eng-system:
 - Invalid YAML syntax
 - Wrong file permissions
 
-## Integration with AI Engineering System
+## Integration with Ferg Engineering
 
 The plugin-dev system integrates seamlessly with existing ai-eng-system components:
 

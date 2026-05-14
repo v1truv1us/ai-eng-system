@@ -236,16 +236,10 @@ Based on the confidence assessment, I recommend:
 - **Task-dependent:** Not all tasks benefit equally; most effective for complex problems
 - **Not actual motivation:** This is statistical pattern-matching, not AI understanding incentives
 
-## Integration with AI Engineering System
+## Integration with Ferg Engineering System
 
 Use this skill to enhance:
 - `/plan` command prompts
 - `/review` multi-agent coordination  
 - Subagent persona definitions
 - Complex debugging sessions
-
-## See Also
-
-- `prompt-refinement` — For structuring prompts with TCRO framework
-- `content-optimization` — For applying these techniques across content types
-- `comprehensive-research` — For research agent enhancement with these techniques
