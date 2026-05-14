@@ -136,7 +136,9 @@ describe("AI Engineering System - Build System", () => {
         await mkdir(join(DOCS_DIR, "knowledge"), { recursive: true });
         await mkdir(join(DOCS_DIR, "decisions"), { recursive: true });
         await mkdir(join(DOCS_DIR, "quality"), { recursive: true });
-        await mkdir(join(DOCS_DIR, "reviews", "maintenance"), { recursive: true });
+        await mkdir(join(DOCS_DIR, "reviews", "maintenance"), {
+            recursive: true,
+        });
 
         // Write sample content
         await writeFile(
@@ -255,7 +257,9 @@ describe("AI Engineering System - Build System", () => {
             );
         }
 
-        if (!existsSync(join(TEMPLATES_DIR, "review", "maintenance-review.md"))) {
+        if (
+            !existsSync(join(TEMPLATES_DIR, "review", "maintenance-review.md"))
+        ) {
             await mkdir(join(TEMPLATES_DIR, "review"), { recursive: true });
             await writeFile(
                 join(TEMPLATES_DIR, "review", "maintenance-review.md"),
@@ -287,7 +291,9 @@ describe("AI Engineering System - Build System", () => {
             );
         }
 
-        if (!existsSync(join(DOCS_DIR, "reviews", "maintenance", "README.md"))) {
+        if (
+            !existsSync(join(DOCS_DIR, "reviews", "maintenance", "README.md"))
+        ) {
             await mkdir(join(DOCS_DIR, "reviews", "maintenance"), {
                 recursive: true,
             });
@@ -484,6 +490,29 @@ Missing description field.
             expect(existsSync(testAgentPath)).toBe(true);
         });
 
+        it("should build Pi package assets", async () => {
+            await runBuild();
+
+            const piDir = join(DIST_DIR, ".pi");
+            expect(existsSync(piDir)).toBe(true);
+            expect(
+                existsSync(join(piDir, "skills", "test-skill", "SKILL.md")),
+            ).toBe(true);
+            expect(existsSync(join(piDir, "prompts", "test-command.md"))).toBe(
+                true,
+            );
+
+            const promptContent = await readFile(
+                join(piDir, "prompts", "test-command.md"),
+                "utf-8",
+            );
+            expect(promptContent).toContain(
+                "description: A test command for validation",
+            );
+            expect(promptContent).not.toContain("agent: build");
+            expect(promptContent).not.toContain("subtask: true");
+        });
+
         it("should copy skills to dist", async () => {
             await runBuild();
 
@@ -513,23 +542,41 @@ Missing description field.
         it("should copy learning plugin support assets", async () => {
             await runBuild();
 
-            const learningPluginDir = join(TEST_ROOT, "plugins", "ai-eng-learning");
+            const learningPluginDir = join(
+                TEST_ROOT,
+                "plugins",
+                "ai-eng-learning",
+            );
             expect(existsSync(learningPluginDir)).toBe(true);
             expect(
                 existsSync(
-                    join(learningPluginDir, "templates", "knowledge", "index.md"),
+                    join(
+                        learningPluginDir,
+                        "templates",
+                        "knowledge",
+                        "index.md",
+                    ),
                 ),
-            ).toBe(true);
-            expect(
-                existsSync(join(learningPluginDir, "docs", "knowledge", "README.md")),
             ).toBe(true);
             expect(
                 existsSync(
-                    join(learningPluginDir, "templates", "decisions", "decision.md"),
+                    join(learningPluginDir, "docs", "knowledge", "README.md"),
                 ),
             ).toBe(true);
             expect(
-                existsSync(join(learningPluginDir, "docs", "decisions", "README.md")),
+                existsSync(
+                    join(
+                        learningPluginDir,
+                        "templates",
+                        "decisions",
+                        "decision.md",
+                    ),
+                ),
+            ).toBe(true);
+            expect(
+                existsSync(
+                    join(learningPluginDir, "docs", "decisions", "README.md"),
+                ),
             ).toBe(true);
             expect(
                 existsSync(
@@ -537,16 +584,29 @@ Missing description field.
                 ),
             ).toBe(true);
             expect(
-                existsSync(join(learningPluginDir, "docs", "quality", "README.md")),
-            ).toBe(true);
-            expect(
                 existsSync(
-                    join(learningPluginDir, "templates", "review", "maintenance-review.md"),
+                    join(learningPluginDir, "docs", "quality", "README.md"),
                 ),
             ).toBe(true);
             expect(
                 existsSync(
-                    join(learningPluginDir, "docs", "reviews", "maintenance", "README.md"),
+                    join(
+                        learningPluginDir,
+                        "templates",
+                        "review",
+                        "maintenance-review.md",
+                    ),
+                ),
+            ).toBe(true);
+            expect(
+                existsSync(
+                    join(
+                        learningPluginDir,
+                        "docs",
+                        "reviews",
+                        "maintenance",
+                        "README.md",
+                    ),
                 ),
             ).toBe(true);
         });

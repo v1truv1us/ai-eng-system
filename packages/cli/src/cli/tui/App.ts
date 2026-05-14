@@ -7,10 +7,10 @@
 import {
     BoxRenderable,
     type CliRendererConfig,
+    createCliRenderer,
     type RenderContext,
     TextAttributes,
     TextRenderable,
-    createCliRenderer,
 } from "@opentui/core";
 import { OpenCodeClient } from "../../backends/opencode/client";
 import type { RalphFlags } from "../../cli/flags";

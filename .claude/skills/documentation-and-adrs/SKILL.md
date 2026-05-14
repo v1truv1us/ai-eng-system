@@ -27,7 +27,7 @@ Record significant architectural decisions:
 - **Consequences**: What results from this decision (positive and negative)
 - **Status**: Proposed / Accepted / Deprecated / Superseded
 
-Save as: `docs/adr/{NNNN}-{title}.md`
+Save as: `docs/decisions/{YYYY-MM-DD}-{title}.md`
 
 ### API Documentation
 
@@ -99,3 +99,13 @@ Every project should have:
 - [ ] Public APIs are documented with examples
 - [ ] Inline comments explain "why" not "what"
 - [ ] README is current and actionable
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "The code is self-documenting" | Code tells you what. Documentation tells you why. Both are needed. |
+| "Documentation goes stale immediately" | Stale docs are a signal to update, not to stop documenting. |
+| "I'll document later" | Later never comes. Document alongside the implementation. |
+| "ADRs are too formal for this decision" | Even small decisions benefit from recorded rationale. Future you will thank present you. |
+| "No one reads documentation" | People read docs when they are stuck. Good docs prevent being stuck. |

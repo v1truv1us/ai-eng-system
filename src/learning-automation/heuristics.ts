@@ -34,7 +34,8 @@ const QUALITY_TERMS = [
     "quality gate",
 ];
 
-const FILE_TOKEN_PATTERN = /(?:[A-Za-z0-9_.-]+\/)*[A-Za-z0-9_.-]+\.[A-Za-z0-9]+/g;
+const FILE_TOKEN_PATTERN =
+    /(?:[A-Za-z0-9_.-]+\/)*[A-Za-z0-9_.-]+\.[A-Za-z0-9]+/g;
 
 function clampConfidence(value: number): number {
     return Math.max(0, Math.min(0.99, Number(value.toFixed(2))));
@@ -81,10 +82,10 @@ function buildSuggestedArguments(
     const fileScope = files.length > 0 ? ` for ${files.join(", ")}` : "";
 
     if (commandId === "decision-journal") {
-        return `\"Document the durable ${focus} decisions from this /ai-eng/${sourceCommand} run${fileScope}\"`;
+        return `"Document the durable ${focus} decisions from this /ai-eng/${sourceCommand} run${fileScope}"`;
     }
 
-    return `\"Capture reusable validation and risk checks from this /ai-eng/${sourceCommand} run${fileScope}\"`;
+    return `"Capture reusable validation and risk checks from this /ai-eng/${sourceCommand} run${fileScope}"`;
 }
 
 function buildTargetFiles(

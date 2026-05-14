@@ -101,3 +101,13 @@ Resolve conflicts promptly. Do not let branches diverge for days.
 - [ ] Commit messages follow the format
 - [ ] Branch is up to date with main
 - [ ] PR description includes test plan
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "I'll commit everything at the end" | A single large commit is hard to review, hard to revert, and loses intermediate context. |
+| "WIP commits are fine, I'll squash later" | If you squash, you lose the save points. If you don't, you merge messy history. |
+| "This change is too small for its own commit" | Small changes are exactly what make good atomic commits. |
+| "I'll rebase later when the branch is done" | Letting branches diverge creates painful merge conflicts. Rebase frequently. |
+| "Feature flags are overkill for this" | Feature flags enable merging incomplete work safely. They prevent long-lived branches. |

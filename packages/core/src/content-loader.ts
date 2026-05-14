@@ -2,7 +2,7 @@
  * Content loading utilities for ai-eng-system core package
  */
 
-import { readFile, readdir, stat } from "node:fs/promises";
+import { readdir, readFile, stat } from "node:fs/promises";
 import { join } from "node:path";
 import {
     getContentPath,

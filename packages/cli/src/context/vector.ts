@@ -59,7 +59,9 @@ export class TextTokenizer {
         for (const text of texts) {
             const words = this.tokenize(text);
             documents.push(words);
-            words.forEach((word) => allWords.add(word));
+            words.forEach((word) => {
+                allWords.add(word);
+            });
         }
 
         const wordList = Array.from(allWords);

@@ -301,6 +301,16 @@ claude plugin add https://github.com/v1truv1us/ai-eng-system
 - `references/skill-format.md` - Skills specification
 - `references/opencode-tools.md` - Custom tool development
 
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "I'll test the plugin after I finish all features" | Test incrementally. Untested plugins accumulate bugs that are hard to trace. |
+| "The canonical format is optional" | Canonical format ensures cross-platform compatibility. Use it or break one platform. |
+| "I don't need to document platform differences" | Platform differences are where plugins break. Document them or users will hit them. |
+| "Security is not a concern for internal plugins" | Internal plugins run with the same privileges as external ones. Validate inputs always. |
+| "The frontmatter fields are self-explanatory" | Missing or malformed frontmatter causes silent failures. Validate before deploying. |
+
 ### Examples
 
 Study existing components in ai-eng-system:

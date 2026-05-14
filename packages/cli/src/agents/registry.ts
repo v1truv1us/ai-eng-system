@@ -8,7 +8,7 @@
  * 4. Provide capability-based queries
  */
 
-import { readFile, readdir } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import { extname, join } from "node:path";
 import { type AgentDefinition, AgentType } from "./types";
 

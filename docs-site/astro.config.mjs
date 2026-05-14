@@ -1,9 +1,8 @@
 import mdx from "@astrojs/mdx";
+import sitemap from "@astrojs/sitemap";
 import starlight from "@astrojs/starlight";
 // @ts-check
 import { defineConfig } from "astro/config";
-
-import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({

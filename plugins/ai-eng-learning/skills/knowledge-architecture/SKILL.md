@@ -110,3 +110,13 @@ docs/knowledge/
 - Decisions embedded in random meeting notes
 - Hypotheses presented as settled facts
 - Runtime tooling assumptions in milestone 1
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "We can organize the knowledge base later" | Disorganized knowledge is lost knowledge. Structure it while the context is fresh. |
+| "One big document is easier to maintain" | Giant undifferentiated notes are impossible to navigate. Split by domain. |
+| "Hypotheses should be marked as facts for clarity" | Marking uncertainty as fact corrupts the knowledge base. Be honest about what is known. |
+| "Rules don't need rationale" | Rules without rationale are ignored. Explain the why behind each rule. |
+| "We don't need a knowledge base for this project" | Every project accumulates knowledge. Without a home for it, it lives in people's heads. |

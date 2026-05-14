@@ -3,8 +3,7 @@
  * Provides comprehensive validation for installation targets
  */
 
-import fs from "node:fs";
-import { constants } from "node:fs";
+import fs, { constants } from "node:fs";
 import path from "node:path";
 
 /**

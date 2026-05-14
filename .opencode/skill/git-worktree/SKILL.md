@@ -41,3 +41,13 @@ After setting up or managing worktrees, rate your confidence from **0.0 to 1.0**
 - **0.0-0.2**: Worktree management is chaotic, risk of lost work or conflicts
 
 Identify areas of uncertainty: Are there worktrees you don't recognize? Do you know which branches are still needed? What's the risk of worktree-related issues?
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "I'll just switch branches instead of creating a worktree" | Switching branches loses uncommitted work and breaks running processes. Worktrees enable true parallelism. |
+| "I don't need to clean up old worktrees" | Stale worktrees clutter the filesystem and confuse branch state. Prune regularly. |
+| "Naming doesn't matter, I'll remember what it's for" | You won't. Descriptive names prevent confusion when juggling multiple worktrees. |
+| "I can share this worktree with another session" | Shared worktrees cause git lock conflicts. Each session gets its own worktree. |
+| "The worktree won't remove, I'll just leave it" | Force remove or manually delete. Stale worktrees cause git warnings and confusion. |

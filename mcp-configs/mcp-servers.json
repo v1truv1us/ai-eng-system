@@ -1,0 +1,86 @@
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      },
+      "description": "GitHub repository management, issues, PRs, and code search"
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "${WORKSPACE}"],
+      "description": "File system access for reading, writing, and searching files"
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "description": "Structured thinking and planning capabilities"
+    },
+    "puppeteer": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
+      "description": "Browser automation for testing and scraping"
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-playwright"],
+      "description": "End-to-end browser testing with Playwright"
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"],
+      "description": "Documentation lookup for libraries and frameworks"
+    },
+    "supabase": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-supabase"],
+      "env": {
+        "SUPABASE_ACCESS_TOKEN": "${SUPABASE_TOKEN}"
+      },
+      "description": "Supabase database management and queries"
+    },
+    "vercel": {
+      "command": "npx",
+      "args": ["-y", "@vercel/mcp"],
+      "env": {
+        "VERCEL_API_TOKEN": "${VERCEL_TOKEN}"
+      },
+      "description": "Vercel deployment management and analytics"
+    },
+    "railway": {
+      "command": "npx",
+      "args": ["-y", "@railway/mcp"],
+      "env": {
+        "RAILWAY_API_TOKEN": "${RAILWAY_TOKEN}"
+      },
+      "description": "Railway infrastructure management"
+    },
+    "slack": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-slack"],
+      "env": {
+        "SLACK_BOT_TOKEN": "${SLACK_BOT_TOKEN}",
+        "SLACK_TEAM_ID": "${SLACK_TEAM_ID}"
+      },
+      "description": "Slack messaging and channel management"
+    },
+    "sentry": {
+      "command": "npx",
+      "args": ["-y", "@getsentry/mcp"],
+      "env": {
+        "SENTRY_AUTH_TOKEN": "${SENTRY_TOKEN}"
+      },
+      "description": "Sentry error tracking and performance monitoring"
+    },
+    "cloudflare": {
+      "command": "npx",
+      "args": ["-y", "cloudflare-mcp"],
+      "env": {
+        "CLOUDFLARE_API_TOKEN": "${CLOUDFLARE_TOKEN}"
+      },
+      "description": "Cloudflare DNS, Workers, KV, and R2 management"
+    }
+  }
+}

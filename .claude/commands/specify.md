@@ -23,7 +23,7 @@ outputs:
 
 Create a comprehensive feature specification: $ARGUMENTS
 
-> **Phase 2 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Review
+> **Phase 2 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Verify → Review
 
 Load `skills/spec-driven-development/SKILL.md` and `skills/prompt-refinement/SKILL.md` (phase: specify).
 

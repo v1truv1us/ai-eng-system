@@ -64,3 +64,13 @@ Write a concise proposal covering:
 - [ ] At least three approaches were considered
 - [ ] Each approach was scored against consistent criteria
 - [ ] A clear recommendation exists with accepted tradeoffs documented
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "The first idea is usually fine" | First ideas tend to be the most obvious, not the most effective. |
+| "We can refine later" | Later refinement is more expensive than early exploration. |
+| "This is too small for structured thinking" | Even small features benefit from a minute of structured evaluation. |
+| "Three approaches is too many for this" | Two approaches is the minimum for comparison. Three reveals non-obvious options. |
+| "The stakeholder already knows what they want" | Stakeholders describe problems, not solutions. Explore the solution space. |

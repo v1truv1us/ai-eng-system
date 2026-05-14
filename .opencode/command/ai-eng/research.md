@@ -23,7 +23,7 @@ outputs:
 
 Conduct comprehensive research for: $ARGUMENTS
 
-> **Phase 1 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Review
+> **Phase 1 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Verify → Review
 
 Conduct research systematically using appropriate agents, gather evidence from multiple sources, and synthesize findings into actionable insights.
 

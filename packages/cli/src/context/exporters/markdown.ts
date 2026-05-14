@@ -53,13 +53,17 @@ function toMarkdown(envelope: CommandContextEnvelope): string {
     if (envelope.filesTouched && envelope.filesTouched.length > 0) {
         lines.push("");
         lines.push("## Files Touched");
-        envelope.filesTouched.forEach((f) => lines.push(`- ${f}`));
+        envelope.filesTouched.forEach((f) => {
+            lines.push(`- ${f}`);
+        });
     }
 
     if (envelope.decisions && envelope.decisions.length > 0) {
         lines.push("");
         lines.push("## Decisions");
-        envelope.decisions.forEach((d) => lines.push(`- ${d}`));
+        envelope.decisions.forEach((d) => {
+            lines.push(`- ${d}`);
+        });
     }
 
     if (envelope.error) {

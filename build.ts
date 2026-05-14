@@ -27,8 +27,8 @@ import { existsSync, watch } from "node:fs";
 import {
     copyFile,
     mkdir,
-    readFile,
     readdir,
+    readFile,
     rm,
     writeFile,
 } from "node:fs/promises";
@@ -47,6 +47,7 @@ const DIST_DIR = join(ROOT, "dist");
 
 const CLAUDE_DIR = join(DIST_DIR, ".claude-plugin");
 const DIST_OPENCODE_DIR = join(DIST_DIR, ".opencode");
+const DIST_PI_DIR = join(DIST_DIR, ".pi");
 const ROOT_OPENCODE_DIR = join(ROOT, ".opencode");
 const ROOT_CLAUDE_DIR = join(ROOT, ".claude");
 const ROOT_CLAUDE_PLUGIN_DIR = join(ROOT, ".claude-plugin");
@@ -402,7 +403,9 @@ async function validateOpenCodeOutput(opencodeRoot: string): Promise<void> {
     // Validate skills (if present), preserving nested namespace folders.
     if (existsSync(skillRoot)) {
         const skillFiles = await getMarkdownFiles(skillRoot);
-        for (const skillMdPath of skillFiles.filter((fp) => fp.endsWith("/SKILL.md"))) {
+        for (const skillMdPath of skillFiles.filter((fp) =>
+            fp.endsWith("/SKILL.md"),
+        )) {
             const skillDirName = basename(dirname(skillMdPath));
 
             try {
@@ -564,6 +567,53 @@ async function buildOpenCode(): Promise<void> {
     await validateOpenCodeOutput(DIST_OPENCODE_DIR);
 }
 
+function transformCommandMarkdownForPi(
+    markdown: string,
+    filePathForErrors: string,
+): { fileName: string; markdown: string } {
+    const parsed = parseFrontmatterStrict(markdown, filePathForErrors);
+    const meta = { ...parsed.meta };
+    const rawName = String(
+        meta.name || basename(filePathForErrors, ".md"),
+    ).trim();
+    const fileName = `${rawName.replaceAll("/", "-")}.md`;
+
+    const piMeta: Record<string, unknown> = {};
+    if (meta.description) {
+        piMeta.description = meta.description;
+    }
+
+    const fm = Object.keys(piMeta).length
+        ? `---\n${serializeFrontmatter(piMeta)}\n---\n`
+        : "";
+
+    return {
+        fileName,
+        markdown: `${fm}${parsed.body}`,
+    };
+}
+
+async function buildPi(): Promise<void> {
+    const promptsDir = join(DIST_PI_DIR, "prompts");
+    const skillsDir = join(DIST_PI_DIR, "skills");
+
+    await rm(DIST_PI_DIR, { recursive: true, force: true });
+    await mkdir(promptsDir, { recursive: true });
+    await mkdir(skillsDir, { recursive: true });
+
+    const commandFiles = await getMarkdownFiles(join(CONTENT_DIR, "commands"));
+    for (const src of commandFiles) {
+        const content = await readFile(src, "utf-8");
+        const transformed = transformCommandMarkdownForPi(content, src);
+        await writeFile(
+            join(promptsDir, transformed.fileName),
+            transformed.markdown,
+        );
+    }
+
+    await copySkillsPreservePath(SKILLS_DIR, skillsDir);
+}
+
 async function copyDirRecursive(
     srcDir: string,
     destDir: string,
@@ -595,6 +645,21 @@ async function copyPromptOptimization(): Promise<void> {
         PROMPT_OPT_DIR,
         join(DIST_DIR, "prompt-optimization"),
     );
+}
+
+async function syncToPiPackage(): Promise<void> {
+    const piPackageDir = join(ROOT, "packages", "pi");
+    await rm(join(piPackageDir, "skills"), { recursive: true, force: true });
+    await rm(join(piPackageDir, "prompts"), { recursive: true, force: true });
+    await copyDirRecursive(
+        join(DIST_PI_DIR, "skills"),
+        join(piPackageDir, "skills"),
+    );
+    await copyDirRecursive(
+        join(DIST_PI_DIR, "prompts"),
+        join(piPackageDir, "prompts"),
+    );
+    console.log("  ✓ Synced Pi package assets");
 }
 
 /**
@@ -877,17 +942,63 @@ interface PluginConfig {
 
 const PLUGIN_MAP: Record<string, PluginConfig> = {
     "ai-eng-core": {
-        commands: ["plan", "work", "review", "specify", "research", "simplify", "context", "init"],
-        agents: ["architect-advisor", "full-stack-developer", "backend-architect", "frontend-reviewer", "subagent-orchestration", "java-pro"],
-        skills: ["comprehensive-research", "prompt-refinement", "incentive-prompting", "text-cleanup", "code-simplification", "incremental-implementation", "ai-eng", "workflow"],
-        description: "Core workflow: plan, work, review cycle with research and context engineering",
+        commands: [
+            "plan",
+            "work",
+            "review",
+            "specify",
+            "research",
+            "simplify",
+            "context",
+            "init",
+        ],
+        agents: [
+            "architect-advisor",
+            "full-stack-developer",
+            "backend-architect",
+            "frontend-reviewer",
+            "subagent-orchestration",
+            "java-pro",
+        ],
+        skills: [
+            "comprehensive-research",
+            "prompt-refinement",
+            "incentive-prompting",
+            "text-cleanup",
+            "code-simplification",
+            "incremental-implementation",
+            "ai-eng",
+            "workflow",
+        ],
+        description:
+            "Core workflow: plan, work, review cycle with research and context engineering",
         category: "development",
-        keywords: ["ai", "engineering", "workflow", "planning", "review", "context-engineering"],
-        tags: ["productivity", "workflow", "architecture", "context-engineering"],
+        keywords: [
+            "ai",
+            "engineering",
+            "workflow",
+            "planning",
+            "review",
+            "context-engineering",
+        ],
+        tags: [
+            "productivity",
+            "workflow",
+            "architecture",
+            "context-engineering",
+        ],
         hasHooks: true,
     },
     "ai-eng-learning": {
-        commands: ["knowledge-architecture", "decision-journal", "quality-gate", "maintenance-review", "learning-approve", "learning-dismiss", "learning-snooze"],
+        commands: [
+            "knowledge-architecture",
+            "decision-journal",
+            "quality-gate",
+            "maintenance-review",
+            "learning-approve",
+            "learning-dismiss",
+            "learning-snooze",
+        ],
         agents: [],
         skills: ["knowledge-architecture"],
         assetDirs: [
@@ -900,40 +1011,118 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "templates/quality",
             "templates/review",
         ],
-        description: "Learning workflows for knowledge mapping, decisions, quality gates, and maintenance reviews",
+        description:
+            "Learning workflows for knowledge mapping, decisions, quality gates, and maintenance reviews",
         category: "development",
-        keywords: ["learning", "knowledge", "decisions", "quality", "maintenance"],
-        tags: ["learning-workflows", "knowledge-management", "quality-gates", "maintenance"],
+        keywords: [
+            "learning",
+            "knowledge",
+            "decisions",
+            "quality",
+            "maintenance",
+        ],
+        tags: [
+            "learning-workflows",
+            "knowledge-management",
+            "quality-gates",
+            "maintenance",
+        ],
     },
     "ai-eng-research": {
-        commands: ["deep-research", "research-companion", "context7-docs", "fact-check", "knowledge-capture"],
-        agents: ["ai-engineer", "docs-writer", "documentation-specialist", "ml-engineer"],
+        commands: [
+            "deep-research",
+            "research-companion",
+            "context7-docs",
+            "fact-check",
+            "knowledge-capture",
+        ],
+        agents: [
+            "ai-engineer",
+            "docs-writer",
+            "documentation-specialist",
+            "ml-engineer",
+        ],
         skills: ["knowledge-capture", "content-optimization"],
-        description: "Deep research, knowledge capture, and documentation tools",
+        description:
+            "Deep research, knowledge capture, and documentation tools",
         category: "development",
         keywords: ["research", "documentation", "knowledge", "fact-checking"],
         tags: ["research-orchestration", "documentation", "knowledge-capture"],
     },
     "ai-eng-devops": {
-        commands: ["deploy", "coolify", "docker", "k8s", "cloudflare", "monitoring", "sentry", "github", "git-workflow"],
-        agents: ["deployment-engineer", "infrastructure-builder", "aws-architect", "monitoring-expert", "cost-optimizer", "data-engineer"],
+        commands: [
+            "deploy",
+            "coolify",
+            "docker",
+            "k8s",
+            "cloudflare",
+            "monitoring",
+            "sentry",
+            "github",
+            "git-workflow",
+        ],
+        agents: [
+            "deployment-engineer",
+            "infrastructure-builder",
+            "aws-architect",
+            "monitoring-expert",
+            "cost-optimizer",
+            "data-engineer",
+        ],
         skills: ["coolify-deploy", "git-worktree"],
         description: "Infrastructure, deployment, and DevOps automation",
         category: "development",
-        keywords: ["devops", "deployment", "infrastructure", "monitoring", "kubernetes"],
+        keywords: [
+            "devops",
+            "deployment",
+            "infrastructure",
+            "monitoring",
+            "kubernetes",
+        ],
         tags: ["devops", "deployment", "infrastructure", "monitoring"],
     },
     "ai-eng-quality": {
-        commands: ["code-review", "security-scan", "socket-security", "api-test", "playwright", "chrome-debug", "ios-sim", "xcodebuild", "db-optimize"],
-        agents: ["code-reviewer", "security-scanner", "test-generator", "performance-engineer", "database-optimizer", "mobile-developer", "api-builder-enhanced"],
+        commands: [
+            "code-review",
+            "security-scan",
+            "socket-security",
+            "api-test",
+            "playwright",
+            "chrome-debug",
+            "ios-sim",
+            "xcodebuild",
+            "db-optimize",
+        ],
+        agents: [
+            "code-reviewer",
+            "security-scanner",
+            "test-generator",
+            "performance-engineer",
+            "database-optimizer",
+            "mobile-developer",
+            "api-builder-enhanced",
+        ],
         skills: ["code-review-and-quality", "debugging-and-error-recovery"],
-        description: "Testing, security scanning, code review, and quality assurance",
+        description:
+            "Testing, security scanning, code review, and quality assurance",
         category: "development",
-        keywords: ["testing", "security", "code-review", "quality", "performance"],
+        keywords: [
+            "testing",
+            "security",
+            "code-review",
+            "quality",
+            "performance",
+        ],
         tags: ["quality-assurance", "security", "code-review", "testing"],
     },
     "ai-eng-content": {
-        commands: ["content-optimize", "seo", "verbalize", "slack", "ralph-wiggum"],
+        commands: [
+            "content-optimize",
+            "seo",
+            "verbalize",
+            "slack",
+            "ralph-wiggum",
+        ],
         agents: ["seo-specialist", "text-cleaner", "prompt-optimizer"],
         skills: [],
         description: "Content optimization, SEO, and communication tools",
@@ -942,10 +1131,25 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
         tags: ["content-optimization", "seo", "communication"],
     },
     "ai-eng-plugin-dev": {
-        commands: ["create-agent", "create-command", "create-skill", "create-tool", "create-plugin", "agent-analyzer"],
-        agents: ["agent-creator", "command-creator", "skill-creator", "tool-creator", "plugin-validator", "agent-developer"],
+        commands: [
+            "create-agent",
+            "create-command",
+            "create-skill",
+            "create-tool",
+            "create-plugin",
+            "agent-analyzer",
+        ],
+        agents: [
+            "agent-creator",
+            "command-creator",
+            "skill-creator",
+            "tool-creator",
+            "plugin-validator",
+            "agent-developer",
+        ],
         skills: ["plugin-dev", "monorepo-initialization"],
-        description: "Meta-tooling for creating plugins, agents, commands, and skills",
+        description:
+            "Meta-tooling for creating plugins, agents, commands, and skills",
         category: "development",
         keywords: ["plugin", "agent", "meta-tooling", "code-generation"],
         tags: ["plugin-development", "meta-tooling", "code-generation"],
@@ -1059,7 +1263,10 @@ async function syncToMarketplacePlugins(): Promise<void> {
 
         // Copy plugin-specific support assets such as templates and docs.
         for (const assetDir of config.assetDirs ?? []) {
-            await copyDirRecursive(join(ROOT, assetDir), join(pluginDir, assetDir));
+            await copyDirRecursive(
+                join(ROOT, assetDir),
+                join(pluginDir, assetDir),
+            );
         }
 
         // Generate plugin.json
@@ -1086,15 +1293,19 @@ async function syncToMarketplacePlugins(): Promise<void> {
             const hooksJson = {
                 hooks: [
                     {
-                        matcher: { event: "notification", type: "session_start" },
+                        matcher: {
+                            event: "notification",
+                            type: "session_start",
+                        },
                         hooks: [
                             {
                                 type: "command",
-                                command: "echo '🔧 AI Engineering System loaded. Key commands: /plan, /work, /review, /research'"
-                            }
-                        ]
-                    }
-                ]
+                                command:
+                                    "echo '🔧 AI Engineering System loaded. Key commands: /plan, /work, /review, /research'",
+                            },
+                        ],
+                    },
+                ],
             };
             await writeFile(
                 join(pluginDir, "hooks.json"),
@@ -1102,7 +1313,9 @@ async function syncToMarketplacePlugins(): Promise<void> {
             );
         }
 
-        console.log(`  ✓ Generated plugin: ${pluginName} (${config.commands.length} commands, ${config.agents.length} agents)`);
+        console.log(
+            `  ✓ Generated plugin: ${pluginName} (${config.commands.length} commands, ${config.agents.length} agents)`,
+        );
     }
 
     console.log("  ✓ Synced all marketplace plugins");
@@ -1124,7 +1337,8 @@ async function generateMarketplaceJson(): Promise<void> {
             email: "contact@v1truv1us.dev",
         },
         metadata: {
-            description: "AI Engineering System - Modular development tools with context engineering, research orchestration, and specialized agents",
+            description:
+                "AI Engineering System - Modular development tools with context engineering, research orchestration, and specialized agents",
             version: packageJson.version,
         },
         plugins: Object.entries(PLUGIN_MAP).map(([name, config]) => ({
@@ -1333,6 +1547,7 @@ async function buildAll(): Promise<void> {
     // Build to dist/
     await buildClaude();
     await buildOpenCode();
+    await buildPi();
     await copySkillsToDist();
 
     // Skip steps that require the full project tree when running in test mode
@@ -1341,11 +1556,12 @@ async function buildAll(): Promise<void> {
         await copyCLI();
         await buildNpmEntrypoint();
 
-        // Sync to committed directories (required for marketplace)
-        console.log("\n📦 Syncing to marketplace directories...");
+        // Sync to committed directories (required for marketplace/packages)
+        console.log("\n📦 Syncing generated assets...");
         await syncToLocalClaude();
         await syncToMarketplacePlugins();
         await generateMarketplaceJson();
+        await syncToPiPackage();
     }
 
     // Validate agents after build

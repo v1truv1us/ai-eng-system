@@ -19,7 +19,7 @@ outputs:
 
 Review code changes: $ARGUMENTS
 
-> **Phase 5 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Review
+> **Phase 6 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Verify → Review
 
  Approach this review systematically. Examine code from multiple expert perspectives, identify issues across all quality dimensions, and provide actionable recommendations.
 

@@ -4,8 +4,8 @@ import { afterEach, beforeEach, describe, expect, it } from "bun:test";
 import {
     existsSync,
     mkdirSync,
-    readFileSync,
     readdirSync,
+    readFileSync,
     rmSync,
 } from "node:fs";
 import { tmpdir } from "node:os";

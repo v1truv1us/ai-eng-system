@@ -13,8 +13,8 @@ import {
     applyApprovedSuggestion,
     applyDismissedSuggestion,
     applyExecutedSuggestion,
-    applySurfacedSuggestion,
     applySnoozedSuggestion,
+    applySurfacedSuggestion,
     normalizeLearningState,
     selectSuggestion,
 } from "./suggestions.js";
@@ -31,7 +31,9 @@ const ALLOWED_APPROVAL_COMMANDS = new Set<LearningRecommendation["commandId"]>([
     "quality-gate",
 ]);
 
-function normalizeControlCommandName(name: string): LearningControlCommandId | null {
+function normalizeControlCommandName(
+    name: string,
+): LearningControlCommandId | null {
     const normalized = name.trim().replace(/^\/+/, "");
     const segments = normalized.split("/");
     const command = segments[segments.length - 1]?.toLowerCase();
@@ -47,7 +49,10 @@ function parseSnoozeDurationMs(
     argumentsText: string,
     defaultSnoozeMinutes: number,
 ): number {
-    const match = argumentsText.trim().toLowerCase().match(/^(\d+)\s*([mhd])?$/);
+    const match = argumentsText
+        .trim()
+        .toLowerCase()
+        .match(/^(\d+)\s*([mhd])?$/);
     if (!match) {
         return defaultSnoozeMinutes * MINUTE_MS;
     }
@@ -58,7 +63,12 @@ function parseSnoozeDurationMs(
     }
 
     const unit = match[2] ?? "m";
-    const multiplier = unit === "d" ? 24 * 60 * 60 * 1000 : unit === "h" ? 60 * 60 * 1000 : 60 * 1000;
+    const multiplier =
+        unit === "d"
+            ? 24 * 60 * 60 * 1000
+            : unit === "h"
+              ? 60 * 60 * 1000
+              : 60 * 1000;
 
     return Math.min(value * multiplier, MAX_SNOOZE_MS);
 }
@@ -67,8 +77,15 @@ function loadActionableRecommendation(
     projectDir: string,
     policy: ReturnType<typeof loadLearningPolicy>,
     now: number,
-): { recommendation: LearningRecommendation; state: ReturnType<typeof normalizeLearningState> } | null {
-    const state = normalizeLearningState(loadLearningState(projectDir), policy, now);
+): {
+    recommendation: LearningRecommendation;
+    state: ReturnType<typeof normalizeLearningState>;
+} | null {
+    const state = normalizeLearningState(
+        loadLearningState(projectDir),
+        policy,
+        now,
+    );
     const latestRecommendation = loadLatestRecommendation(projectDir);
     const activeRecommendation = state.activeRecommendation;
 
@@ -121,7 +138,9 @@ function buildExecutableLearningCommand(
 
 function matchesRecommendation(
     recommendation: LearningRecommendation,
-    activeRecommendation: ReturnType<typeof normalizeLearningState>["activeRecommendation"],
+    activeRecommendation: ReturnType<
+        typeof normalizeLearningState
+    >["activeRecommendation"],
 ): boolean {
     return (
         activeRecommendation?.id === recommendation.id &&
@@ -156,7 +175,11 @@ export function createLearningAutomationRuntime({
         await withLearningStateLock(projectDir, async () => {
             const policy = loadLearningPolicy(projectDir);
             const currentTime = now();
-            const loaded = loadActionableRecommendation(projectDir, policy, currentTime);
+            const loaded = loadActionableRecommendation(
+                projectDir,
+                policy,
+                currentTime,
+            );
 
             if (!loaded) {
                 return;
@@ -164,21 +187,28 @@ export function createLearningAutomationRuntime({
 
             const { recommendation, state } = loaded;
             if (state.activeRecommendation?.status === "approving") {
-                statusMessage = "Learning suggestion approval already in progress.";
+                statusMessage =
+                    "Learning suggestion approval already in progress.";
                 return;
             }
 
-            const executableCommand = buildExecutableLearningCommand(recommendation);
+            const executableCommand =
+                buildExecutableLearningCommand(recommendation);
 
             if (!executableCommand) {
-                statusMessage = "Learning recommendation is invalid or no longer actionable.";
+                statusMessage =
+                    "Learning recommendation is invalid or no longer actionable.";
                 return;
             }
 
             if (commandId === "learning-dismiss") {
                 saveLearningState(
                     projectDir,
-                    applyDismissedSuggestion(state, recommendation, currentTime),
+                    applyDismissedSuggestion(
+                        state,
+                        recommendation,
+                        currentTime,
+                    ),
                 );
                 statusMessage = "Learning suggestion dismissed.";
                 statusVariant = "info";
@@ -228,7 +258,8 @@ export function createLearningAutomationRuntime({
                             approval.recommendation,
                             currentState.activeRecommendation,
                         ) ||
-                        currentState.activeRecommendation?.status !== "approving"
+                        currentState.activeRecommendation?.status !==
+                            "approving"
                     ) {
                         return;
                     }
@@ -252,7 +283,8 @@ export function createLearningAutomationRuntime({
                             approval.recommendation,
                             currentState.activeRecommendation,
                         ) ||
-                        currentState.activeRecommendation?.status !== "approving"
+                        currentState.activeRecommendation?.status !==
+                            "approving"
                     ) {
                         return;
                     }
@@ -263,7 +295,9 @@ export function createLearningAutomationRuntime({
                             currentState,
                             approval.recommendation,
                             approval.approvedAt,
-                            error instanceof Error ? error.message : String(error),
+                            error instanceof Error
+                                ? error.message
+                                : String(error),
                         ),
                     );
                 });
@@ -285,7 +319,9 @@ export function createLearningAutomationRuntime({
             return;
         }
 
-        const controlCommand = normalizeControlCommandName(event.properties.name);
+        const controlCommand = normalizeControlCommandName(
+            event.properties.name,
+        );
         if (controlCommand) {
             await handleControlCommand(
                 controlCommand,
@@ -295,7 +331,11 @@ export function createLearningAutomationRuntime({
         }
 
         const currentTime = now();
-        const candidates = buildLearningCandidates(event, projectDir, currentTime);
+        const candidates = buildLearningCandidates(
+            event,
+            projectDir,
+            currentTime,
+        );
         let notification:
             | {
                   recommendation: LearningRecommendation;
@@ -322,7 +362,8 @@ export function createLearningAutomationRuntime({
                 return;
             }
 
-            const previousLatestRecommendation = loadLatestRecommendation(projectDir);
+            const previousLatestRecommendation =
+                loadLatestRecommendation(projectDir);
             const nextState = applySurfacedSuggestion(
                 state,
                 recommendation,
@@ -349,7 +390,8 @@ export function createLearningAutomationRuntime({
         } catch {
             await withLearningStateLock(projectDir, async () => {
                 const currentState = loadLearningState(projectDir);
-                const currentLatestRecommendation = loadLatestRecommendation(projectDir);
+                const currentLatestRecommendation =
+                    loadLatestRecommendation(projectDir);
 
                 if (
                     !matchesRecommendation(
@@ -357,7 +399,8 @@ export function createLearningAutomationRuntime({
                         currentState.activeRecommendation,
                     ) ||
                     currentState.activeRecommendation?.status !== "surfaced" ||
-                    currentLatestRecommendation?.id !== surfacedNotification.recommendation.id ||
+                    currentLatestRecommendation?.id !==
+                        surfacedNotification.recommendation.id ||
                     currentLatestRecommendation?.dedupeKey !==
                         surfacedNotification.recommendation.dedupeKey ||
                     currentLatestRecommendation?.commandId !==
@@ -366,7 +409,10 @@ export function createLearningAutomationRuntime({
                     return;
                 }
 
-                saveLearningState(projectDir, surfacedNotification.previousState);
+                saveLearningState(
+                    projectDir,
+                    surfacedNotification.previousState,
+                );
                 if (surfacedNotification.previousLatestRecommendation) {
                     saveLatestRecommendation(
                         projectDir,

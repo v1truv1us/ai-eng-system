@@ -99,3 +99,13 @@ Build user interfaces with component architecture, design system consistency, re
 - [ ] Color contrast meets WCAG 2.1 AA standards
 - [ ] Responsive at standard breakpoints
 - [ ] Automated accessibility audit passes
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "Accessibility can be added later" | Retrofitting accessibility is much more expensive than building it in. |
+| "This is an internal tool, accessibility doesn't matter" | Internal tools benefit from keyboard navigation and screen reader support too. |
+| "The design system is too restrictive" | Consistency speeds up both development and user comprehension. |
+| "I'll test responsive design on my phone" | Test at all standard breakpoints, not just one device. |
+| "The component looks good, it's done" | Visual correctness is not functional correctness. Test keyboard nav and screen readers. |

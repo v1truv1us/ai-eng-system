@@ -5,6 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 // scripts/install-opencode.js
 import { parse as parseJsonc } from "jsonc-parser";
+
 const __filename2 = fileURLToPath(import.meta.url);
 const __dirname2 = path.dirname(__filename2);
 const packageRoot = path.dirname(__dirname2);
@@ -55,6 +56,7 @@ function isPluginReferenced(configPath) {
         return false;
     }
 }
+
 import * as os from "node:os";
 
 function findOpenCodeConfig(startDir) {

@@ -96,3 +96,13 @@ Use browser DevTools to verify runtime behavior, debug issues, and measure perfo
 - [ ] Network requests succeed with correct payloads
 - [ ] Performance meets acceptable thresholds
 - [ ] Accessibility properties are correct in the DOM
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "It looks fine in the code" | Code can be correct and still render incorrectly due to CSS, browser bugs, or dynamic state. |
+| "Unit tests cover this" | Unit tests cannot catch rendering issues, layout bugs, or network timing problems. |
+| "DevTools is too slow to use regularly" | A 30-second DevTools check catches issues that take hours to debug later. |
+| "I'll test it in production" | Production is not a testing environment. Catch issues before users do. |
+| "The performance numbers look good on my machine" | Your machine is not your users' machine. Profile on realistic hardware and network conditions. |

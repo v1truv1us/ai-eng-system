@@ -1,14 +1,15 @@
 # AI Engineering System
 
-AI engineering workflow toolkit for Claude Code and OpenCode with 57 commands (42 ai-eng namespace + 5 lifecycle aliases + 5 runtime + 5 orchestration), 38 specialized agents, and 32 reusable skills covering the full development lifecycle from idea to production.
+AI engineering workflow toolkit for Claude Code and OpenCode with namespaced commands, 38 specialized agents, and reusable skills covering the full development lifecycle from idea to production.
 
 ## Packages
 
-This repository ships three npm packages:
+This repository ships four npm packages:
 
 - `@ai-eng-system/core` - shared library and content-loading helpers
 - `@ai-eng-system/toolkit` - generated Claude Code, OpenCode, and marketplace assets
 - `@ai-eng-system/cli` - executable installer and command-line workflows
+- `@ai-eng-system/pi` - generated Pi skills and prompt templates
 
 The repo root package is private and is never published.
 
@@ -44,6 +45,14 @@ ai-eng install --scope global
 
 OpenCode learning automation now surfaces toast-based suggestions for `/ai-eng/decision-journal` and `/ai-eng/quality-gate`, then waits for explicit `/ai-eng/learning-approve`, `/ai-eng/learning-dismiss`, or `/ai-eng/learning-snooze` consent. Local policy and state live under `.ai-context/learning/`.
 
+### Pi
+
+```bash
+pi install npm:@ai-eng-system/pi
+```
+
+Pi loads ai-eng-system skills natively from the package `skills/` directory and exposes generated command prompts from `prompts/`.
+
 ## Core Workflow
 
 | Phase | Command | Purpose |
@@ -52,16 +61,17 @@ OpenCode learning automation now surfaces toast-based suggestions for `/ai-eng/d
 | Specify | `/ai-eng/specify` | Feature/spec generation with TCRO structure |
 | Plan | `/ai-eng/plan` | Implementation planning |
 | Work | `/ai-eng/work` | Guided execution with quality gates |
+| Verify | `/verify` | Lint, typecheck, test, build gate |
 | Review | `/ai-eng/review` | Multi-agent code review |
 
-Lifecycle mapping to the more common `agent-skills` command names:
+Shorthand lifecycle entrypoints:
 
-| This repo | Common lifecycle alias |
+| Shorthand | Canonical Command |
 | --- | --- |
-| `/ai-eng/specify` | `/spec` |
-| `/ai-eng/plan` | `/plan` |
-| `/ai-eng/work` | `/build` |
-| `/ai-eng/review` | `/review` |
+| `/spec` | `/ai-eng/specify` |
+| `/build` | `/ai-eng/work` |
+
+`/ai-eng/plan` and `/ai-eng/review` are direct lifecycle entrypoints with no separate shorthand file.
 
 Related commands:
 - `/ai-eng/ralph-wiggum` - iterative full-cycle workflow
@@ -69,9 +79,9 @@ Related commands:
 
 ## What Is Included
 
-- 42 commands under the `ai-eng/` namespace plus 7 lifecycle aliases
+- Commands under the `ai-eng/` namespace plus shorthand lifecycle entrypoints
 - 38 specialized agents
-- 32 skills covering the full development lifecycle (Define, Plan, Build, Verify, Review, Ship) plus repository-specific workflows
+- Skills covering the full development lifecycle (Define, Plan, Build, Verify, Review, Ship) plus repository-specific workflows
 
 Selected commands beyond the core workflow:
 - creation: `/ai-eng/create-plugin`, `/ai-eng/create-agent`, `/ai-eng/create-command`, `/ai-eng/create-skill`, `/ai-eng/create-tool`
@@ -138,16 +148,22 @@ bun test
 ### Repository structure
 
 ```text
-content/                Canonical command and agent docs
-skills/                 Canonical skill definitions
+content/                Canonical command and agent docs (source of truth)
+skills/                 Canonical skill definitions (source of truth)
+docs/                   Canonical long-form and reference documentation
+templates/              Decision and quality gate templates
 packages/core/          Published core library package
 packages/toolkit/       Published toolkit assets package
 packages/cli/           Published CLI package
-plugins/ai-eng-system/  Marketplace plugin output
+packages/pi/            Published Pi package (generated skills/prompts)
+plugins/                Marketplace plugin output (generated)
 dist/                   Generated root outputs
+docs-site/              Published documentation site (mirror of docs/)
 ```
 
 ## Documentation
+
+Canonical documentation lives in `docs/`. Command definitions live in `content/commands/`. Skill definitions live in `skills/`. Generated mirrors (`.claude/`, `.opencode/`, `dist/`, `plugins/`) are rebuilt from these canonical sources and should not be edited directly.
 
 - `docs/getting-started/installation.md`
 - `docs/getting-started/quick-start.md`

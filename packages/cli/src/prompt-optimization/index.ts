@@ -5,50 +5,47 @@
  * Works on both OpenCode and Claude Code.
  */
 
-// Type definitions
-export type {
-    Complexity,
-    Domain,
-    TechniqueId,
-    StepStatus,
-    Verbosity,
-} from "./types";
-
-export type {
-    OptimizationStep,
-    OptimizationSession,
-    OptimizationConfig,
-    UserPreferences,
-    AnalysisResult,
-    TechniqueContext,
-    TechniqueConfig,
-    FormattedOutput,
-    Action,
-    ExpectedImprovement,
-} from "./types";
+export { analyzePrompt } from "./analyzer";
+export {
+    formatFinalReview,
+    formatNormal,
+    formatOutput,
+    formatQuiet,
+    formatVerbose,
+} from "./formatter";
 
 // Core exports
 export {
-    PromptOptimizer,
     DEFAULT_CONFIG,
     DEFAULT_PREFERENCES,
+    PromptOptimizer,
 } from "./optimizer";
-export { analyzePrompt } from "./analyzer";
 export {
     ALL_TECHNIQUES,
-    expertPersona,
-    reasoningChain,
-    stakesLanguage,
-    challengeFraming,
-    selfEvaluation,
     analysisStep,
+    challengeFraming,
+    expertPersona,
     getTechniqueById,
     getTechniquesForComplexity,
+    reasoningChain,
+    selfEvaluation,
+    stakesLanguage,
 } from "./techniques";
-export {
-    formatOutput,
-    formatQuiet,
-    formatNormal,
-    formatVerbose,
-    formatFinalReview,
-} from "./formatter";
+// Type definitions
+export type {
+    Action,
+    AnalysisResult,
+    Complexity,
+    Domain,
+    ExpectedImprovement,
+    FormattedOutput,
+    OptimizationConfig,
+    OptimizationSession,
+    OptimizationStep,
+    StepStatus,
+    TechniqueConfig,
+    TechniqueContext,
+    TechniqueId,
+    UserPreferences,
+    Verbosity,
+} from "./types";

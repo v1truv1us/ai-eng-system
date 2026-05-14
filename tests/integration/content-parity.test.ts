@@ -36,8 +36,14 @@ function countSkillsRecursive(dir: string): number {
 describe("Content Parity", () => {
     describe("File counts", () => {
         it("should have matching content/commands and .claude/commands counts", () => {
-            const contentCount = countFiles(join(ROOT, "content/commands"), /\.md$/);
-            const claudeCount = countFiles(join(ROOT, ".claude/commands"), /\.md$/);
+            const contentCount = countFiles(
+                join(ROOT, "content/commands"),
+                /\.md$/,
+            );
+            const claudeCount = countFiles(
+                join(ROOT, ".claude/commands"),
+                /\.md$/,
+            );
             expect(claudeCount).toBe(contentCount);
         });
 
@@ -137,22 +143,22 @@ describe("Content Parity", () => {
     describe("Reference docs", () => {
         it("should have skills-first-map.md", () => {
             expect(
-                existsSync(join(ROOT, "docs/reference/skills-first-map.md"))
+                existsSync(join(ROOT, "docs/reference/skills-first-map.md")),
             ).toBe(true);
         });
 
         it("should have workflow-surface-matrix.md", () => {
             expect(
                 existsSync(
-                    join(ROOT, "docs/reference/workflow-surface-matrix.md")
-                )
+                    join(ROOT, "docs/reference/workflow-surface-matrix.md"),
+                ),
             ).toBe(true);
         });
 
         it("skills reference should mention 32 skills", () => {
             const content = readFileSync(
                 join(ROOT, "docs/reference/skills.md"),
-                "utf-8"
+                "utf-8",
             );
             expect(content).toContain("32");
         });
@@ -160,7 +166,7 @@ describe("Content Parity", () => {
         it("agents reference should mention 38 agents", () => {
             const content = readFileSync(
                 join(ROOT, "docs/reference/agents.md"),
-                "utf-8"
+                "utf-8",
             );
             expect(content).toContain("38");
         });

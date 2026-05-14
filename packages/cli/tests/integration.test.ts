@@ -20,8 +20,7 @@ import {
     it,
 } from "bun:test";
 import { execSync } from "node:child_process";
-import { existsSync } from "node:fs";
-import { mkdtempSync } from "node:fs";
+import { existsSync, mkdtempSync } from "node:fs";
 import { copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
@@ -36,6 +35,10 @@ describe("AI Engineering System - Integration Tests", () => {
 
         // Copy original project structure to test directory
         await copyProjectStructure();
+        execSync("bun install", {
+            cwd: TEST_ROOT,
+            stdio: "ignore",
+        });
     });
 
     afterAll(async () => {
@@ -511,10 +514,20 @@ async function copyProjectStructure(): Promise<void> {
     // Copy essential files and directories
     const essentialItems = [
         "package.json",
+        "bun.lock",
         "build.ts",
         "content/",
         "skills/",
+        "docs/",
+        "templates/",
+        "src/",
+        "scripts/",
+        "packages/",
+        ".claude/",
+        ".opencode/",
         ".claude-plugin/",
+        "biome.json",
+        "tsconfig.json",
         "marketplace.json",
     ];
 

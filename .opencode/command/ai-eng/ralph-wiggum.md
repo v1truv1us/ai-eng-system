@@ -1,6 +1,6 @@
 ---
 name: ai-eng/ralph-wiggum
-description: Full-cycle feature development with continuous iteration through all spec-driven workflow phases (Research → Specify → Plan → Work → Review) until feature is complete.
+description: Full-cycle feature development with continuous iteration through all spec-driven workflow phases (Research → Specify → Plan → Work → Verify → Review) until feature is complete.
 agent: build
 version: 1.0.0
 inputs:
@@ -31,7 +31,7 @@ outputs:
 
 Execute complete feature development cycle: $ARGUMENTS
 
-> **Phase 0-5 of Spec-Driven Workflow**: Orchestrates Research → Specify → Plan → Work → Review in continuous loop
+> **Phase 0-6 of Spec-Driven Workflow**: Orchestrates Research → Specify → Plan → Work → Verify → Review in continuous loop
 
  orchestrate this complex multi-phase workflow systematically. Manage iteration cycles, track progress across all phases, and ensure comprehensive quality at each stage.
 

@@ -33,14 +33,15 @@ Every user-facing surface in ai-eng-system maps to one of four ownership categor
 | Build | `api-and-interface-design` | `/ai-eng/work` | - |
 | Verify | `browser-testing-with-devtools` | - | - |
 | Verify | `debugging-and-error-recovery` | - | - |
-| Review | `code-review-and-quality` | `/ai-eng/review` | `/review` |
+| Verify | quality gate loop | `/verify` | - |
+| Review | `code-review-and-quality` | `/ai-eng/review` | - |
 | Review | `code-simplification` | `/ai-eng/simplify` | `/code-simplify` |
 | Review | `security-and-hardening` | `/ai-eng/security-scan` | - |
 | Review | `performance-optimization` | `/ai-eng/review --focus=performance` | - |
 | Ship | `git-workflow-and-versioning` | - | - |
 | Ship | `ci-cd-and-automation` | `/ai-eng/deploy` | `/ship` |
 | Ship | `deprecation-and-migration` | - | - |
-| Ship | `documentation-and-adrs` | `/ai-eng/knowledge-capture` | - |
+| Ship | `documentation-and-adrs` | `/ai-eng/decision-journal` | - |
 | Ship | `shipping-and-launch` | `/ai-eng/deploy` | `/ship` |
 
 ## Repo-Specific Skills

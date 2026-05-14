@@ -158,7 +158,7 @@ The CLI provides an interactive Terminal UI with 6 screens:
 
 #### 5. Executing Screen
 - Shows phase execution progress
-- Displays current phase (Research → Specify → Plan → Work → Review)
+- Displays current phase (Research → Specify → Plan → Work → Verify → Review)
 - Shows quality gate results
 - Live status updates
 

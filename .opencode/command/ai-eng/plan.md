@@ -27,7 +27,7 @@ outputs:
 
 Create a detailed implementation plan for: $ARGUMENTS
 
-> **Phase 3 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Review
+> **Phase 3 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Verify → Review
 
  Approach this planning task systematically. Analyze requirements, decompose into atomic tasks, identify dependencies, and create comprehensive implementation strategy.
 

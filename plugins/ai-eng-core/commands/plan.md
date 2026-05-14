@@ -27,7 +27,7 @@ outputs:
 
 Create a detailed implementation plan for: $ARGUMENTS
 
-> **Phase 3 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Review
+> **Phase 3 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Verify → Review
 
 Load `skills/planning-and-task-breakdown/SKILL.md` and `skills/prompt-refinement/SKILL.md` (phase: plan).
 

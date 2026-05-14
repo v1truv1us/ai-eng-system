@@ -14,7 +14,7 @@ This document defines the **agents and tools** available in this system. For the
 | build | edit | Implements changes |
 | review | read-only | Code review |
 
-## Specialized Agents (38 Total)
+## Specialized Agents (48 Total)
 
 ### Architecture & Planning
 - `architect-advisor` - System architecture decisions and trade-off analysis
@@ -32,8 +32,6 @@ This document defines the **agents and tools** available in this system. For the
 - `mobile-developer` - iOS, Android, React Native, and Flutter development
 - `data-engineer` - Data pipelines, warehousing, and streaming systems
 - `docs-lookup` - Documentation retrieval and verification from official sources
-- `mobile-developer` - iOS, Android, React Native, and Flutter development
-- `data-engineer` - Pipelines, warehousing, streaming, and data quality
 - `documentation-specialist` - Comprehensive technical documentation generation
 - `docs-writer` - Concise product and feature documentation
 
@@ -47,6 +45,20 @@ This document defines the **agents and tools** available in this system. For the
 - `e2e-runner` - End-to-end Playwright testing
 - `plugin-validator` - Plugin structure validation and best practices
 - `text-cleaner` - AI-generated verbosity cleanup and content tightening
+
+### Language-Specific Reviewers (NEW)
+- `typescript-reviewer` - TypeScript/JavaScript type safety, async, React patterns
+- `python-reviewer` - Python type hints, async, testing, Pythonic idioms
+- `go-reviewer` - Go concurrency, error handling, interfaces, idioms
+- `java-reviewer` - Java Spring Boot, JPA, concurrency, enterprise patterns
+- `rust-reviewer` - Rust ownership, lifetimes, traits, async, safety
+- `cpp-reviewer` - C++ memory management, RAII, templates, modern C++
+- `kotlin-reviewer` - Kotlin coroutines, sealed classes, Android/KMP patterns
+- `csharp-reviewer` - C# async/await, LINQ, DI, .NET patterns
+
+### Reliability & Automation (NEW)
+- `silent-failure-hunter` - Detects swallowed errors, missing assertions, unmonitored paths
+- `loop-operator` - Manages autonomous agent loops with quality gates and recovery
 
 ### DevOps & Operations
 - `deployment-engineer` - CI/CD pipeline design and deployment automation
@@ -295,6 +307,11 @@ The table below highlights the most important lifecycle and alignment skills. Th
 | incentive-prompting | skills/incentive-prompting/ | Research-backed prompting techniques |
 | knowledge-architecture | skills/knowledge-architecture/ | Static-first knowledge architecture and learning workflows |
 | plugin-dev | skills/plugin-dev/ | Plugin development knowledge base |
+| using-agent-skills | skills/using-agent-skills/ | Decision tree for task-to-skill mapping |
+| continuous-learning-v2 | skills/continuous-learning-v2/ | Instinct-based learning with confidence scoring |
+| verification-loop | skills/verification-loop/ | Continuous verification after every change |
+| eval-harness | skills/eval-harness/ | Agent evaluation framework |
+| context-budget | skills/context-budget/ | Context window management |
 
 ## Key Commands
 
@@ -319,6 +336,12 @@ The table below highlights the most important lifecycle and alignment skills. Th
 | /decision-journal | Record durable decisions | build |
 | /quality-gate | Define file-backed quality gates | build |
 | /maintenance-review | Review drift and maintenance debt | read-only |
+| /prp-prd | Generate Product Requirements Document | plan |
+| /prp-plan | Create implementation plan from PRD | plan |
+| /prp-implement | Execute implementation plan | build |
+| /loop-start | Start autonomous agent loop | build |
+| /loop-status | Check loop status | plan |
+| /harness-audit | Audit agent harness configuration | plan |
 
 See `docs/reference/commands.md` for the full 49-command inventory.
 
@@ -352,6 +375,82 @@ The research command orchestrates multiple agents for thorough investigation:
 1. **Discovery** (Parallel): codebase-locator, research-locator, codebase-pattern-finder
 2. **Analysis** (Sequential): codebase-analyzer, research-analyzer
 3. **Synthesis**: Consolidated findings with evidence and recommendations
+
+## New Additions from External Repositories
+
+### References (from addyosmani/agent-skills)
+Located in `references/`, loaded on-demand by skills:
+
+| Reference | Purpose |
+|-----------|---------|
+| `testing-patterns.md` | Test structure, naming, mocking, React/API/E2E examples |
+| `security-checklist.md` | Pre-commit checks, OWASP Top 10, secrets management |
+| `performance-checklist.md` | Core Web Vitals, frontend/backend checklists |
+| `accessibility-checklist.md` | Keyboard nav, screen readers, WCAG 2.1 AA |
+| `orchestration-patterns.md` | 5 endorsed + 4 anti-pattern orchestration approaches |
+
+### Rules (from everything-claude-code)
+Located in `rules/`, always-follow guidelines per language:
+
+| Rule Pack | Purpose |
+|-----------|---------|
+| `common/rules.md` | Language-agnostic principles |
+| `typescript/rules.md` | Type safety, async, React, module system |
+| `python/rules.md` | Type hints, async, PEP 8, error handling |
+| `golang/rules.md` | Error handling, concurrency, interfaces |
+
+### Contexts (from everything-claude-code)
+Located in `contexts/`, dynamic system prompt injection:
+
+| Context | Purpose |
+|---------|---------|
+| `dev.md` | Development mode principles and tool preferences |
+| `review.md` | Code review mode with five-axis review process |
+| `research.md` | Research mode with read-only analysis patterns |
+
+### Hooks (from addyosmani/agent-skills)
+Located in `hooks/`, session lifecycle automations:
+
+| Hook | Event | Purpose |
+|------|-------|---------|
+| `session-start.sh` | SessionStart | Load project context and skill count |
+| `hooks.json` | Configuration | Hook definitions and conditions |
+
+### New Skills (from both repos)
+
+| Skill | Source | Purpose |
+|-------|--------|---------|
+| `using-agent-skills` | agent-skills | Decision tree for task-to-skill mapping |
+| `continuous-learning-v2` | everything-claude-code | Instinct-based learning with confidence scoring |
+| `verification-loop` | everything-claude-code | Continuous verification after every change |
+| `eval-harness` | everything-claude-code | Agent evaluation framework |
+| `context-budget` | everything-claude-code | Context window management |
+
+### New Commands (from everything-claude-code)
+
+| Command | Purpose |
+|---------|---------|
+| `/prp-prd` | Generate Product Requirements Document |
+| `/prp-plan` | Create implementation plan from PRD |
+| `/prp-implement` | Execute implementation plan |
+| `/loop-start` | Start autonomous agent loop |
+| `/loop-status` | Check loop status |
+| `/harness-audit` | Audit agent harness configuration |
+
+### Multi-Platform Setup Guides (from addyosmani/agent-skills)
+Located in `docs/`:
+
+| Guide | Platform |
+|-------|----------|
+| `cursor-setup.md` | Cursor IDE |
+| `gemini-cli-setup.md` | Google Gemini CLI |
+| `windsurf-setup.md` | Windsurf IDE |
+| `copilot-setup.md` | GitHub Copilot |
+| `kiro-setup.md` | Kiro IDE |
+
+### MCP Configurations (from everything-claude-code)
+Located in `mcp-configs/mcp-servers.json`:
+- Pre-configured MCP servers for GitHub, Supabase, Vercel, Railway, Slack, Sentry, Cloudflare, Puppeteer, Playwright, Context7, Sequential Thinking, and Filesystem.
 
 ## Directory Context Index
 

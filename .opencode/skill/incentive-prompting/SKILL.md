@@ -150,7 +150,7 @@ Before finalizing, rate your confidence and identify any assumptions or limitati
 4. **Kong et al. (2023)** - Persona prompting research
    - 24% to 84% accuracy improvement with detailed personas
 
-## Self-Evaluation in Practice
+## Anti-Rationalization Table
 
 Self-Evaluation is one of the simplest yet most powerful techniques. Here's how to apply it effectively:
 

@@ -64,10 +64,12 @@ export function selectSuggestion(
             return false;
         }
 
-        const lastCommandSurface = state.commandLastSurfacedAt[candidate.commandId];
+        const lastCommandSurface =
+            state.commandLastSurfacedAt[candidate.commandId];
         if (
             lastCommandSurface !== undefined &&
-            now - lastCommandSurface < minutesToMs(commandPolicy.cooldownMinutes)
+            now - lastCommandSurface <
+                minutesToMs(commandPolicy.cooldownMinutes)
         ) {
             return false;
         }
@@ -75,7 +77,8 @@ export function selectSuggestion(
         const lastDuplicateSurface = state.dedupe[candidate.dedupeKey];
         if (
             lastDuplicateSurface !== undefined &&
-            now - lastDuplicateSurface < minutesToMs(commandPolicy.cooldownMinutes)
+            now - lastDuplicateSurface <
+                minutesToMs(commandPolicy.cooldownMinutes)
         ) {
             return false;
         }
@@ -92,7 +95,10 @@ export function selectSuggestion(
         return true;
     });
 
-    return eligible.sort((left, right) => right.confidence - left.confidence)[0] ?? null;
+    return (
+        eligible.sort((left, right) => right.confidence - left.confidence)[0] ??
+        null
+    );
 }
 
 export function applySurfacedSuggestion(

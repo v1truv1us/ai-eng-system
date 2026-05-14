@@ -1,0 +1,32 @@
+{
+  "hooks": [
+    {
+      "id": "session-start",
+      "event": "SessionStart",
+      "description": "Load project context and available skills on session start",
+      "enabled": true,
+      "script": "hooks/session-start.sh"
+    },
+    {
+      "id": "sdd-cache-pre",
+      "event": "PreToolUse",
+      "description": "Cache spec state before spec-driven development operations",
+      "enabled": false,
+      "condition": "tool matches /write|edit/ AND file matches /specs/"
+    },
+    {
+      "id": "sdd-cache-post",
+      "event": "PostToolUse",
+      "description": "Update spec cache after spec-driven development operations",
+      "enabled": false,
+      "condition": "tool matches /write|edit/ AND file matches /specs/"
+    },
+    {
+      "id": "simplify-ignore-check",
+      "event": "PreToolUse",
+      "description": "Check if file is in simplify ignore list before code simplification",
+      "enabled": true,
+      "condition": "skill matches /code-simplification|simplify/"
+    }
+  ]
+}

@@ -23,7 +23,7 @@ outputs:
 
 Execute a plan or task: $ARGUMENTS
 
-> **Phase 4 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Review
+> **Phase 4 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Verify → Review
 
 Execute implementation systematically using TDD, run quality gates at each step, and ensure all acceptance criteria are met.
 

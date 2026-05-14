@@ -1,6 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { LearningPolicy, LearningRecommendation, LearningState } from "./types.js";
+import type {
+    LearningPolicy,
+    LearningRecommendation,
+    LearningState,
+} from "./types.js";
 
 type PartialLearningPolicy = Partial<LearningPolicy> & {
     commands?: Partial<LearningPolicy["commands"]>;
@@ -116,7 +120,8 @@ function mergePolicy(input: unknown): LearningPolicy {
                 ),
                 minimumConfidence: sanitizeConfidence(
                     commands?.["decision-journal"]?.minimumConfidence,
-                    DEFAULT_POLICY.commands["decision-journal"].minimumConfidence,
+                    DEFAULT_POLICY.commands["decision-journal"]
+                        .minimumConfidence,
                 ),
             },
             "quality-gate": {
@@ -154,7 +159,9 @@ export function loadLearningPolicy(projectDir: string): LearningPolicy {
 
 export function loadLearningState(projectDir: string): LearningState {
     const learningDir = ensureLearningDirectory(projectDir);
-    const state = readJsonFile<Record<string, unknown>>(path.join(learningDir, STATE_FILE));
+    const state = readJsonFile<Record<string, unknown>>(
+        path.join(learningDir, STATE_FILE),
+    );
 
     if (!state) {
         return { ...DEFAULT_STATE };
@@ -164,7 +171,8 @@ export function loadLearningState(projectDir: string): LearningState {
         return {
             version: 2,
             commandLastSurfacedAt:
-                (state.commandLastSurfacedAt as LearningState["commandLastSurfacedAt"]) ?? {},
+                (state.commandLastSurfacedAt as LearningState["commandLastSurfacedAt"]) ??
+                {},
             dedupe: (state.dedupe as LearningState["dedupe"]) ?? {},
             lastSurfacedAt: state.lastSurfacedAt as number | undefined,
             activeRecommendation: state.activeRecommendation as
@@ -181,18 +189,23 @@ export function loadLearningState(projectDir: string): LearningState {
     return {
         version: 2,
         commandLastSurfacedAt:
-            (state.commandLastSurfacedAt as LearningState["commandLastSurfacedAt"]) ?? {},
+            (state.commandLastSurfacedAt as LearningState["commandLastSurfacedAt"]) ??
+            {},
         dedupe: (state.dedupe as LearningState["dedupe"]) ?? {},
         lastSurfacedAt: state.lastSurfacedAt as number | undefined,
         activeRecommendation: state.activeRecommendation as
             | LearningState["activeRecommendation"]
             | undefined,
         recommendationHistory:
-            (state.recommendationHistory as LearningState["recommendationHistory"]) ?? {},
+            (state.recommendationHistory as LearningState["recommendationHistory"]) ??
+            {},
     };
 }
 
-export function saveLearningState(projectDir: string, state: LearningState): void {
+export function saveLearningState(
+    projectDir: string,
+    state: LearningState,
+): void {
     const learningDir = ensureLearningDirectory(projectDir);
     fs.writeFileSync(
         path.join(learningDir, STATE_FILE),

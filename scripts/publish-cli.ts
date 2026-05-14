@@ -45,16 +45,19 @@ async function publishCli(): Promise<void> {
                 repoRoot,
             );
         } else {
-            await run(
-                ["bun", "scripts/update-publish-versions.ts"],
-                repoRoot,
-            );
+            await run(["bun", "scripts/update-publish-versions.ts"], repoRoot);
         }
 
         const publishJson = await readFile(cliPublishPath, "utf-8");
         await writeFile(cliPackagePath, publishJson);
 
-        const command = ["bun", "publish", "--access", "public", "--provenance"];
+        const command = [
+            "bun",
+            "publish",
+            "--access",
+            "public",
+            "--provenance",
+        ];
         if (isDryRun) {
             command.push("--dry-run");
         }

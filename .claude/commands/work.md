@@ -23,7 +23,7 @@ outputs:
 
 Execute a plan or task: $ARGUMENTS
 
-> **Phase 4 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Review
+> **Phase 4 of Spec-Driven Workflow**: Research → Specify → Plan → Work → Verify → Review
 
 Load `skills/incremental-implementation/SKILL.md`, `skills/test-driven-development/SKILL.md`, and `skills/prompt-refinement/SKILL.md` (phase: work). If using `--ralph`, also load `skills/workflow/ralph-wiggum/SKILL.md`.
 
@@ -70,7 +70,8 @@ For each task in dependency order:
 - Spec validation (cross-reference completed tasks with spec acceptance criteria)
 - Security check if applicable
 
-### Phase 4: Review Preparation
+### Phase 4: Verify and Review Preparation
+- Run `/verify` (lint, typecheck, test, build)
 - Update documentation
 - Create pull request
 - Request review via `/ai-eng/review`
@@ -90,6 +91,6 @@ For each task in dependency order:
 ## Integration
 
 - Reads from: `/ai-eng/plan` output (plan.md), `/ai-eng/specify` output (spec.md)
-- Feeds into: `/ai-eng/review`
+- Feeds into: `/verify`, then `/ai-eng/review`
 
 $ARGUMENTS
