@@ -2,61 +2,44 @@
 
 ## Overview
 
-This guide explains how to set up ai-eng-system skills and commands in Google Gemini CLI.
+Install ai-eng-system skills and commands for Google Gemini CLI from the generated `.gemini/` bundle.
 
 ## Installation
 
-### Using Gemini Skills Command
+### From npm toolkit (recommended)
 
 ```bash
-# If Gemini CLI supports skills installation
-gemini skills install --source=./skills
+npm install @ai-eng-system/toolkit
+mkdir -p .gemini
+cp -R node_modules/@ai-eng-system/toolkit/.gemini/* .gemini/
 ```
 
-### Manual Installation
-
-1. Create `.gemini/skills/` directory in your project root
-2. Copy skills:
+### From repository build
 
 ```bash
-mkdir -p .gemini/skills
-for skill in skills/*/; do
-  name=$(basename "$skill")
-  cp -r "$skill" ".gemini/skills/${name}"
-done
+git clone https://github.com/v1truv1us/ai-eng-system.git
+cd ai-eng-system
+bun run build
+mkdir -p .gemini
+cp -R dist/.gemini/* .gemini/
 ```
 
-3. Copy commands:
+## Bundle contents
 
-```bash
-mkdir -p .gemini/commands
-cp .claude/commands/*.md .gemini/commands/
-```
+After build, `dist/.gemini/` includes:
 
-## Available Commands
+- `skills/` — All canonical skills with namespace paths preserved
+- `commands/` — Command definitions from `content/commands/`
 
-After installation, these commands are available:
+## Using skills
 
-- `/specify` — Create feature specifications
-- `/plan` — Create implementation plans
-- `/build` — Execute implementation
-- `/review` — Multi-perspective code review
-- `/research` — Multi-phase research
-- `/deploy` — Pre-deployment checklist
-- And 54 more...
+Gemini CLI loads skills automatically when the task matches their description. To manually reference a skill, open the relevant `SKILL.md` for context.
 
-## Using Skills
+## Available commands
 
-In Gemini CLI, skills are loaded automatically when the task matches their description. To manually load a skill:
+Commands mirror the ai-eng namespace: `/specify`, `/plan`, `/work`, `/review`, `/research`, `/deploy`, and others from `content/commands/`.
 
-```
-Load skill: spec-driven-development
-```
+## Related
 
-## Best Practices
-
-1. **Start with research**: Use `/research` to understand the codebase
-2. **Specify before coding**: Use `/specify` to create clear requirements
-3. **Plan before building**: Use `/plan` to break work into atomic tasks
-4. **Verify after every change**: Run tests and builds
-5. **Review before merging**: Use `/review` for quality assurance
+- [Cursor IDE Setup](./cursor-setup.md)
+- [Attribution: Cursor plugins](./attribution/cursor-plugins.md)

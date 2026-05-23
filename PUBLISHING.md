@@ -78,6 +78,10 @@ This updates:
 Packaged directories include:
 - `.claude-plugin/`
 - `.opencode/`
+- `.cursor-plugin/`
+- `.gemini/`
+- `.pi/`
+- `plugins/ai-eng-system/`
 - `plugins/ai-eng-system/`
 
 ## Current Release

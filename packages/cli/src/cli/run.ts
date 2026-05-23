@@ -28,7 +28,7 @@ USAGE:
 COMMANDS:
   init [options]                     # Initialize .ai-eng/config.yaml with defaults
   ralph <prompt|workflow> [options]  # Iteration loop runner
-  install [options]                  # Install OpenCode/Claude assets
+  install [options]                  # Install OpenCode, Cursor, Gemini, or Pi assets
 
 GLOBAL OPTIONS:
   -h, --help                         Show this help message
@@ -65,22 +65,30 @@ EXAMPLES:
 `;
 
 const INSTALL_HELP_TEXT = `
-ai-eng install - Install OpenCode/Claude assets
+ai-eng install - Install platform assets from @ai-eng-system/toolkit / core
+
+Claude Code: use the Claude marketplace plugin (not this command).
 
 USAGE:
   ai-eng install [options]
 
 OPTIONS:
-  --scope project|global|auto        Where to install (default: auto-detect)
-  --dry-run                          Show what would be done without writing
-  --yes                              Skip confirmation prompts
-  -v, --verbose                      Verbose output
+  --platform opencode|cursor|gemini|pi   Target harness (default: opencode)
+  --scope project|global|auto            OpenCode only (default: auto-detect)
+  --dry-run                              Show what would be done without writing
+  --yes                                  Skip confirmation prompts
+  -v, --verbose                          Verbose output
 
 EXAMPLES:
-  ai-eng install                          # Auto-detect project vs global
-  ai-eng install --scope project          # Install to project .opencode/
-  ai-eng install --scope global           # Install to ~/.config/opencode/
-  ai-eng install --dry-run                # Preview operations
+  ai-eng install                                    # OpenCode (auto scope)
+  ai-eng install --platform cursor                  # .cursor/plugins/ai-eng-system/
+  ai-eng install --platform gemini                  # ./.gemini/
+  ai-eng install --platform pi                      # ./.pi/
+  ai-eng install --scope project                    # OpenCode project .opencode/
+  ai-eng install --scope global                     # OpenCode ~/.config/opencode/
+  ai-eng install --platform cursor --dry-run
+
+Requires @ai-eng-system/toolkit for cursor, gemini, and pi.
 `;
 
 const RALPH_HELP_TEXT = `
@@ -128,8 +136,11 @@ EXAMPLES:
   ai-eng ralph --no-loop "single-shot task"
 `;
 
+import type { InstallPlatform } from "../install/install";
+
 interface InstallFlags {
     scope?: "project" | "global" | "auto";
+    platform?: InstallPlatform;
     dryRun?: boolean;
     yes?: boolean;
     verbose?: boolean;
@@ -188,6 +199,7 @@ async function runInstall(args: string[]): Promise<void> {
         args,
         options: {
             scope: { type: "string" },
+            platform: { type: "string" },
             "dry-run": { type: "boolean" },
             yes: { type: "boolean" },
             verbose: { type: "boolean", short: "v" },
@@ -196,8 +208,32 @@ async function runInstall(args: string[]): Promise<void> {
         allowPositionals: true,
     });
 
+    const platformRaw = values.platform as string | undefined;
+    const allowedPlatforms = new Set([
+        "opencode",
+        "cursor",
+        "gemini",
+        "pi",
+        "claude",
+    ]);
+    if (platformRaw && !allowedPlatforms.has(platformRaw)) {
+        console.log(
+            `❌ Unknown platform "${platformRaw}". Use opencode, cursor, gemini, or pi.`,
+        );
+        process.exit(1);
+    }
+    if (platformRaw === "claude") {
+        console.log(
+            "Claude Code installs via the marketplace plugin, not ai-eng install.",
+        );
+        console.log("  /plugin marketplace add v1truv1us/ai-eng-system");
+        console.log("  /plugin install ai-eng-system@ai-eng-marketplace");
+        process.exit(0);
+    }
+
     const flags: InstallFlags = {
         scope: values.scope as InstallFlags["scope"],
+        platform: (platformRaw as InstallPlatform | undefined) ?? "opencode",
         dryRun: values["dry-run"],
         yes: values.yes,
         verbose: values.verbose,

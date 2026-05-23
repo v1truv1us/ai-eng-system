@@ -17,6 +17,18 @@ export function getOpenCodeDir() {
     return resolve(packageRoot, ".opencode");
 }
 
-export function getMarketplacePluginDir() {
-    return resolve(packageRoot, "plugins", "ai-eng-system");
+export function getCursorPluginDir() {
+    return resolve(packageRoot, ".cursor-plugin");
+}
+
+export function getGeminiDir() {
+    return resolve(packageRoot, ".gemini");
+}
+
+export function getPiDir() {
+    return resolve(packageRoot, ".pi");
+}
+
+export function getMarketplacePluginDir(name = "ai-eng-core") {
+    return resolve(packageRoot, "plugins", name);
 }

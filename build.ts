@@ -15,6 +15,9 @@
  * Derived outputs:
  * - dist/.claude-plugin/   (for CI validation + tests)
  * - dist/.opencode/        (for OpenCode installs)
+ * - dist/.cursor-plugin/   (for Cursor installs)
+ * - dist/.gemini/          (for Gemini CLI installs)
+ * - dist/.pi/              (for Pi package sync)
  * - dist/prompt-optimization/ (shared library for npm package consumers)
  * - dist/skills/           (shared skill packs)
  * - .claude/               (local development runtime)
@@ -48,6 +51,10 @@ const DIST_DIR = join(ROOT, "dist");
 const CLAUDE_DIR = join(DIST_DIR, ".claude-plugin");
 const DIST_OPENCODE_DIR = join(DIST_DIR, ".opencode");
 const DIST_PI_DIR = join(DIST_DIR, ".pi");
+const DIST_CURSOR_DIR = join(DIST_DIR, ".cursor-plugin");
+const DIST_GEMINI_DIR = join(DIST_DIR, ".gemini");
+const RULES_DIR = join(ROOT, "rules");
+const CURSOR_RULES_DIR = join(RULES_DIR, "cursor");
 const ROOT_OPENCODE_DIR = join(ROOT, ".opencode");
 const ROOT_CLAUDE_DIR = join(ROOT, ".claude");
 const ROOT_CLAUDE_PLUGIN_DIR = join(ROOT, ".claude-plugin");
@@ -567,6 +574,22 @@ async function buildOpenCode(): Promise<void> {
     await validateOpenCodeOutput(DIST_OPENCODE_DIR);
 }
 
+const PI_SKILL_CONTEXT_PREAMBLE = `
+## Pi Context-Aware Execution
+
+When this skill is invoked in Pi, treat the user's current request and any skill arguments as the task input. Do not treat this file as the task by itself.
+
+Before applying the skill, establish only the context needed for the request:
+
+1. Identify the current working directory and relevant project scope.
+2. Read local guidance first when present: AGENTS.md, CLAUDE.md, TODO.md, or nearby task/spec files.
+3. Inspect the current codebase with targeted searches (prefer rg) and read relevant files before making claims or proposing changes.
+4. Ground findings and recommendations in project evidence: cite file paths, commands, tests, docs, or external sources as applicable.
+5. Ask a concise clarification only when the arguments and codebase context are insufficient to proceed safely.
+
+Operate conservatively: avoid broad scans, large reads, subagents, or parallel fanout unless the user's requested depth clearly requires them.
+`;
+
 function transformCommandMarkdownForPi(
     markdown: string,
     filePathForErrors: string,
@@ -593,6 +616,30 @@ function transformCommandMarkdownForPi(
     };
 }
 
+async function addPiContextPreambleToSkills(skillsDir: string): Promise<void> {
+    if (!existsSync(skillsDir)) return;
+
+    const entries = await readdir(skillsDir, { withFileTypes: true });
+    for (const entry of entries) {
+        const entryPath = join(skillsDir, entry.name);
+        if (entry.isDirectory()) {
+            await addPiContextPreambleToSkills(entryPath);
+            continue;
+        }
+
+        if (!entry.isFile() || entry.name !== "SKILL.md") continue;
+
+        const content = await readFile(entryPath, "utf-8");
+        if (content.includes("## Pi Context-Aware Execution")) continue;
+
+        const parsed = parseFrontmatterStrict(content, entryPath);
+        const nextContent = parsed.hasFrontmatter
+            ? `---\n${serializeFrontmatter(parsed.meta)}\n---\n${PI_SKILL_CONTEXT_PREAMBLE}${parsed.body.trimStart()}`
+            : `${PI_SKILL_CONTEXT_PREAMBLE}${content.trimStart()}`;
+        await writeFile(entryPath, nextContent);
+    }
+}
+
 async function buildPi(): Promise<void> {
     const promptsDir = join(DIST_PI_DIR, "prompts");
     const skillsDir = join(DIST_PI_DIR, "skills");
@@ -612,6 +659,163 @@ async function buildPi(): Promise<void> {
     }
 
     await copySkillsPreservePath(SKILLS_DIR, skillsDir);
+    await addPiContextPreambleToSkills(skillsDir);
+}
+
+async function buildCursor(): Promise<void> {
+    await rm(DIST_CURSOR_DIR, { recursive: true, force: true });
+    await mkdir(DIST_CURSOR_DIR, { recursive: true });
+
+    const cursorSkillsDir = join(DIST_CURSOR_DIR, "skills");
+    const cursorAgentsDir = join(DIST_CURSOR_DIR, "agents");
+    const cursorRulesDir = join(DIST_CURSOR_DIR, "rules");
+
+    await copySkillsPreservePath(SKILLS_DIR, cursorSkillsDir);
+    await mkdir(cursorAgentsDir, { recursive: true });
+    await copyMarkdownFiles(join(CONTENT_DIR, "agents"), cursorAgentsDir);
+
+    if (existsSync(CURSOR_RULES_DIR)) {
+        await copyDirRecursive(CURSOR_RULES_DIR, cursorRulesDir);
+    }
+
+    const packageJson = JSON.parse(
+        await readFile(join(ROOT, "package.json"), "utf-8"),
+    );
+    const pluginJson = {
+        name: "ai-eng-system",
+        displayName: "AI Engineering System",
+        version: packageJson.version,
+        description:
+            "AI Engineering System with research orchestration, quality gates, and Cursor-imported workflows",
+        author: {
+            name: "v1truv1us",
+            url: "https://github.com/v1truv1us/ai-eng-system",
+        },
+        license: "MIT",
+        homepage: "https://github.com/v1truv1us/ai-eng-system",
+        repository: "https://github.com/v1truv1us/ai-eng-system",
+        skills: "./skills/",
+        agents: "./agents/",
+        rules: "./rules/",
+    };
+
+    await writeFile(
+        join(DIST_CURSOR_DIR, "plugin.json"),
+        JSON.stringify(pluginJson, null, 2),
+    );
+
+    await validateCursorOutput(DIST_CURSOR_DIR);
+}
+
+async function buildGemini(): Promise<void> {
+    await rm(DIST_GEMINI_DIR, { recursive: true, force: true });
+    await mkdir(DIST_GEMINI_DIR, { recursive: true });
+
+    const geminiSkillsDir = join(DIST_GEMINI_DIR, "skills");
+    const geminiCommandsDir = join(DIST_GEMINI_DIR, "commands");
+
+    await copySkillsPreservePath(SKILLS_DIR, geminiSkillsDir);
+    await mkdir(geminiCommandsDir, { recursive: true });
+    await copyMarkdownFiles(join(CONTENT_DIR, "commands"), geminiCommandsDir);
+
+    await validateGeminiOutput(DIST_GEMINI_DIR);
+}
+
+async function validateCursorOutput(cursorRoot: string): Promise<void> {
+    const errors: string[] = [];
+    const pluginJsonPath = join(cursorRoot, "plugin.json");
+
+    if (!existsSync(pluginJsonPath)) {
+        errors.push("Cursor plugin missing plugin.json");
+    } else {
+        const pluginJson = JSON.parse(await readFile(pluginJsonPath, "utf-8"));
+        if (!pluginJson.name) errors.push("Cursor plugin.json missing name");
+        if (!pluginJson.skills) errors.push("Cursor plugin.json missing skills path");
+        if (!pluginJson.agents) errors.push("Cursor plugin.json missing agents path");
+    }
+
+    const skillsRoot = join(cursorRoot, "skills");
+    if (!existsSync(skillsRoot)) {
+        errors.push("Cursor output missing skills/");
+    } else {
+        const skills = await discoverSkills(skillsRoot);
+        if (skills.length === 0) {
+            errors.push("Cursor output has no skills");
+        }
+        for (const skill of skills) {
+            const content = await readFile(skill.skillFile, "utf-8");
+            const parsed = parseFrontmatterStrict(content, skill.skillFile);
+            if (!parsed.meta.description) {
+                errors.push(`Cursor skill missing description: ${skill.skillFile}`);
+            }
+        }
+    }
+
+    if (errors.length) {
+        console.error("\n❌ Cursor output validation failed:\n");
+        for (const e of errors) console.error(` - ${e}`);
+        throw new Error(
+            `Cursor validation failed with ${errors.length} error(s)`,
+        );
+    }
+}
+
+async function validateGeminiOutput(geminiRoot: string): Promise<void> {
+    const errors: string[] = [];
+    const skillsRoot = join(geminiRoot, "skills");
+    const commandsRoot = join(geminiRoot, "commands");
+
+    if (!existsSync(skillsRoot)) {
+        errors.push("Gemini output missing skills/");
+    } else {
+        const skills = await discoverSkills(skillsRoot);
+        if (skills.length === 0) {
+            errors.push("Gemini output has no skills");
+        }
+    }
+
+    if (!existsSync(commandsRoot)) {
+        errors.push("Gemini output missing commands/");
+    } else {
+        const commandFiles = await getMarkdownFiles(commandsRoot);
+        if (commandFiles.length === 0) {
+            errors.push("Gemini output has no commands");
+        }
+    }
+
+    if (errors.length) {
+        console.error("\n❌ Gemini output validation failed:\n");
+        for (const e of errors) console.error(` - ${e}`);
+        throw new Error(
+            `Gemini validation failed with ${errors.length} error(s)`,
+        );
+    }
+}
+
+async function validateCanonicalSkills(): Promise<string[]> {
+    const errors: string[] = [];
+    if (!existsSync(SKILLS_DIR)) {
+        errors.push("skills/ directory not found");
+        return errors;
+    }
+
+    const skills = await discoverSkills(SKILLS_DIR);
+    for (const skill of skills) {
+        const content = await readFile(skill.skillFile, "utf-8");
+        const parsed = parseFrontmatterStrict(content, skill.skillFile);
+        if (!parsed.hasFrontmatter) {
+            errors.push(`${skill.skillFile}: missing YAML frontmatter`);
+            continue;
+        }
+        if (!parsed.meta.name) {
+            errors.push(`${skill.skillFile}: missing 'name' in frontmatter`);
+        }
+        if (!parsed.meta.description) {
+            errors.push(`${skill.skillFile}: missing 'description' in frontmatter`);
+        }
+    }
+
+    return errors;
 }
 
 async function copyDirRecursive(
@@ -645,21 +849,6 @@ async function copyPromptOptimization(): Promise<void> {
         PROMPT_OPT_DIR,
         join(DIST_DIR, "prompt-optimization"),
     );
-}
-
-async function syncToPiPackage(): Promise<void> {
-    const piPackageDir = join(ROOT, "packages", "pi");
-    await rm(join(piPackageDir, "skills"), { recursive: true, force: true });
-    await rm(join(piPackageDir, "prompts"), { recursive: true, force: true });
-    await copyDirRecursive(
-        join(DIST_PI_DIR, "skills"),
-        join(piPackageDir, "skills"),
-    );
-    await copyDirRecursive(
-        join(DIST_PI_DIR, "prompts"),
-        join(piPackageDir, "prompts"),
-    );
-    console.log("  ✓ Synced Pi package assets");
 }
 
 /**
@@ -886,6 +1075,11 @@ async function syncToLocalClaude(): Promise<void> {
     const claudeSkillsDir = join(ROOT_CLAUDE_DIR, "skills");
     await cleanDirectory(claudeSkillsDir);
     await copySkillsPreservePath(SKILLS_DIR, claudeSkillsDir);
+
+    // Sync agents for local Claude Code development
+    const claudeAgentsDir = join(ROOT_CLAUDE_DIR, "agents");
+    await cleanDirectory(claudeAgentsDir);
+    await copyMarkdownFiles(join(CONTENT_DIR, "agents"), claudeAgentsDir);
 
     // Sync hooks to .claude/hooks/ directory
     const claudeHooksDir = join(ROOT_CLAUDE_DIR, "hooks");
@@ -1172,7 +1366,7 @@ async function copySelectedMarkdownFiles(
         if (existsSync(src)) {
             await copyFile(src, join(destDir, `${name}.md`));
             copied.push(`./commands/${name}.md`);
-        } else {
+        } else if (!IS_TEST_MODE) {
             throw new Error(
                 `Command not found during marketplace sync: ${src}`,
             );
@@ -1194,7 +1388,7 @@ async function copySelectedAgentFiles(
         const src = join(srcDir, `${name}.md`);
         if (existsSync(src)) {
             await copyFile(src, join(destDir, `${name}.md`));
-        } else {
+        } else if (!IS_TEST_MODE) {
             throw new Error(`Agent not found during marketplace sync: ${src}`);
         }
     }
@@ -1214,7 +1408,7 @@ async function copySelectedSkills(
         const src = join(srcDir, name);
         if (existsSync(src)) {
             await copyDirRecursive(src, join(destDir, name));
-        } else {
+        } else if (!IS_TEST_MODE) {
             throw new Error(`Skill not found during marketplace sync: ${src}`);
         }
     }
@@ -1455,6 +1649,7 @@ async function validateContentOnly(): Promise<void> {
     }
 
     errors.push(...(await validateCommandSkillReferences(commandFiles)));
+    errors.push(...(await validateCanonicalSkills()));
 
     for (const fp of agentFiles) {
         const content = await readFile(fp, "utf-8");
@@ -1548,7 +1743,13 @@ async function buildAll(): Promise<void> {
     await buildClaude();
     await buildOpenCode();
     await buildPi();
+    await buildCursor();
+    await buildGemini();
     await copySkillsToDist();
+
+    // Marketplace plugin sync uses TEST_ROOT fixtures when TEST_ROOT is set.
+    await syncToMarketplacePlugins();
+    await generateMarketplaceJson();
 
     // Skip steps that require the full project tree when running in test mode
     if (!IS_TEST_MODE) {
@@ -1556,12 +1757,8 @@ async function buildAll(): Promise<void> {
         await copyCLI();
         await buildNpmEntrypoint();
 
-        // Sync to committed directories (required for marketplace/packages)
         console.log("\n📦 Syncing generated assets...");
         await syncToLocalClaude();
-        await syncToMarketplacePlugins();
-        await generateMarketplaceJson();
-        await syncToPiPackage();
     }
 
     // Validate agents after build

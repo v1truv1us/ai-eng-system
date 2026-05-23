@@ -383,3 +383,109 @@ After loop completes:
 | "I don't need to monitor the loop" | Unmonitored loops can get stuck. Check progress periodically to detect cycling. |
 | "The task is complex but the loop will figure it out" | Loops work best on well-defined tasks. Break complex tasks into smaller loops. |
 | "I'll skip the completion promise" | Without a unique completion signal, the loop does not know when to stop. |
+
+## Imported from ralph-loop/ralph-loop-help (MIT, cursor/plugins)
+
+# Ralph Loop Help
+
+## Trigger
+
+The user asks what Ralph Loop is, how it works, or needs usage guidance.
+
+## What to Explain
+
+### What is Ralph Loop?
+
+Ralph Loop implements the Ralph Wiggum technique — an iterative development methodology based on continuous AI loops, pioneered by Geoffrey Huntley.
+
+Core concept: the same prompt is fed to the agent repeatedly. The "self-referential" aspect comes from the agent seeing its own previous work in the files and git history, not from feeding output back as input.
+
+Each iteration:
+1. The agent receives the SAME prompt
+2. Works on the task, modifying files
+3. Tries to exit
+4. Stop hook intercepts and feeds the same prompt again
+5. The agent sees its previous work in the files
+6. Iteratively improves until completion
+
+### Starting a Ralph Loop
+
+Tell the agent your task along with options:
+
+```
+Start a ralph loop: "Build a REST API for todos" --max-iterations 20 --completion-promise "COMPLETE"
+```
+
+Options:
+- `--max-iterations N` — max iterations before auto-stop
+- `--completion-promise "TEXT"` — phrase to signal completion
+
+How it works:
+1. Creates `.cursor/ralph/scratchpad.md` state file
+2. Agent works on the task
+3. Stop hook intercepts exit and feeds the same prompt back
+4. Agent sees its previous work and iterates
+5. Continues until promise detected or max iterations reached
+
+### Cancelling a Ralph Loop
+
+Ask the agent to cancel the ralph loop. It will remove the state file and report the iteration count.
+
+### Completion Promises
+
+To signal completion, the agent outputs a `<promise>` tag:
+
+```
+<promise>TASK COMPLETE</promise>
+```
+
+The stop hook looks for this specific tag. Without it (or `--max-iterations`), Ralph runs indefinitely.
+
+### When to Use Ralph
+
+**Good for:**
+- Well-defined tasks with clear success criteria
+- Tasks requiring iteration and refinement
+- Iterative development with self-correction
+- Greenfield projects
+
+**Not good for:**
+- Tasks requiring human judgment or design decisions
+- One-shot operations
+- Tasks with unclear success criteria
+
+### Learn More
+
+- Original technique: https://ghuntley.com/ralph/
+- Ralph Orchestrator: https://github.com/mikeyobrien/ralph-orchestrator
+
+## Output
+
+Present the above information clearly to the user, tailored to their specific question.
+
+## Imported from ralph-loop/cancel-ralph (MIT, cursor/plugins)
+
+# Cancel Ralph
+
+## Trigger
+
+The user wants to cancel or stop an active Ralph loop.
+
+## Workflow
+
+1. Check if `.cursor/ralph/scratchpad.md` exists.
+
+2. **If it does not exist**: Tell the user "No active Ralph loop found."
+
+3. **If it exists**:
+   - Read `.cursor/ralph/scratchpad.md` to get the current iteration from the `iteration:` field.
+   - Remove the state file and any done flag:
+     ```bash
+     rm -rf .cursor/ralph
+     ```
+   - Report: "Cancelled Ralph loop (was at iteration N)."
+
+## Output
+
+A short confirmation with the iteration count, or a message that no loop was active.
+

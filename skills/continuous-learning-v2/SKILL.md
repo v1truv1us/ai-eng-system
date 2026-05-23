@@ -86,3 +86,25 @@ When an instinct reaches thresholds:
 | "This is too specific to be useful" | Specific patterns become general skills through evolution. Start specific, generalize later. |
 | "I don't have time to document" | 2 minutes now saves 2 hours of rediscovery later. Use the instinct template. |
 | "The confidence score is subjective" | Confidence is a starting point. Usage and success rates provide objective data over time. |
+
+## Imported from continual-learning/continual-learning (MIT, cursor/plugins)
+
+# Continual Learning
+
+Keep `AGENTS.md` current by delegating the memory update flow to one subagent.
+
+## Trigger
+
+Use when the user asks to mine prior chats, maintain `AGENTS.md`, or run the continual-learning loop.
+
+## Workflow
+
+1. Call `agents-memory-updater`.
+2. Return the updater result.
+
+## Guardrails
+
+- Keep the parent skill orchestration-only.
+- Do not mine transcripts or edit files in the parent flow.
+- Do not bypass the subagent.
+

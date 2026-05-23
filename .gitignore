@@ -37,6 +37,11 @@ dist/util/
 # OpenCode build artifacts (development only)
 dist/.opencode/
 dist/.claude-plugin/
+dist/.cursor-plugin/
+dist/.gemini/
+
+# Cursor plugin import staging (regenerate with scripts/import-cursor-plugins.ts)
+tmp/
 
 # Build scratch
 build.ts.tmp
@@ -46,9 +51,11 @@ build.ts.tmp
 
 # Package build outputs (rebuilt during publish workflow)
 packages/*/dist/
-packages/pi/prompts/
 packages/toolkit/.claude-plugin/
 packages/toolkit/.opencode/
+packages/toolkit/.cursor-plugin/
+packages/toolkit/.gemini/
+packages/toolkit/.pi/
 packages/toolkit/plugins/
 .dist/
 

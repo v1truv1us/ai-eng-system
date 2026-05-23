@@ -33,7 +33,6 @@ async function updatePublishVersions() {
         process.cwd(),
         "packages/toolkit/package.json",
     );
-    const piPackagePath = resolve(process.cwd(), "packages/pi/package.json");
     const versionedManifestPaths = [
         resolve(process.cwd(), ".claude-plugin/plugin.json"),
         resolve(process.cwd(), ".claude-plugin/marketplace.json"),
@@ -100,12 +99,6 @@ async function updatePublishVersions() {
         console.log(
             `🔄 Updated @ai-eng-system/toolkit version to ${coreVersion}`,
         );
-
-        await updateJsonFile(piPackagePath, (piPkg) => {
-            piPkg.version = coreVersion;
-            return piPkg;
-        });
-        console.log(`🔄 Updated @ai-eng-system/pi version to ${coreVersion}`);
 
         for (const manifestPath of versionedManifestPaths) {
             try {

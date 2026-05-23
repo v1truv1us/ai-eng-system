@@ -513,6 +513,43 @@ Missing description field.
             expect(promptContent).not.toContain("subtask: true");
         });
 
+        it("should build Cursor plugin structure", async () => {
+            await runBuild();
+
+            const cursorDir = join(DIST_DIR, ".cursor-plugin");
+            expect(existsSync(cursorDir)).toBe(true);
+
+            const pluginJsonPath = join(cursorDir, "plugin.json");
+            expect(existsSync(pluginJsonPath)).toBe(true);
+
+            const pluginJson = JSON.parse(
+                await readFile(pluginJsonPath, "utf-8"),
+            );
+            expect(pluginJson.name).toBe("ai-eng-system");
+            expect(pluginJson.skills).toBe("./skills/");
+            expect(pluginJson.agents).toBe("./agents/");
+
+            expect(
+                existsSync(join(cursorDir, "skills", "test-skill", "SKILL.md")),
+            ).toBe(true);
+            expect(
+                existsSync(join(cursorDir, "agents", "test-agent.md")),
+            ).toBe(true);
+        });
+
+        it("should build Gemini bundle structure", async () => {
+            await runBuild();
+
+            const geminiDir = join(DIST_DIR, ".gemini");
+            expect(existsSync(geminiDir)).toBe(true);
+            expect(
+                existsSync(join(geminiDir, "skills", "test-skill", "SKILL.md")),
+            ).toBe(true);
+            expect(
+                existsSync(join(geminiDir, "commands", "test-command.md")),
+            ).toBe(true);
+        });
+
         it("should copy skills to dist", async () => {
             await runBuild();
 

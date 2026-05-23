@@ -4,12 +4,11 @@ AI engineering workflow toolkit for Claude Code and OpenCode with namespaced com
 
 ## Packages
 
-This repository ships four npm packages:
+This repository ships three npm packages:
 
 - `@ai-eng-system/core` - shared library and content-loading helpers
-- `@ai-eng-system/toolkit` - generated Claude Code, OpenCode, and marketplace assets
+- `@ai-eng-system/toolkit` - generated Claude Code, OpenCode, Cursor, Gemini, Pi, and marketplace assets
 - `@ai-eng-system/cli` - executable installer and command-line workflows
-- `@ai-eng-system/pi` - generated Pi skills and prompt templates
 
 The repo root package is private and is never published.
 
@@ -48,10 +47,18 @@ OpenCode learning automation now surfaces toast-based suggestions for `/ai-eng/d
 ### Pi
 
 ```bash
-pi install npm:@ai-eng-system/pi
+pi install npm:@ai-eng-system/toolkit
 ```
 
-Pi loads ai-eng-system skills natively from the package `skills/` directory and exposes generated command prompts from `prompts/`.
+Pi loads skills from `.pi/skills/` and command prompts from `.pi/prompts/` in the toolkit package.
+
+### Cursor
+
+See [docs/cursor-setup.md](./docs/cursor-setup.md). Install `@ai-eng-system/toolkit` and use the generated `.cursor-plugin` bundle (skills, agents, and `rules/cursor/`).
+
+### Gemini CLI
+
+See [docs/gemini-cli-setup.md](./docs/gemini-cli-setup.md). Install `@ai-eng-system/toolkit` and copy the generated `.gemini/` bundle (skills and commands).
 
 ## Core Workflow
 
@@ -120,7 +127,7 @@ Recent alignment work includes:
 
 ## Release Model
 
-The current coordinated release version is `1.0.0` for:
+The current coordinated release version is `1.6.0` for:
 
 - `@ai-eng-system/core`
 - `@ai-eng-system/toolkit`
@@ -155,7 +162,9 @@ templates/              Decision and quality gate templates
 packages/core/          Published core library package
 packages/toolkit/       Published toolkit assets package
 packages/cli/           Published CLI package
-packages/pi/            Published Pi package (generated skills/prompts)
+dist/.pi/               Pi distribution (synced to toolkit/.pi/)
+dist/.cursor-plugin/    Cursor plugin bundle (synced to toolkit)
+dist/.gemini/           Gemini CLI bundle (synced to toolkit)
 plugins/                Marketplace plugin output (generated)
 dist/                   Generated root outputs
 docs-site/              Published documentation site (mirror of docs/)

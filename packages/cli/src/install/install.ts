@@ -11,14 +11,35 @@ import {
     getDistOpenCodeContent,
     type OpenCodeContent,
 } from "@ai-eng-system/core";
+import {
+    getInstallTargetDir,
+    getToolkitHarnessSource,
+    type ToolkitHarness,
+} from "./toolkit-path";
 
 const NAMESPACE_PREFIX = "ai-eng";
 
+export type InstallPlatform = "opencode" | "cursor" | "gemini" | "pi";
+
 interface InstallFlags {
     scope?: "project" | "global" | "auto";
+    platform?: InstallPlatform;
     dryRun?: boolean;
     yes?: boolean;
     verbose?: boolean;
+}
+
+function copyRecursive(src: string, dest: string): void {
+    const stat = fs.statSync(src);
+    if (stat.isDirectory()) {
+        fs.mkdirSync(dest, { recursive: true });
+        for (const entry of fs.readdirSync(src)) {
+            copyRecursive(path.join(src, entry), path.join(dest, entry));
+        }
+    } else {
+        fs.mkdirSync(path.dirname(dest), { recursive: true });
+        fs.copyFileSync(src, dest);
+    }
 }
 
 async function cleanNamespacedDirectory(
@@ -118,7 +139,59 @@ function detectInstallationScope(
     return "global";
 }
 
+async function installToolkitHarness(
+    harness: ToolkitHarness,
+    flags: InstallFlags,
+): Promise<void> {
+    const projectDir = process.cwd();
+    const sourceDir = getToolkitHarnessSource(harness);
+    const targetDir = getInstallTargetDir(harness, projectDir);
+
+    if (!fs.existsSync(sourceDir)) {
+        console.log(`❌ Harness bundle missing in toolkit: ${sourceDir}`);
+        console.log("   Run a release build or reinstall @ai-eng-system/toolkit.");
+        process.exit(1);
+    }
+
+    if (flags.verbose) {
+        console.log(`Platform: ${harness}`);
+        console.log(`Source: ${sourceDir}`);
+        console.log(`Target: ${targetDir}`);
+    }
+
+    if (flags.dryRun) {
+        console.log("🔍 dry-run: Would copy toolkit bundle:");
+        console.log(`   ${sourceDir}`);
+        console.log(`   -> ${targetDir}`);
+        return;
+    }
+
+    if (fs.existsSync(targetDir)) {
+        fs.rmSync(targetDir, { recursive: true, force: true });
+    }
+    fs.mkdirSync(path.dirname(targetDir), { recursive: true });
+    copyRecursive(sourceDir, targetDir);
+
+    console.log("\n✅ Installation complete!");
+    if (harness === "cursor") {
+        console.log("   Enable the ai-eng-system plugin in Cursor if needed.");
+    } else if (harness === "gemini") {
+        console.log("   Gemini CLI loads skills and commands from .gemini/");
+    } else if (harness === "pi") {
+        console.log(
+            "   Pi can also use: pi install npm:@ai-eng-system/toolkit",
+        );
+    }
+}
+
 async function runInstaller(flags: InstallFlags): Promise<void> {
+    const platform: InstallPlatform = flags.platform ?? "opencode";
+
+    if (platform === "cursor" || platform === "gemini" || platform === "pi") {
+        await installToolkitHarness(platform, flags);
+        return;
+    }
+
     const projectDir = process.cwd();
     const homeDir = process.env.HOME || process.env.USERPROFILE || "";
 
@@ -306,4 +379,4 @@ async function installContentFromCore(
     }
 }
 
-export { runInstaller };
+export { runInstaller, type InstallFlags };

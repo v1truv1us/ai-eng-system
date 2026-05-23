@@ -27,6 +27,18 @@ const sources = [
         source: resolve(repoRoot, "dist/.opencode"),
         target: resolve(toolkitRoot, ".opencode"),
     },
+    {
+        source: resolve(repoRoot, "dist/.cursor-plugin"),
+        target: resolve(toolkitRoot, ".cursor-plugin"),
+    },
+    {
+        source: resolve(repoRoot, "dist/.gemini"),
+        target: resolve(toolkitRoot, ".gemini"),
+    },
+    {
+        source: resolve(repoRoot, "dist/.pi"),
+        target: resolve(toolkitRoot, ".pi"),
+    },
     ...PLUGIN_NAMES.map((name) => ({
         source: resolve(repoRoot, `plugins/${name}`),
         target: resolve(toolkitRoot, `plugins/${name}`),
@@ -36,6 +48,10 @@ const sources = [
 const requiredMarkers = [
     resolve(toolkitRoot, ".claude-plugin/plugin.json"),
     resolve(toolkitRoot, ".opencode/opencode.jsonc"),
+    resolve(toolkitRoot, ".cursor-plugin/plugin.json"),
+    resolve(toolkitRoot, ".gemini/skills"),
+    resolve(toolkitRoot, ".pi/skills"),
+    resolve(toolkitRoot, ".pi/prompts"),
     ...PLUGIN_NAMES.map((name) =>
         resolve(toolkitRoot, `plugins/${name}/plugin.json`),
     ),

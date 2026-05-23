@@ -37,6 +37,7 @@
             "!**/venv",
             "!**/.venv",
             "!**/venv_validation",
+            "!**/tmp",
             "!**/*.d.ts"
         ]
     }

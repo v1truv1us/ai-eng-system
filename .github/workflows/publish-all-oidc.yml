@@ -94,6 +94,12 @@ jobs:
           bun scripts/update-publish-versions.ts $VERSION
       - name: Build repository
         run: bun run build
+      - name: Verify toolkit harness bundles
+        run: bun scripts/verify-toolkit-harnesses.ts
+      - name: Typecheck workspace
+        run: bun run typecheck
+      - name: Run root build tests
+        run: bun test tests/build.test.ts
       - name: Run core tests
         working-directory: ./packages/core
         run: bun test

@@ -1,7 +1,7 @@
 {
   "name": "@ai-eng-system/toolkit",
-  "version": "1.5.0",
-  "description": "Packaged Claude, OpenCode, and marketplace integration assets for ai-eng-system",
+  "version": "1.6.0",
+  "description": "Packaged Claude, OpenCode, Cursor, Gemini, Pi, and marketplace integration assets for ai-eng-system",
   "type": "module",
   "main": "./index.js",
   "types": "./index.d.ts",
@@ -16,13 +16,24 @@
     "index.d.ts",
     ".claude-plugin/",
     ".opencode/",
+    ".cursor-plugin/",
+    ".gemini/",
+    ".pi/",
     "plugins/",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
     "build": "bun ../../scripts/build-toolkit.ts",
-    "clean": "rm -rf .claude-plugin .opencode plugins"
+    "clean": "rm -rf .claude-plugin .opencode .cursor-plugin .gemini .pi plugins"
+  },
+  "pi": {
+    "skills": [
+      "./.pi/skills"
+    ],
+    "prompts": [
+      "./.pi/prompts/*.md"
+    ]
   },
   "keywords": [
     "ai-engineering",

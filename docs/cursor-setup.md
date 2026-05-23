@@ -2,56 +2,59 @@
 
 ## Overview
 
-This guide explains how to set up ai-eng-system skills, agents, and commands in Cursor IDE.
+Install ai-eng-system as an official Cursor plugin bundle (skills, agents, rules) generated from the canonical `skills/` and `content/` sources.
 
 ## Installation
 
-### Option 1: Copy Skills to Cursor Rules
-
-1. Create `.cursor/rules/` directory in your project root
-2. Copy skill contents from `skills/*/SKILL.md` into `.cursor/rules/`:
+### Option 1: From npm toolkit (recommended)
 
 ```bash
-# Copy all skills
-for skill in skills/*/; do
-  name=$(basename "$skill")
-  cp "$skill/SKILL.md" ".cursor/rules/${name}.md"
-done
+npm install @ai-eng-system/toolkit
 ```
 
-### Option 2: Use Cursor's Custom Instructions
+Copy or symlink the Cursor plugin bundle into your project:
 
-1. Open Cursor Settings → Custom Instructions
-2. Paste the contents of `CLAUDE.md` as your base instructions
-3. Add references to key skills in your custom instructions
+```bash
+mkdir -p .cursor
+cp -R node_modules/@ai-eng-system/toolkit/.cursor-plugin .cursor/plugins/ai-eng-system
+```
 
-## Available Skills
+Or reference the plugin path in Cursor's plugin settings if installing globally.
 
-After installation, the following skills are available:
+### Option 2: From repository build
 
-- `spec-driven-development` — Write specs before coding
-- `test-driven-development` — Red-Green-Refactor workflow
-- `incremental-implementation` — Thin vertical slices
-- `code-review-and-quality` — Multi-axis review
-- `code-simplification` — Behavior-preserving simplification
-- `debugging-and-error-recovery` — Root-cause debugging
-- `security-and-hardening` — OWASP Top 10 prevention
-- `performance-optimization` — Measure-first optimization
-- `git-workflow-and-versioning` — Trunk-based development
-- `ci-cd-and-automation` — Shift Left, quality gates
-- And 28 more...
+```bash
+git clone https://github.com/v1truv1us/ai-eng-system.git
+cd ai-eng-system
+bun run build
+cp -R dist/.cursor-plugin .cursor/plugins/ai-eng-system
+```
 
-## Using Agents
+### Option 3: Skills only (legacy)
 
-Cursor doesn't support subagents natively. Instead:
+Copy individual skills from `skills/*/SKILL.md` into `.cursor/rules/` if you only need skill context without the full plugin manifest.
 
-1. Use Cursor's Chat with system prompts from `.opencode/agent/ai-eng/`
-2. For code review, paste the agent's instructions into Chat
-3. For specialized tasks, use the relevant skill's instructions
+## Plugin contents
 
-## Best Practices
+After build, `dist/.cursor-plugin/` includes:
 
-1. **Use skills as context**: When working on a task, open the relevant skill's `.md` file in Cursor's editor to provide context
-2. **Follow the workflow**: research → specify → plan → work → review
-3. **Verify after every change**: Run tests, lint, and typecheck
-4. **Keep changes small**: ~100 lines per commit
+- `plugin.json` — Cursor plugin manifest
+- `skills/` — All canonical skills (including Cursor-imported workflows)
+- `agents/` — Agent definitions from `content/agents/`
+- `rules/` — Cursor-specific rules from `rules/cursor/`
+
+## Using agents
+
+Cursor supports plugin agents when installed via the plugin bundle. For ad-hoc use, paste agent instructions from `content/agents/` into Chat.
+
+## Best practices
+
+1. Use skills as context for task-specific work
+2. Follow the workflow: research → specify → plan → work → review
+3. Verify after every change: tests, lint, typecheck
+4. Keep changes small (~100 lines per commit)
+
+## Related
+
+- [Gemini CLI Setup](./gemini-cli-setup.md)
+- [Attribution: Cursor plugins](./attribution/cursor-plugins.md)

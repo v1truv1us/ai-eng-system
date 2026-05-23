@@ -7,11 +7,14 @@ This directory contains the GitHub Actions workflows used for trusted publishing
 Use `.github/workflows/publish-all-oidc.yml` for coordinated releases.
 
 That workflow:
+- runs on **version tags** (`v*`) and optional manual dispatch
 - aligns workspace versions
-- builds the repository once
-- runs core tests
-- runs a release-safe CLI smoke test suite
+- builds the repository once (including toolkit harness bundles for OpenCode, Cursor, Gemini, Pi, Claude)
+- verifies harness artifacts under `packages/toolkit/` before publish
+- typechecks and runs build tests, core tests, and CLI build tests
 - publishes packages in order: `core -> toolkit -> cli`
+
+Generated platform bundles are produced in CI and published via npm; they are not committed to the repository.
 
 ## Package-specific Workflows
 

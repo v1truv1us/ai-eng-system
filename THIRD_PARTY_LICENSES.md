@@ -12,3 +12,15 @@
   - `skills/incremental-implementation/SKILL.md`
 
 The adapted files in this repository retain the upstream MIT license obligations.
+
+## cursor/plugins
+
+- Source: `https://github.com/cursor/plugins`
+- License: MIT
+- Import script: `scripts/import-cursor-plugins.ts`
+- Attribution log: `docs/attribution/cursor-plugins.md`
+- Adapted content:
+  - New and merged skills under `skills/` (see platform-packaging decision in `docs/decisions/platform-packaging.md`)
+  - Cursor rule packs under `rules/cursor/`
+
+Imported Cursor plugin content retains upstream MIT license obligations.
