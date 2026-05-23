@@ -97,7 +97,9 @@ jobs:
       - name: Verify toolkit harness bundles
         run: bun scripts/verify-toolkit-harnesses.ts
       - name: Typecheck workspace
-        run: bun run typecheck
+        run: |
+          cd packages/core && bun run typecheck
+          cd ../cli && bun run typecheck
       - name: Run root build tests
         run: bun test tests/build.test.ts
       - name: Run core tests

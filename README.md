@@ -127,7 +127,7 @@ Recent alignment work includes:
 
 ## Release Model
 
-The current coordinated release version is `1.6.0` for:
+The current coordinated release version is `1.6.1` for:
 
 - `@ai-eng-system/core`
 - `@ai-eng-system/toolkit`
