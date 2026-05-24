@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.52.0",
+    "@esbuild/linux-arm64": "^0.28.0",
     "@opencode-ai/sdk": "^1.4.3"
   },
   "devDependencies": {

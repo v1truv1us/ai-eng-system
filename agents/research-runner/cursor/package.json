@@ -9,6 +9,7 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.52.0",
     "@cursor/sdk": "latest",
+    "@esbuild/linux-arm64": "^0.28.0",
     "dotenv": "^16.0.0"
   },
   "devDependencies": {

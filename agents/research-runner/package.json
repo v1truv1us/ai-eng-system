@@ -1,0 +1,8 @@
+{
+  "name": "research-runner",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.52.0"
+  }
+}
