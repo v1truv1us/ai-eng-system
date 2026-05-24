@@ -1,8 +1,9 @@
 ---
 name: morning-brief
-description: Daily briefing synthesizing calendar, tasks, and priorities. Use for "morning brief", "daily briefing", "start my day", or /morning-brief.
-version: 1.0.0
-tags: [productivity, briefing, planning]
+description: "Daily briefing synthesizing calendar, tasks, and priorities. Use for \"morning brief\", \"daily briefing\", \"start my day\", or /morning-brief."
+metadata:
+  version: 1.0.0
+  tags: productivity, briefing, planning
 ---
 
 # Morning Brief Skill

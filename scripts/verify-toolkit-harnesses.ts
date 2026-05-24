@@ -13,9 +13,11 @@ const toolkitRoot = resolve(repoRoot, "packages/toolkit");
 const requiredMarkers = [
     resolve(toolkitRoot, ".claude-plugin/plugin.json"),
     resolve(toolkitRoot, ".opencode/opencode.jsonc"),
-    resolve(toolkitRoot, ".cursor-plugin/plugin.json"),
+    resolve(toolkitRoot, ".cursor-plugin/.cursor-plugin/plugin.json"),
     resolve(toolkitRoot, ".cursor-plugin/skills"),
     resolve(toolkitRoot, ".cursor-plugin/agents"),
+    resolve(toolkitRoot, ".cursor-plugin/commands"),
+    resolve(toolkitRoot, ".cursor-plugin/hooks/cursor-hooks.json"),
     resolve(toolkitRoot, ".gemini/skills"),
     resolve(toolkitRoot, ".gemini/commands"),
     resolve(toolkitRoot, ".pi/skills"),

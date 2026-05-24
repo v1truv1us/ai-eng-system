@@ -1,8 +1,9 @@
 ---
 name: repurpose
-description: Adapt existing content into new formats for different channels. Use for "repurpose this", "turn this into", "adapt for", or /repurpose.
-version: 1.0.0
-tags: [content, writing, marketing]
+description: "Adapt existing content into new formats for different channels. Use for \"repurpose this\", \"turn this into\", \"adapt for\", or /repurpose."
+metadata:
+  version: 1.0.0
+  tags: content, writing, marketing
 ---
 
 # Content Repurpose Skill

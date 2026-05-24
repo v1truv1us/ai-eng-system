@@ -1,7 +1,8 @@
 ---
 name: coolify-deploy
-description: "Deploy applications to Coolify self-hosting platform. Use when deploying to Coolify, configuring build settings, setting environment variables, managing health checks, or performing rollbacks."
-version: 1.0.0
+description: Deploy applications to Coolify self-hosting platform. Use when deploying to Coolify, configuring build settings, setting environment variables, managing health checks, or performing rollbacks.
+metadata:
+  version: 1.0.0
 ---
 
 # Coolify Deployment Skill

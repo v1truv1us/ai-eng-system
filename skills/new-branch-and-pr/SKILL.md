@@ -1,10 +1,9 @@
 ---
 name: new-branch-and-pr
 description: Create a fresh branch, complete work, and open a pull request
-version: 1.0.0
-tags:
-  - cursor-import
-  - cursor-team-kit
+metadata:
+  version: 1.0.0
+  tags: cursor-import, cursor-team-kit
 ---
 
 # New branch and PR

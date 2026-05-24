@@ -1,11 +1,9 @@
 ---
 name: fix-merge-conflicts
-description: Resolve merge conflicts non-interactively, validate build and
-  tests, and finalize conflict resolution
-version: 1.0.0
-tags:
-  - cursor-import
-  - cursor-team-kit
+description: Resolve merge conflicts non-interactively, validate build and tests, and finalize conflict resolution
+metadata:
+  version: 1.0.0
+  tags: cursor-import, cursor-team-kit
 ---
 
 # Fix merge conflicts

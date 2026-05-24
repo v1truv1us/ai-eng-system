@@ -1,8 +1,9 @@
 ---
 name: prompt-refinement
 description: Transform prompts into structured TCRO format with phase-specific clarification. Automatically invoked by /ai-eng/research, /ai-eng/plan, /ai-eng/work, and /ai-eng/specify commands. Use when refining vague prompts, structuring requirements, or enhancing user input quality before execution.
-version: 1.0.0
-tags: [prompting, clarification, structuring, tcro]
+metadata:
+  version: 1.0.0
+  tags: prompting, clarification, structuring, tcro
 ---
 
 # Prompt Refinement Skill

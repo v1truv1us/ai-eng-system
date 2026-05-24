@@ -1,7 +1,8 @@
 ---
 name: npm-trusted-publishing
-description: "Publish npm packages via GitHub Actions with OIDC trusted publishing and provenance. Use when setting up automated npm publishes, debugging ENEEDAUTH/E404 errors, or configuring provenance attestations."
-version: 1.0.0
+description: Publish npm packages via GitHub Actions with OIDC trusted publishing and provenance. Use when setting up automated npm publishes, debugging ENEEDAUTH/E404 errors, or configuring provenance attestations.
+metadata:
+  version: 1.0.0
 ---
 
 # npm Trusted Publishing Skill

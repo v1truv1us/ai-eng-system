@@ -1,8 +1,9 @@
 ---
 name: content-optimization
 description: Enhance any content type using research-backed techniques. Optimize AI prompts with step-by-step approval, improve code quality, refine database queries, enhance documentation, optimize commit messages, and improve communication. Wraps incentive-prompting skill with content-type detection.
-version: 1.0.0
-tags: [optimization, prompts, code, queries, documentation, communication]
+metadata:
+  version: 1.0.0
+  tags: optimization, prompts, code, queries, documentation, communication
 ---
 
 # Content Optimization Skill
@@ -420,4 +421,3 @@ This skill provides the framework; you customize the techniques.
 | "I'll optimize after the first draft" | Optimization during creation prevents compounding bad patterns. |
 | "The confidence score is high enough" | High confidence does not mean perfect. Review before applying any optimization. |
 | "This content type doesn't need optimization" | Every content type has domain-specific improvements. Apply the right techniques. |
-

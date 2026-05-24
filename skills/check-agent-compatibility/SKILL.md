@@ -1,11 +1,9 @@
 ---
 name: check-agent-compatibility
-description: "Run the full repository compatibility pass: scanner score, startup
-  path, validation loop, and docs reliability."
-version: 1.0.0
-tags:
-  - cursor-import
-  - unknown
+description: "Run the full repository compatibility pass: scanner score, startup path, validation loop, and docs reliability."
+metadata:
+  version: 1.0.0
+  tags: cursor-import, agent-compatibility
 ---
 
 # Check agent compatibility

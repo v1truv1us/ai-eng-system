@@ -29,6 +29,8 @@ COMMANDS:
   init [options]                     # Initialize .ai-eng/config.yaml with defaults
   ralph <prompt|workflow> [options]  # Iteration loop runner
   install [options]                  # Install OpenCode, Cursor, Gemini, or Pi assets
+  clean [options]                    # Remove ai-eng-managed install artifacts
+  reinstall [options]                # Clean then install (upgrade shortcut)
 
 GLOBAL OPTIONS:
   -h, --help                         Show this help message
@@ -40,6 +42,8 @@ EXAMPLES:
   ai-eng "implement user authentication"
   ai-eng ralph "fix bug" --print-logs --log-level DEBUG
   ai-eng install --scope project
+  ai-eng reinstall --platform cursor
+  ai-eng clean --platform gemini --scope global
   ai-eng ralph feature-spec.yml --max-iters 5
   ai-eng ralph --tui --resume
   ai-eng ralph "make fleettools usable" --ship --max-cycles 30
@@ -74,21 +78,69 @@ USAGE:
 
 OPTIONS:
   --platform opencode|cursor|gemini|pi   Target harness (default: opencode)
-  --scope project|global|auto            OpenCode only (default: auto-detect)
+  --scope project|global|auto            Install scope (default: auto-detect)
+  --fresh                                Clean before install (default)
+  --skip-clean                           Install without removing previous ai-eng files
   --dry-run                              Show what would be done without writing
   --yes                                  Skip confirmation prompts
   -v, --verbose                          Verbose output
 
 EXAMPLES:
-  ai-eng install                                    # OpenCode (auto scope)
-  ai-eng install --platform cursor                  # .cursor/plugins/ai-eng-system/
+  ai-eng install                                    # OpenCode (auto scope, clean first)
+  ai-eng install --platform cursor                  # project: plugin + .agents/skills/
+  ai-eng install --platform cursor --scope global   # ~/.cursor/plugins/local/ai-eng-system/ + skills
+  ai-eng install --platform pi --scope global       # ~/.agents/skills/ (minimal)
   ai-eng install --platform gemini                  # ./.gemini/
-  ai-eng install --platform pi                      # ./.pi/
+  ai-eng install --platform gemini --scope global   # merge into ~/.gemini/
+  ai-eng install --platform pi                      # .pi/ + .agents/skills/
   ai-eng install --scope project                    # OpenCode project .opencode/
   ai-eng install --scope global                     # OpenCode ~/.config/opencode/
-  ai-eng install --platform cursor --dry-run
+  ai-eng reinstall --platform cursor                # Same as clean + install
+
+Cursor and Pi load Agent Skills from .agents/skills/ (project) and
+~/.agents/skills/ (global). Global Cursor installs the full plugin under
+~/.cursor/plugins/local/ai-eng-system/. Global pi installs skills only.
 
 Requires @ai-eng-system/toolkit for cursor, gemini, and pi.
+`;
+
+const CLEAN_HELP_TEXT = `
+ai-eng clean - Remove ai-eng-managed commands, agents, skills, and bundles
+
+Removes only artifacts installed by ai-eng (tracked in .ai-eng/install-manifest.json
+or derived from the current toolkit/core package). Does not delete user-owned
+skills, commands, or unrelated harness configuration.
+
+USAGE:
+  ai-eng clean [options]
+
+OPTIONS:
+  --platform opencode|cursor|gemini|pi|all   Target harness (default: opencode)
+  --scope project|global|auto                Scope (default: auto-detect)
+  --dry-run                                  Show what would be removed
+  -v, --verbose                              Verbose output
+  -h, --help                                 Show this help message
+
+EXAMPLES:
+  ai-eng clean --platform cursor --scope project
+  ai-eng clean --platform opencode --scope global
+  ai-eng clean --platform all --scope project
+`;
+
+const REINSTALL_HELP_TEXT = `
+ai-eng reinstall - Clean previous ai-eng install, then install fresh
+
+Shortcut for: ai-eng clean && ai-eng install
+
+USAGE:
+  ai-eng reinstall [options]
+
+OPTIONS:
+  Same as ai-eng install (platform, scope, dry-run, verbose)
+
+EXAMPLES:
+  ai-eng reinstall --platform cursor
+  ai-eng reinstall --platform gemini --scope global
 `;
 
 const RALPH_HELP_TEXT = `
@@ -136,16 +188,8 @@ EXAMPLES:
   ai-eng ralph --no-loop "single-shot task"
 `;
 
-import type { InstallPlatform } from "../install/install";
-
-interface InstallFlags {
-    scope?: "project" | "global" | "auto";
-    platform?: InstallPlatform;
-    dryRun?: boolean;
-    yes?: boolean;
-    verbose?: boolean;
-    help?: boolean;
-}
+import type { InstallFlags } from "../install/types";
+import type { CleanFlags } from "../install/types";
 
 interface InitFlags {
     interactive?: boolean;
@@ -191,51 +235,71 @@ async function runInit(args: string[]): Promise<void> {
     await initConfig(flags);
 }
 
+interface InstallCommandFlags extends InstallFlags {
+    help?: boolean;
+}
+
+interface CleanCommandFlags extends CleanFlags {
+    help?: boolean;
+}
+
+function parsePlatformArg(
+    platformRaw: string | undefined,
+    allowAll = false,
+): InstallFlags["platform"] | "all" | undefined {
+    if (!platformRaw) return undefined;
+    const allowed = new Set([
+        "opencode",
+        "cursor",
+        "gemini",
+        "pi",
+        "claude",
+        ...(allowAll ? ["all"] : []),
+    ]);
+    if (!allowed.has(platformRaw)) {
+        console.log(
+            `❌ Unknown platform "${platformRaw}". Use opencode, cursor, gemini, pi${allowAll ? ", or all" : ""}.`,
+        );
+        process.exit(1);
+    }
+    if (platformRaw === "claude") {
+        console.log(
+            "Claude Code uses the marketplace plugin. Remove via Claude's plugin UI.",
+        );
+        console.log("  /plugin marketplace add v1truv1us/ai-eng-system");
+        process.exit(0);
+    }
+    return platformRaw as InstallFlags["platform"] | "all";
+}
+
 /**
  * Handle the 'install' subcommand
  */
 async function runInstall(args: string[]): Promise<void> {
-    const { values, positionals } = parseArgs({
+    const { values } = parseArgs({
         args,
         options: {
             scope: { type: "string" },
             platform: { type: "string" },
             "dry-run": { type: "boolean" },
             yes: { type: "boolean" },
+            fresh: { type: "boolean", default: true },
+            "skip-clean": { type: "boolean" },
             verbose: { type: "boolean", short: "v" },
             help: { type: "boolean" },
         },
         allowPositionals: true,
     });
 
-    const platformRaw = values.platform as string | undefined;
-    const allowedPlatforms = new Set([
-        "opencode",
-        "cursor",
-        "gemini",
-        "pi",
-        "claude",
-    ]);
-    if (platformRaw && !allowedPlatforms.has(platformRaw)) {
-        console.log(
-            `❌ Unknown platform "${platformRaw}". Use opencode, cursor, gemini, or pi.`,
-        );
-        process.exit(1);
-    }
-    if (platformRaw === "claude") {
-        console.log(
-            "Claude Code installs via the marketplace plugin, not ai-eng install.",
-        );
-        console.log("  /plugin marketplace add v1truv1us/ai-eng-system");
-        console.log("  /plugin install ai-eng-system@ai-eng-marketplace");
-        process.exit(0);
-    }
+    const platform = parsePlatformArg(values.platform as string | undefined);
 
-    const flags: InstallFlags = {
+    const flags: InstallCommandFlags = {
         scope: values.scope as InstallFlags["scope"],
-        platform: (platformRaw as InstallPlatform | undefined) ?? "opencode",
+        platform: (platform as InstallFlags["platform"]) ?? "opencode",
         dryRun: values["dry-run"],
         yes: values.yes,
+        fresh: values.fresh,
+        skipClean: values["skip-clean"],
         verbose: values.verbose,
         help: values.help,
     };
@@ -245,9 +309,99 @@ async function runInstall(args: string[]): Promise<void> {
         return;
     }
 
-    // Dynamic import to avoid circular dependencies and to allow install logic to be optional
     const { runInstaller } = await import("../install/install");
     await runInstaller(flags);
+}
+
+/**
+ * Handle the 'clean' subcommand
+ */
+async function runClean(args: string[]): Promise<void> {
+    const { values } = parseArgs({
+        args,
+        options: {
+            scope: { type: "string" },
+            platform: { type: "string" },
+            "dry-run": { type: "boolean" },
+            verbose: { type: "boolean", short: "v" },
+            help: { type: "boolean" },
+        },
+        allowPositionals: true,
+    });
+
+    const platform = parsePlatformArg(values.platform as string | undefined, true);
+
+    const flags: CleanCommandFlags = {
+        scope: values.scope as CleanFlags["scope"],
+        platform: (platform as CleanFlags["platform"]) ?? "opencode",
+        dryRun: values["dry-run"],
+        verbose: values.verbose,
+        help: values.help,
+    };
+
+    if (flags.help) {
+        console.log(CLEAN_HELP_TEXT);
+        return;
+    }
+
+    const { runCleaner } = await import("../install/clean");
+    const { resolveInstallScope } = await import("../install/install");
+    await runCleaner(flags, (projectDir) =>
+        resolveInstallScope({ scope: flags.scope }, projectDir),
+    );
+}
+
+/**
+ * Handle the 'reinstall' subcommand
+ */
+async function runReinstall(args: string[]): Promise<void> {
+    const { values } = parseArgs({
+        args,
+        options: {
+            scope: { type: "string" },
+            platform: { type: "string" },
+            "dry-run": { type: "boolean" },
+            verbose: { type: "boolean", short: "v" },
+            help: { type: "boolean" },
+        },
+        allowPositionals: true,
+    });
+
+    const platform = parsePlatformArg(values.platform as string | undefined);
+
+    if (values.help) {
+        console.log(REINSTALL_HELP_TEXT);
+        return;
+    }
+
+    const cleanFlags: CleanCommandFlags = {
+        scope: values.scope as CleanFlags["scope"],
+        platform: (platform as CleanFlags["platform"]) ?? "opencode",
+        dryRun: values["dry-run"],
+        verbose: values.verbose,
+    };
+
+    const installFlags: InstallCommandFlags = {
+        scope: values.scope as InstallFlags["scope"],
+        platform: (platform as InstallFlags["platform"]) ?? "opencode",
+        dryRun: values["dry-run"],
+        verbose: values.verbose,
+        fresh: true,
+        skipClean: false,
+    };
+
+    const { runCleaner } = await import("../install/clean");
+    const { runInstaller, resolveInstallScope } = await import("../install/install");
+
+    await runCleaner(cleanFlags, (projectDir) =>
+        resolveInstallScope({ scope: cleanFlags.scope }, projectDir),
+    );
+
+    if (!values["dry-run"]) {
+        console.log("");
+    }
+
+    await runInstaller(installFlags);
 }
 
 /**
@@ -388,6 +542,14 @@ async function main() {
             case "install":
             case "i":
                 await runInstall(subcommandArgs);
+                break;
+
+            case "clean":
+                await runClean(subcommandArgs);
+                break;
+
+            case "reinstall":
+                await runReinstall(subcommandArgs);
                 break;
 
             case "ralph":

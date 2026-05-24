@@ -1,8 +1,9 @@
 ---
 name: knowledge-capture
 description: Document solved problems to build cumulative team knowledge. Systematically capture solutions with context, code examples, gotchas, and related links. Use after completing workflows to ensure learnings compound for future team members.
-version: 1.0.0
-tags: [documentation, knowledge-management, team-learning, problem-solving]
+metadata:
+  version: 1.0.0
+  tags: documentation, knowledge-management, team-learning, problem-solving
 ---
 
 # Knowledge Capture Skill
@@ -345,4 +346,3 @@ Compounding engineering isn't about working harder—it's about working smarter 
 | "The code explains itself" | Code shows what was done. Knowledge capture explains why and what was learned. |
 | "No one will read this documentation" | People read docs when they are stuck. Good docs prevent being stuck. |
 | "I don't have time for knowledge capture" | Not capturing knowledge costs more time when the same problem is solved again. |
-

@@ -1,8 +1,9 @@
 ---
 name: monorepo-initialization
 description: Recursively initialize AGENTS.md in monorepo subdirectories with smart detection. Creates hierarchical agent context files with proper linking to root CLAUDE.md and parent AGENTS.md. Use for setting up multi-package projects, microservices, or any project with important subdirectories that need AI agent guidance.
-version: 1.0.0
-tags: [monorepo, agents, context-engineering, setup, hierarchy]
+metadata:
+  version: 1.0.0
+  tags: monorepo, agents, context-engineering, setup, hierarchy
 ---
 
 # Monorepo Initialization Skill
@@ -434,4 +435,3 @@ This transforms your monorepo from "confusing structure" to "clear, navigable co
 | "One AGENTS.md at the root is enough" | Root-level guidance does not scale to 20+ packages. Each package needs focused guidance. |
 | "I don't need to document build commands" | Agents need to know how to run tests and builds. Document them or agents guess wrong. |
 | "The hierarchy metadata is boilerplate" | Hierarchy metadata enables agents to navigate from root to package. It is structural, not decorative. |
-

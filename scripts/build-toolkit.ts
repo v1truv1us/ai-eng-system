@@ -16,6 +16,7 @@ const PLUGIN_NAMES = [
     "ai-eng-quality",
     "ai-eng-content",
     "ai-eng-plugin-dev",
+    "ai-eng-pstack",
 ];
 
 const sources = [
@@ -48,12 +49,17 @@ const sources = [
 const requiredMarkers = [
     resolve(toolkitRoot, ".claude-plugin/plugin.json"),
     resolve(toolkitRoot, ".opencode/opencode.jsonc"),
-    resolve(toolkitRoot, ".cursor-plugin/plugin.json"),
+    resolve(toolkitRoot, ".cursor-plugin/.cursor-plugin/plugin.json"),
+    resolve(toolkitRoot, ".cursor-plugin/commands"),
+    resolve(toolkitRoot, ".cursor-plugin/hooks/cursor-hooks.json"),
     resolve(toolkitRoot, ".gemini/skills"),
     resolve(toolkitRoot, ".pi/skills"),
     resolve(toolkitRoot, ".pi/prompts"),
     ...PLUGIN_NAMES.map((name) =>
         resolve(toolkitRoot, `plugins/${name}/plugin.json`),
+    ),
+    ...PLUGIN_NAMES.map((name) =>
+        resolve(toolkitRoot, `plugins/${name}/.cursor-plugin/plugin.json`),
     ),
 ];
 

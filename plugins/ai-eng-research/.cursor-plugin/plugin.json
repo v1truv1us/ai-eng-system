@@ -1,0 +1,28 @@
+{
+  "name": "ai-eng-research",
+  "displayName": "AI Engineering Research",
+  "version": "1.5.0",
+  "description": "Deep research, knowledge capture, and documentation tools",
+  "author": {
+    "name": "v1truv1us",
+    "url": "https://github.com/v1truv1us/ai-eng-system"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/v1truv1us/ai-eng-system",
+  "repository": "https://github.com/v1truv1us/ai-eng-system",
+  "keywords": [
+    "research",
+    "documentation",
+    "knowledge",
+    "fact-checking"
+  ],
+  "category": "development",
+  "tags": [
+    "research-orchestration",
+    "documentation",
+    "knowledge-capture"
+  ],
+  "skills": "./skills/",
+  "agents": "./agents/",
+  "commands": "./commands/"
+}

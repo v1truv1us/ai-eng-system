@@ -20,14 +20,26 @@ Install ai-eng-system per harness. **Generated bundles are built on release (git
 npm install -g @ai-eng-system/cli @ai-eng-system/toolkit
 ```
 
-| Harness | Command |
-| --- | --- |
-| OpenCode | `ai-eng install` or `ai-eng install --platform opencode --scope project` |
-| Cursor | `ai-eng install --platform cursor` → `.cursor/plugins/ai-eng-system/` |
-| Gemini CLI | `ai-eng install --platform gemini` → `./.gemini/` |
-| Pi | `ai-eng install --platform pi` → `./.pi/` or `pi install npm:@ai-eng-system/toolkit` |
+### Upgrade or refresh an install
 
-Project installs run from your repo root. OpenCode also supports `--scope global` for `~/.config/opencode/`.
+`ai-eng install` **cleans previous ai-eng-managed files first** (commands, agents, skills, bundles), then installs the current package version. For an explicit two-step upgrade:
+
+```bash
+ai-eng reinstall --platform cursor          # clean + install
+ai-eng clean --platform opencode --scope global   # uninstall only
+ai-eng install --skip-clean                 # install without pre-clean (not recommended)
+```
+
+Install state is tracked in `.ai-eng/install-manifest.json` (project) or `~/.config/ai-eng/install-manifest.json` (global) so cleans remove stale skills/commands without touching your own files.
+
+| Harness | Project | Global |
+| --- | --- | --- |
+| OpenCode | `ai-eng install` or `ai-eng install --scope project` | `ai-eng install --scope global` → `~/.config/opencode/` |
+| Cursor | `ai-eng install --platform cursor` → plugin + `.agents/skills/` | `ai-eng install --platform cursor --scope global` → `~/.cursor/plugins/local/ai-eng-system/` + `~/.agents/skills/` |
+| Gemini | `ai-eng install --platform gemini` → `./.gemini/` | `ai-eng install --platform gemini --scope global` → merge into `~/.gemini/` |
+| Pi | `ai-eng install --platform pi` → `.pi/` + `.agents/skills/` | `ai-eng install --platform pi --scope global` → `~/.agents/skills/` only |
+
+Cursor and Pi discover [Agent Skills](https://agentskills.io) from `.agents/skills/` (project) and `~/.agents/skills/` (user). Global Cursor installs include the full plugin bundle under `~/.cursor/plugins/local/ai-eng-system/`. Global Pi remains skills-only; use project scope for the full `.pi/` prompts bundle.
 
 ## Build from source (contributors)
 

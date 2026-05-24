@@ -1,0 +1,27 @@
+{
+  "name": "ai-eng-pstack",
+  "displayName": "AI Engineering Pstack",
+  "version": "1.5.0",
+  "description": "Pstack deep-work skills (architecture, TDD, principles) imported from cursor/plugins",
+  "author": {
+    "name": "v1truv1us",
+    "url": "https://github.com/v1truv1us/ai-eng-system"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/v1truv1us/ai-eng-system",
+  "repository": "https://github.com/v1truv1us/ai-eng-system",
+  "keywords": [
+    "pstack",
+    "principles",
+    "architecture",
+    "tdd",
+    "deep-work"
+  ],
+  "category": "development",
+  "tags": [
+    "pstack",
+    "deep-work",
+    "cursor-import"
+  ],
+  "skills": "./skills/"
+}

@@ -1,8 +1,9 @@
 ---
 name: research-deep
-description: Multi-source deep research with confidence-rated synthesis. Use for "research deeply", "deep dive on", "comprehensive research", or /research-deep.
-version: 1.0.0
-tags: [research, investigation, synthesis]
+description: "Multi-source deep research with confidence-rated synthesis. Use for \"research deeply\", \"deep dive on\", \"comprehensive research\", or /research-deep."
+metadata:
+  version: 1.0.0
+  tags: research, investigation, synthesis
 ---
 
 # Research Deep-Dive Skill

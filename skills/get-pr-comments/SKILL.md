@@ -1,10 +1,9 @@
 ---
 name: get-pr-comments
 description: Fetch and summarize review comments from the active pull request
-version: 1.0.0
-tags:
-  - cursor-import
-  - cursor-team-kit
+metadata:
+  version: 1.0.0
+  tags: cursor-import, cursor-team-kit
 ---
 
 # Get PR comments

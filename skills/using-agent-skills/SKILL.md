@@ -1,6 +1,6 @@
 ---
 name: using-agent-skills
-description: "Discovery and invocation of all skills, commands, and agents. Decision tree for task-to-skill mapping. Core operating behaviors for agents. Use when unsure which skill or agent to use."
+description: Discovery and invocation of all skills, commands, and agents. Decision tree for task-to-skill mapping. Core operating behaviors for agents. Use when unsure which skill or agent to use.
 ---
 
 # Using Agent Skills

@@ -1,13 +1,9 @@
 ---
 name: workflow-from-chats
-description: Extract durable working preferences from recent Cursor chats and
-  convert them into skills, rules, or workflow docs. Use when asked to learn
-  preferences, mine feedback, personalize workflows, or generate
-  team/person-specific agent guidance.
-version: 1.0.0
-tags:
-  - cursor-import
-  - cursor-team-kit
+description: Extract durable working preferences from recent Cursor chats and convert them into skills, rules, or workflow docs. Use when asked to learn preferences, mine feedback, personalize workflows, or generate team/person-specific agent guidance.
+metadata:
+  version: 1.0.0
+  tags: cursor-import, cursor-team-kit
 ---
 
 # Workflow From Chats

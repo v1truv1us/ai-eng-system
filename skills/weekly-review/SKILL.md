@@ -1,11 +1,9 @@
 ---
 name: weekly-review
-description: Produce a weekly synthesis of authored commits with highlights by
-  bugfix, tech debt, and net-new work
-version: 1.0.0
-tags:
-  - cursor-import
-  - cursor-team-kit
+description: Produce a weekly synthesis of authored commits with highlights by bugfix, tech debt, and net-new work
+metadata:
+  version: 1.0.0
+  tags: cursor-import, cursor-team-kit
 ---
 
 # Weekly review

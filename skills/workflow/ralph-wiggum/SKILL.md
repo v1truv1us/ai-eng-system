@@ -1,8 +1,9 @@
 ---
 name: ralph-wiggum
 description: Continuous iteration loop pattern for well-defined tasks with clear completion criteria. Use when getting tests to pass, implementing features with automatic verification, bug fixing with clear success conditions, or running automated development overnight. Provides prompt templates, safety guidelines, and integration patterns for ai-eng-system workflows.
-version: 1.0.0
-tags: [workflow, iteration, automation, continuous, looping]
+metadata:
+  version: 1.0.0
+  tags: workflow, iteration, automation, continuous, looping
 ---
 
 # Ralph Wiggum Continuous Iteration
@@ -488,4 +489,3 @@ The user wants to cancel or stop an active Ralph loop.
 ## Output
 
 A short confirmation with the iteration count, or a message that no loop was active.
-

@@ -1,10 +1,9 @@
 ---
 name: run-learning-retrospective
 description: Evaluate learning progress, identify blockers, and adjust the learning plan
-version: 1.0.0
-tags:
-  - cursor-import
-  - teaching
+metadata:
+  version: 1.0.0
+  tags: cursor-import, teaching
 ---
 
 # Run a learning retrospective

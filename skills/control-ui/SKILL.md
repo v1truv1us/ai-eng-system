@@ -1,12 +1,9 @@
 ---
 name: control-ui
-description: Build or adapt a local browser/CDP harness to drive and inspect a
-  web, IDE, or Electron UI. Use for local UI verification, screenshots,
-  accessibility snapshots, perf profiles, visual diffs, or reproducing UI bugs.
-version: 1.0.0
-tags:
-  - cursor-import
-  - cursor-team-kit
+description: Build or adapt a local browser/CDP harness to drive and inspect a web, IDE, or Electron UI. Use for local UI verification, screenshots, accessibility snapshots, perf profiles, visual diffs, or reproducing UI bugs.
+metadata:
+  version: 1.0.0
+  tags: cursor-import, cursor-team-kit
 ---
 
 # Control UI

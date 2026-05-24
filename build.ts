@@ -23,7 +23,7 @@
  * - .claude/               (local development runtime)
  * - .claude-plugin/        (marketplace manifest only)
  * - .opencode/             (local development runtime)
- * - plugins/<name>/        (7 marketplace plugin directories)
+ * - plugins/<name>/        (8 marketplace plugin directories)
  */
 
 import { existsSync, watch } from "node:fs";
@@ -38,6 +38,7 @@ import {
 import { basename, dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import YAML from "yaml";
+import { validateSkillName, formatSkillContent } from "./scripts/lib/agent-skills.ts";
 
 const IS_TEST_MODE = !!process.env.TEST_ROOT;
 const ROOT = process.env.TEST_ROOT
@@ -55,6 +56,29 @@ const DIST_CURSOR_DIR = join(DIST_DIR, ".cursor-plugin");
 const DIST_GEMINI_DIR = join(DIST_DIR, ".gemini");
 const RULES_DIR = join(ROOT, "rules");
 const CURSOR_RULES_DIR = join(RULES_DIR, "cursor");
+const CURSOR_RALPH_HOOKS_DIR = join(ROOT, "hooks", "cursor", "ralph-loop");
+
+/** Core workflow commands shipped in the monolithic Cursor bundle */
+const CURSOR_BUNDLE_COMMANDS = [
+    "research",
+    "specify",
+    "plan",
+    "work",
+    "review",
+    "ralph-wiggum",
+];
+
+const CURSOR_PLUGIN_DISPLAY_NAMES: Record<string, string> = {
+    "ai-eng-system": "AI Engineering System",
+    "ai-eng-core": "AI Engineering Core",
+    "ai-eng-learning": "AI Engineering Learning",
+    "ai-eng-research": "AI Engineering Research",
+    "ai-eng-devops": "AI Engineering DevOps",
+    "ai-eng-quality": "AI Engineering Quality",
+    "ai-eng-content": "AI Engineering Content",
+    "ai-eng-plugin-dev": "AI Engineering Plugin Dev",
+    "ai-eng-pstack": "AI Engineering Pstack",
+};
 const ROOT_OPENCODE_DIR = join(ROOT, ".opencode");
 const ROOT_CLAUDE_DIR = join(ROOT, ".claude");
 const ROOT_CLAUDE_PLUGIN_DIR = join(ROOT, ".claude-plugin");
@@ -96,10 +120,6 @@ const NAMED_COLOR_TO_HEX: Record<string, string> = {
     white: "#FFFFFF",
 };
 
-// Skill name validation (from OpenCode docs: https://opencode.ai/docs/skills)
-const SKILL_NAME_REGEX = /^[a-z0-9]+(-[a-z0-9]+)*$/;
-const SKILL_NAME_MIN_LENGTH = 1;
-const SKILL_NAME_MAX_LENGTH = 64;
 const SKILL_REFERENCE_REGEX = /skills\/([A-Za-z0-9/_-]+)\/SKILL\.md/g;
 
 type FrontmatterParseResult = {
@@ -165,26 +185,6 @@ function parseFrontmatterStrict(
 
 function serializeFrontmatter(meta: Record<string, any>): string {
     return YAML.stringify(meta).trimEnd();
-}
-
-/**
- * Validate skill name matches OpenCode requirements
- * https://opencode.ai/docs/skills#validate-names
- */
-function validateSkillName(name: string, filePath: string): void {
-    if (
-        name.length < SKILL_NAME_MIN_LENGTH ||
-        name.length > SKILL_NAME_MAX_LENGTH
-    ) {
-        throw new Error(
-            `Skill name '${name}' must be ${SKILL_NAME_MIN_LENGTH}-${SKILL_NAME_MAX_LENGTH} characters: ${filePath}`,
-        );
-    }
-    if (!SKILL_NAME_REGEX.test(name)) {
-        throw new Error(
-            `Skill name '${name}' must be lowercase alphanumeric with single hyphens (regex: ${SKILL_NAME_REGEX}): ${filePath}`,
-        );
-    }
 }
 
 function extractSkillReferences(markdown: string): string[] {
@@ -669,10 +669,19 @@ async function buildCursor(): Promise<void> {
     const cursorSkillsDir = join(DIST_CURSOR_DIR, "skills");
     const cursorAgentsDir = join(DIST_CURSOR_DIR, "agents");
     const cursorRulesDir = join(DIST_CURSOR_DIR, "rules");
+    const cursorCommandsDir = join(DIST_CURSOR_DIR, "commands");
+    const cursorHooksDir = join(DIST_CURSOR_DIR, "hooks");
 
     await copySkillsPreservePath(SKILLS_DIR, cursorSkillsDir);
     await mkdir(cursorAgentsDir, { recursive: true });
     await copyMarkdownFiles(join(CONTENT_DIR, "agents"), cursorAgentsDir);
+    await copySelectedMarkdownFiles(
+        join(CONTENT_DIR, "commands"),
+        cursorCommandsDir,
+        CURSOR_BUNDLE_COMMANDS,
+    );
+    await copyCursorRalphHookScripts(cursorHooksDir);
+    await writeCursorRalphHooksManifest(cursorHooksDir);
 
     if (existsSync(CURSOR_RULES_DIR)) {
         await copyDirRecursive(CURSOR_RULES_DIR, cursorRulesDir);
@@ -697,10 +706,14 @@ async function buildCursor(): Promise<void> {
         skills: "./skills/",
         agents: "./agents/",
         rules: "./rules/",
+        commands: "./commands/",
+        hooks: "./hooks/cursor-hooks.json",
     };
 
+    const pluginManifestDir = join(DIST_CURSOR_DIR, ".cursor-plugin");
+    await mkdir(pluginManifestDir, { recursive: true });
     await writeFile(
-        join(DIST_CURSOR_DIR, "plugin.json"),
+        join(pluginManifestDir, "plugin.json"),
         JSON.stringify(pluginJson, null, 2),
     );
 
@@ -723,7 +736,7 @@ async function buildGemini(): Promise<void> {
 
 async function validateCursorOutput(cursorRoot: string): Promise<void> {
     const errors: string[] = [];
-    const pluginJsonPath = join(cursorRoot, "plugin.json");
+    const pluginJsonPath = join(cursorRoot, ".cursor-plugin", "plugin.json");
 
     if (!existsSync(pluginJsonPath)) {
         errors.push("Cursor plugin missing plugin.json");
@@ -802,16 +815,18 @@ async function validateCanonicalSkills(): Promise<string[]> {
     const skills = await discoverSkills(SKILLS_DIR);
     for (const skill of skills) {
         const content = await readFile(skill.skillFile, "utf-8");
-        const parsed = parseFrontmatterStrict(content, skill.skillFile);
-        if (!parsed.hasFrontmatter) {
-            errors.push(`${skill.skillFile}: missing YAML frontmatter`);
-            continue;
+        const result = formatSkillContent(content, skill.skillFile);
+
+        for (const issue of result.issues) {
+            if (issue.level === "error") {
+                errors.push(`${skill.skillFile}: ${issue.message}`);
+            }
         }
-        if (!parsed.meta.name) {
-            errors.push(`${skill.skillFile}: missing 'name' in frontmatter`);
-        }
-        if (!parsed.meta.description) {
-            errors.push(`${skill.skillFile}: missing 'description' in frontmatter`);
+
+        if (result.changed) {
+            errors.push(
+                `${skill.skillFile}: not formatted for Agent Skills spec (run \`bun run format:skills:fix\`)`,
+            );
         }
     }
 
@@ -1348,6 +1363,16 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
         keywords: ["plugin", "agent", "meta-tooling", "code-generation"],
         tags: ["plugin-development", "meta-tooling", "code-generation"],
     },
+    "ai-eng-pstack": {
+        commands: [],
+        agents: [],
+        skills: ["pstack"],
+        description:
+            "Pstack deep-work skills (architecture, TDD, principles) imported from cursor/plugins",
+        category: "development",
+        keywords: ["pstack", "principles", "architecture", "tdd", "deep-work"],
+        tags: ["pstack", "deep-work", "cursor-import"],
+    },
 };
 
 /**
@@ -1392,6 +1417,101 @@ async function copySelectedAgentFiles(
             throw new Error(`Agent not found during marketplace sync: ${src}`);
         }
     }
+}
+
+/**
+ * Copy Ralph loop shell hooks from hooks/cursor/ralph-loop into a destination hooks/ directory.
+ */
+async function copyCursorRalphHookScripts(destHooksDir: string): Promise<void> {
+    await mkdir(destHooksDir, { recursive: true });
+    for (const script of ["capture-response.sh", "stop-hook.sh"] as const) {
+        const src = join(CURSOR_RALPH_HOOKS_DIR, script);
+        if (!existsSync(src)) {
+            if (!IS_TEST_MODE) {
+                throw new Error(`Cursor ralph hook script missing: ${src}`);
+            }
+            continue;
+        }
+        await copyFile(src, join(destHooksDir, script));
+    }
+}
+
+/**
+ * Write Cursor-compatible Ralph loop hooks manifest (separate from Claude hooks.json).
+ */
+async function writeCursorRalphHooksManifest(destHooksDir: string): Promise<void> {
+    const srcManifest = join(CURSOR_RALPH_HOOKS_DIR, "hooks.json");
+    const manifest = existsSync(srcManifest)
+        ? JSON.parse(await readFile(srcManifest, "utf-8"))
+        : {
+              version: 1,
+              hooks: {
+                  afterAgentResponse: [
+                      { command: "./hooks/capture-response.sh" },
+                  ],
+                  stop: [{ command: "./hooks/stop-hook.sh", loop_limit: null }],
+              },
+          };
+
+    await mkdir(destHooksDir, { recursive: true });
+    await writeFile(
+        join(destHooksDir, "cursor-hooks.json"),
+        JSON.stringify(manifest, null, 2) + "\n",
+    );
+}
+
+/**
+ * Generate per-plugin Cursor manifest at plugins/<name>/.cursor-plugin/plugin.json
+ */
+async function writePerPluginCursorManifest(
+    pluginDir: string,
+    pluginName: string,
+    config: PluginConfig,
+    packageJson: { version: string },
+): Promise<void> {
+    const manifestDir = join(pluginDir, ".cursor-plugin");
+    await mkdir(manifestDir, { recursive: true });
+
+    const displayName =
+        CURSOR_PLUGIN_DISPLAY_NAMES[pluginName] ??
+        pluginName
+            .replace(/^ai-eng-/, "AI Eng ")
+            .replace(/-/g, " ")
+            .replace(/\b\w/g, (c) => c.toUpperCase());
+
+    const manifest: Record<string, unknown> = {
+        name: pluginName,
+        displayName,
+        version: packageJson.version,
+        description: config.description,
+        author: {
+            name: "v1truv1us",
+            url: "https://github.com/v1truv1us/ai-eng-system",
+        },
+        license: "MIT",
+        homepage: "https://github.com/v1truv1us/ai-eng-system",
+        repository: "https://github.com/v1truv1us/ai-eng-system",
+        keywords: config.keywords,
+        category: config.category,
+        tags: config.tags,
+    };
+
+    const hasSkills =
+        config.skills.length > 0 || existsSync(join(pluginDir, "skills"));
+    if (hasSkills) manifest.skills = "./skills/";
+    if (config.agents.length > 0) manifest.agents = "./agents/";
+    if (config.commands.length > 0) manifest.commands = "./commands/";
+    if (
+        config.hasHooks &&
+        existsSync(join(pluginDir, "hooks", "cursor-hooks.json"))
+    ) {
+        manifest.hooks = "./hooks/cursor-hooks.json";
+    }
+
+    await writeFile(
+        join(manifestDir, "plugin.json"),
+        JSON.stringify(manifest, null, 2) + "\n",
+    );
 }
 
 /**
@@ -1480,10 +1600,11 @@ async function syncToMarketplacePlugins(): Promise<void> {
         // Copy hooks to core plugin only
         if (config.hasHooks) {
             const distHooksDir = join(CLAUDE_DIR, "hooks");
+            const pluginHooksDir = join(pluginDir, "hooks");
             if (existsSync(distHooksDir)) {
-                await copyDirRecursive(distHooksDir, join(pluginDir, "hooks"));
+                await copyDirRecursive(distHooksDir, pluginHooksDir);
             }
-            // Generate hooks.json for session start notification
+            // Generate hooks.json for session start notification (Claude marketplace)
             const hooksJson = {
                 hooks: [
                     {
@@ -1505,7 +1626,18 @@ async function syncToMarketplacePlugins(): Promise<void> {
                 join(pluginDir, "hooks.json"),
                 JSON.stringify(hooksJson, null, 2),
             );
+
+            // Cursor Ralph loop hooks (cursor/plugins ralph-loop)
+            await copyCursorRalphHookScripts(pluginHooksDir);
+            await writeCursorRalphHooksManifest(pluginHooksDir);
         }
+
+        await writePerPluginCursorManifest(
+            pluginDir,
+            pluginName,
+            config,
+            packageJson,
+        );
 
         console.log(
             `  ✓ Generated plugin: ${pluginName} (${config.commands.length} commands, ${config.agents.length} agents)`,
@@ -1567,6 +1699,38 @@ async function generateMarketplaceJson(): Promise<void> {
     );
 
     console.log("  ✓ Generated marketplace.json");
+}
+
+/**
+ * Auto-generate .cursor-plugin/marketplace.json from PLUGIN_MAP (Cursor team marketplace).
+ */
+async function generateCursorMarketplaceJson(): Promise<void> {
+    const packageJson = JSON.parse(
+        await readFile(join(ROOT, "package.json"), "utf-8"),
+    );
+
+    const marketplace = {
+        name: "ai-eng-system",
+        metadata: {
+            description:
+                "AI Engineering System - Modular development tools with context engineering, research orchestration, and specialized agents",
+            version: packageJson.version,
+        },
+        plugins: Object.entries(PLUGIN_MAP).map(([name, config]) => ({
+            name,
+            source: `./plugins/${name}`,
+            description: config.description,
+        })),
+    };
+
+    const marketplaceDir = join(ROOT, ".cursor-plugin");
+    await mkdir(marketplaceDir, { recursive: true });
+    await writeFile(
+        join(marketplaceDir, "marketplace.json"),
+        JSON.stringify(marketplace, null, 2) + "\n",
+    );
+
+    console.log("  ✓ Generated Cursor marketplace.json");
 }
 
 async function buildNpmEntrypoint(): Promise<void> {
@@ -1750,6 +1914,7 @@ async function buildAll(): Promise<void> {
     // Marketplace plugin sync uses TEST_ROOT fixtures when TEST_ROOT is set.
     await syncToMarketplacePlugins();
     await generateMarketplaceJson();
+    await generateCursorMarketplaceJson();
 
     // Skip steps that require the full project tree when running in test mode
     if (!IS_TEST_MODE) {

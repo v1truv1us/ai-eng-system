@@ -1,11 +1,9 @@
 ---
 name: what-did-i-get-done
-description: Summarize authored commits over a user-specified time period into a
-  concise update
-version: 1.0.0
-tags:
-  - cursor-import
-  - cursor-team-kit
+description: Summarize authored commits over a user-specified time period into a concise update
+metadata:
+  version: 1.0.0
+  tags: cursor-import, cursor-team-kit
 ---
 
 # What did I get done

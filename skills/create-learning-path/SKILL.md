@@ -1,10 +1,9 @@
 ---
 name: create-learning-path
 description: Build a personalized learning roadmap with milestones and practice checkpoints
-version: 1.0.0
-tags:
-  - cursor-import
-  - teaching
+metadata:
+  version: 1.0.0
+  tags: cursor-import, teaching
 ---
 
 # Create a learning path

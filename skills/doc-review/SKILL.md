@@ -1,8 +1,9 @@
 ---
 name: doc-review
-description: Structured document review for structure, clarity, and technical accuracy. Use for "review this doc", feedback, critique, or /doc-review.
-version: 1.0.0
-tags: [documentation, review, editing]
+description: "Structured document review for structure, clarity, and technical accuracy. Use for \"review this doc\", feedback, critique, or /doc-review."
+metadata:
+  version: 1.0.0
+  tags: documentation, review, editing
 ---
 
 # Doc Review Skill

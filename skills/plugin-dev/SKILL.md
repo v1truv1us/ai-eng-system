@@ -1,7 +1,8 @@
 ---
 name: plugin-dev
 description: This skill should be used when creating extensions for Claude Code or OpenCode, including plugins, commands, agents, skills, and custom tools. Covers both platforms with format specifications, best practices, and the ai-eng-system build system.
-version: 1.0.0
+metadata:
+  version: 1.0.0
 ---
 
 # Plugin Development for Claude Code & OpenCode
@@ -475,4 +476,3 @@ This path makes the plugin immediately available to Cursor without any install s
 - Marketplace entry (if applicable)
 - Short validation report of required fields and component metadata
 - Confirmation that the plugin is saved under `~/.cursor/plugins/local/` and ready for use
-

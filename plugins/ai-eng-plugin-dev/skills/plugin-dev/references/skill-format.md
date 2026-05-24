@@ -25,24 +25,28 @@ skill-name/
 
 ### Required Frontmatter
 
+Per [agentskills.io](https://agentskills.io/specification):
+
 ```yaml
 ---
 name: skill-name
-description: This skill should be used when...
-version: 1.0.0
+description: What this skill does and when to use it. Include trigger phrases.
 ---
 ```
 
-**Name Requirements:**
-- Lowercase alphanumeric with hyphens only
-- Must match directory name
-- 3-50 characters
+Optional spec fields: `license`, `compatibility`, `metadata`, `allowed-tools` (experimental).
 
-**Description Requirements:**
-- Minimum 20 characters for discoverability
-- Third-person: "This skill should be used when..."
-- Include specific trigger phrases
-- Concrete examples of user queries
+**Name requirements:**
+- Lowercase alphanumeric with single hyphens only
+- 1–64 characters
+- Must match the immediate parent directory name (`skill-name/SKILL.md`)
+
+**Description requirements:**
+- Required, non-empty, max 1024 characters
+- Describe what the skill does **and** when to use it
+- Prefer one line (portable across Cursor, Pi, Gemini, Copilot, OpenCode)
+
+**Legacy ai-eng fields:** Run `bun run format:skills:fix` to migrate top-level `version` / `tags` into `metadata`.
 
 ### Content Guidelines
 

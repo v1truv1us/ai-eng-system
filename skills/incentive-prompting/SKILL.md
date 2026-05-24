@@ -1,8 +1,9 @@
 ---
 name: incentive-prompting
 description: Research-backed prompting techniques for improved AI response quality (+45-115% improvement). Use when optimizing prompts, enhancing agent instructions, or when maximum response quality is critical. Invoked by /ai-eng/optimize command. Includes expert persona, stakes language, step-by-step reasoning, challenge framing, and self-evaluation techniques.
-version: 1.0.0
-tags: [prompting, optimization, ai-enhancement, quality]
+metadata:
+  version: 1.0.0
+  tags: prompting, optimization, ai-enhancement, quality
 ---
 
 # Incentive-Based Prompting Skill

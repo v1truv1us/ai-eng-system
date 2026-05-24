@@ -2,7 +2,7 @@
  * ai-eng install command
  *
  * Installs OpenCode/Claude assets to project or global location.
- * Replaces the automatic postinstall behavior.
+ * Cleans previously installed ai-eng artifacts before writing.
  */
 
 import fs from "node:fs";
@@ -12,22 +12,33 @@ import {
     type OpenCodeContent,
 } from "@ai-eng-system/core";
 import {
+    cleanOpenCodeInstall,
+    cleanToolkitHarness,
+    extractOpenCodeSkillDirs,
+    extractOpenCodeToolPaths,
+} from "./clean";
+import {
+    type InstallManifestEntry,
+    upsertManifestEntry,
+} from "./manifest";
+import type { CleanFlags, InstallFlags, InstallPlatform } from "./types";
+import {
+    getAgentSkillsInstallDir,
+    getHarnessSkillsSourceDir,
     getInstallTargetDir,
     getToolkitHarnessSource,
+    resolveInstallBaseDir,
+    type InstallScope,
     type ToolkitHarness,
+    usesSkillsOnlyInstall,
 } from "./toolkit-path";
+import {
+    listSkillTreeEntries,
+    mergeGeminiHarness,
+    syncSkillsTree,
+} from "./sync-skills";
 
 const NAMESPACE_PREFIX = "ai-eng";
-
-export type InstallPlatform = "opencode" | "cursor" | "gemini" | "pi";
-
-interface InstallFlags {
-    scope?: "project" | "global" | "auto";
-    platform?: InstallPlatform;
-    dryRun?: boolean;
-    yes?: boolean;
-    verbose?: boolean;
-}
 
 function copyRecursive(src: string, dest: string): void {
     const stat = fs.statSync(src);
@@ -39,51 +50,6 @@ function copyRecursive(src: string, dest: string): void {
     } else {
         fs.mkdirSync(path.dirname(dest), { recursive: true });
         fs.copyFileSync(src, dest);
-    }
-}
-
-async function cleanNamespacedDirectory(
-    baseDir: string,
-    subdir: string,
-    namespace: string,
-    silent = false,
-): Promise<void> {
-    const dir = path.join(baseDir, subdir, namespace);
-    if (fs.existsSync(dir)) {
-        fs.rmSync(dir, { recursive: true, force: true });
-        if (!silent) {
-            console.log(`  ✅ Cleaned existing ${subdir}/${namespace}/`);
-        }
-    }
-}
-
-async function cleanAiEngSkills(
-    targetOpenCodeDir: string,
-    distOpenCodeDir: string,
-    silent = false,
-): Promise<void> {
-    const targetSkillDir = path.join(targetOpenCodeDir, "skill");
-    const distSkillDir = path.join(distOpenCodeDir, "skill");
-    if (!fs.existsSync(distSkillDir)) return;
-
-    const aiEngSkillNames = fs
-        .readdirSync(distSkillDir, { withFileTypes: true })
-        .filter((entry) => entry.isDirectory())
-        .map((entry) => entry.name);
-
-    if (aiEngSkillNames.length === 0) return;
-
-    let cleanedCount = 0;
-    for (const skillName of aiEngSkillNames) {
-        const skillPath = path.join(targetSkillDir, skillName);
-        if (fs.existsSync(skillPath)) {
-            fs.rmSync(skillPath, { recursive: true, force: true });
-            cleanedCount++;
-        }
-    }
-
-    if (!silent && cleanedCount > 0) {
-        console.log(`  ✅ Cleaned ${cleanedCount} existing ai-eng skills`);
     }
 }
 
@@ -105,13 +71,11 @@ function findOpenCodeConfig(
 ): { path: string; isGlobal: boolean } | null {
     const homeDir = process.env.HOME || process.env.USERPROFILE || "";
 
-    // Check project .opencode/
     const projectConfig = path.join(projectDir, ".opencode", "opencode.jsonc");
     if (fs.existsSync(projectConfig)) {
         return { path: projectConfig, isGlobal: false };
     }
 
-    // Check global ~/.config/opencode/
     const globalConfig = path.join(
         homeDir,
         ".config",
@@ -125,13 +89,12 @@ function findOpenCodeConfig(
     return null;
 }
 
-function detectInstallationScope(
+export function detectInstallationScope(
     projectDir: string,
 ): "project" | "global" | null {
     const config = findOpenCodeConfig(projectDir);
     if (config) return config.isGlobal ? "global" : "project";
 
-    // If no config exists, check if we're in a project with package.json
     if (fs.existsSync(path.join(projectDir, "package.json"))) {
         return "project";
     }
@@ -139,13 +102,101 @@ function detectInstallationScope(
     return "global";
 }
 
+export function resolveInstallScope(
+    flags: InstallFlags,
+    projectDir: string,
+): InstallScope {
+    const raw = flags.scope ?? "auto";
+    if (raw === "auto") {
+        const detected = detectInstallationScope(projectDir);
+        return detected ?? "project";
+    }
+    return raw;
+}
+
+function toCleanFlags(flags: InstallFlags): CleanFlags {
+    return {
+        scope: flags.scope,
+        platform: flags.platform,
+        dryRun: flags.dryRun,
+        verbose: flags.verbose,
+    };
+}
+
+function listGeminiCommandFiles(sourceGeminiDir: string): string[] {
+    const commandsDir = path.join(sourceGeminiDir, "commands");
+    if (!fs.existsSync(commandsDir)) return [];
+    return fs
+        .readdirSync(commandsDir, { withFileTypes: true })
+        .filter((entry) => entry.isFile())
+        .map((entry) => entry.name)
+        .sort();
+}
+
+function buildToolkitManifestEntry(
+    harness: ToolkitHarness,
+    scope: InstallScope,
+    baseDir: string,
+    skillsSourceDir: string,
+): InstallManifestEntry {
+    const skillsOnly = usesSkillsOnlyInstall(harness, scope);
+    const agentSkillEntries = listSkillTreeEntries(skillsSourceDir);
+    let bundlePath: string | undefined;
+
+    if (harness === "gemini" && scope === "project") {
+        bundlePath = ".gemini";
+    } else if (!skillsOnly) {
+        bundlePath = path.relative(
+            baseDir,
+            getInstallTargetDir(harness, baseDir, scope),
+        );
+    }
+
+    const geminiSource = path.dirname(skillsSourceDir);
+
+    return {
+        platform: harness,
+        scope,
+        installedAt: new Date().toISOString(),
+        agentSkillEntries,
+        bundlePath,
+        geminiCommandFiles:
+            harness === "gemini"
+                ? listGeminiCommandFiles(geminiSource)
+                : undefined,
+        geminiSkillEntries:
+            harness === "gemini"
+                ? listSkillTreeEntries(path.join(geminiSource, "skills"))
+                : undefined,
+    };
+}
+
+function buildOpenCodeManifestEntry(
+    scope: InstallScope,
+    content: OpenCodeContent,
+): InstallManifestEntry {
+    return {
+        platform: "opencode",
+        scope,
+        installedAt: new Date().toISOString(),
+        agentSkillEntries: [],
+        openCodeSkillDirs: extractOpenCodeSkillDirs(content),
+        openCodeToolPaths: extractOpenCodeToolPaths(content),
+    };
+}
+
 async function installToolkitHarness(
     harness: ToolkitHarness,
     flags: InstallFlags,
 ): Promise<void> {
     const projectDir = process.cwd();
+    const scope = resolveInstallScope(flags, projectDir);
+    const baseDir = resolveInstallBaseDir(scope, projectDir);
     const sourceDir = getToolkitHarnessSource(harness);
-    const targetDir = getInstallTargetDir(harness, projectDir);
+    const skillsSourceDir = getHarnessSkillsSourceDir(harness);
+    const agentSkillsDir = getAgentSkillsInstallDir(scope, projectDir);
+    const skillsOnly = usesSkillsOnlyInstall(harness, scope);
+    const shouldClean = flags.skipClean !== true && flags.fresh !== false;
 
     if (!fs.existsSync(sourceDir)) {
         console.log(`❌ Harness bundle missing in toolkit: ${sourceDir}`);
@@ -155,32 +206,112 @@ async function installToolkitHarness(
 
     if (flags.verbose) {
         console.log(`Platform: ${harness}`);
+        console.log(`Scope: ${scope}`);
         console.log(`Source: ${sourceDir}`);
-        console.log(`Target: ${targetDir}`);
+        console.log(`Agent skills: ${agentSkillsDir}`);
+        if (!skillsOnly) {
+            console.log(
+                `Bundle target: ${getInstallTargetDir(harness, baseDir, scope)}`,
+            );
+        }
     }
 
     if (flags.dryRun) {
-        console.log("🔍 dry-run: Would copy toolkit bundle:");
-        console.log(`   ${sourceDir}`);
-        console.log(`   -> ${targetDir}`);
+        console.log("🔍 dry-run: Would install:");
+        if (shouldClean) {
+            console.log("   (after cleaning previous ai-eng install)");
+        }
+        console.log(`   Skills -> ${agentSkillsDir}`);
+        if (harness === "gemini" && scope === "global") {
+            console.log(
+                `   Gemini merge -> ${path.join(baseDir, ".gemini")}/skills, commands/`,
+            );
+        } else if (!skillsOnly) {
+            console.log(
+                `   Bundle -> ${getInstallTargetDir(harness, baseDir, scope)}`,
+            );
+        }
         return;
     }
 
-    if (fs.existsSync(targetDir)) {
-        fs.rmSync(targetDir, { recursive: true, force: true });
+    if (shouldClean) {
+        console.log("🧹 Removing previous ai-eng install...");
+        cleanToolkitHarness(harness, scope, projectDir, toCleanFlags(flags));
     }
-    fs.mkdirSync(path.dirname(targetDir), { recursive: true });
-    copyRecursive(sourceDir, targetDir);
+
+    const skillCount = syncSkillsTree(skillsSourceDir, agentSkillsDir);
+    if (skillCount > 0) {
+        console.log(
+            `  ✅ Synced ${skillCount} skill tree(s) to ${agentSkillsDir}`,
+        );
+    }
+
+    if (harness === "gemini") {
+        const geminiTarget = getInstallTargetDir("gemini", baseDir, scope);
+        if (scope === "global") {
+            mergeGeminiHarness(sourceDir, geminiTarget);
+            console.log(
+                `  ✅ Merged Gemini skills/commands into ${geminiTarget}`,
+            );
+        } else {
+            fs.mkdirSync(path.dirname(geminiTarget), { recursive: true });
+            copyRecursive(sourceDir, geminiTarget);
+            console.log(`  ✅ Installed Gemini bundle to ${geminiTarget}`);
+        }
+    } else if (!skillsOnly) {
+        const targetDir = getInstallTargetDir(harness, baseDir, scope);
+        fs.mkdirSync(path.dirname(targetDir), { recursive: true });
+        copyRecursive(sourceDir, targetDir);
+        console.log(`  ✅ Installed harness bundle to ${targetDir}`);
+    }
+
+    upsertManifestEntry(
+        scope,
+        projectDir,
+        buildToolkitManifestEntry(harness, scope, baseDir, skillsSourceDir),
+    );
 
     console.log("\n✅ Installation complete!");
+    printToolkitPostInstall(harness, scope, skillsOnly);
+}
+
+function printToolkitPostInstall(
+    harness: ToolkitHarness,
+    scope: InstallScope,
+    skillsOnly: boolean,
+): void {
     if (harness === "cursor") {
-        console.log("   Enable the ai-eng-system plugin in Cursor if needed.");
+        if (scope === "global") {
+            console.log(
+                "   Global plugin: ~/.cursor/plugins/local/ai-eng-system/",
+            );
+            console.log(
+                "   Global skills: ~/.agents/skills/ — enable the plugin in Cursor if needed.",
+            );
+        } else {
+            console.log("   Enable the ai-eng-system plugin in Cursor if needed.");
+            console.log("   Skills also available under .agents/skills/");
+        }
     } else if (harness === "gemini") {
-        console.log("   Gemini CLI loads skills and commands from .gemini/");
-    } else if (harness === "pi") {
         console.log(
-            "   Pi can also use: pi install npm:@ai-eng-system/toolkit",
+            scope === "global"
+                ? "   Gemini CLI loads user skills from ~/.gemini/skills/"
+                : "   Gemini CLI loads skills and commands from .gemini/",
         );
+    } else if (harness === "pi") {
+        if (skillsOnly) {
+            console.log(
+                "   Global skills loaded from ~/.agents/skills (Pi docs).",
+            );
+            console.log(
+                "   For prompts globally: pi install npm:@ai-eng-system/toolkit",
+            );
+        } else {
+            console.log("   Skills also under .agents/skills/ and .pi/");
+            console.log(
+                "   Pi can also use: pi install npm:@ai-eng-system/toolkit",
+            );
+        }
     }
 }
 
@@ -194,22 +325,9 @@ async function runInstaller(flags: InstallFlags): Promise<void> {
 
     const projectDir = process.cwd();
     const homeDir = process.env.HOME || process.env.USERPROFILE || "";
-
-    // Get content from core package
     const openCodeContent = await getDistOpenCodeContent();
-
-    // Determine installation scope
-    let scope = flags.scope;
-    if (!scope || scope === "auto") {
-        const detected = detectInstallationScope(projectDir);
-        if (!detected) {
-            console.log(
-                "❌ Could not detect installation scope. Use --scope project|global",
-            );
-            process.exit(1);
-        }
-        scope = detected;
-    }
+    const scope = resolveInstallScope(flags, projectDir);
+    const shouldClean = flags.skipClean !== true && flags.fresh !== false;
 
     const targetOpenCodeDir =
         scope === "global"
@@ -221,7 +339,6 @@ async function runInstaller(flags: InstallFlags): Promise<void> {
         console.log(`Scope: ${scope}`);
     }
 
-    // Validate target directory
     if (scope === "project") {
         const opencodeDir = path.join(projectDir, ".opencode");
         if (!fs.existsSync(opencodeDir)) {
@@ -231,7 +348,6 @@ async function runInstaller(flags: InstallFlags): Promise<void> {
         }
     }
 
-    // Check for ai-eng-system plugin reference
     const config = findOpenCodeConfig(projectDir);
     if (config && !isPluginReferenced(config.path)) {
         console.log(
@@ -244,6 +360,9 @@ async function runInstaller(flags: InstallFlags): Promise<void> {
 
     if (flags.dryRun) {
         console.log("🔍 dry-run: Would install the following files:");
+        if (shouldClean) {
+            console.log("   (after cleaning previous ai-eng install)");
+        }
         console.log(
             `   Commands -> ${targetOpenCodeDir}/command/${NAMESPACE_PREFIX}/`,
         );
@@ -251,11 +370,26 @@ async function runInstaller(flags: InstallFlags): Promise<void> {
             `   Agents   -> ${targetOpenCodeDir}/agent/${NAMESPACE_PREFIX}/`,
         );
         console.log(`   Skills   -> ${targetOpenCodeDir}/skill/`);
+        console.log(`   Tools    -> ${targetOpenCodeDir}/tool/`);
         return;
     }
 
-    // Install content using core package
+    if (shouldClean) {
+        console.log("🧹 Removing previous ai-eng install...");
+        cleanOpenCodeInstall(
+            targetOpenCodeDir,
+            openCodeContent,
+            toCleanFlags(flags),
+        );
+    }
+
     await installContentFromCore(openCodeContent, targetOpenCodeDir);
+
+    upsertManifestEntry(
+        scope,
+        projectDir,
+        buildOpenCodeManifestEntry(scope, openCodeContent),
+    );
 
     console.log("\n✅ Installation complete!");
     console.log(
@@ -270,19 +404,12 @@ async function installContentFromCore(
     content: OpenCodeContent,
     targetOpenCodeDir: string,
 ): Promise<void> {
-    // Install commands (namespaced under ai-eng/)
     if (content.commands.length > 0) {
         const commandsDir = path.join(
             targetOpenCodeDir,
             "command",
             NAMESPACE_PREFIX,
         );
-        await cleanNamespacedDirectory(
-            targetOpenCodeDir,
-            "command",
-            NAMESPACE_PREFIX,
-        );
-
         fs.mkdirSync(commandsDir, { recursive: true });
 
         for (const command of content.commands) {
@@ -290,8 +417,7 @@ async function installContentFromCore(
                 ? command.path.slice(NAMESPACE_PREFIX.length + 1)
                 : command.path;
             const targetPath = path.join(commandsDir, relativePath);
-            const targetDir = path.dirname(targetPath);
-            fs.mkdirSync(targetDir, { recursive: true });
+            fs.mkdirSync(path.dirname(targetPath), { recursive: true });
 
             if (command.content) {
                 fs.writeFileSync(targetPath, command.content, "utf-8");
@@ -303,19 +429,12 @@ async function installContentFromCore(
         );
     }
 
-    // Install agents (namespaced under ai-eng/)
     if (content.agents.length > 0) {
         const agentsDir = path.join(
             targetOpenCodeDir,
             "agent",
             NAMESPACE_PREFIX,
         );
-        await cleanNamespacedDirectory(
-            targetOpenCodeDir,
-            "agent",
-            NAMESPACE_PREFIX,
-        );
-
         fs.mkdirSync(agentsDir, { recursive: true });
 
         for (const agent of content.agents) {
@@ -323,8 +442,7 @@ async function installContentFromCore(
                 ? agent.path.slice(NAMESPACE_PREFIX.length + 1)
                 : agent.path;
             const targetPath = path.join(agentsDir, relativePath);
-            const targetDir = path.dirname(targetPath);
-            fs.mkdirSync(targetDir, { recursive: true });
+            fs.mkdirSync(path.dirname(targetPath), { recursive: true });
 
             if (agent.content) {
                 fs.writeFileSync(targetPath, agent.content, "utf-8");
@@ -336,17 +454,13 @@ async function installContentFromCore(
         );
     }
 
-    // Install skills (not namespaced)
     if (content.skills.length > 0) {
         const skillsDir = path.join(targetOpenCodeDir, "skill");
-        await cleanAiEngSkills(targetOpenCodeDir, "");
-
         fs.mkdirSync(skillsDir, { recursive: true });
 
         for (const skill of content.skills) {
             const targetPath = path.join(skillsDir, skill.path);
-            const targetDir = path.dirname(targetPath);
-            fs.mkdirSync(targetDir, { recursive: true });
+            fs.mkdirSync(path.dirname(targetPath), { recursive: true });
 
             if (skill.content) {
                 fs.writeFileSync(targetPath, skill.content, "utf-8");
@@ -358,15 +472,13 @@ async function installContentFromCore(
         );
     }
 
-    // Install tools (if any)
     if (content.tools.length > 0) {
         const toolsDir = path.join(targetOpenCodeDir, "tool");
         fs.mkdirSync(toolsDir, { recursive: true });
 
         for (const tool of content.tools) {
             const targetPath = path.join(toolsDir, tool.path);
-            const targetDir = path.dirname(targetPath);
-            fs.mkdirSync(targetDir, { recursive: true });
+            fs.mkdirSync(path.dirname(targetPath), { recursive: true });
 
             if (tool.content) {
                 fs.writeFileSync(targetPath, tool.content, "utf-8");
@@ -379,4 +491,5 @@ async function installContentFromCore(
     }
 }
 
-export { runInstaller, type InstallFlags };
+export { runInstaller };
+export type { InstallFlags, InstallPlatform } from "./types";

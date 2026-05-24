@@ -1,23 +1,9 @@
 ---
 name: cursor-sdk
-description: Guide users building apps, scripts, CI pipelines, or automations on
-  top of the Cursor TypeScript SDK (`@cursor/sdk`). Use this skill whenever the
-  user mentions integrating, installing, or writing code against the Cursor SDK;
-  whenever they say `Agent.create`, `Agent.prompt`, `Agent.resume`,
-  `agent.send`, `run.stream`, `CursorAgentError`, or `@cursor/sdk`; whenever
-  they ask to run Cursor agents programmatically from a script, CI/CD pipeline,
-  GitHub Action, backend service, or any other code that isn't the Cursor IDE
-  itself; and whenever they want to pick between local and cloud runtime,
-  configure MCP servers for an SDK agent, or handle streaming, cancellation, or
-  errors from an SDK agent. Also trigger when a user is wiring Cursor into an
-  automation, writing a bot that runs Cursor, or porting REST `/v1/agents` calls
-  to the SDK, even if they don't explicitly name the package. Use this eagerly
-  rather than answering from memory; the SDK surface evolves and this skill plus
-  its references are the source of truth for the external package.
-version: 1.0.0
-tags:
-  - cursor-import
-  - cursor-sdk
+description: Guide building apps, scripts, CI pipelines, and automations with the Cursor TypeScript SDK (`@cursor/sdk`). Use when integrating `Agent.create`, `Agent.prompt`, `Agent.resume`, streaming, MCP servers, local vs cloud runtime, errors, or porting REST `/v1/agents` calls to the SDK. Prefer this skill over memory—the SDK surface evolves and references here are the source of truth.
+metadata:
+  version: 1.0.0
+  tags: cursor-import, cursor-sdk
 ---
 
 # Cursor SDK

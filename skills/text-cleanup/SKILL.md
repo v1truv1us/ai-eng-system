@@ -1,8 +1,9 @@
 ---
 name: text-cleanup
 description: Comprehensive patterns and techniques for removing AI-generated verbosity and slop
-version: 1.0.0
-tags: [text-cleanup, slop-removal, pattern-matching, content-optimization]
+metadata:
+  version: 1.0.0
+  tags: text-cleanup, slop-removal, pattern-matching, content-optimization
 ---
 
 # Text Cleanup Skill
@@ -403,4 +404,3 @@ Check the diff against main and remove AI-generated slop introduced in the branc
 - Keep behavior unchanged unless fixing a clear bug.
 - Prefer minimal, focused edits over broad rewrites.
 - Keep the final summary concise (1-3 sentences).
-

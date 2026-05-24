@@ -162,4 +162,3 @@ Reasoning:
 ```
 
 Do not soften a negative result. A clear `NOT VERIFIED` is useful.
-

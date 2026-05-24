@@ -1,8 +1,9 @@
 ---
 name: comprehensive-research
 description: Multi-phase research orchestration for thorough codebase, documentation, and external knowledge investigation. Invoked by /ai-eng/research command. Use when conducting deep analysis, exploring codebases, investigating patterns, or synthesizing findings from multiple sources.
-version: 1.0.0
-tags: [research, analysis, discovery, documentation, synthesis, multi-agent]
+metadata:
+  version: 1.0.0
+  tags: research, analysis, discovery, documentation, synthesis, multi-agent
 ---
 
 # Comprehensive Research Skill

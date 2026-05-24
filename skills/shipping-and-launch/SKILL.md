@@ -185,4 +185,3 @@ gh pr checks --json name,bucket,state,workflow,link
 - Findings summary (critical, warning, note)
 - Tests run and outcomes
 - PR URL
-

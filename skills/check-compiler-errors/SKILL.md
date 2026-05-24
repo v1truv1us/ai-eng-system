@@ -1,10 +1,9 @@
 ---
 name: check-compiler-errors
 description: Run compile and type-check commands and report failures
-version: 1.0.0
-tags:
-  - cursor-import
-  - cursor-team-kit
+metadata:
+  version: 1.0.0
+  tags: cursor-import, cursor-team-kit
 ---
 
 # Check compiler errors

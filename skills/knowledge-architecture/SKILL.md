@@ -1,8 +1,9 @@
 ---
 name: knowledge-architecture
 description: Build a static-first knowledge architecture using file-backed domain maps, rules, hypotheses, and durable references. Use for knowledge architecture, learning systems, decision context, and long-lived team memory without runtime memory tooling.
-version: 1.0.0
-tags: [knowledge-management, documentation, learning-system, decision-making]
+metadata:
+  version: 1.0.0
+  tags: knowledge-management, documentation, learning-system, decision-making
 ---
 
 # Knowledge Architecture Skill
