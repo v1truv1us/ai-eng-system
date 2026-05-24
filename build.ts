@@ -1208,8 +1208,8 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "learning-dismiss",
             "learning-snooze",
         ],
-        agents: [],
-        skills: ["knowledge-architecture"],
+        agents: ["agents-memory-updater"],
+        skills: ["knowledge-architecture", "continuous-learning"],
         assetDirs: [
             "docs/knowledge",
             "docs/decisions",
@@ -1277,8 +1277,9 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "monitoring-expert",
             "cost-optimizer",
             "data-engineer",
+            "ci-watcher",
         ],
-        skills: ["coolify-deploy", "git-worktree"],
+        skills: ["coolify-deploy", "git-worktree", "ci-cd-and-automation"],
         description: "Infrastructure, deployment, and DevOps automation",
         category: "development",
         keywords: [
@@ -1310,8 +1311,18 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "database-optimizer",
             "mobile-developer",
             "api-builder-enhanced",
+            "compatibility-scan-review",
+            "startup-review",
+            "validation-review",
+            "docs-reliability-review",
         ],
-        skills: ["code-review-and-quality", "debugging-and-error-recovery"],
+        skills: [
+            "code-review-and-quality",
+            "debugging-and-error-recovery",
+            "check-agent-compatibility",
+            "verification-loop",
+            "shipping-and-launch",
+        ],
         description:
             "Testing, security scanning, code review, and quality assurance",
         category: "development",
@@ -1365,7 +1376,7 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
     },
     "ai-eng-pstack": {
         commands: [],
-        agents: [],
+        agents: ["poteto-agent"],
         skills: ["pstack"],
         description:
             "Pstack deep-work skills (architecture, TDD, principles) imported from cursor/plugins",

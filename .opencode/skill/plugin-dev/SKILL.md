@@ -1,7 +1,8 @@
 ---
 name: plugin-dev
 description: This skill should be used when creating extensions for Claude Code or OpenCode, including plugins, commands, agents, skills, and custom tools. Covers both platforms with format specifications, best practices, and the ai-eng-system build system.
-version: 1.0.0
+metadata:
+  version: 1.0.0
 ---
 
 # Plugin Development for Claude Code & OpenCode
@@ -79,6 +80,42 @@ Create directly in platform directories:
 | **Project** | `.claude/` | `.opencode/` |
 | **Global** | `~/.claude/` | `~/.config/opencode/` |
 
+## Lifecycle workflows
+
+### Plan architecture (new or refactor)
+
+1. Clarify goal, users, and outcomes.
+2. Pick the smallest component set: `rules`, `skills`, `agents`, `commands`, `hooks`, `mcpServers`.
+3. Propose directory layout and manifest. Default local path: `~/.cursor/plugins/local/<plugin-name>/`.
+4. Flag discoverability and metadata risks early.
+5. Return an implementation checklist.
+
+### Scaffold a new plugin
+
+**Inputs:** kebab-case name, purpose, component set, single-plugin vs marketplace repo.
+
+**Steps:**
+
+1. Validate name (lowercase kebab-case, alphanumeric ends).
+2. Create target dir (default `~/.cursor/plugins/local/<plugin-name>/` unless user specifies otherwise).
+3. Add `.cursor-plugin/plugin.json`, `README.md`, `LICENSE`, optional `CHANGELOG.md`.
+4. Populate manifest (`name` required; recommend `version`, `description`, `author`, `license`, `keywords`).
+5. Add components with valid frontmatter (rules `.mdc`, skills `skills/*/SKILL.md`, agents/commands markdown).
+6. For marketplace repos, register in `.cursor-plugin/marketplace.json` with relative `source`.
+7. Verify paths are relative—no absolute paths or parent traversal.
+
+**Guardrails:** one focused use case; concise actionable text; no references to missing files.
+
+### Pre-submission review
+
+Before release or marketplace submission:
+
+1. **Manifest:** valid `plugin.json`, kebab-case `name`, coherent metadata.
+2. **Discoverability:** skills, rules, agents, commands, hooks, MCP in expected paths.
+3. **Frontmatter:** every skill/rule/agent/command has required fields.
+4. **Repo integration:** marketplace entry if applicable; unique names; README covers purpose and install.
+5. **Report:** pass/fail by section, prioritized fixes, submission recommendation.
+
 ## Quick Reference
 
 ### Command Frontmatter
@@ -99,11 +136,12 @@ tools:                 # Optional: tool restrictions
 
 **Claude Code Output:** Same format (YAML frontmatter)
 
-**OpenCode Output:** Table format
+**OpenCode Output:** YAML frontmatter with OpenCode-compatible fields
 ```markdown
-| description | agent |
-|---|---|
-| Description here | build |
+---
+description: Description here
+agent: build
+---
 ```
 
 ### Agent Frontmatter
@@ -124,11 +162,12 @@ tools:
 
 **Claude Code Output:** Same format (YAML frontmatter)
 
-**OpenCode Output:** Table format
+**OpenCode Output:** YAML frontmatter with OpenCode-compatible fields
 ```markdown
-| description | mode |
-|---|---|
-| Description here | subagent |
+---
+description: Description here
+mode: subagent
+---
 ```
 
 ### Skill Structure
@@ -336,7 +375,7 @@ Study existing components in ai-eng-system:
 - Invalid YAML syntax
 - Wrong file permissions
 
-## Integration with Ferg Engineering
+## Integration with AI Engineering System
 
 The plugin-dev system integrates seamlessly with existing ai-eng-system components:
 

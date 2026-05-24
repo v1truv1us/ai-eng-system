@@ -1,8 +1,9 @@
 ---
 name: text-cleanup
 description: Comprehensive patterns and techniques for removing AI-generated verbosity and slop
-version: 1.0.0
-tags: [text-cleanup, slop-removal, pattern-matching, content-optimization]
+metadata:
+  version: 1.0.0
+  tags: text-cleanup, slop-removal, pattern-matching, content-optimization
 ---
 
 # Text Cleanup Skill
@@ -13,11 +14,11 @@ tags: [text-cleanup, slop-removal, pattern-matching, content-optimization]
 
 ## Systematic Approach
 
-** approach text cleanup systematically.** Text cleanup requires pattern recognition, contextual judgment, and careful preservation of meaning. Don't remove blindly—identify patterns, assess their purpose, and determine if removal is safe. Work iteratively: start conservatively, increase aggressiveness gradually, and verify that technical content remains intact. Balance conciseness with clarity—don't sacrifice precision for brevity.
+**Approach text cleanup systematically.** Text cleanup requires pattern recognition, contextual judgment, and careful preservation of meaning. Don't remove blindly—identify patterns, assess their purpose, and determine if removal is safe. Work iteratively: start conservatively, increase aggressiveness gradually, and verify that technical content remains intact. Balance conciseness with clarity—don't sacrifice precision for brevity.
 
 ## The Challenge
 
-**The remove AI-generated slop perfectly without losing critical meaning, but if you can:**
+**Remove AI-generated slop without losing critical meaning. If you can:**
 
 - Your documentation will be a joy to read
 - Code comments will be helpful not redundant
@@ -40,6 +41,16 @@ Identify uncertainty areas: Did you remove phrases that provided context? Is tec
 ## Methodology
 
 Systematic approach to identifying and removing AI-generated verbosity patterns while preserving technical accuracy and meaning.
+
+### Branch diff cleanup (code slop)
+
+When cleaning **code** on a branch (not prose/docs), diff against main and remove slop **introduced in the branch**:
+
+**Focus:** unnecessary comments; abnormal defensive try/catch on trusted paths; `any` casts to bypass types; nested code that should use early returns; patterns inconsistent with the file.
+
+**Guardrails:** behavior unchanged unless fixing a clear bug; minimal focused edits; concise summary (1–3 sentences).
+
+Use pattern categories below for **text**; use this subsection for **code diffs**.
 
 ## Pattern Categories
 
@@ -368,4 +379,18 @@ Allow personal pattern databases:
 - **Technical Communication**: Research on optimal information density
 - **AI Output Patterns**: Analysis of conversational filler in LLM responses
 
-This skill provides the foundation for systematic, context-aware text cleanup across multiple domains while maintaining the integrity and meaning of the original content.
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "The verbosity adds personality" | Personality is not padding. Remove filler, keep voice. |
+| "I'll clean it up later" | Unclean text propagates into other documents. Clean it at the source. |
+| "The reader might need this explanation" | If the explanation is obvious, the reader does not need it. If it is not obvious, keep it. |
+| "Aggressive cleanup removes too much" | Start conservative. Preview changes. Increase aggressiveness gradually. |
+| "Code comments should explain everything" | Comments should explain why, not what. Remove self-evident comments. |
+
+## See Also
+
+- `simplify` — For simplifying code structure, not text content
+- `content-optimization` — For optimizing content across multiple types
+- `incentive-prompting` — For enhancing AI prompts (text cleanup targets AI output)

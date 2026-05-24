@@ -308,7 +308,7 @@ The table below highlights the most important lifecycle and alignment skills. Th
 | knowledge-architecture | skills/knowledge-architecture/ | Static-first knowledge architecture and learning workflows |
 | plugin-dev | skills/plugin-dev/ | Plugin development knowledge base |
 | using-agent-skills | skills/using-agent-skills/ | Decision tree for task-to-skill mapping |
-| continuous-learning-v2 | skills/continuous-learning-v2/ | Instinct-based learning with confidence scoring |
+| continuous-learning | skills/continuous-learning/ | Instinct-based learning with confidence scoring and AGENTS.md memory updates |
 | verification-loop | skills/verification-loop/ | Continuous verification after every change |
 | eval-harness | skills/eval-harness/ | Agent evaluation framework |
 | context-budget | skills/context-budget/ | Context window management |
@@ -421,7 +421,7 @@ Located in `hooks/`, session lifecycle automations:
 | Skill | Source | Purpose |
 |-------|--------|---------|
 | `using-agent-skills` | agent-skills | Decision tree for task-to-skill mapping |
-| `continuous-learning-v2` | everything-claude-code | Instinct-based learning with confidence scoring |
+| `continuous-learning` | everything-claude-code + cursor/plugins | Instinct-based learning, memory updates, skill evolution |
 | `verification-loop` | everything-claude-code | Continuous verification after every change |
 | `eval-harness` | everything-claude-code | Agent evaluation framework |
 | `context-budget` | everything-claude-code | Context window management |

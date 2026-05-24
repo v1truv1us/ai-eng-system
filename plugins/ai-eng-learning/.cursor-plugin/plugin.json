@@ -25,5 +25,6 @@
     "maintenance"
   ],
   "skills": "./skills/",
+  "agents": "./agents/",
   "commands": "./commands/"
 }

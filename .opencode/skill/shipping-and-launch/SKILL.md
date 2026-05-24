@@ -1,148 +1,88 @@
 ---
 name: shipping-and-launch
-description: Pre-launch checklists, feature flag lifecycle, staged rollouts, rollback procedures, monitoring setup. Use when preparing to deploy to production.
+description: Review changes, open PRs, run pre-launch checks, staged rollouts, and rollback. Use when preparing to ship to production or closing out a branch.
 ---
 
 # Shipping and Launch
 
 ## Overview
 
-Ship to production with confidence using pre-launch checklists, staged rollouts, and verified rollback procedures. Faster is safer: small, frequent releases are less risky than large, infrequent ones.
+Shipping is review → PR → checklist → staged rollout → monitor. Small, frequent releases beat large batches. Do not skip review because launch checklists exist, and do not ship because staging looked fine without production safeguards.
 
 ## When to Use
 
-- Preparing to deploy any change to production
-- Launching a new feature or significant change
-- After completing code review and quality gates
+- Reviewing and opening/updating a PR before merge
+- Preparing to deploy to production
+- Launching a feature behind flags
+- After code review and quality gates pass
 
-## Pre-Launch Checklist
+## End-to-end workflow
 
-### Code Quality
+### 1. Review the change
 
-- [ ] All tests pass (unit, integration, e2e)
-- [ ] Code review approved
-- [ ] No critical or high-severity issues open
-- [ ] Coverage meets 80% threshold
+Gather context: diff against base branch, uncommitted changes, recent commits, changed files, and user intent from recent chats if useful.
 
-### Security
+```bash
+git fetch origin main
+git diff origin/main...HEAD
+git status
+gh pr checks --json name,bucket,state,workflow,link
+```
 
-- [ ] No secrets in code or configuration
-- [ ] Dependency audit shows no critical vulnerabilities
-- [ ] Input validation at all trust boundaries
-- [ ] Authentication and authorization tested
+Then:
 
-### Performance
+1. Run targeted tests for changed behavior; add tests or document gaps.
+2. Review for correctness, regressions, security, and intent fit. Use parallel subagents on large diffs.
+3. Fix critical issues and re-run affected tests.
+4. Commit focused changes with a concise message.
+5. Push and open or update the PR.
 
-- [ ] Performance baseline established
-- [ ] No regressions in Core Web Vitals or response times
-- [ ] Database queries analyzed for N+1 patterns
-- [ ] Load tested if the change affects throughput
+Prioritize correctness, security, and regressions over style-only comments. Fix pre-commit failures; never bypass hooks. Use `gh pr checks` as the source of truth for PR readiness.
 
-### Operational
+**Output:** findings (critical / warning / note), tests run, PR URL.
 
-- [ ] Feature flag created for new behavior
-- [ ] Monitoring and alerting configured
-- [ ] Rollback procedure documented and tested
-- [ ] Staging deployment verified
+### 2. Complete pre-launch checklist
 
-## Feature Flag Lifecycle
+**Code quality:** tests pass, review approved, no critical/high issues, coverage meets threshold.
 
-1. **Create**: Add flag in default-off state
-2. **Develop**: Implement behind the flag
-3. **Test**: Enable for internal users and automated tests
-4. **Roll Out**: Enable for percentage of users
-5. **General Availability**: Enable for all users
-6. **Cleanup**: Remove flag and old code path
+**Security:** no secrets in code/config, dependency audit clean, inputs validated, auth tested.
 
-## Staged Rollout
+**Performance:** baseline established, no CWV/regression, no N+1, load tested if throughput-sensitive.
 
-### Stage 1: Internal
+**Operational:** feature flag ready, monitoring configured, rollback tested, staging verified.
 
-- Deploy to staging
-- Enable for internal team
-- Verify functionality and monitoring
+### 3. Deploy and roll out
 
-### Stage 2: Canary
+1. Deploy to staging; run smoke tests; check dashboards.
+2. Roll out in stages: internal → canary (1–5%) → expanded (25–50%) → GA.
+3. Monitor at each stage; rollback if metrics degrade.
+4. After GA, monitor 24–48 hours and schedule flag cleanup.
 
-- Enable for 1-5% of users
-- Monitor error rates and performance
-- Compare against baseline metrics
+### 4. Rollback when needed
 
-### Stage 3: Expanded
+**Automatic triggers:** error rate, SLO breach, health check failures.
 
-- Enable for 25-50% of users
-- Continue monitoring
-- Verify no edge case regressions
+**Manual rollback:** identify bad deployment → revert to last good → verify → communicate → root-cause before redeploy.
 
-### Stage 4: General Availability
+## Feature flag lifecycle
 
-- Enable for all users
-- Monitor for 24-48 hours
-- Remove feature flag in next release
+Create (off) → develop behind flag → test internally → gradual rollout → GA → remove flag and dead code path.
 
-## Rollback Procedure
-
-### Automatic Rollback
-
-Triggered by:
-- Error rate exceeds threshold
-- Response time exceeds SLO
-- Health check failures
-
-### Manual Rollback
-
-1. Identify the failing deployment
-2. Revert to the last known good deployment
-3. Verify the rollback resolved the issue
-4. Communicate the rollback to stakeholders
-5. Investigate root cause before re-deploying
-
-## Process
-
-### Step 1: Complete Pre-Launch Checklist
-
-Work through every item. Any unchecked item is a blocker.
-
-### Step 2: Deploy to Staging
-
-- Verify the deployment succeeds
-- Run smoke tests against staging
-- Check monitoring dashboards
-
-### Step 3: Execute Staged Rollout
-
-- Follow the rollout stages above
-- Monitor at each stage
-- Rollback if metrics degrade
-
-### Step 4: General Availability
-
-- Enable for all users
-- Monitor for 24-48 hours
-- Schedule feature flag cleanup
-
-## Common Rationalizations
-
-| Rationalization | Reality |
-|---|---|
-| "It works on staging, ship it" | Staging does not perfectly replicate production traffic and data. |
-| "We can monitor after launch" | Monitoring should be configured before launch, not after. |
-| "Rollback is too slow, just fix forward" | Fixing forward under pressure introduces more risk than a clean rollback. |
-
-## Verification
-
-- [ ] Pre-launch checklist is complete
-- [ ] Feature flag is configured for staged rollout
-- [ ] Monitoring and alerting are in place
-- [ ] Rollback procedure is tested
-- [ ] Stakeholders are informed of the launch timeline
-
-## Anti-Rationalization Table
+## Anti-Rationalization
 
 | Excuse | Counter |
 |--------|---------|
-| "It works on staging, ship it" | Staging does not perfectly replicate production traffic and data. |
-| "We can monitor after launch" | Monitoring should be configured before launch, not after. |
-| "Rollback is too slow, just fix forward" | Fixing forward under pressure introduces more risk than a clean rollback. |
-| "Staged rollout is too slow, just enable for everyone" | Staged rollouts catch issues before they affect all users. They are faster than incident response. |
-| "The feature flag cleanup can wait" | Uncleaned feature flags become permanent technical debt. Schedule cleanup immediately. |
+| "It works on staging, ship it" | Staging does not replicate production traffic and data. |
+| "We can monitor after launch" | Monitoring must exist before launch. |
+| "Rollback is too slow, fix forward" | Fix-forward under pressure adds risk. |
+| "Staged rollout is too slow" | Staged rollouts beat incident response. |
+| "Flag cleanup can wait" | Flags become permanent debt. Schedule cleanup now. |
+
+## Verification
+
+- [ ] Review complete; critical issues resolved
+- [ ] PR checks green
+- [ ] Pre-launch checklist complete
+- [ ] Feature flag and monitoring configured
+- [ ] Rollback tested
+- [ ] Stakeholders informed

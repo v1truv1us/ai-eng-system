@@ -17,6 +17,8 @@ Canonical merge into `skills/` and `content/agents/` with dedup. Source: [cursor
 Import script: `scripts/import-cursor-plugins.ts`  
 Attribution log: [docs/attribution/cursor-plugins.md](./attribution/cursor-plugins.md)
 
+Merged upstream content is woven into canonical skills and agents under native section headings (no `-v2` suffixes, no `## Imported from ...` appendices).
+
 ## Dedup decisions
 
 | Cursor skill | Action | Target |
@@ -27,7 +29,7 @@ Attribution log: [docs/attribution/cursor-plugins.md](./attribution/cursor-plugi
 | `review-and-ship` | Merged | `shipping-and-launch` |
 | `thermo-nuclear-code-quality-review` | Merged | `code-review-and-quality` |
 | `ralph-loop`, `ralph-loop-help`, `cancel-ralph` | Merged | `workflow/ralph-wiggum` |
-| `continual-learning` | Merged | `continuous-learning-v2` |
+| `continual-learning` | Merged | `continuous-learning` |
 | `create-plugin-scaffold`, `review-plugin-submission` | Merged | `plugin-dev` |
 | `pr-review-canvas` (standalone plugin) | Skipped | Already imported from `cursor-team-kit` |
 
@@ -36,6 +38,23 @@ Attribution log: [docs/attribution/cursor-plugins.md](./attribution/cursor-plugi
 From `cursor-team-kit`: `control-cli`, `control-ui`, `check-compiler-errors`, `fix-merge-conflicts`, `get-pr-comments`, `make-pr-easy-to-review`, `new-branch-and-pr`, `pr-review-canvas`, `run-smoke-tests`, `weekly-review`, `what-did-i-get-done`, `workflow-from-chats`
 
 From other plugins: `check-agent-compatibility`, `cli-for-agents`, `docs-canvas`, `cursor-sdk`, `orchestrate`, `create-learning-path`, `run-learning-retrospective`
+
+## Agent dedup decisions
+
+| Cursor agent | Action | Target |
+|--------------|--------|--------|
+| `thermo-nuclear-code-quality-review` | Merged | `code-reviewer` |
+| `plugin-architect` | Merged | `plugin-validator` |
+
+## Imported as new canonical agents
+
+From `cursor-team-kit`: `ci-watcher`
+
+From `continual-learning`: `agents-memory-updater`
+
+From `agent-compatibility`: `compatibility-scan-review`, `startup-review`, `validation-review`, `docs-reliability-review`
+
+From `pstack`: `poteto-agent`
 
 ## Rules mapping
 

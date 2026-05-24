@@ -23,5 +23,6 @@
     "deep-work",
     "cursor-import"
   ],
-  "skills": "./skills/"
+  "skills": "./skills/",
+  "agents": "./agents/"
 }

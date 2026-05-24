@@ -1,0 +1,18 @@
+{
+  "name": "ai-eng-system",
+  "displayName": "AI Engineering System",
+  "version": "1.5.0",
+  "description": "AI Engineering System with research orchestration, quality gates, and Cursor-imported workflows",
+  "author": {
+    "name": "v1truv1us",
+    "url": "https://github.com/v1truv1us/ai-eng-system"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/v1truv1us/ai-eng-system",
+  "repository": "https://github.com/v1truv1us/ai-eng-system",
+  "skills": "./skills/",
+  "agents": "./agents/",
+  "rules": "./rules/",
+  "commands": "./commands/",
+  "hooks": "./hooks/cursor-hooks.json"
+}

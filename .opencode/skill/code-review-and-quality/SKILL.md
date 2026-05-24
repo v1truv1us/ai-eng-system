@@ -1,6 +1,6 @@
 ---
 name: code-review-and-quality
-description: Conducts multi-axis code review. Use before merging any change. Use when reviewing code written by yourself, another agent, or a human.
+description: Multi-axis code review with optional strict maintainability mode. Use before merging any change—human, agent, or automation output.
 ---
 
 # Code Review and Quality
@@ -9,88 +9,131 @@ Adapted from `addyosmani/agent-skills` (MIT), commit `82ceff41ed4d3c644e3dcca8a0
 
 ## Overview
 
-Review changes across five axes: correctness, readability, architecture, security, and performance. The standard is not perfection; it is whether the change clearly improves the codebase without introducing avoidable risk.
+Review changes across five axes: correctness, readability, architecture, security, and performance. **Standard mode** asks whether the change improves the codebase without avoidable risk. **Strict maintainability mode** adds structural ambition: hunt for simplifications that delete complexity, not just rearrange it.
 
 ## When to Use
 
 - Before merging any change
-- After completing a feature, bug fix, or refactor
-- When reviewing code produced by another agent or automation
-- When validating whether tests and verification are actually sufficient
+- After a feature, bug fix, or refactor
+- When validating whether tests and verification are sufficient
+- When the user or parent agent requests a deep maintainability audit (strict mode)
+
+## Review modes
+
+| Mode | Goal | When |
+|------|------|------|
+| Standard | Correct, safe, readable change | Default for most PRs |
+| Strict maintainability | Ambitious structural quality; block spaghetti and unjustified sprawl | Large refactors, messy diffs, subagent thermo-style review |
+
+Strict mode baseline: *Rethink structure without changing behavior. Improve abstractions, modularity, and legibility. If a code-judo move could delete whole branches or layers, push for it.*
 
 ## The Five-Axis Review
 
 ### 1. Correctness
 
-- Does the change do what the task or spec requires?
-- Are happy paths, edge cases, and error paths handled?
-- Do tests cover the real behavior change?
+- Does the change meet the task or spec?
+- Happy paths, edge cases, and errors handled?
+- Tests cover the real behavior change?
 
 ### 2. Readability and Simplicity
 
-- Are names clear and consistent with the codebase?
-- Is control flow easy to follow?
-- Are there any clever shortcuts that should become straightforward code?
+- Clear names consistent with the codebase?
+- Control flow easy to follow?
+- Clever shortcuts that should be straightforward code?
+
+In **strict mode**, also ask: Is the implementation direct, or special-case spaghetti? Any thin wrappers or pass-through helpers that add indirection without clarity?
 
 ### 3. Architecture
 
-- Does the change follow existing patterns?
-- Are boundaries between modules still clean?
-- Is the abstraction level appropriate for the current need?
+- Follows existing patterns?
+- Module boundaries still clean?
+- Abstraction level appropriate?
+
+In **strict mode**, also ask:
+
+- Logic in the canonical layer? Reusing existing helpers vs bespoke one-offs?
+- Feature logic leaking into shared paths?
+- File crossing **1000 lines** without strong justification—prefer extract/split first.
+- New ad-hoc conditionals bolted onto busy flows—prefer dedicated abstraction or module.
+- Sequential orchestration or non-atomic updates when parallel/atomic structure is obvious?
 
 ### 4. Security
 
-- Is untrusted input validated at boundaries?
-- Are secrets kept out of code and logs?
-- Are auth, permissions, and external data flows handled safely?
+- Untrusted input validated at boundaries?
+- Secrets out of code and logs?
+- Auth, permissions, and external data handled safely?
 
 ### 5. Performance
 
-- Any N+1 access patterns, repeated expensive work, or unbounded operations?
-- Any missing pagination, batching, caching, or async boundaries?
+- N+1, repeated expensive work, unbounded operations?
+- Pagination, batching, caching, async boundaries where needed?
 
 ## Review Process
 
-### Step 1: Understand Intent
+### Step 1: Understand intent
 
-Before commenting on the code, identify:
+What changed, why, and what proof should exist.
 
-- What changed
-- Why it changed
-- What proof should exist that it works
+### Step 2: Review tests first
 
-### Step 2: Review Tests First
+- Regression tests for bug fixes?
+- Behavior verified, not private implementation?
+- Would tests fail if the bug returned?
 
-Tests reveal intent faster than implementation details.
+### Step 3: Review implementation (five axes)
 
-- Are there regression tests for bug fixes?
-- Do tests verify behavior rather than private implementation?
-- Would the tests fail if the bug returned?
+Prefer concrete findings over style. In **strict mode**, prioritize:
 
-### Step 3: Review the Implementation
+1. Structural regressions and missed dramatic simplifications
+2. Spaghetti / branching growth
+3. Boundary, abstraction, and type-contract problems
+4. File-size and decomposition
+5. Modularity and legibility
 
-Inspect each changed file with the five axes in mind. Prefer concrete findings over style preferences.
+**Strict questions (when applicable):**
 
-### Step 4: Label Findings Clearly
+- Code-judo move that removes concepts/branches/layers?
+- Refactor that moves complexity without deleting it?
+- Casts, `any`, `unknown`, or optionality hiding the real invariant?
+- Duplicate of a canonical helper or wrong package/layer?
 
-Use explicit severity so the author knows what blocks merge.
+### Step 4: Label findings
 
-- `Critical:` security issue, broken behavior, or data loss risk
-- Required: must change before merge
-- `Optional:` worthwhile but not blocking
-- `Nit:` cosmetic or style-only
+- `Critical:` security, broken behavior, data loss
+- `Required:` must fix before merge
+- `Optional:` worthwhile, not blocking
+- `Nit:` cosmetic
 - `FYI:` context only
 
-### Step 5: Verify the Verification Story
+Strict mode: do not soften structural issues into nits. Be direct; skip cosmetic floods when structural problems exist.
 
-Check what was actually run:
+### Step 5: Verify the verification story
 
-- targeted tests
-- full relevant suite
-- build and typecheck
-- manual verification for UI or operational changes
+Targeted tests, relevant suite, build/typecheck, manual checks for UI/ops.
 
-## Review Output Template
+## Findings priority (strict mode)
+
+1. Structural regressions
+2. Missed simplification / code-judo opportunities
+3. Spaghetti and special-case branching
+4. Boundary and type-contract problems
+5. File size and decomposition
+6. Modularity and legibility
+
+## Approval bar
+
+**Standard:** no critical/required issues unresolved; relevant tests and build pass.
+
+**Strict:** behavior correct is not enough. Presumptive blockers unless clearly justified:
+
+- Plausible simplification path ignored; complexity preserved
+- File pushed from under to over 1000 lines
+- Ad-hoc branching tangling shared flows
+- Feature checks scattered across general modules
+- Unnecessary wrapper, cast-heavy contract, or wrong-layer logic
+- Duplicate of existing canonical helper
+
+## Output template
 
 ```markdown
 ## Findings
@@ -106,36 +149,35 @@ Check what was actually run:
 - Manual: ...
 ```
 
-## Common Rationalizations
-
-| Rationalization | Reality |
-|---|---|
-| "The tests pass, so it is fine" | Tests are necessary, not sufficient. They do not prove architecture, readability, or security are sound. |
-| "AI-generated code is probably okay" | AI code needs more scrutiny, not less. It is often plausible and confidently wrong. |
-| "We can clean it up later" | Deferred cleanup usually does not happen. |
-
-## Red Flags
+## Red flags
 
 - No regression test for a bug fix
-- Large change with no explanation or verification summary
-- Review feedback that never labels severity
+- Large change without verification summary
+- Unlabeled severity in feedback
 - Security-sensitive changes reviewed only for style
-- Large diffs that should have been split
+- Diffs that should have been split
+- (Strict) File-size jump, scattered conditionals, or refactor that only relocates complexity
 
-## Verification
-
-- [ ] Critical issues resolved
-- [ ] Required issues resolved or explicitly deferred with justification
-- [ ] Relevant tests pass
-- [ ] Build succeeds
-- [ ] Review summary documents what was checked
-
-## Anti-Rationalization Table
+## Anti-Rationalization
 
 | Excuse | Counter |
 |--------|---------|
-| "I'll review this quickly, it looks fine" | Quick reviews miss subtle bugs. Systematic five-axis review catches what glancing misses. |
-| "This change is too small for a full review" | Small changes can have large effects. Every change deserves systematic review. |
-| "I know this code, no need to review" | Familiarity breeds blind spots. Fresh eyes catch what the author misses. |
-| "The tests pass, the code is good" | Tests prove correctness, not quality. Review catches design issues tests can't see. |
-| "AI-generated code is probably okay" | AI code needs more scrutiny, not less. It is often plausible and confidently wrong. |
+| "Tests pass, so it is fine" | Tests are necessary, not sufficient for architecture, security, or maintainability. |
+| "Too small for full review" | Small changes can have large effects. |
+| "I know this code" | Familiarity hides blind spots. |
+| "AI-generated code is probably okay" | AI output needs more scrutiny—it is often plausible and wrong. |
+| "We can clean up later" | Deferred cleanup rarely happens. |
+| (Strict) "It works, ship it" | Working code that worsens structure is a maintainability regression. |
+
+## Verification checklist
+
+- [ ] Critical and required issues resolved or explicitly deferred with justification
+- [ ] Relevant tests pass; build succeeds
+- [ ] Review summary documents what was checked
+- [ ] (Strict) No presumptive blockers above without justification
+
+## Subagent orchestration (strict mode)
+
+When invoked as a **Task subagent**, the parent supplies `### Git / diff output` and `### Changed file contents`. Apply this skill to that input only; trace cross-file impact at module boundaries. Do not spawn nested subagents unless asked.
+
+Typical parent flow: parallel shell + explore tasks for diff and file contents, then invoke `code-reviewer` in strict mode with labeled sections.

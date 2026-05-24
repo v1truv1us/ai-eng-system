@@ -1,8 +1,9 @@
 ---
 name: comprehensive-research
 description: Multi-phase research orchestration for thorough codebase, documentation, and external knowledge investigation. Invoked by /ai-eng/research command. Use when conducting deep analysis, exploring codebases, investigating patterns, or synthesizing findings from multiple sources.
-version: 1.0.0
-tags: [research, analysis, discovery, documentation, synthesis, multi-agent]
+metadata:
+  version: 1.0.0
+  tags: research, analysis, discovery, documentation, synthesis, multi-agent
 ---
 
 # Comprehensive Research Skill
@@ -373,3 +374,20 @@ This skill incorporates methodologies from:
 - **Bsharat et al. (2023)** - Principled prompting for quality
 - **Kong et al. (2023)** - Expert persona effectiveness
 - **Yang et al. (2023)** - Step-by-step reasoning optimization
+
+## Anti-Rationalization Table
+
+| Excuse | Counter |
+|--------|---------|
+| "I've found enough, no need to keep searching" | Partial research leads to partial solutions. Multiple sources confirm accuracy. |
+| "The codebase is too large to research thoroughly" | Targeted scope definition prevents overwhelm. Focus on the relevant subsystem first. |
+| "I'll just start coding and figure it out as I go" | Coding without research repeats past mistakes and ignores existing patterns. |
+| "Cached documentation is good enough" | Cached docs may be stale. Current codebase state is the source of truth. |
+| "One agent is enough for this research" | Parallel agents provide overlapping validation. Single agents miss blind spots. |
+
+## See Also
+
+- `deep-web-research` — For web-focused research with source evaluation
+- `research-companion` — For research with document analysis and fact-checking
+- `prompt-refinement` — For structuring research prompts before execution
+- `incentive-prompting` — For enhancing research agent prompts

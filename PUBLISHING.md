@@ -86,4 +86,4 @@ Packaged directories include:
 
 ## Current Release
 
-Latest coordinated release: `0.6.0`
+Latest coordinated release: `1.6.3`

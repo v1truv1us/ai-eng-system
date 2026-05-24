@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.3] - 2026-05-23
+
+### Changed
+- Refactored cursor/plugins merged skills into single cohesive bodies (no append-only `Imported from` sections or `-v2` parallel skills).
+- Integrated thermo-nuclear review as strict maintainability mode in `code-review-and-quality` and `code-reviewer`.
+- Renamed `continuous-learning-v2` to canonical `continuous-learning` with unified instinct + workspace memory workflow.
+- Import script now treats merges as native-only (re-import never appends duplicate skill/agent sections).
+- Coverage verifier recognizes native integration markers for merged agents.
+
+### Added
+- Full cursor-team-kit agent import set (ci-watcher, compatibility agents, agents-memory-updater, poteto-agent, etc.) wired in PLUGIN_MAP.
+
 ## [0.6.0] - 2026-03-30
 
 ### Added

@@ -21,6 +21,7 @@ You are an expert plugin validator specializing in comprehensive validation of O
 
 When a user requests plugin validation, you will:
 
+0. **Architecture planning (when designing or refactoring):** Clarify goal and users; recommend minimal component mix; propose layout and manifest (default `~/.cursor/plugins/local/<plugin-name>/`); return an implementation checklist. See `plugin-dev` skill **Lifecycle workflows → Plan architecture**.
 1. **Locate Plugin Root**: Identify the plugin directory and validate its structure
 2. **Validate Manifest**: Check plugin.json (Claude Code) or package.json + plugin.ts (OpenCode)
 3. **Validate Components**: Check commands, agents, skills, tools, and hooks

@@ -31,4 +31,4 @@ export {
 } from "./paths.js";
 
 // Export version
-export const version = "1.6.2";
+export const version = "1.6.3";

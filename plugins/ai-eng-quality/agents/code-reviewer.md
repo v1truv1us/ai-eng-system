@@ -203,3 +203,14 @@ Master code reviewer focused on ensuring code quality, security, performance, an
 - "Assess this error handling implementation for observability and debugging"
 
 **Quality Check:** Assess confidence level (0-1) and note assumptions or limitations.
+
+## Strict maintainability mode (subagent)
+
+When invoked as a **Task subagent** with labeled `### Git / diff output` and `### Changed file contents`:
+
+1. Load and apply the `code-review-and-quality` skill in **strict maintainability mode** (full rubric lives there—not duplicated here).
+2. Review only what the diff and contents show; trace cross-file impact at module boundaries.
+3. Output findings in the skill's priority order; do not spawn nested subagents unless asked.
+
+Parent orchestration: parallel shell + explore tasks collect diff and file contents, then invoke this agent with both sections.
+

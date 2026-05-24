@@ -1,109 +1,78 @@
 ---
 name: ci-cd-and-automation
-description: Shift Left, Faster is Safer, feature flags, quality gate pipelines, failure feedback loops. Use when setting up or modifying build and deploy pipelines.
+description: Design CI/CD pipelines, quality gates, and iterate on failing PR checks until green. Use when setting up pipelines or fixing CI on a branch.
 ---
 
 # CI/CD and Automation
 
 ## Overview
 
-Build and deployment pipelines should enforce quality automatically. Apply Shift Left principles (catch issues early), use feature flags for safe releases, and make the pipeline the authority on whether code is ready to ship.
+Pipelines enforce quality automatically: catch issues early (shift left), ship in small batches, and use feature flags for safe release. When CI fails on a branch, iterate with `gh pr checks` as the source of truth—not GitHub Actions list alone.
 
 ## When to Use
 
-- Setting up CI/CD for a new project
-- Modifying existing build or deploy pipelines
+- Designing or changing build/deploy pipelines
 - Adding quality gates or automated checks
-- Troubleshooting pipeline failures
+- Watching or fixing CI on the current branch or PR
 
-## Core Principles
+## Core principles
 
-### Shift Left
+**Shift left:** lint/format pre-commit, typecheck before push, unit tests on push, integration tests on PR, security scans on main.
 
-Catch issues as early as possible:
-- Lint and format on save or pre-commit
-- Run type checks locally before push
-- Run unit tests on every push
-- Run integration tests on every PR
-- Run security scans on merge to main
+**Faster is safer:** automate deploys, make rollbacks trivial, auto-deploy staging on merge.
 
-### Faster is Safer
+**Feature flags:** incomplete features, gradual rollout, kill switches, environment-specific behavior.
 
-Small, frequent deployments are safer than large, infrequent ones:
-- Automate the deployment process completely
-- Make rollbacks trivial
-- Deploy to staging automatically on merge
-- Deploy to production with a single approval or automatically
+**Quality gate order (fastest-failing first):** lint → typecheck → unit tests → build → integration → security → staging deploy → smoke → production.
 
-### Feature Flags
+## Pipeline design process
 
-Use feature flags for:
-- Incomplete features merged to main
-- A/B testing and gradual rollouts
-- Kill switches for new functionality
-- Environment-specific behavior
+1. List required checks and order fastest-failing-first with clear pass/fail criteria.
+2. Keep lint/typecheck under ~30s and unit tests under ~2 minutes where possible.
+3. Automate staging on merge; production with approval or policy.
+4. Track success rate and mean time to recovery; alert on blocked merges.
 
-### Quality Gate Pipeline
+## CI failure iteration
 
-Standard pipeline stages:
-1. Lint and format check
-2. Type check
-3. Unit tests with coverage
-4. Build
-5. Integration tests
-6. Security scan
-7. Deploy to staging
-8. Smoke tests
-9. Deploy to production
+Use when checks are pending, failing, or you need to drive a branch to green.
 
-## Process
+```bash
+gh pr view --json number,url,headRefName
+gh pr checks --json name,bucket,state,workflow,link
+gh pr checks --watch --fail-fast          # when pending
+gh run view <run-id> --log-failed        # when GHA job failed
+```
 
-### Step 1: Define Pipeline Stages
+**Workflow:**
 
-- List all automated checks the project needs
-- Order them fastest-failing-first
-- Ensure each stage has clear pass/fail criteria
+1. Resolve the active PR and inspect the full check set.
+2. If already failed, diagnose the first actionable error (logs or check link).
+3. If pending, watch with fail-fast.
+4. Apply the smallest safe fix for one failure at a time.
+5. Push, re-run `gh pr checks`, repeat until green.
 
-### Step 2: Implement Fast Feedback
+**Guardrails:**
 
-- Ensure lint and type checks run in under 30 seconds
-- Ensure unit tests run in under 2 minutes
-- Provide clear error output for each failure
+- One failure cause per fix when possible; no `--no-verify`.
+- If failure is unrelated and fixed on main, merge main instead of bloating the PR.
+- Retry flaky checks once and record flake evidence.
+- Re-check after every push—the check set can change.
 
-### Step 3: Add Deployment Automation
+**Output:** current status, root error, fixes applied in order, PR URL when green.
 
-- Automated staging deployment on merge
-- Automated production deployment with approval gate
-- Rollback procedure that can execute in under 1 minute
+## Anti-Rationalization
 
-### Step 4: Monitor Pipeline Health
-
-- Track build success rates
-- Track mean time to recovery from failures
-- Alert on pipeline failures that block merges
-
-## Common Rationalizations
-
-| Rationalization | Reality |
-|---|---|
-| "The pipeline can be fixed later" | Broken pipelines encourage bypassing them, which defeats their purpose. |
-| "Full automation is too much work" | Manual deployment is slower, more error-prone, and harder to audit. |
-| "Feature flags add complexity" | Feature flags add controlled complexity that prevents uncontrolled deployment risk. |
+| Excuse | Counter |
+|--------|---------|
+| "The pipeline can be fixed later" | Broken pipelines get bypassed. |
+| "Full automation is too much work" | Manual deploy is slower and error-prone. |
+| "Feature flags add complexity" | They prevent uncontrolled release risk. |
+| "We don't need staging" | Staging catches environment-specific failures. |
+| "The pipeline is fast enough" | Slow feedback discourages small commits. |
 
 ## Verification
 
 - [ ] Pipeline runs on every push and PR
 - [ ] Fastest checks run first
-- [ ] Each stage has clear pass/fail criteria
-- [ ] Deployment is fully automated
-- [ ] Rollback takes under 1 minute
-
-## Anti-Rationalization Table
-
-| Excuse | Counter |
-|--------|---------|
-| "The pipeline can be fixed later" | Broken pipelines encourage bypassing them, which defeats their purpose. |
-| "Full automation is too much work" | Manual deployment is slower, more error-prone, and harder to audit. |
-| "Feature flags add complexity" | Feature flags add controlled complexity that prevents uncontrolled deployment risk. |
-| "We don't need staging, just deploy to production" | Staging catches environment-specific issues before they reach users. |
-| "The pipeline is fast enough" | Slow pipelines discourage frequent commits. Fast feedback enables trunk-based development. |
+- [ ] Deploy and rollback paths are automated and tested
+- [ ] CI iteration uses `gh pr checks` as authority

@@ -80,6 +80,42 @@ Create directly in platform directories:
 | **Project** | `.claude/` | `.opencode/` |
 | **Global** | `~/.claude/` | `~/.config/opencode/` |
 
+## Lifecycle workflows
+
+### Plan architecture (new or refactor)
+
+1. Clarify goal, users, and outcomes.
+2. Pick the smallest component set: `rules`, `skills`, `agents`, `commands`, `hooks`, `mcpServers`.
+3. Propose directory layout and manifest. Default local path: `~/.cursor/plugins/local/<plugin-name>/`.
+4. Flag discoverability and metadata risks early.
+5. Return an implementation checklist.
+
+### Scaffold a new plugin
+
+**Inputs:** kebab-case name, purpose, component set, single-plugin vs marketplace repo.
+
+**Steps:**
+
+1. Validate name (lowercase kebab-case, alphanumeric ends).
+2. Create target dir (default `~/.cursor/plugins/local/<plugin-name>/` unless user specifies otherwise).
+3. Add `.cursor-plugin/plugin.json`, `README.md`, `LICENSE`, optional `CHANGELOG.md`.
+4. Populate manifest (`name` required; recommend `version`, `description`, `author`, `license`, `keywords`).
+5. Add components with valid frontmatter (rules `.mdc`, skills `skills/*/SKILL.md`, agents/commands markdown).
+6. For marketplace repos, register in `.cursor-plugin/marketplace.json` with relative `source`.
+7. Verify paths are relative—no absolute paths or parent traversal.
+
+**Guardrails:** one focused use case; concise actionable text; no references to missing files.
+
+### Pre-submission review
+
+Before release or marketplace submission:
+
+1. **Manifest:** valid `plugin.json`, kebab-case `name`, coherent metadata.
+2. **Discoverability:** skills, rules, agents, commands, hooks, MCP in expected paths.
+3. **Frontmatter:** every skill/rule/agent/command has required fields.
+4. **Repo integration:** marketplace entry if applicable; unique names; README covers purpose and install.
+5. **Report:** pass/fail by section, prioritized fixes, submission recommendation.
+
 ## Quick Reference
 
 ### Command Frontmatter
@@ -361,118 +397,3 @@ The plugin-dev system integrates seamlessly with existing ai-eng-system componen
 - `/ai-eng/create-tool` - Quick tool creation
 
 All use the same quality standards and research-backed prompting techniques.
-
-## Imported from create-plugin/review-plugin-submission (MIT, cursor/plugins)
-
-# Review plugin submission
-
-## Trigger
-
-A plugin is implemented and needs a final quality check before submission or release.
-
-## Workflow
-
-1. Verify manifest validity:
-   - `.cursor-plugin/plugin.json` exists
-   - `name` is valid lowercase kebab-case
-   - metadata fields are coherent (`description`, `version`, `author`, `license`)
-2. Verify component discoverability:
-   - Skills in `skills/*/SKILL.md`
-   - Rules in `rules/` as `.mdc` or markdown variants
-   - Agents in `agents/` markdown files
-   - Commands in `commands/` markdown or text files
-   - Hooks in `hooks/hooks.json`
-   - MCP config in `mcp.json` (or `mcpServers` override)
-3. Verify component metadata:
-   - Skills include `name` and `description` frontmatter
-   - Rules include valid frontmatter and clear guidance
-   - Agents and commands include `name` and `description`
-4. Verify repository integration:
-   - For marketplace repos, plugin entry exists in `.cursor-plugin/marketplace.json`
-   - `source` resolves to plugin directory and names are unique
-5. Verify documentation quality:
-   - `README.md` states purpose, installation, and component coverage
-   - optional logo path is valid and repository-hosted
-
-## Checklist
-
-- Manifest exists and parses as valid JSON
-- All declared paths exist and are relative
-- No broken file references
-- No missing frontmatter on skills/rules/agents/commands
-- Plugin scope is clear and focused
-- Marketplace registration complete (if multi-plugin repo)
-
-## Output
-
-- Pass/fail report by section
-- Prioritized fix list
-- Final submission recommendation
-
-## Imported from create-plugin/create-plugin-scaffold (MIT, cursor/plugins)
-
-# Create plugin scaffold
-
-## Trigger
-
-You need to create a new Cursor plugin from scratch and make it ready for local use or marketplace submission.
-
-## Required Inputs
-
-- Plugin name (lowercase kebab-case)
-- Plugin purpose and target users
-- Component set to include (`rules`, `skills`, `agents`, `commands`, `hooks`, `mcpServers`)
-- Repository style (`single-plugin` or `multi-plugin marketplace`)
-
-## Output Location
-
-By default, create the plugin inside the user's local plugin directory:
-
-```
-~/.cursor/plugins/local/<plugin-name>/
-```
-
-This path makes the plugin immediately available to Cursor without any install step. If the user explicitly asks to create the plugin elsewhere (e.g. inside an existing repo or a specific directory), respect that choice instead.
-
-## Workflow
-
-1. Validate plugin name format: lowercase kebab-case, starts and ends with an alphanumeric character.
-2. Determine the target directory:
-   - Default: `~/.cursor/plugins/local/<plugin-name>/`
-   - Override: use the path the user specifies, if any.
-   - Create the directory (and parents) if it does not exist.
-3. Create base files inside the target directory:
-   - `.cursor-plugin/plugin.json`
-   - `README.md`
-   - `LICENSE`
-   - optional `CHANGELOG.md`
-4. Populate `plugin.json`:
-   - Required: `name`
-   - Recommended: `version`, `description`, `author`, `license`, `keywords`
-   - Add explicit component paths only when non-default discovery is needed.
-5. Create component files with valid frontmatter:
-   - Rules: `.mdc` with `description`, `alwaysApply`, optional `globs`
-   - Skills: `skills/<skill-name>/SKILL.md` with `name`, `description`
-   - Agents: `agents/*.md` with `name`, `description`
-   - Commands: `commands/*.(md|txt)` with `name`, `description`
-6. If repository uses `.cursor-plugin/marketplace.json`, add plugin entry:
-   - `name`
-   - `source`
-   - optional metadata (`description`, `keywords`, `category`, `tags`)
-7. Ensure all manifest paths are relative, valid, and do not use absolute paths or parent traversal.
-
-## Guardrails
-
-- Keep the plugin focused on one use case.
-- Prefer concise, actionable skill and rule text over long prose.
-- Do not reference files that do not exist.
-- Use folder discovery defaults unless custom paths are required.
-- Always save to `~/.cursor/plugins/local/<plugin-name>/` unless the user provides a different path.
-
-## Output
-
-- Created file tree for the plugin (with full path to the output directory)
-- Final `plugin.json`
-- Marketplace entry (if applicable)
-- Short validation report of required fields and component metadata
-- Confirmation that the plugin is saved under `~/.cursor/plugins/local/` and ready for use

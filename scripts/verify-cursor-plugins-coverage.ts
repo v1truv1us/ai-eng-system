@@ -10,7 +10,7 @@
  *   bun scripts/verify-cursor-plugins-coverage.ts --strict   # exit 1 on gaps
  */
 
-import { readFileSync, readdirSync, statSync } from "node:fs";
+import { readFileSync, readdirSync, statSync, existsSync } from "node:fs";
 import { join } from "node:path";
 
 const ROOT = join(import.meta.dir, "..");
@@ -47,6 +47,35 @@ async function fetchMarketplacePlugins(): Promise<string[]> {
     return (data.plugins ?? []).map((entry) => entry.name).sort();
 }
 
+const AGENTS_DIR = join(ROOT, "content", "agents");
+
+/** Expected cursor/plugins agents by plugin (from upstream marketplace). */
+const EXPECTED_CURSOR_AGENTS: Record<string, string[]> = {
+    "cursor-team-kit": ["ci-watcher", "thermo-nuclear-code-quality-review"],
+    "continual-learning": ["agents-memory-updater"],
+    "create-plugin": ["plugin-architect"],
+    "agent-compatibility": [
+        "compatibility-scan-review",
+        "docs-reliability-review",
+        "startup-review",
+        "validation-review",
+    ],
+    pstack: ["poteto-agent"],
+};
+
+/** Agents merged into canonical targets instead of standalone files */
+const MERGED_CURSOR_AGENTS: Record<string, string> = {
+    "thermo-nuclear-code-quality-review": "code-reviewer",
+    "plugin-architect": "plugin-validator",
+};
+
+/** Native integration markers in merged agent targets (no append-only imports). */
+const MERGED_AGENT_NATIVE_MARKERS: Record<string, string> = {
+    "thermo-nuclear-code-quality-review":
+        "## Strict maintainability mode (subagent)",
+    "plugin-architect": "Architecture planning (when designing or refactoring)",
+};
+
 function countCursorImportSkills(): number {
     let count = 0;
 
@@ -69,6 +98,50 @@ function countCursorImportSkills(): number {
     return count;
 }
 
+function agentCoverage(): {
+    imported: string[];
+    merged: string[];
+    missing: string[];
+} {
+    const imported: string[] = [];
+    const merged: string[] = [];
+    const missing: string[] = [];
+
+    for (const [plugin, names] of Object.entries(EXPECTED_CURSOR_AGENTS)) {
+        void plugin;
+        for (const name of names) {
+            const mergeTarget = MERGED_CURSOR_AGENTS[name];
+            if (mergeTarget) {
+                const targetPath = join(AGENTS_DIR, `${mergeTarget}.md`);
+                if (!existsSync(targetPath)) {
+                    missing.push(`${name} -> ${mergeTarget}`);
+                    continue;
+                }
+                const content = readFileSync(targetPath, "utf-8");
+                const nativeMarker = MERGED_AGENT_NATIVE_MARKERS[name];
+                const integrated =
+                    (nativeMarker && content.includes(nativeMarker)) ||
+                    (content.includes(`Imported from`) && content.includes(name));
+                if (integrated) {
+                    merged.push(`${name} -> ${mergeTarget}`);
+                } else {
+                    missing.push(`${name} -> ${mergeTarget} (not natively integrated)`);
+                }
+                continue;
+            }
+
+            const agentPath = join(AGENTS_DIR, `${name}.md`);
+            if (existsSync(agentPath)) {
+                imported.push(name);
+            } else {
+                missing.push(name);
+            }
+        }
+    }
+
+    return { imported, merged, missing };
+}
+
 async function main(): Promise<void> {
     const strict = process.argv.includes("--strict");
     const marketplacePlugins = await fetchMarketplacePlugins();
@@ -81,11 +154,15 @@ async function main(): Promise<void> {
         marketplacePlugins.includes(name),
     );
     const importSkillCount = countCursorImportSkills();
+    const agentStatus = agentCoverage();
 
     console.log("Cursor plugins coverage verification\n");
     console.log(`Marketplace plugins (cursor/plugins): ${marketplacePlugins.length}`);
     console.log(`Imported via import-cursor-plugins.ts: ${IMPORTED_PLUGINS.length}`);
     console.log(`Skills tagged/imported in skills/: ${importSkillCount}`);
+    console.log(
+        `Cursor agents: ${agentStatus.imported.length} imported, ${agentStatus.merged.length} merged`,
+    );
     console.log(`Intentionally excluded: ${[...EXCLUDED_PLUGINS].join(", ") || "(none)"}`);
 
     if (missing.length) {
@@ -113,7 +190,14 @@ async function main(): Promise<void> {
         console.log("\n⚠️  docs/attribution/cursor-plugins.md missing source reference");
     }
 
-    if (strict && (missing.length > 0 || extra.length > 0)) {
+    if (agentStatus.missing.length) {
+        console.log("\n⚠️  Cursor agents missing or incomplete:");
+        for (const name of agentStatus.missing) console.log(`  - ${name}`);
+    } else {
+        console.log("\n✅ All cursor/plugins agents are imported or merged");
+    }
+
+    if (strict && (missing.length > 0 || extra.length > 0 || agentStatus.missing.length > 0)) {
         process.exit(1);
     }
 }

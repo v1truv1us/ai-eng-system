@@ -1,8 +1,9 @@
 ---
 name: ralph-wiggum
 description: Continuous iteration loop pattern for well-defined tasks with clear completion criteria. Use when getting tests to pass, implementing features with automatic verification, bug fixing with clear success conditions, or running automated development overnight. Provides prompt templates, safety guidelines, and integration patterns for ai-eng-system workflows.
-version: 1.0.0
-tags: [workflow, iteration, automation, continuous, looping]
+metadata:
+  version: 1.0.0
+  tags: workflow, iteration, automation, continuous, looping
 ---
 
 # Ralph Wiggum Continuous Iteration
@@ -86,6 +87,8 @@ Always include these when using Ralph Wiggum loops:
 2. **Completion Promise** - Unique exact-match phrase like `<promise>COMPLETE</promise>` or `✅ ALL_TESTS_PASSING`
 3. **Progress Monitoring** - Track iteration count and show last N outputs for visibility
 4. **Cancellation Mechanism** - Ability to stop active loop and save iteration history
+
+To cancel a Ralph loop: remove `.cursor/ralph/scratchpad.md` (or the active scratchpad path), report how many iterations ran, and summarize partial progress for the user.
 
 ### Cost Management
 
