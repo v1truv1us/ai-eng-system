@@ -95,7 +95,8 @@ This is a test agent body with comprehensive details.
 const SAMPLE_SKILL = `---
 name: test-skill
 description: A test skill for validation
-version: 1.0.0
+metadata:
+  version: 1.0.0
 ---
 
 # Test Skill
