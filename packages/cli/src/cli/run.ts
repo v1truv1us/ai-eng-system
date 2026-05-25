@@ -8,6 +8,8 @@
  *   - ai-eng "prompt"     : Defaults to ralph (shortcut)
  */
 
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 import { parseArgs } from "node:util";
 import { loadConfig } from "../config/loadConfig";
 import { Log } from "../util/log";
@@ -26,6 +28,7 @@ USAGE:
   ai-eng "prompt" [options]          # Shortcut: defaults to 'ralph'
 
 COMMANDS:
+  version                            # Print the installed version
   init [options]                     # Initialize .ai-eng/config.yaml with defaults
   ralph <prompt|workflow> [options]  # Iteration loop runner
   install [options]                  # Install OpenCode, Cursor, Gemini, or Pi assets
@@ -35,6 +38,7 @@ COMMANDS:
 GLOBAL OPTIONS:
   -h, --help                         Show this help message
   -v, --verbose                      Verbose output (DEBUG level logs)
+  -V, --version                      Print the installed version
 
 EXAMPLES:
   ai-eng init                    # Initialize config with defaults
@@ -535,6 +539,28 @@ async function main() {
 
         // Route to subcommand
         switch (subcommand) {
+            case "version":
+            case "-V":
+            case "--version": {
+                let version: string | undefined;
+                // Walk up from the CLI entry point to find package.json
+                let dir = dirname(process.argv[1]);
+                for (let i = 0; i < 5; i++) {
+                    try {
+                        const pkg = JSON.parse(readFileSync(join(dir, "package.json"), "utf8"));
+                        if (pkg.name === "@ai-eng-system/cli" && pkg.version) {
+                            version = pkg.version;
+                            break;
+                        }
+                    } catch { /* not found, walk up */ }
+                    const parent = dirname(dir);
+                    if (parent === dir) break;
+                    dir = parent;
+                }
+                console.log(version ? `ai-eng v${version}` : "ai-eng (version unknown)");
+                break;
+            }
+
             case "init":
                 await runInit(subcommandArgs);
                 break;
