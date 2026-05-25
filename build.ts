@@ -1279,7 +1279,13 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "data-engineer",
             "ci-watcher",
         ],
-        skills: ["coolify-deploy", "git-worktree", "ci-cd-and-automation"],
+        skills: [
+            "coolify-deploy",
+            "git-worktree",
+            "ci-cd-and-automation",
+            "fix-ci",
+            "loop-on-ci",
+        ],
         description: "Infrastructure, deployment, and DevOps automation",
         category: "development",
         keywords: [
@@ -1315,6 +1321,7 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "startup-review",
             "validation-review",
             "docs-reliability-review",
+            "thermo-nuclear-code-quality-review",
         ],
         skills: [
             "code-review-and-quality",
@@ -1322,6 +1329,9 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "check-agent-compatibility",
             "verification-loop",
             "shipping-and-launch",
+            "thermo-nuclear-code-quality-review",
+            "verify-this",
+            "review-and-ship",
         ],
         description:
             "Testing, security scanning, code review, and quality assurance",
