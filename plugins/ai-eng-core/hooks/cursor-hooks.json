@@ -1,16 +1,7 @@
 {
   "version": 1,
   "hooks": {
-    "afterAgentResponse": [
-      {
-        "command": "./hooks/capture-response.sh"
-      }
-    ],
     "stop": [
-      {
-        "command": "./hooks/stop-hook.sh",
-        "loop_limit": null
-      },
       {
         "command": "./hooks/cooking-stop-hook.sh",
         "loop_limit": null

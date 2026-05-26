@@ -56,7 +56,6 @@ const DIST_CURSOR_DIR = join(DIST_DIR, ".cursor-plugin");
 const DIST_GEMINI_DIR = join(DIST_DIR, ".gemini");
 const RULES_DIR = join(ROOT, "rules");
 const CURSOR_RULES_DIR = join(RULES_DIR, "cursor");
-const CURSOR_RALPH_HOOKS_DIR = join(ROOT, "hooks", "cursor", "ralph-loop");
 const COOKING_HOOKS_DIR = join(ROOT, "hooks", "cooking");
 
 /** Core workflow commands shipped in the monolithic Cursor bundle */
@@ -679,8 +678,10 @@ async function buildCursor(): Promise<void> {
         cursorCommandsDir,
         CURSOR_BUNDLE_COMMANDS,
     );
-    await copyCursorRalphHookScripts(cursorHooksDir);
-    await writeCursorRalphHooksManifest(cursorHooksDir);
+    // A6: Cursor Ralph loop scripts decommissioned. The cooking Stop hook
+    // (host-agnostic) replaces them.
+    await copyCookingHookScripts(cursorHooksDir);
+    await writeCursorHooksManifest(cursorHooksDir);
 
     if (existsSync(CURSOR_RULES_DIR)) {
         await copyDirRecursive(CURSOR_RULES_DIR, cursorRulesDir);
@@ -1157,6 +1158,7 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "simplify",
             "context",
             "init",
+            "cook-status",
         ],
         agents: [
             "architect-advisor",
@@ -1206,7 +1208,11 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "learning-snooze",
         ],
         agents: ["agents-memory-updater"],
-        skills: ["knowledge-architecture", "continuous-learning"],
+        skills: [
+            "knowledge-architecture",
+            "continuous-learning",
+            "dreaming-consolidator",
+        ],
         assetDirs: [
             "docs/knowledge",
             "docs/decisions",
@@ -1248,7 +1254,11 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "documentation-specialist",
             "ml-engineer",
         ],
-        skills: ["knowledge-capture", "content-optimization"],
+        skills: [
+            "knowledge-capture",
+            "content-optimization",
+            "investigation-loop",
+        ],
         description:
             "Deep research, knowledge capture, and documentation tools",
         category: "development",
@@ -1282,7 +1292,9 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "ci-cd-and-automation",
             "fix-ci",
             "loop-on-ci",
+            "cross-repo-refactor",
         ],
+        hasHooks: true,
         description: "Infrastructure, deployment, and DevOps automation",
         category: "development",
         keywords: [
@@ -1335,6 +1347,7 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "thermo-nuclear-performance-review",
             "verify-this",
             "review-and-ship",
+            "test-fix-loop",
         ],
         description:
             "Testing, security scanning, code review, and quality assurance",
@@ -1444,47 +1457,6 @@ async function copySelectedAgentFiles(
 }
 
 /**
- * Copy Ralph loop shell hooks from hooks/cursor/ralph-loop into a destination hooks/ directory.
- */
-async function copyCursorRalphHookScripts(destHooksDir: string): Promise<void> {
-    await mkdir(destHooksDir, { recursive: true });
-    for (const script of ["capture-response.sh", "stop-hook.sh"] as const) {
-        const src = join(CURSOR_RALPH_HOOKS_DIR, script);
-        if (!existsSync(src)) {
-            if (!IS_TEST_MODE) {
-                throw new Error(`Cursor ralph hook script missing: ${src}`);
-            }
-            continue;
-        }
-        await copyFile(src, join(destHooksDir, script));
-    }
-}
-
-/**
- * Write Cursor-compatible Ralph loop hooks manifest (separate from Claude hooks.json).
- */
-async function writeCursorRalphHooksManifest(destHooksDir: string): Promise<void> {
-    const srcManifest = join(CURSOR_RALPH_HOOKS_DIR, "hooks.json");
-    const manifest = existsSync(srcManifest)
-        ? JSON.parse(await readFile(srcManifest, "utf-8"))
-        : {
-              version: 1,
-              hooks: {
-                  afterAgentResponse: [
-                      { command: "./hooks/capture-response.sh" },
-                  ],
-                  stop: [{ command: "./hooks/stop-hook.sh", loop_limit: null }],
-              },
-          };
-
-    await mkdir(destHooksDir, { recursive: true });
-    await writeFile(
-        join(destHooksDir, "cursor-hooks.json"),
-        JSON.stringify(manifest, null, 2) + "\n",
-    );
-}
-
-/**
  * Copy cooking-routines Stop hook from hooks/cooking/ into a destination
  * hooks/ directory as cooking-stop-hook.sh. Host-agnostic: the script reads
  * its marker from ~/.claude/cooking/active-<pid> regardless of host.
@@ -1502,34 +1474,36 @@ async function copyCookingHookScripts(destHooksDir: string): Promise<void> {
 }
 
 /**
- * Write Cursor-compatible hooks manifest combining Ralph loop hooks AND the
- * cooking-routines Stop hook. Both stop entries are listed; each script is
- * gated by its own state file so they don't fight for the loop.
+ * Copy cooking-routines branch-guard PreToolUse Bash hook from
+ * hooks/cooking/ into a destination hooks/ directory as
+ * cooking-branch-guard.sh. Used by cross-repo-refactor to make pushes to
+ * forbidden branches physically impossible.
+ */
+async function copyBranchGuardHookScripts(destHooksDir: string): Promise<void> {
+    await mkdir(destHooksDir, { recursive: true });
+    const src = join(COOKING_HOOKS_DIR, "branch-guard.sh");
+    if (!existsSync(src)) {
+        if (!IS_TEST_MODE) {
+            throw new Error(`Cooking branch-guard script missing: ${src}`);
+        }
+        return;
+    }
+    await copyFile(src, join(destHooksDir, "cooking-branch-guard.sh"));
+}
+
+/**
+ * Write Cursor-compatible hooks manifest pointing at the cooking-routines
+ * host-agnostic Stop hook. A6 decommissioned the Ralph loop entries; the
+ * cooking hook covers Cursor too because its marker file path
+ * (~/.claude/cooking/active-<pid>) is host-agnostic.
  */
 async function writeCursorHooksManifest(destHooksDir: string): Promise<void> {
-    const ralphSrc = join(CURSOR_RALPH_HOOKS_DIR, "hooks.json");
-    const ralph = existsSync(ralphSrc)
-        ? JSON.parse(await readFile(ralphSrc, "utf-8"))
-        : {
-              version: 1,
-              hooks: {
-                  afterAgentResponse: [
-                      { command: "./hooks/capture-response.sh" },
-                  ],
-                  stop: [{ command: "./hooks/stop-hook.sh", loop_limit: null }],
-              },
-          };
-
-    const stopEntries = [
-        ...(ralph.hooks?.stop ?? []),
-        { command: "./hooks/cooking-stop-hook.sh", loop_limit: null },
-    ];
-
     const manifest = {
-        ...ralph,
+        version: 1,
         hooks: {
-            ...ralph.hooks,
-            stop: stopEntries,
+            stop: [
+                { command: "./hooks/cooking-stop-hook.sh", loop_limit: null },
+            ],
         },
     };
 
@@ -1675,58 +1649,82 @@ async function syncToMarketplacePlugins(): Promise<void> {
             JSON.stringify(pluginJson, null, 2),
         );
 
-        // Copy hooks to core plugin only
+        // Per-plugin hook wiring. Each plugin opts in via hasHooks=true and
+        // gets the appropriate hook bundle.
         if (config.hasHooks) {
-            const distHooksDir = join(CLAUDE_DIR, "hooks");
             const pluginHooksDir = join(pluginDir, "hooks");
-            if (existsSync(distHooksDir)) {
-                await copyDirRecursive(distHooksDir, pluginHooksDir);
-            }
-            // Cooking-routines host-agnostic Stop hook (replaces the
-            // previously Cursor-only stop-hook.sh in Claude Code).
-            await copyCookingHookScripts(pluginHooksDir);
 
-            // Generate hooks.json for session start notification AND the
-            // cooking-routines Stop matcher (Claude marketplace).
-            const hooksJson = {
-                hooks: [
-                    {
-                        matcher: {
-                            event: "notification",
-                            type: "session_start",
+            if (pluginName === "ai-eng-core") {
+                // Core: prompt-optimization scripts + cooking Stop hook.
+                const distHooksDir = join(CLAUDE_DIR, "hooks");
+                if (existsSync(distHooksDir)) {
+                    await copyDirRecursive(distHooksDir, pluginHooksDir);
+                }
+                await copyCookingHookScripts(pluginHooksDir);
+
+                const hooksJson = {
+                    hooks: [
+                        {
+                            matcher: {
+                                event: "notification",
+                                type: "session_start",
+                            },
+                            hooks: [
+                                {
+                                    type: "command",
+                                    command:
+                                        "echo '🔧 AI Engineering System loaded. Key commands: /plan, /work, /review, /research'",
+                                },
+                            ],
                         },
-                        hooks: [
-                            {
-                                type: "command",
-                                command:
-                                    "echo '🔧 AI Engineering System loaded. Key commands: /plan, /work, /review, /research'",
-                            },
-                        ],
-                    },
-                ],
-                Stop: [
-                    {
-                        matcher: "*",
-                        hooks: [
-                            {
-                                type: "command",
-                                command:
-                                    "$CLAUDE_PLUGIN_DIR/hooks/cooking-stop-hook.sh",
-                            },
-                        ],
-                    },
-                ],
-            };
-            await writeFile(
-                join(pluginDir, "hooks.json"),
-                JSON.stringify(hooksJson, null, 2),
-            );
+                    ],
+                    Stop: [
+                        {
+                            matcher: "*",
+                            hooks: [
+                                {
+                                    type: "command",
+                                    command:
+                                        "$CLAUDE_PLUGIN_DIR/hooks/cooking-stop-hook.sh",
+                                },
+                            ],
+                        },
+                    ],
+                };
+                await writeFile(
+                    join(pluginDir, "hooks.json"),
+                    JSON.stringify(hooksJson, null, 2),
+                );
 
-            // Cursor manifest: emit both Ralph loop hooks (existing) AND the
-            // cooking Stop hook entry. Ralph state file and cooking marker
-            // gate independently inside their respective scripts.
-            await copyCursorRalphHookScripts(pluginHooksDir);
-            await writeCursorHooksManifest(pluginHooksDir);
+                // Cursor manifest: cooking Stop hook only. Ralph loop's
+                // CURSOR_PROJECT_DIR-coupled scripts were decommissioned in
+                // A6 since the host-agnostic cooking hook covers both hosts.
+                await writeCursorHooksManifest(pluginHooksDir);
+            } else if (pluginName === "ai-eng-devops") {
+                // DevOps: branch-guard PreToolUse Bash hook for cross-repo-refactor.
+                // No Cursor equivalent exposed today; the skill body documents
+                // the gap.
+                await copyBranchGuardHookScripts(pluginHooksDir);
+
+                const hooksJson = {
+                    PreToolUse: [
+                        {
+                            matcher: "Bash",
+                            hooks: [
+                                {
+                                    type: "command",
+                                    command:
+                                        "$CLAUDE_PLUGIN_DIR/hooks/cooking-branch-guard.sh",
+                                },
+                            ],
+                        },
+                    ],
+                };
+                await writeFile(
+                    join(pluginDir, "hooks.json"),
+                    JSON.stringify(hooksJson, null, 2),
+                );
+            }
         }
 
         await writePerPluginCursorManifest(
