@@ -1,0 +1,79 @@
+name: Sync Claude Marketplace Plugins
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '.claude-plugin/marketplace.json'
+      - 'plugins/**'
+      - '.cursor-plugin/marketplace.json'
+  workflow_dispatch:
+
+concurrency:
+  group: sync-claude-marketplace-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install workspace dependencies
+        run: bun install --ignore-scripts --frozen-lockfile
+
+      - name: Build generated marketplace plugins
+        run: bun run build
+
+      - name: Verify Claude marketplace sources exist
+        run: |
+          node <<'NODE'
+          const { existsSync, readFileSync } = require('node:fs');
+          const { normalize } = require('node:path');
+
+          const manifestPath = '.claude-plugin/marketplace.json';
+          const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
+          const missing = [];
+
+          for (const plugin of manifest.plugins || []) {
+            const source = normalize(plugin.source);
+            if (!existsSync(source)) missing.push(`${plugin.name}: ${source}`);
+          }
+
+          if (missing.length) {
+            console.error('Missing Claude marketplace plugin sources:');
+            for (const item of missing) console.error(`- ${item}`);
+            process.exit(1);
+          }
+
+          console.log(`Verified ${manifest.plugins.length} Claude marketplace plugin sources.`);
+          NODE
+
+      - name: Commit generated marketplace plugins
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add -f \
+            .claude-plugin/marketplace.json \
+            .cursor-plugin/marketplace.json \
+            plugins/ai-eng-*
+
+          if git diff --cached --quiet; then
+            echo "No generated marketplace changes to commit."
+            exit 0
+          fi
+
+          git commit -m "chore: sync generated marketplace plugins [skip ci]"
+          git push

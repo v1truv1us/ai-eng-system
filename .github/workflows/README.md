@@ -14,7 +14,7 @@ That workflow:
 - typechecks and runs build tests, core tests, and CLI build tests
 - publishes packages in order: `core -> toolkit -> cli`
 
-Generated platform bundles are produced in CI and published via npm; they are not committed to the repository.
+Generated toolkit platform bundles are produced in CI and published via npm; they are not committed to the repository. Claude marketplace plugin sources are the exception: `.github/workflows/sync-claude-marketplace.yml` rebuilds and commits `.claude-plugin/marketplace.json` plus `plugins/ai-eng-*` so adding the repository through the Claude/plugin marketplace resolves real source directories.
 
 ## Package-specific Workflows
 
