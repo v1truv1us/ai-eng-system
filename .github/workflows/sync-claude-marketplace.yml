@@ -17,6 +17,8 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
     permissions:
       contents: write
     steps:
@@ -31,7 +33,7 @@ jobs:
           bun-version: latest
 
       - name: Install workspace dependencies
-        run: bun install --ignore-scripts --frozen-lockfile
+        run: bun install --ignore-scripts
 
       - name: Build generated marketplace plugins
         run: bun run build
