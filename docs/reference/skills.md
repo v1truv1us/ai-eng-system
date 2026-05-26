@@ -69,9 +69,16 @@ ai-eng-system currently ships 33 canonical skills organized by lifecycle phase a
 - `knowledge-architecture` ships in the `ai-eng-learning` Claude plugin group.
 - `knowledge-capture` remains packaged outside `ai-eng-learning`.
 
-## Plugin and Extension Development
+## Plugin, Extension, and Agent SDK Development
 
-- `plugin-dev`
+- `plugin-dev` - Claude Code/OpenCode plugin, command, agent, skill, and tool development
+- `cursor-sdk` - Cursor TypeScript SDK workflows and cloud/local agents
+- `claude-agent-sdk` - Claude/Anthropic SDK workflow adapters
+- `opencode-sdk` - OpenCode SDK local workflow runners
+- `openai-agents-sdk` - OpenAI Agents SDK / Codex-style workflow adapters
+- `gemini-agent-sdk` - Gemini SDK/ADK-style workflow adapters
+- `pi-agent-sdk` - Pi CLI/subagent workflow adapters
+
 ## Notes
 
 - Lifecycle skills are canonical workflow surfaces. Commands are thin entrypoints.
