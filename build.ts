@@ -57,6 +57,7 @@ const DIST_GEMINI_DIR = join(DIST_DIR, ".gemini");
 const RULES_DIR = join(ROOT, "rules");
 const CURSOR_RULES_DIR = join(RULES_DIR, "cursor");
 const CURSOR_RALPH_HOOKS_DIR = join(ROOT, "hooks", "cursor", "ralph-loop");
+const COOKING_HOOKS_DIR = join(ROOT, "hooks", "cooking");
 
 /** Core workflow commands shipped in the monolithic Cursor bundle */
 const CURSOR_BUNDLE_COMMANDS = [
@@ -1484,6 +1485,62 @@ async function writeCursorRalphHooksManifest(destHooksDir: string): Promise<void
 }
 
 /**
+ * Copy cooking-routines Stop hook from hooks/cooking/ into a destination
+ * hooks/ directory as cooking-stop-hook.sh. Host-agnostic: the script reads
+ * its marker from ~/.claude/cooking/active-<pid> regardless of host.
+ */
+async function copyCookingHookScripts(destHooksDir: string): Promise<void> {
+    await mkdir(destHooksDir, { recursive: true });
+    const src = join(COOKING_HOOKS_DIR, "stop-hook.sh");
+    if (!existsSync(src)) {
+        if (!IS_TEST_MODE) {
+            throw new Error(`Cooking stop-hook script missing: ${src}`);
+        }
+        return;
+    }
+    await copyFile(src, join(destHooksDir, "cooking-stop-hook.sh"));
+}
+
+/**
+ * Write Cursor-compatible hooks manifest combining Ralph loop hooks AND the
+ * cooking-routines Stop hook. Both stop entries are listed; each script is
+ * gated by its own state file so they don't fight for the loop.
+ */
+async function writeCursorHooksManifest(destHooksDir: string): Promise<void> {
+    const ralphSrc = join(CURSOR_RALPH_HOOKS_DIR, "hooks.json");
+    const ralph = existsSync(ralphSrc)
+        ? JSON.parse(await readFile(ralphSrc, "utf-8"))
+        : {
+              version: 1,
+              hooks: {
+                  afterAgentResponse: [
+                      { command: "./hooks/capture-response.sh" },
+                  ],
+                  stop: [{ command: "./hooks/stop-hook.sh", loop_limit: null }],
+              },
+          };
+
+    const stopEntries = [
+        ...(ralph.hooks?.stop ?? []),
+        { command: "./hooks/cooking-stop-hook.sh", loop_limit: null },
+    ];
+
+    const manifest = {
+        ...ralph,
+        hooks: {
+            ...ralph.hooks,
+            stop: stopEntries,
+        },
+    };
+
+    await mkdir(destHooksDir, { recursive: true });
+    await writeFile(
+        join(destHooksDir, "cursor-hooks.json"),
+        JSON.stringify(manifest, null, 2) + "\n",
+    );
+}
+
+/**
  * Generate per-plugin Cursor manifest at plugins/<name>/.cursor-plugin/plugin.json
  */
 async function writePerPluginCursorManifest(
@@ -1625,7 +1682,12 @@ async function syncToMarketplacePlugins(): Promise<void> {
             if (existsSync(distHooksDir)) {
                 await copyDirRecursive(distHooksDir, pluginHooksDir);
             }
-            // Generate hooks.json for session start notification (Claude marketplace)
+            // Cooking-routines host-agnostic Stop hook (replaces the
+            // previously Cursor-only stop-hook.sh in Claude Code).
+            await copyCookingHookScripts(pluginHooksDir);
+
+            // Generate hooks.json for session start notification AND the
+            // cooking-routines Stop matcher (Claude marketplace).
             const hooksJson = {
                 hooks: [
                     {
@@ -1642,15 +1704,29 @@ async function syncToMarketplacePlugins(): Promise<void> {
                         ],
                     },
                 ],
+                Stop: [
+                    {
+                        matcher: "*",
+                        hooks: [
+                            {
+                                type: "command",
+                                command:
+                                    "$CLAUDE_PLUGIN_DIR/hooks/cooking-stop-hook.sh",
+                            },
+                        ],
+                    },
+                ],
             };
             await writeFile(
                 join(pluginDir, "hooks.json"),
                 JSON.stringify(hooksJson, null, 2),
             );
 
-            // Cursor Ralph loop hooks (cursor/plugins ralph-loop)
+            // Cursor manifest: emit both Ralph loop hooks (existing) AND the
+            // cooking Stop hook entry. Ralph state file and cooking marker
+            // gate independently inside their respective scripts.
             await copyCursorRalphHookScripts(pluginHooksDir);
-            await writeCursorRalphHooksManifest(pluginHooksDir);
+            await writeCursorHooksManifest(pluginHooksDir);
         }
 
         await writePerPluginCursorManifest(

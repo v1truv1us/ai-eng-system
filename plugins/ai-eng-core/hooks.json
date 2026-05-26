@@ -12,5 +12,16 @@
         }
       ]
     }
+  ],
+  "Stop": [
+    {
+      "matcher": "*",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "$CLAUDE_PLUGIN_DIR/hooks/cooking-stop-hook.sh"
+        }
+      ]
+    }
   ]
 }
