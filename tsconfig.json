@@ -10,6 +10,6 @@
         "noEmit": true,
         "types": ["bun-types"]
     },
-    "include": ["src/**/*.ts"],
+    "include": ["src/**/*.ts", "packages/cli/src/**/*.ts", "packages/core/src/**/*.ts", "build.ts"],
     "exclude": ["node_modules", "dist"]
 }

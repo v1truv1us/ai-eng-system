@@ -46,7 +46,7 @@ const ROOT = process.env.TEST_ROOT
     : dirname(fileURLToPath(import.meta.url));
 const CONTENT_DIR = join(ROOT, "content");
 const SKILLS_DIR = join(ROOT, "skills");
-const PROMPT_OPT_DIR = join(ROOT, "src", "prompt-optimization");
+const PROMPT_OPT_DIR = join(ROOT, "packages", "cli", "src", "prompt-optimization");
 const DIST_DIR = join(ROOT, "dist");
 
 const CLAUDE_DIR = join(DIST_DIR, ".claude-plugin");
@@ -976,7 +976,7 @@ async function transpileCLI(): Promise<void> {
             sourcemap: "inline", // For debugging
             minify: false, // Keep readable
             splitting: false, // Prevent CommonJS bundling
-            external: [], // Don't bundle external modules
+            external: ["@opentui/core", "web-tree-sitter", "@opencode-ai/sdk", "@opencode-ai/plugin"], // Don't bundle large deps
         });
 
         if (!result.success) {
@@ -1965,17 +1965,22 @@ async function buildAll(): Promise<void> {
     await validateContentOnly();
 
     // Build to dist/
-    await buildClaude();
-    await buildOpenCode();
-    await buildPi();
-    await buildCursor();
-    await buildGemini();
+    // Build all platform targets in parallel (they write to separate directories)
+    await Promise.all([
+        buildClaude(),
+        buildOpenCode(),
+        buildPi(),
+        buildCursor(),
+        buildGemini(),
+    ]);
     await copySkillsToDist();
 
-    // Marketplace plugin sync uses TEST_ROOT fixtures when TEST_ROOT is set.
-    await syncToMarketplacePlugins();
-    await generateMarketplaceJson();
-    await generateCursorMarketplaceJson();
+    // Marketplace generation in parallel
+    await Promise.all([
+        syncToMarketplacePlugins(),
+        generateMarketplaceJson(),
+        generateCursorMarketplaceJson(),
+    ]);
 
     // Skip steps that require the full project tree when running in test mode
     if (!IS_TEST_MODE) {
