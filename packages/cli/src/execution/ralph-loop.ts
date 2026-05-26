@@ -227,10 +227,10 @@ export class RalphLoopRunner {
         });
 
         // Initialize flow store
-        this.flowStore.initialize();
+        await this.flowStore.initialize();
 
         // Create initial state
-        const initialState = this.flowStore.createInitialState({
+        const initialState = await this.flowStore.createInitialState({
             prompt: this.config.prompt,
             completionPromise: this.config.completionPromise,
             maxCycles: this.config.maxCycles,
@@ -239,7 +239,7 @@ export class RalphLoopRunner {
         });
 
         // Update status to running
-        this.flowStore.updateStatus(RunStatus.RUNNING);
+        await this.flowStore.updateStatus(RunStatus.RUNNING);
 
         // Run the loop
         await this.runLoop();
@@ -249,7 +249,7 @@ export class RalphLoopRunner {
     private async resume(): Promise<void> {
         log.info("Resuming Ralph loop", { runId: this.config.runId });
 
-        const state = this.flowStore.load();
+        const state = await this.flowStore.load();
         if (!state) {
             throw new Error(
                 `No flow state found for run ID: ${this.config.runId}. Cannot resume.`,
@@ -273,7 +273,7 @@ export class RalphLoopRunner {
 
     /** Main loop execution */
     private async runLoop(): Promise<void> {
-        const state = this.flowStore.load();
+        const state = await this.flowStore.load();
         if (!state) {
             throw new Error("No flow state found");
         }
@@ -356,7 +356,7 @@ export class RalphLoopRunner {
 
                     // Record the cycle
                     if (result.success) {
-                        this.flowStore.recordSuccessfulCycle(
+                        await this.flowStore.recordSuccessfulCycle(
                             result.cycleState,
                             result.summary,
                         );
@@ -365,13 +365,13 @@ export class RalphLoopRunner {
                         const durationMs = Date.now() - runStartTime;
                         this.discordWebhook?.notifyCycleComplete(
                             cycleNumber,
-                            this.flowStore.load()?.completedCycles ??
+                            (await this.flowStore.load())?.completedCycles ??
                                 cycleNumber,
                             result.summary,
                             durationMs,
                         );
                     } else {
-                        this.flowStore.recordFailedCycle(result.cycleState);
+                        await this.flowStore.recordFailedCycle(result.cycleState);
 
                         // Notify Discord: cycle failed
                         this.discordWebhook?.notifyError(
@@ -441,7 +441,7 @@ export class RalphLoopRunner {
             }
 
             // Check if stuck
-            const currentState = this.flowStore.load();
+            const currentState = await this.flowStore.load();
             if (
                 currentState &&
                 currentState.stuckCount >= this.config.stuckThreshold
@@ -457,8 +457,8 @@ export class RalphLoopRunner {
 
             // Save checkpoint if needed
             if (cycleNumber % this.config.checkpointFrequency === 0) {
-                this.flowStore.saveCheckpoint(
-                    this.flowStore.load()!,
+                await this.flowStore.saveCheckpoint(
+                    (await this.flowStore.load())!,
                     result.cycleState.phases,
                 );
             }
@@ -535,7 +535,7 @@ export class RalphLoopRunner {
         }
 
         // Add previous cycle summary if available
-        const previousCycle = this.flowStore.getIteration(cycleNumber - 1);
+        const previousCycle = await this.flowStore.getIteration(cycleNumber - 1);
         if (previousCycle) {
             contextParts.push(
                 `# Previous Cycle (${cycleNumber - 1}) Summary\n\n`,
@@ -577,7 +577,7 @@ export class RalphLoopRunner {
         }
 
         // Add last checkpoint summary
-        const state = this.flowStore.load();
+        const state = await this.flowStore.load();
         if (state?.lastCheckpoint) {
             contextParts.push(
                 `\n# Last Checkpoint\n\nCycle ${state.lastCheckpoint.cycleNumber}: ${state.lastCheckpoint.summary}\n`,
@@ -1138,7 +1138,7 @@ Output: <promise>SHIP</promise> if all criteria are met, or list remaining issue
             });
 
             // Save gate results
-            this.flowStore.saveGateResults(cycleNumber, results);
+            await this.flowStore.saveGateResults(cycleNumber, results);
         }
 
         return results;
@@ -1404,7 +1404,7 @@ Output: <promise>SHIP</promise> if all criteria are met, or list remaining issue
         reason: StopReason,
         summary: string,
     ): Promise<void> {
-        const state = this.flowStore.load();
+        const state = await this.flowStore.load();
         if (state) {
             let runStatus: RunStatus;
             switch (reason) {
@@ -1433,7 +1433,7 @@ Output: <promise>SHIP</promise> if all criteria are met, or list remaining issue
                 default:
                     runStatus = RunStatus.FAILED;
             }
-            this.flowStore.updateStatus(runStatus, reason);
+            await this.flowStore.updateStatus(runStatus, reason);
         }
 
         UI.header("Loop Complete");

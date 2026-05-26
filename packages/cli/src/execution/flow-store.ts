@@ -9,7 +9,8 @@
  * - gates/<n>.json: Quality gate results
  */
 
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync } from "node:fs";
+import fsp from "node:fs/promises";
 import { join } from "node:path";
 import { Log } from "../util/log";
 import type { Checkpoint, CycleState, FlowState } from "./flow-types";
@@ -46,14 +47,14 @@ export class FlowStore {
     }
 
     /** Initialize flow directory structure */
-    initialize(): void {
+    async initialize(): Promise<void> {
         // Create .flow directory and subdirectories
         const dirs = ["iterations", "contexts", "gates"];
 
         for (const dir of dirs) {
             const dirPath = this.path(dir);
             if (!existsSync(dirPath)) {
-                mkdirSync(dirPath, { recursive: true });
+                await fsp.mkdir(dirPath, { recursive: true });
                 log.debug("Created directory", { path: dirPath });
             }
         }
@@ -70,14 +71,14 @@ export class FlowStore {
     }
 
     /** Load existing run state for resume */
-    load(): FlowState | null {
+    async load(): Promise<FlowState | null> {
         const statePath = this.path("state.json");
         if (!existsSync(statePath)) {
             return null;
         }
 
         try {
-            const content = readFileSync(statePath, "utf-8");
+            const content = await fsp.readFile(statePath, "utf-8");
             const state = JSON.parse(content) as FlowState;
 
             // Validate schema version
@@ -104,13 +105,13 @@ export class FlowStore {
     }
 
     /** Create initial run state */
-    createInitialState(options: {
+    async createInitialState(options: {
         prompt: string;
         completionPromise: string;
         maxCycles: number;
         stuckThreshold: number;
         gates: string[];
-    }): FlowState {
+    }): Promise<FlowState> {
         const now = new Date().toISOString();
 
         const state: FlowState = {
@@ -130,23 +131,23 @@ export class FlowStore {
             updatedAt: now,
         };
 
-        this.saveState(state);
+        await this.saveState(state);
         return state;
     }
 
     /** Save run state to state.json */
-    saveState(state: FlowState): void {
+    async saveState(state: FlowState): Promise<void> {
         const statePath = this.path("state.json");
         state.updatedAt = new Date().toISOString();
-        writeFileSync(statePath, JSON.stringify(state, null, 2));
+        await fsp.writeFile(statePath, JSON.stringify(state, null, 2));
         log.debug("Saved flow state", { runId: state.runId });
     }
 
     /** Save a checkpoint for fast resume */
-    saveCheckpoint(
+    async saveCheckpoint(
         state: FlowState,
         lastPhaseOutputs: CycleState["phases"],
-    ): void {
+    ): Promise<void> {
         const checkpointPath = this.path("checkpoint.json");
         const checkpoint: Checkpoint = {
             schemaVersion: FLOW_SCHEMA_VERSION,
@@ -156,7 +157,7 @@ export class FlowStore {
             state,
             lastPhaseOutputs,
         };
-        writeFileSync(checkpointPath, JSON.stringify(checkpoint, null, 2));
+        await fsp.writeFile(checkpointPath, JSON.stringify(checkpoint, null, 2));
         log.debug("Saved checkpoint", {
             runId: state.runId,
             cycle: state.currentCycle,
@@ -164,14 +165,14 @@ export class FlowStore {
     }
 
     /** Load checkpoint for resume */
-    loadCheckpoint(): Checkpoint | null {
+    async loadCheckpoint(): Promise<Checkpoint | null> {
         const checkpointPath = this.path("checkpoint.json");
         if (!existsSync(checkpointPath)) {
             return null;
         }
 
         try {
-            const content = readFileSync(checkpointPath, "utf-8");
+            const content = await fsp.readFile(checkpointPath, "utf-8");
             return JSON.parse(content) as Checkpoint;
         } catch (error) {
             const errorMsg =
@@ -182,25 +183,25 @@ export class FlowStore {
     }
 
     /** Save iteration cycle output */
-    saveIteration(cycle: CycleState): void {
+    async saveIteration(cycle: CycleState): Promise<void> {
         const cyclePath = this.path(`iterations/${cycle.cycleNumber}.json`);
-        writeFileSync(cyclePath, JSON.stringify(cycle, null, 2));
+        await fsp.writeFile(cyclePath, JSON.stringify(cycle, null, 2));
 
         // Save re-anchoring context
         const contextPath = this.path(`contexts/${cycle.cycleNumber}.md`);
         const contextContent = this.generateContextContent(cycle);
-        writeFileSync(contextPath, contextContent);
+        await fsp.writeFile(contextPath, contextContent);
 
         log.debug("Saved iteration", { cycle: cycle.cycleNumber });
     }
 
     /** Save gate results for iteration */
-    saveGateResults(
+    async saveGateResults(
         cycleNumber: number,
         results: CycleState["gateResults"],
-    ): void {
+    ): Promise<void> {
         const gatePath = this.path(`gates/${cycleNumber}.json`);
-        writeFileSync(gatePath, JSON.stringify(results, null, 2));
+        await fsp.writeFile(gatePath, JSON.stringify(results, null, 2));
     }
 
     /** Generate re-anchoring context content for a cycle */
@@ -246,14 +247,14 @@ export class FlowStore {
     }
 
     /** Get iteration by number */
-    getIteration(cycleNumber: number): CycleState | null {
+    async getIteration(cycleNumber: number): Promise<CycleState | null> {
         const cyclePath = this.path(`iterations/${cycleNumber}.json`);
         if (!existsSync(cyclePath)) {
             return null;
         }
 
         try {
-            const content = readFileSync(cyclePath, "utf-8");
+            const content = await fsp.readFile(cyclePath, "utf-8");
             return JSON.parse(content) as CycleState;
         } catch {
             return null;
@@ -261,12 +262,12 @@ export class FlowStore {
     }
 
     /** Get all iterations */
-    getAllIterations(): CycleState[] {
+    async getAllIterations(): Promise<CycleState[]> {
         const iterations: CycleState[] = [];
         let n = 1;
 
         while (true) {
-            const cycle = this.getIteration(n);
+            const cycle = await this.getIteration(n);
             if (!cycle) break;
             iterations.push(cycle);
             n++;
@@ -276,12 +277,12 @@ export class FlowStore {
     }
 
     /** Update state status */
-    updateStatus(
+    async updateStatus(
         status: RunStatus,
         stopReason?: StopReason,
         error?: string,
-    ): void {
-        const state = this.load();
+    ): Promise<void> {
+        const state = await this.load();
         if (!state) {
             throw new Error("No flow state to update");
         }
@@ -293,32 +294,32 @@ export class FlowStore {
             state.completedAt = new Date().toISOString();
         }
 
-        this.saveState(state);
+        await this.saveState(state);
     }
 
     /** Increment cycle counter */
-    incrementCycle(): number {
-        const state = this.load();
+    async incrementCycle(): Promise<number> {
+        const state = await this.load();
         if (!state) {
             throw new Error("No flow state to update");
         }
 
         state.currentCycle++;
-        this.saveState(state);
+        await this.saveState(state);
         return state.currentCycle;
     }
 
     /** Record a failed cycle */
-    recordFailedCycle(cycle: CycleState): void {
-        const state = this.load();
+    async recordFailedCycle(cycle: CycleState): Promise<void> {
+        const state = await this.load();
         if (!state) {
             throw new Error("No flow state to update");
         }
 
         state.failedCycles++;
         state.stuckCount++;
-        this.saveIteration(cycle);
-        this.saveState(state);
+        await this.saveIteration(cycle);
+        await this.saveState(state);
 
         log.info("Cycle failed", {
             runId: this.runId,
@@ -329,8 +330,8 @@ export class FlowStore {
     }
 
     /** Record a successful cycle */
-    recordSuccessfulCycle(cycle: CycleState, summary: string): void {
-        const state = this.load();
+    async recordSuccessfulCycle(cycle: CycleState, summary: string): Promise<void> {
+        const state = await this.load();
         if (!state) {
             throw new Error("No flow state to update");
         }
@@ -343,8 +344,8 @@ export class FlowStore {
             timestamp: new Date().toISOString(),
         };
 
-        this.saveIteration(cycle);
-        this.saveState(state);
+        await this.saveIteration(cycle);
+        await this.saveState(state);
 
         log.info("Cycle completed", {
             runId: this.runId,
@@ -354,7 +355,7 @@ export class FlowStore {
     }
 
     /** Clean up flow directory */
-    cleanup(): void {
+    async cleanup(): Promise<void> {
         // Implementation would remove the .flow directory
         // For now, just log
         log.info("Flow store cleanup requested", { runId: this.runId });
