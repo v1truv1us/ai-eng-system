@@ -2,7 +2,7 @@
 
 **Generated:** 2025-05-25
 **Source reviews:** Architecture, Code Quality, Security, Performance (agent-produced)
-**Status:** DRAFT — awaiting approval before any implementation
+**Status:** IN PROGRESS — Phase 0 and Phase 1.1 complete (commit `d5fcc63`)
 
 ---
 
@@ -16,37 +16,33 @@ Cross-referenced findings from all four thermo-nuclear reviews. Grouped by **dep
 
 > Security-critical fixes. No architectural changes needed. Each is a targeted patch.
 
-### 0.1 Sanitize gate commands before `execSync`
+### 0.1 ~~Sanitize gate commands before `execSync`~~ ✅ DONE
 
 **Source:** Security C-1 (Critical)
-**Files:** `packages/cli/src/execution/ralph-loop.ts`
-**What:** Reject gate commands containing shell metacharacters (`|`, `;`, `&`, `$`, backticks, `$()`, `>`, `<`). Or parse into `[binary, ...args]` and use `spawn` with `shell: false`.
-**Risk:** Low — restricts inputs, doesn't change control flow.
-**Test:** Gate command with `; rm -rf /` is rejected.
+**Files:** `packages/cli/src/execution/ralph-loop.ts`, `src/execution/ralph-loop.ts`
+**What:** Added `validateCommand()` method that rejects shell metacharacters before execSync.
+**Commit:** `d5fcc63`
 
-### 0.2 Sanitize plan task commands before `spawn`
+### 0.2 ~~Sanitize plan task commands before `spawn`~~ ✅ DONE
 
 **Source:** Security H-1 (High)
-**Files:** `packages/cli/src/execution/task-executor.ts`, `packages/cli/src/execution/plan-parser.ts`
-**What:** Add shell metacharacter validation to `plan-parser.ts` when extracting `taskData.command`. Or switch to `spawn(cmd, args, { shell: false })`.
-**Risk:** Low — narrows the attack surface.
-**Test:** Plan YAML with `command: "echo owned; cat /etc/passwd"` is rejected or safely executed.
+**Files:** `plan-parser.ts`, `task-executor.ts` (both trees)
+**What:** Added metacharacter validation in plan-parser + defense-in-depth in task-executor with `shell: false`.
+**Commit:** `d5fcc63`
 
-### 0.3 Strip stack traces from persisted state
+### 0.3 ~~Strip stack traces from persisted state~~ ✅ DONE
 
 **Source:** Security H-2 (High)
-**Files:** `packages/cli/src/context/types.ts`
-**What:** Remove `stack: input.error.stack` from `errorPayload`. Keep only `message` and `name`. Gate behind a debug flag if needed for development.
-**Risk:** Minimal — only affects debug info in state files.
-**Test:** Verify `.ai-eng/` state files no longer contain file paths after an error.
+**Files:** `context/types.ts` (both trees)
+**What:** Removed `stack` field from `errorPayload`.
+**Commit:** `d5fcc63`
 
-### 0.4 Tighten `version` handler catch
+### 0.4 ~~Tighten version handler catch~~ ✅ DONE
 
 **Source:** Code Quality #3
 **Files:** `packages/cli/src/cli/run.ts`
-**What:** Change `catch { /* not found */ }` to `catch (e) { if (e?.code !== 'ENOENT') throw; }`. Better: replace the filesystem walk with build-time version injection (`const VERSION = "__VERSION__"`).
-**Risk:** Minimal.
-**Test:** `ai-eng version` still prints version; corrupt package.json throws instead of silently failing.
+**What:** Tightened catch to only swallow ENOENT. Moved -V/--version handling before subcommand switch.
+**Commit:** `d5fcc63`
 
 ---
 
@@ -54,28 +50,13 @@ Cross-referenced findings from all four thermo-nuclear reviews. Grouped by **dep
 
 > Structural cleanup that's independent of the big refactor. Reduces noise and removes tracked build outputs.
 
-### 1.1 Remove 681 tracked build-output files from git
+### 1.1 ~~Remove 667 tracked build-output files from git~~ ✅ DONE
 
 **Source:** Code Quality #1 (Blocker), Architecture #3.3, Performance #1.1
-**Files:** `.claude/`, `.opencode/`, `plugins/` (all generated content)
-**What:**
-1. Add to `.gitignore`:
-   ```
-   .claude/agents/
-   .claude/skills/
-   .claude/commands/
-   .opencode/agent/
-   .opencode/skill/
-   plugins/ai-eng-*/agents/
-   plugins/ai-eng-*/skills/
-   plugins/ai-eng-*/commands/
-   plugins/ai-eng-*/plugin.json
-   ```
-2. `git rm -r --cached` all 681 files
-3. Verify `bun run build` still regenerates everything identically
-**Risk:** Low — `build.ts` already generates these. Git history preserves them.
-**Test:** Fresh clone → `bun run build` → all platforms work. `ai-eng install --platform pi --scope global` succeeds.
-**Impact:** Removes ~681 files from tracking. Dramatically reduces diff noise.
+**Files:** `.gitignore` + removed 667 files from tracking
+**What:** Added gitignore entries for `.claude/agents|skills|commands/`, `.opencode/agent|command|skill|tool/`, `plugins/ai-eng-*/` generated content. Removed 667 files from tracking. Verified `bun run build` regenerates everything correctly (803ms).
+**Commit:** `d5fcc63`
+**Impact:** Removed 78,706 lines from git tracking. Diffs are now clean.
 
 ### 1.2 Cache build artifacts to eliminate redundant I/O
 
