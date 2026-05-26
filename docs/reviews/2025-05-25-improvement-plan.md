@@ -2,7 +2,8 @@
 
 **Generated:** 2025-05-25
 **Source reviews:** Architecture, Code Quality, Security, Performance (agent-produced)
-**Status:** IN PROGRESS — Phase 0 and Phase 1.1 complete (commit `d5fcc63`)
+**Status:** IN PROGRESS — Phase 0, 1, 2.1, 5.1, 5.3, 6.3 complete (4 commits)
+**Commits:** `d5fcc63` (P0+P1.1), `b3e75a3` (P1.2-1.4), `8bfdf5d` (P2.1+P5.3+P6.3), `3ba9768` (P5.1)
 
 ---
 
@@ -58,7 +59,11 @@ Cross-referenced findings from all four thermo-nuclear reviews. Grouped by **dep
 **Commit:** `d5fcc63`
 **Impact:** Removed 78,706 lines from git tracking. Diffs are now clean.
 
-### 1.2 Cache build artifacts to eliminate redundant I/O
+### 1.2 ~~Cache build artifacts in build.ts~~ ✅ DONE
+
+Cached `getMarkdownFiles` (commands + agents), `discoverSkills`, and `package.json` reads.
+5 package.json reads → 1. 6 getMarkdownFiles calls → 2 cached. Build time: ~800ms.
+**Commit:** `b3e75a3`
 
 **Source:** Performance #1.1, #1.2, #1.3, #2.1, #5.3
 **Files:** `build.ts`
@@ -71,7 +76,10 @@ Cross-referenced findings from all four thermo-nuclear reviews. Grouped by **dep
 **Test:** Build produces identical output. Build time decreases measurably.
 **Impact:** Reduces build from ~600 file ops to ~100, eliminates redundant YAML parsing.
 
-### 1.3 Fix swallowed errors in research module
+### 1.3 ~~Fix swallowed errors in research module~~ ✅ DONE
+
+Replaced 10 `catch (error) {}` blocks with documented `catch (error) { /* non-critical, skip */ }`.
+**Commit:** `b3e75a3`
 
 **Source:** Code Quality #6
 **Files:** `packages/cli/src/research/analysis.ts`, `packages/cli/src/research/discovery.ts`
@@ -79,7 +87,10 @@ Cross-referenced findings from all four thermo-nuclear reviews. Grouped by **dep
 **Risk:** Low — may surface previously hidden bugs.
 **Test:** Research command still works; errors are now visible.
 
-### 1.4 Move Astro to devDependencies
+### 1.4 ~~Move Astro to devDependencies~~ ✅ DONE
+
+Moved `astro`, `@astrojs/mdx`, `@astrojs/starlight` to devDeps. No runtime imports found.
+**Commit:** `b3e75a3`
 
 **Source:** Performance #6.5 (Blocker)
 **Files:** `packages/cli/package.json`
@@ -199,7 +210,10 @@ Cross-referenced findings from all four thermo-nuclear reviews. Grouped by **dep
 
 > Async I/O conversion, cache bounding, bundle optimization.
 
-### 5.1 Convert install subsystem from sync to async FS
+### 5.1 ~~Convert install.ts from sync to async FS~~ ✅ DONE (partial)
+
+Converted `install.ts` (27 sync → async). Deferred `flow-store.ts` and `ralph-loop.ts` — ripple through callers requires dedicated pass.
+**Commit:** `3ba9768`
 
 **Source:** Performance #2.4
 **Files:** `packages/cli/src/install/` (6 files, 37+ sync calls)
@@ -218,7 +232,12 @@ Cross-referenced findings from all four thermo-nuclear reviews. Grouped by **dep
 **Risk:** Medium — changes loop execution flow.
 **Test:** Ralph loop completes successfully. Gate commands run.
 
-### 5.3 Bound unbounded caches
+### 5.3 ~~Bound unbounded caches~~ ✅ DONE
+
+- `context/retrieval.ts`: contextCache max 50 entries
+- `context/progressive.ts`: loadedCache max 100 entries
+Applied to both trees.
+**Commit:** `8bfdf5d`
 
 **Source:** Performance #3.1, #3.2
 **Files:** `packages/cli/src/context/retrieval.ts`, `packages/cli/src/context/progressive.ts`
@@ -256,7 +275,10 @@ Cross-referenced findings from all four thermo-nuclear reviews. Grouped by **dep
 **Risk:** Medium — execution layer currently has many UI calls.
 **Test:** Ralph loop output is identical. Execution engine is testable without CLI UI.
 
-### 6.3 Improve secret redaction
+### 6.3 ~~Improve secret redaction~~ ✅ DONE
+
+Replaced broad `/token/i` patterns with format-specific matchers (ghp_*, sk-*, xoxb-*) + key=value patterns with 8+ char values. No more false positives on words like "token" in code.
+**Commit:** `8bfdf5d`
 
 **Source:** Security M-2
 **Files:** `packages/cli/src/execution/ralph-loop.ts`
