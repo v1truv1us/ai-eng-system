@@ -1,0 +1,32 @@
+{
+  "name": "ai-eng-core",
+  "displayName": "AI Engineering Core",
+  "version": "1.5.0",
+  "description": "Core workflow: plan, work, review cycle with research and context engineering",
+  "author": {
+    "name": "v1truv1us",
+    "url": "https://github.com/v1truv1us/ai-eng-system"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/v1truv1us/ai-eng-system",
+  "repository": "https://github.com/v1truv1us/ai-eng-system",
+  "keywords": [
+    "ai",
+    "engineering",
+    "workflow",
+    "planning",
+    "review",
+    "context-engineering"
+  ],
+  "category": "development",
+  "tags": [
+    "productivity",
+    "workflow",
+    "architecture",
+    "context-engineering"
+  ],
+  "skills": "./skills/",
+  "agents": "./agents/",
+  "commands": "./commands/",
+  "hooks": "./hooks/cursor-hooks.json"
+}
