@@ -28,6 +28,7 @@ export class ContextRetriever {
         string,
         { context: AssembledContext; expires: number }
     > = new Map();
+    private static MAX_CACHE_SIZE = 50;
 
     /**
      * Initialize vector manager
@@ -497,6 +498,13 @@ export class ContextRetriever {
         context: AssembledContext,
         ttlMs = 300000, // 5 minutes
     ): void {
+        // Evict oldest entries when cache exceeds max size
+        if (this.contextCache.size >= ContextRetriever.MAX_CACHE_SIZE) {
+            const oldestKey = this.contextCache.keys().next().value;
+            if (oldestKey !== undefined) {
+                this.contextCache.delete(oldestKey);
+            }
+        }
         this.contextCache.set(cacheKey, {
             context,
             expires: Date.now() + ttlMs,

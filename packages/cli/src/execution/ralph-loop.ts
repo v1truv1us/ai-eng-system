@@ -53,32 +53,38 @@ const DEFAULT_CHECKPOINT_FREQUENCY = 1;
 const DEFAULT_CYCLE_RETRIES = 2;
 
 /** Secrets patterns to redact in debug output */
-const SECRET_PATTERNS = [
-    /api[_-]?key/i,
-    /token/i,
-    /secret/i,
-    /password/i,
-    /credential/i,
-    /webhook/i,
-    /auth/i,
-    /bearer/i,
-    /private[_-]?key/i,
+const SECRET_FORMATS: (RegExp | { pattern: RegExp; replacement: string })[] = [
+    // GitHub tokens (exact formats)
+    /ghp_[a-zA-Z0-9]{36}/g,
+    /gho_[a-zA-Z0-9]{36}/g,
+    /ghu_[a-zA-Z0-9]{36}/g,
+    /ghs_[a-zA-Z0-9]{36}/g,
+    /ghr_[a-zA-Z0-9]{36}/g,
+    // AI service tokens
+    /sk-[a-zA-Z0-9]{20,}/g,
+    /sk-ant-[a-zA-Z0-9\-]{20,}/g,
+    // Slack tokens
+    /xoxb-[a-zA-Z0-9\-]{10,}/g,
+    /xoxp-[a-zA-Z0-9\-]{10,}/g,
+    // Key=value patterns (preserve key, redact value)
+    { pattern: /(api[_-]?key|access[_-]?token|secret[_-]?key|private[_-]?key|auth[_-]?token|bearer[_-]?token)(["'"]?\s*[:=]\s*["'"]?)([^"'"`,\s]{8,})/gi, replacement: '$1$2[REDACTED]' },
+    { pattern: /(password|passwd|credential|webhook[_-]?url)(["'"]?\s*[:=]\s*["'"]?)([^"'"`,\s]{8,})/gi, replacement: '$1$2[REDACTED]' },
 ];
 
 /**
- * Redact secrets from a string
+ * Redact secrets from a string using format-specific patterns.
+ * Avoids false positives from broad patterns like /token/i.
  */
 function redactSecrets(text: string): string {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let result = text;
-    for (const pattern of SECRET_PATTERNS) {
-        result = result.replace(
-            new RegExp(
-                `${pattern.source}["']?\\s*[:=]\\s*["']?([^"'",\\s]+)`,
-                "gi",
-            ),
-            `${pattern.source}="[REDACTED]"`,
-        );
+    for (const entry of SECRET_FORMATS) {
+        if (entry instanceof RegExp) {
+            result = result.replace(entry, '[REDACTED]');
+            entry.lastIndex = 0;
+        } else {
+            result = result.replace(entry.pattern, entry.replacement);
+            entry.pattern.lastIndex = 0;
+        }
     }
     return result;
 }

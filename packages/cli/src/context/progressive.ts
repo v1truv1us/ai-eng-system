@@ -22,6 +22,7 @@ import type {
 export class ProgressiveSkillLoader {
     private skillsDir: string;
     private loadedCache: Map<string, LoadedSkill> = new Map();
+    private static MAX_CACHE_SIZE = 100;
 
     constructor(skillsDir = "./skills") {
         this.skillsDir = skillsDir;
@@ -181,6 +182,12 @@ export class ProgressiveSkillLoader {
             };
 
             // Cache the result
+            if (this.loadedCache.size >= ProgressiveSkillLoader.MAX_CACHE_SIZE) {
+                const oldestKey = this.loadedCache.keys().next().value;
+                if (oldestKey !== undefined) {
+                    this.loadedCache.delete(oldestKey);
+                }
+            }
             this.loadedCache.set(cacheKey, loaded);
 
             return loaded;

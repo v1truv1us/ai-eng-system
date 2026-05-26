@@ -22,6 +22,7 @@ import type {
 export class ProgressiveSkillLoader {
     private skillsDir: string;
     private loadedCache: Map<string, LoadedSkill> = new Map();
+    private static MAX_CACHE_SIZE = 100;
 
     constructor(skillsDir = "./skills") {
         this.skillsDir = skillsDir;

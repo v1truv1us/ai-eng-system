@@ -24,6 +24,7 @@ export class ContextRetriever {
     private memoryManager: MemoryManager;
     private skillLoader: ProgressiveSkillLoader;
     private vectorManager: VectorMemoryManager;
+    private static MAX_CACHE_SIZE = 50;
     private contextCache: Map<
         string,
         { context: AssembledContext; expires: number }
