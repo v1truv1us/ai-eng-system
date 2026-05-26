@@ -6,6 +6,7 @@
  */
 
 import fs from "node:fs";
+import fsp from "node:fs/promises";
 import path from "node:path";
 import {
     getDistOpenCodeContent,
@@ -40,16 +41,16 @@ import {
 
 const NAMESPACE_PREFIX = "ai-eng";
 
-function copyRecursive(src: string, dest: string): void {
-    const stat = fs.statSync(src);
+async function copyRecursive(src: string, dest: string): Promise<void> {
+    const stat = await fsp.stat(src);
     if (stat.isDirectory()) {
-        fs.mkdirSync(dest, { recursive: true });
-        for (const entry of fs.readdirSync(src)) {
-            copyRecursive(path.join(src, entry), path.join(dest, entry));
+        await fsp.mkdir(dest, { recursive: true });
+        for (const entry of await fsp.readdir(src)) {
+            await copyRecursive(path.join(src, entry), path.join(dest, entry));
         }
     } else {
-        fs.mkdirSync(path.dirname(dest), { recursive: true });
-        fs.copyFileSync(src, dest);
+        await fsp.mkdir(path.dirname(dest), { recursive: true });
+        await fsp.copyFile(src, dest);
     }
 }
 
@@ -254,14 +255,14 @@ async function installToolkitHarness(
                 `  ✅ Merged Gemini skills/commands into ${geminiTarget}`,
             );
         } else {
-            fs.mkdirSync(path.dirname(geminiTarget), { recursive: true });
-            copyRecursive(sourceDir, geminiTarget);
+            await fsp.mkdir(path.dirname(geminiTarget), { recursive: true });
+            await copyRecursive(sourceDir, geminiTarget);
             console.log(`  ✅ Installed Gemini bundle to ${geminiTarget}`);
         }
     } else if (!skillsOnly) {
         const targetDir = getInstallTargetDir(harness, baseDir, scope);
-        fs.mkdirSync(path.dirname(targetDir), { recursive: true });
-        copyRecursive(sourceDir, targetDir);
+        await fsp.mkdir(path.dirname(targetDir), { recursive: true });
+        await copyRecursive(sourceDir, targetDir);
         console.log(`  ✅ Installed harness bundle to ${targetDir}`);
     }
 
@@ -410,17 +411,17 @@ async function installContentFromCore(
             "command",
             NAMESPACE_PREFIX,
         );
-        fs.mkdirSync(commandsDir, { recursive: true });
+        await fsp.mkdir(commandsDir, { recursive: true });
 
         for (const command of content.commands) {
             const relativePath = command.path.startsWith(NAMESPACE_PREFIX + "/")
                 ? command.path.slice(NAMESPACE_PREFIX.length + 1)
                 : command.path;
             const targetPath = path.join(commandsDir, relativePath);
-            fs.mkdirSync(path.dirname(targetPath), { recursive: true });
+            await fsp.mkdir(path.dirname(targetPath), { recursive: true });
 
             if (command.content) {
-                fs.writeFileSync(targetPath, command.content, "utf-8");
+                await fsp.writeFile(targetPath, command.content, "utf-8");
             }
         }
 
@@ -435,17 +436,17 @@ async function installContentFromCore(
             "agent",
             NAMESPACE_PREFIX,
         );
-        fs.mkdirSync(agentsDir, { recursive: true });
+        await fsp.mkdir(agentsDir, { recursive: true });
 
         for (const agent of content.agents) {
             const relativePath = agent.path.startsWith(NAMESPACE_PREFIX + "/")
                 ? agent.path.slice(NAMESPACE_PREFIX.length + 1)
                 : agent.path;
             const targetPath = path.join(agentsDir, relativePath);
-            fs.mkdirSync(path.dirname(targetPath), { recursive: true });
+            await fsp.mkdir(path.dirname(targetPath), { recursive: true });
 
             if (agent.content) {
-                fs.writeFileSync(targetPath, agent.content, "utf-8");
+                await fsp.writeFile(targetPath, agent.content, "utf-8");
             }
         }
 
@@ -456,14 +457,14 @@ async function installContentFromCore(
 
     if (content.skills.length > 0) {
         const skillsDir = path.join(targetOpenCodeDir, "skill");
-        fs.mkdirSync(skillsDir, { recursive: true });
+        await fsp.mkdir(skillsDir, { recursive: true });
 
         for (const skill of content.skills) {
             const targetPath = path.join(skillsDir, skill.path);
-            fs.mkdirSync(path.dirname(targetPath), { recursive: true });
+            await fsp.mkdir(path.dirname(targetPath), { recursive: true });
 
             if (skill.content) {
-                fs.writeFileSync(targetPath, skill.content, "utf-8");
+                await fsp.writeFile(targetPath, skill.content, "utf-8");
             }
         }
 
@@ -474,14 +475,14 @@ async function installContentFromCore(
 
     if (content.tools.length > 0) {
         const toolsDir = path.join(targetOpenCodeDir, "tool");
-        fs.mkdirSync(toolsDir, { recursive: true });
+        await fsp.mkdir(toolsDir, { recursive: true });
 
         for (const tool of content.tools) {
             const targetPath = path.join(toolsDir, tool.path);
-            fs.mkdirSync(path.dirname(targetPath), { recursive: true });
+            await fsp.mkdir(path.dirname(targetPath), { recursive: true });
 
             if (tool.content) {
-                fs.writeFileSync(targetPath, tool.content, "utf-8");
+                await fsp.writeFile(targetPath, tool.content, "utf-8");
             }
         }
 
