@@ -446,7 +446,7 @@ async function buildClaude(): Promise<void> {
     // Commands
     const claudeCommandsDir = join(CLAUDE_DIR, "commands");
     await mkdir(claudeCommandsDir, { recursive: true });
-    const commandFiles = await getMarkdownFiles(join(CONTENT_DIR, "commands"));
+    const commandFiles = await getCachedCommandFiles();
     for (const src of commandFiles) {
         await copyFile(src, join(claudeCommandsDir, basename(src)));
     }
@@ -454,7 +454,7 @@ async function buildClaude(): Promise<void> {
     // Agents
     const claudeAgentsDir = join(CLAUDE_DIR, "agents");
     await mkdir(claudeAgentsDir, { recursive: true });
-    const agentFiles = await getMarkdownFiles(join(CONTENT_DIR, "agents"));
+    const agentFiles = await getCachedAgentFiles();
     for (const src of agentFiles) {
         await copyFile(src, join(claudeAgentsDir, basename(src)));
     }
@@ -463,9 +463,7 @@ async function buildClaude(): Promise<void> {
     await copyDirRecursive(SKILLS_DIR, join(CLAUDE_DIR, "skills"));
 
     // plugin.json (for CI/tests; user installs happen from plugins/ai-eng-system)
-    const packageJson = JSON.parse(
-        await readFile(join(ROOT, "package.json"), "utf-8"),
-    );
+    const packageJson = await getPackageJson();
     const pluginJson = {
         name: "ai-eng-system",
         version: packageJson.version,
@@ -544,7 +542,7 @@ async function buildOpenCode(): Promise<void> {
         }
 
         // Agents: MD-first but strip `name` and nest by category.
-        const agentFiles = await getMarkdownFiles(join(CONTENT_DIR, "agents"));
+        const agentFiles = await getCachedAgentFiles();
         for (const src of agentFiles) {
             const content = await readFile(src, "utf-8");
             const transformed = transformAgentMarkdownForOpenCode(content, src);
@@ -648,7 +646,7 @@ async function buildPi(): Promise<void> {
     await mkdir(promptsDir, { recursive: true });
     await mkdir(skillsDir, { recursive: true });
 
-    const commandFiles = await getMarkdownFiles(join(CONTENT_DIR, "commands"));
+    const commandFiles = await getCachedCommandFiles();
     for (const src of commandFiles) {
         const content = await readFile(src, "utf-8");
         const transformed = transformCommandMarkdownForPi(content, src);
@@ -687,9 +685,7 @@ async function buildCursor(): Promise<void> {
         await copyDirRecursive(CURSOR_RULES_DIR, cursorRulesDir);
     }
 
-    const packageJson = JSON.parse(
-        await readFile(join(ROOT, "package.json"), "utf-8"),
-    );
+    const packageJson = await getPackageJson();
     const pluginJson = {
         name: "ai-eng-system",
         displayName: "AI Engineering System",
@@ -812,7 +808,7 @@ async function validateCanonicalSkills(): Promise<string[]> {
         return errors;
     }
 
-    const skills = await discoverSkills(SKILLS_DIR);
+    const skills = await getCachedSkills();
     for (const skill of skills) {
         const content = await readFile(skill.skillFile, "utf-8");
         const result = formatSkillContent(content, skill.skillFile);
@@ -1573,9 +1569,7 @@ async function syncToMarketplacePlugins(): Promise<void> {
         await rm(pluginsBaseDir, { recursive: true, force: true });
     }
 
-    const packageJson = JSON.parse(
-        await readFile(join(ROOT, "package.json"), "utf-8"),
-    );
+    const packageJson = await getPackageJson();
 
     for (const [pluginName, config] of Object.entries(PLUGIN_MAP)) {
         const pluginDir = join(pluginsBaseDir, pluginName);
@@ -1679,9 +1673,7 @@ async function syncToMarketplacePlugins(): Promise<void> {
  * Keeps the marketplace manifest in sync with actual plugin contents.
  */
 async function generateMarketplaceJson(): Promise<void> {
-    const packageJson = JSON.parse(
-        await readFile(join(ROOT, "package.json"), "utf-8"),
-    );
+    const packageJson = await getPackageJson();
 
     const marketplace = {
         name: "ai-eng-system",
@@ -1732,9 +1724,7 @@ async function generateMarketplaceJson(): Promise<void> {
  * Auto-generate .cursor-plugin/marketplace.json from PLUGIN_MAP (Cursor team marketplace).
  */
 async function generateCursorMarketplaceJson(): Promise<void> {
-    const packageJson = JSON.parse(
-        await readFile(join(ROOT, "package.json"), "utf-8"),
-    );
+    const packageJson = await getPackageJson();
 
     const marketplace = {
         name: "ai-eng-system",
@@ -1826,8 +1816,8 @@ async function validateContentOnly(): Promise<void> {
     if (!existsSync(CONTENT_DIR))
         throw new Error("content/ directory not found");
 
-    const commandFiles = await getMarkdownFiles(join(CONTENT_DIR, "commands"));
-    const agentFiles = await getMarkdownFiles(join(CONTENT_DIR, "agents"));
+    const commandFiles = await getCachedCommandFiles();
+    const agentFiles = await getCachedAgentFiles();
 
     const errors: string[] = [];
 
@@ -1914,6 +1904,50 @@ async function validateAgents(): Promise<void> {
     }
 
     console.log("✅ All agents validated successfully");
+}
+
+interface BuildCache {
+    packageJson: Record<string, unknown> | null;
+    commandFiles: string[] | null;
+    agentFiles: string[] | null;
+    skills: SkillInfo[] | null;
+}
+
+const buildCache: BuildCache = {
+    packageJson: null,
+    commandFiles: null,
+    agentFiles: null,
+    skills: null,
+};
+
+async function getPackageJson(): Promise<Record<string, unknown>> {
+    if (!buildCache.packageJson) {
+        buildCache.packageJson = JSON.parse(
+            await readFile(join(ROOT, "package.json"), "utf-8"),
+        );
+    }
+    return buildCache.packageJson!;
+}
+
+async function getCachedCommandFiles(): Promise<string[]> {
+    if (!buildCache.commandFiles) {
+        buildCache.commandFiles = await getMarkdownFiles(join(CONTENT_DIR, "commands"));
+    }
+    return buildCache.commandFiles!;
+}
+
+async function getCachedAgentFiles(): Promise<string[]> {
+    if (!buildCache.agentFiles) {
+        buildCache.agentFiles = await getMarkdownFiles(join(CONTENT_DIR, "agents"));
+    }
+    return buildCache.agentFiles!;
+}
+
+async function getCachedSkills(): Promise<SkillInfo[]> {
+    if (!buildCache.skills) {
+        buildCache.skills = await discoverSkills(SKILLS_DIR);
+    }
+    return buildCache.skills!;
 }
 
 async function buildAll(): Promise<void> {
