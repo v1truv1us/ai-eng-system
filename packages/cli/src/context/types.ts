@@ -346,7 +346,6 @@ export function createCommandEnvelope(input: {
         errorPayload = {
             message: input.error.message,
             name: input.error.name,
-            stack: input.error.stack,
         };
     } else if (input.error) {
         errorPayload = {

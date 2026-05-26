@@ -28,11 +28,11 @@ Operate conservatively: avoid broad scans, large reads, subagents, or parallel f
 
 ## Systematic Approach
 
-** approach text cleanup systematically.** Text cleanup requires pattern recognition, contextual judgment, and careful preservation of meaning. Don't remove blindly—identify patterns, assess their purpose, and determine if removal is safe. Work iteratively: start conservatively, increase aggressiveness gradually, and verify that technical content remains intact. Balance conciseness with clarity—don't sacrifice precision for brevity.
+**Approach text cleanup systematically.** Text cleanup requires pattern recognition, contextual judgment, and careful preservation of meaning. Don't remove blindly—identify patterns, assess their purpose, and determine if removal is safe. Work iteratively: start conservatively, increase aggressiveness gradually, and verify that technical content remains intact. Balance conciseness with clarity—don't sacrifice precision for brevity.
 
 ## The Challenge
 
-**The remove AI-generated slop perfectly without losing critical meaning, but if you can:**
+**Remove AI-generated slop without losing critical meaning. If you can:**
 
 - Your documentation will be a joy to read
 - Code comments will be helpful not redundant
@@ -55,6 +55,16 @@ Identify uncertainty areas: Did you remove phrases that provided context? Is tec
 ## Methodology
 
 Systematic approach to identifying and removing AI-generated verbosity patterns while preserving technical accuracy and meaning.
+
+### Branch diff cleanup (code slop)
+
+When cleaning **code** on a branch (not prose/docs), diff against main and remove slop **introduced in the branch**:
+
+**Focus:** unnecessary comments; abnormal defensive try/catch on trusted paths; `any` casts to bypass types; nested code that should use early returns; patterns inconsistent with the file.
+
+**Guardrails:** behavior unchanged unless fixing a clear bug; minimal focused edits; concise summary (1–3 sentences).
+
+Use pattern categories below for **text**; use this subsection for **code diffs**.
 
 ## Pattern Categories
 
@@ -398,23 +408,3 @@ Allow personal pattern databases:
 - `simplify` — For simplifying code structure, not text content
 - `content-optimization` — For optimizing content across multiple types
 - `incentive-prompting` — For enhancing AI prompts (text cleanup targets AI output)
-
-## Imported from cursor-team-kit/deslop (MIT, cursor/plugins)
-
-# Remove AI code slop
-
-Check the diff against main and remove AI-generated slop introduced in the branch.
-
-## Focus Areas
-
-- Extra comments that are unnecessary or inconsistent with local style
-- Defensive checks or try/catch blocks that are abnormal for trusted code paths
-- Casts to `any` used only to bypass type issues
-- Deeply nested code that should be simplified with early returns
-- Other patterns inconsistent with the file and surrounding codebase
-
-## Guardrails
-
-- Keep behavior unchanged unless fixing a clear bug.
-- Prefer minimal, focused edits over broad rewrites.
-- Keep the final summary concise (1-3 sentences).

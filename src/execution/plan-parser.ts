@@ -266,6 +266,16 @@ export class PlanParser {
                 });
                 return null;
             }
+            // Validate command doesn't contain shell metacharacters
+            const dangerous = /[|;&$`(){}!><\n\r]/;
+            if (dangerous.test(taskData.command)) {
+                this.errors.push({
+                    type: ValidationErrorType.FORMAT,
+                    message: `Task "${taskData.id}" command contains shell metacharacters. Use a direct command without pipes, chains, or substitution.`,
+                    path: `tasks[${index}].command`,
+                });
+                return null;
+            }
         }
 
         // Parse task type

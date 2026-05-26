@@ -323,8 +323,21 @@ export class TaskExecutor {
 
             this.log(`Executing command: ${shellTask.command}`);
 
-            const child = spawn(shellTask.command, [], {
-                shell: true,
+            // Defense-in-depth: reject shell metacharacters even though plan-parser validates
+            const dangerous = /[|;&$`(){}!><\n\r]/;
+            if (dangerous.test(shellTask.command)) {
+                throw new Error(
+                    `Command rejected: contains shell metacharacters. Got: ${shellTask.command.slice(0, 80)}`
+                );
+            }
+
+            // Parse command into binary + args for safer execution
+            const parts = shellTask.command.split(/\s+/);
+            const binary = parts[0];
+            const args = parts.slice(1);
+
+            const child = spawn(binary, args, {
+                shell: false,
                 detached: true,
                 cwd:
                     shellTask.workingDirectory ?? this.options.workingDirectory,

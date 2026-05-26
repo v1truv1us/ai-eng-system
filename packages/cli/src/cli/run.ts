@@ -537,29 +537,33 @@ async function main() {
         const subcommand = rawArgs[0];
         const subcommandArgs = rawArgs.slice(1);
 
+        // Handle --version/-V at top level (before subcommand routing)
+        if (subcommand === "version" || rawArgs.includes("--version") || rawArgs.includes("-V")) {
+            let version: string | undefined;
+            let dir = dirname(process.argv[1]);
+            for (let i = 0; i < 5; i++) {
+                try {
+                    const pkg = JSON.parse(readFileSync(join(dir, "package.json"), "utf8"));
+                    if (pkg.name === "@ai-eng-system/cli" && pkg.version) {
+                        version = pkg.version;
+                        break;
+                    }
+                } catch (e) {
+                    // Only ignore ENOENT (file not found) — re-throw EACCES, EMFILE, etc.
+                    if (!(e instanceof Error && (e as NodeJS.ErrnoException).code === "ENOENT")) {
+                        throw e;
+                    }
+                }
+                const parent = dirname(dir);
+                if (parent === dir) break;
+                dir = parent;
+            }
+            console.log(version ? `ai-eng v${version}` : "ai-eng (version unknown)");
+            process.exit(0);
+        }
+
         // Route to subcommand
         switch (subcommand) {
-            case "version":
-            case "-V":
-            case "--version": {
-                let version: string | undefined;
-                // Walk up from the CLI entry point to find package.json
-                let dir = dirname(process.argv[1]);
-                for (let i = 0; i < 5; i++) {
-                    try {
-                        const pkg = JSON.parse(readFileSync(join(dir, "package.json"), "utf8"));
-                        if (pkg.name === "@ai-eng-system/cli" && pkg.version) {
-                            version = pkg.version;
-                            break;
-                        }
-                    } catch { /* not found, walk up */ }
-                    const parent = dirname(dir);
-                    if (parent === dir) break;
-                    dir = parent;
-                }
-                console.log(version ? `ai-eng v${version}` : "ai-eng (version unknown)");
-                break;
-            }
 
             case "init":
                 await runInit(subcommandArgs);

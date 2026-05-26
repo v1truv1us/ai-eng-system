@@ -1212,6 +1212,17 @@ Output: <promise>SHIP</promise> if all criteria are met, or list remaining issue
         return { command: String(configGate ?? "") };
     }
 
+    /** Validate a command string to prevent shell injection */
+    private validateCommand(command: string): void {
+        const dangerous = /[|;&$`(){}!><\n\r]/;
+        if (dangerous.test(command)) {
+            throw new Error(
+                `Gate command rejected: contains shell metacharacters. ` +
+                `Use a direct command (e.g. "bun test", "pnpm lint"). Got: ${command.slice(0, 80)}`
+            );
+        }
+    }
+
     /** Run a gate command and capture results */
     private async runGateCommand(
         gateName: string,
@@ -1231,10 +1242,11 @@ Output: <promise>SHIP</promise> if all criteria are met, or list remaining issue
         let stdout = "";
         let stderr = "";
 
+        this.validateCommand(command);
         UI.info(`  Running ${gateName}: ${command}`);
 
         try {
-            // Run the command
+            // Run the command — validated above to contain no shell metacharacters
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const result = execSync(command, {
                 encoding: "utf-8",
