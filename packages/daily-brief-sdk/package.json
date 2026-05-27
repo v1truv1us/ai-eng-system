@@ -1,0 +1,49 @@
+{
+  "name": "@ai-eng-system/daily-brief-sdk",
+  "version": "0.1.0",
+  "description": "Scheduled-brief SDK for cook-and-brief: tomorrow / morning / week-ahead / dream-digest workflows that gather Jira+Bitbucket+Grafana+calendar data and email an HTML brief.",
+  "type": "module",
+  "private": true,
+  "main": "./dist/cli.mjs",
+  "bin": {
+    "daily-brief": "./dist/cli.mjs"
+  },
+  "files": [
+    "dist/",
+    "src/",
+    "bin/",
+    "launchd/",
+    "README.md",
+    "INSTALL.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "bun run typecheck && bun build src/cli.ts --outdir dist --target node --format esm --banner '#!/usr/bin/env node' && mv dist/cli.js dist/cli.mjs && chmod +x dist/cli.mjs",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test",
+    "test:coverage": "bun test --coverage"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.3.145",
+    "nodemailer": "^6.9.0",
+    "p-retry": "^6.2.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "^6.4.0"
+  },
+  "keywords": [
+    "ai-engineering",
+    "daily-brief",
+    "scheduled",
+    "agent-sdk",
+    "jira",
+    "bitbucket"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "v1truv1us",
+    "email": "contact@v1truv1us.dev"
+  }
+}

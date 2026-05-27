@@ -59,6 +59,20 @@ async function main() {
 
     await run("bun run build:toolkit");
     await run("bun run sync:core-dist");
+
+    // Build daily-brief-sdk (4th workspace package). Best-effort: skip if
+    // the package directory or its node_modules deps are missing — keeps
+    // the existing build path green for repos that haven't installed the
+    // brief SDK deps yet.
+    if (existsSync(resolve(repoRoot, "packages/daily-brief-sdk/package.json"))) {
+        try {
+            await run("bun run build:briefs");
+        } catch (error) {
+            console.warn(
+                `daily-brief-sdk build skipped: ${error instanceof Error ? error.message : String(error)}`,
+            );
+        }
+    }
 }
 
 main().catch((error) => {

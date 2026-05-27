@@ -38,6 +38,7 @@
     "build:core": "cd packages/core && bun run build && cd ../.. && cp -r packages/core/opencode packages/core/dist/.opencode",
     "sync:core-dist": "cp -r packages/toolkit/.opencode/* packages/core/dist/.opencode/ 2>/dev/null; cp -r packages/toolkit/.claude-plugin/* packages/cli/dist/.claude-plugin/ 2>/dev/null; echo '✅ Synced toolkit output to core/cli dist'",
     "build:cli": "cd packages/cli && bun run build:cli",
+    "build:briefs": "cd packages/daily-brief-sdk && bun run build",
     "copy:content": "cp packages/core/dist/index.js dist/ && cp packages/core/dist/*.d.ts dist/",
     "build:toolkit": "bun run build.ts && bun scripts/build-toolkit.ts",
     "build:watch": "bun run build && cd packages/cli && bun run build:cli --watch",
