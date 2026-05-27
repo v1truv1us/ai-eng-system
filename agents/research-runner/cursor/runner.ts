@@ -27,6 +27,7 @@ async function runTemplate(
   systemPrompt: string,
   template: QueryTemplate,
   query: string,
+  agentInstruction: string | undefined,
 ): Promise<TemplateResult> {
   const agent = await Agent.create({
     apiKey,
@@ -34,47 +35,56 @@ async function runTemplate(
     local: { cwd: process.cwd() },
   });
 
-  const fullPrompt = `${systemPrompt}\n\n${template.text}\n\nQuery context: ${query}`;
-  const run = await agent.send(fullPrompt);
+  try {
+    const agentPrompt = agentInstruction ? `\n\nAgent instruction: ${agentInstruction}` : "";
+    const fullPrompt = `${systemPrompt}${agentPrompt}\n\n${template.text}\n\nQuery context: ${query}`;
+    const run = await agent.send(fullPrompt);
 
-  let text = "";
-  for await (const event of run.stream()) {
-    // Collect text from whatever shape the event arrives in
-    const e = event as unknown as Record<string, unknown>;
-    if (typeof e["text"] === "string") {
-      text += e["text"];
-    } else if (e["type"] === "text" && typeof e["content"] === "string") {
-      text += e["content"];
-    } else if (
-      e["type"] === "message" &&
-      typeof (e as Record<string, unknown>)["text"] === "string"
-    ) {
-      text += (e as Record<string, unknown>)["text"] as string;
-    } else if (typeof e["delta"] === "string") {
-      text += e["delta"];
+    let text = "";
+    for await (const event of run.stream()) {
+      const e = event as unknown as Record<string, unknown>;
+      if (typeof e["text"] === "string") {
+        text += e["text"];
+      } else if (e["type"] === "text" && typeof e["content"] === "string") {
+        text += e["content"];
+      } else if (
+        e["type"] === "message" &&
+        typeof (e as Record<string, unknown>)["text"] === "string"
+      ) {
+        text += (e as Record<string, unknown>)["text"] as string;
+      } else if (typeof e["delta"] === "string") {
+        text += e["delta"];
+      }
+    }
+
+    return {
+      id: template.id,
+      name: template.name,
+      text: text.trim() || "(no text response)",
+    };
+  } finally {
+    await agent[Symbol.asyncDispose]();
+  }
+}
+
+function parseArgs(): { query: string; templateFilter: string[]; agent?: string } {
+  const args = process.argv.slice(2);
+  let templateFilter: string[] = [];
+  let agent = process.env.AI_ENG_AGENT?.trim() || undefined;
+  const rest: string[] = [];
+
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === "--templates") {
+      templateFilter = (args[++i] ?? "").split(",").filter(Boolean);
+    } else if (args[i] === "--agent") {
+      agent = args[++i]?.trim() || agent;
+    } else {
+      rest.push(args[i]);
     }
   }
 
-  return {
-    id: template.id,
-    name: template.name,
-    text: text.trim() || "(no text response)",
-  };
-}
-
-function parseArgs(): { query: string; templateFilter: string[] } {
-  const args = process.argv.slice(2);
-  const flagIdx = args.indexOf("--templates");
-  let templateFilter: string[] = [];
-  let rest = [...args];
-
-  if (flagIdx !== -1) {
-    templateFilter = (args[flagIdx + 1] ?? "").split(",").filter(Boolean);
-    rest = args.filter((_, i) => i !== flagIdx && i !== flagIdx + 1);
-  }
-
   const query = rest.join(" ").trim();
-  return { query, templateFilter };
+  return { query, templateFilter, agent };
 }
 
 async function main(): Promise<void> {
@@ -88,7 +98,7 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
-  const { query, templateFilter } = parseArgs();
+  const { query, templateFilter, agent } = parseArgs();
   if (!query) {
     console.error(
       'Usage: npx tsx runner.ts [--templates A1,M2] "research question"',
@@ -110,7 +120,7 @@ async function main(): Promise<void> {
   console.error(`Running ${templates.length} Cursor agent(s) in parallel…`);
 
   const results = await Promise.all(
-    templates.map((t) => runTemplate(apiKey, data.systemPrompt, t, query)),
+    templates.map((t) => runTemplate(apiKey, data.systemPrompt, t, query, agent)),
   );
 
   const synthesis = await synthesize(query, results);

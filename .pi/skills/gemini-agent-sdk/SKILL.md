@@ -18,9 +18,22 @@ Use this skill when implementing a Gemini-backed runner for a workflow that also
 
 ## Workflow adapter contract
 
-Shared types: `agents/research-runner/shared/workflow-contract.ts` (`WorkflowInput`, `WorkflowResult`, optional `safetyNotes`).
+```ts
+type WorkflowInput = {
+  goal: string;
+  cwd?: string;
+  model?: string;
+  maxTurns?: number;
+  statePath?: string;
+};
 
-No Gemini runner exists yet. Add `agents/research-runner/gemini/runner.ts` (or a new workflow folder) implementing this contract; keep `.gemini/skills` as CLI distribution only.
+type WorkflowResult = {
+  status: "success" | "blocked" | "failed";
+  summary: string;
+  artifacts: string[];
+  safetyNotes?: string[];
+};
+```
 
 ## Implementation rules
 

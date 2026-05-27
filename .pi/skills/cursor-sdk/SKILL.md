@@ -1,34 +1,18 @@
 ---
 name: cursor-sdk
-description: Guide building apps, scripts, CI pipelines, and automations with
-  the Cursor TypeScript SDK (`@cursor/sdk`). Use when integrating
-  `Agent.create`, `Agent.prompt`, `Agent.resume`, streaming, MCP servers, local
-  vs cloud runtime, errors, or porting REST `/v1/agents` calls to the SDK.
-  Prefer this skill over memory—the SDK surface evolves and references here are
-  the source of truth.
+description: Guide building apps, scripts, CI pipelines, and automations with the Cursor TypeScript SDK (`@cursor/sdk`). Use when integrating `Agent.create`, `Agent.prompt`, `Agent.resume`, streaming, MCP servers, local vs cloud runtime, errors, or porting REST `/v1/agents` calls to the SDK. Prefer this skill over memory—the SDK surface evolves and references here are the source of truth.
 metadata:
   version: 1.0.0
   tags: cursor-import, cursor-sdk
 ---
 
-## Pi Context-Aware Execution
-
-When this skill is invoked in Pi, treat the user's current request and any skill arguments as the task input. Do not treat this file as the task by itself.
-
-Before applying the skill, establish only the context needed for the request:
-
-1. Identify the current working directory and relevant project scope.
-2. Read local guidance first when present: AGENTS.md, CLAUDE.md, TODO.md, or nearby task/spec files.
-3. Inspect the current codebase with targeted searches (prefer rg) and read relevant files before making claims or proposing changes.
-4. Ground findings and recommendations in project evidence: cite file paths, commands, tests, docs, or external sources as applicable.
-5. Ask a concise clarification only when the arguments and codebase context are insufficient to proceed safely.
-
-Operate conservatively: avoid broad scans, large reads, subagents, or parallel fanout unless the user's requested depth clearly requires them.
 # Cursor SDK
 
 The Cursor TypeScript SDK (`@cursor/sdk`) runs Cursor agents programmatically. The same interfaces drives the local runtime (agent runs on your machine against your files) and the cloud runtime (agent runs on Cursor-hosted or self-hosted infrastructure against a cloned repo and opens PRs).
 
 Use this skill to help someone **bootstrap a working integration quickly** and **avoid the handful of traps that bite new users**. Canonical docs live at [https://cursor.com/docs/api/sdk/typescript](https://cursor.com/docs/api/sdk/typescript); this skill only adds decision-making, failure-mode prevention, and ready-to-extend patterns.
+
+Local workflow example: `agents/research-runner/cursor/runner.ts`. Shared workflow types: `agents/research-runner/shared/workflow-contract.ts`.
 
 ## Voice and Posture
 
@@ -51,21 +35,18 @@ Prefer:
 - Open with the design decision or the first thing they need to know.
 - If you genuinely have a design choice to flag (local vs cloud, prompt vs send, sync vs stream), name it in one sentence and explain why; don't preface it with validation.
 
-## When to open a reference file
+## Deeper topics (official docs)
 
-Keep this page short. Read a reference file only when the user's task clearly falls inside it:
+This repo ships only this `SKILL.md`. For runtime choice, auth, errors, streaming, MCP, sub-agents, and integration patterns, use the [Cursor TypeScript SDK docs](https://cursor.com/docs/api/sdk/typescript) or the upstream [cursor-sdk plugin references](https://github.com/cursor/plugins/tree/main/cursor-sdk).
 
-
-| If the user is...                                                                    | Read                                                           |
-| ------------------------------------------------------------------------------------ | -------------------------------------------------------------- |
-| Picking between local and cloud runtime, or not sure which they should use           | [`references/runtime-choice.md`](references/runtime-choice.md) |
-| Debugging auth (401s, "Missing CURSOR_API_KEY", team-vs-user keys, local vs prod)    | [`references/auth.md`](references/auth.md)                     |
-| Handling errors, retries, rate limits, `CursorAgentError`, `result.status === error` | [`references/error-handling.md`](references/error-handling.md) |
-| Consuming streams, picking event types, cancelling, or deciding stream vs wait       | [`references/streaming.md`](references/streaming.md)           |
-| Configuring MCP servers (HTTP, stdio, cloud vs local transport, auth injection)      | [`references/mcp.md`](references/mcp.md)                       |
-| Using sub-agents, resume, artifacts, listing/inspecting agents, `Agent.messages`     | [`references/advanced.md`](references/advanced.md)             |
-| Building a specific integration (CI review bot, scheduled triage, chat, webhook)     | [`references/patterns.md`](references/patterns.md)             |
-
+| If the user is... | Start here |
+| ----------------- | ---------- |
+| Local vs cloud runtime | SDK docs → runtime / `local` vs `cloud` options |
+| Auth (401, `CURSOR_API_KEY`, team keys) | SDK docs → authentication |
+| Errors, retries, `CursorAgentError` | SDK docs → errors |
+| Streams, cancel, wait vs stream | SDK docs → streaming |
+| MCP servers | SDK docs → MCP |
+| Sub-agents, resume, artifacts | SDK docs → agents API |
 
 Everything below is the minimum needed for 80% of tasks.
 
@@ -140,7 +121,7 @@ These trip up almost every new integration. They're all easy to prevent once you
 
 ### 1. Missing `cloud: { repos }` silently defaults to local
 
-`AgentOptions` doesn't require `local` or `cloud`; if you omit both, the SDK selects the local runtime. The trap: if you intended a cloud agent and forgot the `cloud:` field, you get a local agent silently — no error, just a local agent ID and a local executor. Always pass `cloud: { repos }` explicitly when you want cloud, and pass `local: { cwd }` explicitly for local even though it's the default. Picking the right runtime: see [`references/runtime-choice.md`](references/runtime-choice.md).
+`AgentOptions` doesn't require `local` or `cloud`; if you omit both, the SDK selects the local runtime. The trap: if you intended a cloud agent and forgot the `cloud:` field, you get a local agent silently — no error, just a local agent ID and a local executor. Always pass `cloud: { repos }` explicitly when you want cloud, and pass `local: { cwd }` explicitly for local even though it's the default. Picking the right runtime: see the [SDK docs](https://cursor.com/docs/api/sdk/typescript).
 
 ### 2. Two different kinds of failure, one instinct to conflate them
 
@@ -193,7 +174,7 @@ Current gap worth knowing about: detached/re-hydrated runs (you got the handle f
 - **Local** — runs on the caller's machine against `cwd`, reuses their environment and credentials, good for dev loops and CI that already has a repo checkout.
 - **Cloud** — runs on a Cursor-hosted VM against a freshly cloned `repos[].url`, good for long jobs, fire-and-forget automation, and opening real PRs (`autoCreatePR: true`).
 
-Decision tree, capability differences, and capability gaps (artifacts, cancel, MCP transport): [`references/runtime-choice.md`](references/runtime-choice.md).
+Decision tree and capability gaps: [SDK docs](https://cursor.com/docs/api/sdk/typescript).
 
 ## Auth, minimum viable
 

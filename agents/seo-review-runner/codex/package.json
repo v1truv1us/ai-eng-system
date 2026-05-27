@@ -1,0 +1,17 @@
+{
+  "name": "seo-review-runner-codex",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "run": "tsx runner.ts"
+  },
+  "dependencies": {
+    "@openai/agents": "^0.0.11",
+    "dotenv": "^16.0.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  }
+}

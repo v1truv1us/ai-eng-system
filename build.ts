@@ -1356,7 +1356,7 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "ralph-wiggum",
         ],
         agents: ["seo-specialist", "text-cleaner", "prompt-optimizer"],
-        skills: [],
+        skills: ["seo-audit"],
         description: "Content optimization, SEO, and communication tools",
         category: "development",
         keywords: ["content", "seo", "optimization", "communication"],

@@ -55,6 +55,7 @@ ai-eng-system currently ships 33 canonical skills organized by lifecycle phase a
 - `incentive-prompting` - research-backed prompting techniques (+45-115% quality)
 - `content-optimization` - content and prompt enhancement
 - `text-cleanup` - AI-generated verbosity removal
+- `seo-audit` - SEO, Lighthouse-style, metadata, structured data, and accessibility audits
 
 ## Development and Operations
 
@@ -76,8 +77,13 @@ ai-eng-system currently ships 33 canonical skills organized by lifecycle phase a
 - `claude-agent-sdk` - Claude/Anthropic SDK workflow adapters
 - `opencode-sdk` - OpenCode SDK local workflow runners
 - `openai-agents-sdk` - OpenAI Agents SDK / Codex-style workflow adapters
-- `gemini-agent-sdk` - Gemini SDK/ADK-style workflow adapters
-- `pi-agent-sdk` - Pi CLI/subagent workflow adapters
+- `gemini-agent-sdk` - Gemini SDK/ADK-style workflow adapters (runner not in repo yet)
+- `pi-agent-sdk` - Pi CLI workflow adapters (subagents are separate from research-runner and seo-review-runner)
+- `orchestrate` - Planned Cursor cloud planner/worker tree; use `cursor-sdk` until implemented
+
+Reference runners: `agents/research-runner/` (research templates, 5 runtimes), `agents/seo-review-runner/` (SEO audit, 5 runtimes). Shared prompt helpers: `agents/seo-review-runner/shared/prompt.ts`. Shared workflow types: `agents/research-runner/shared/workflow-contract.ts`.
+
+These skills are included in default installs (see `.ai-eng/install-manifest.json`) and in the `ai-eng-development` plugin group in `build.ts`.
 
 ## Notes
 

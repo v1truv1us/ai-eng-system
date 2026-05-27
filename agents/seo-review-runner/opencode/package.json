@@ -1,0 +1,16 @@
+{
+  "name": "seo-review-runner-opencode",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "run": "tsx runner.ts"
+  },
+  "dependencies": {
+    "@opencode-ai/sdk": "^1.4.3"
+  },
+  "devDependencies": {
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  }
+}

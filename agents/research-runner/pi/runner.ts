@@ -1,7 +1,7 @@
 /**
  * Pi coding-agent research runner.
  *
- * Spawns one `pi` process per query template in parallel (print mode, --json),
+ * Spawns one `pi` process per query template in parallel (print mode, --mode json),
  * collects results, then writes a brief to the vault.
  *
  * Requires: `pi` CLI installed and on PATH (https://github.com/badlogic/lemmy)
@@ -24,7 +24,7 @@ function runPi(prompt: string): Promise<string> {
     let stdout = "";
     let stderr = "";
 
-    const child = spawn("pi", ["-p", prompt, "--json"], {
+    const child = spawn("pi", ["-p", prompt, "--mode", "json"], {
       stdio: ["ignore", "pipe", "pipe"],
     });
 
@@ -53,8 +53,10 @@ async function runTemplate(
   template: QueryTemplate,
   systemPrompt: string,
   query: string,
+  agent: string | undefined,
 ): Promise<TemplateResult> {
-  const fullPrompt = `${systemPrompt}\n\n${template.text}\n\nQuery context: ${query}`;
+  const agentPrompt = agent ? `\n\nAgent instruction: ${agent}` : "";
+  const fullPrompt = `${systemPrompt}${agentPrompt}\n\n${template.text}\n\nQuery context: ${query}`;
   const raw = await runPi(fullPrompt);
 
   // pi --json wraps output in { content: string } or { text: string };
@@ -75,22 +77,27 @@ async function runTemplate(
   return { id: template.id, name: template.name, text };
 }
 
-function parseArgs(): { query: string; templateFilter: string[] } {
+function parseArgs(): { query: string; templateFilter: string[]; agent?: string } {
   const args = process.argv.slice(2);
-  const flagIdx = args.indexOf("--templates");
   let templateFilter: string[] = [];
-  let rest = [...args];
+  let agent = process.env.AI_ENG_AGENT?.trim() || undefined;
+  const rest: string[] = [];
 
-  if (flagIdx !== -1) {
-    templateFilter = (args[flagIdx + 1] ?? "").split(",").filter(Boolean);
-    rest = args.filter((_, i) => i !== flagIdx && i !== flagIdx + 1);
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === "--templates") {
+      templateFilter = (args[++i] ?? "").split(",").filter(Boolean);
+    } else if (args[i] === "--agent") {
+      agent = args[++i]?.trim() || agent;
+    } else {
+      rest.push(args[i]);
+    }
   }
 
-  return { query: rest.join(" ").trim(), templateFilter };
+  return { query: rest.join(" ").trim(), templateFilter, agent };
 }
 
 async function main(): Promise<void> {
-  const { query, templateFilter } = parseArgs();
+  const { query, templateFilter, agent } = parseArgs();
   if (!query) {
     console.error(
       'Usage: npx tsx runner.ts [--templates A1,M2] "research question"',
@@ -112,7 +119,7 @@ async function main(): Promise<void> {
   console.error(`Spawning ${templates.length} pi instance(s) in parallel…`);
 
   const results = await Promise.all(
-    templates.map((t) => runTemplate(t, data.systemPrompt, query)),
+    templates.map((t) => runTemplate(t, data.systemPrompt, query, agent)),
   );
 
   const synthesis = await synthesize(query, results);

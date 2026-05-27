@@ -95,7 +95,8 @@ Marketplace packaging note:
 
 ## SEO
 
-- `/ai-eng/seo` - technical SEO and Core Web Vitals review
+- `/ai-eng/seo` - technical SEO and Core Web Vitals review (agent-backed, `seo-specialist`)
+- `ai-eng workflow run seo-review --runtime <runtime> "https://url"` - portable SEO audit via SDK runners (anthropic, codex, cursor, opencode, pi); writes dated report to `.ai-eng/reports/`
 
 ## Shorthand and Compatibility Commands
 

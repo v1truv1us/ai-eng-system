@@ -22,6 +22,7 @@ async function runTemplate(
   systemPrompt: string,
   template: QueryTemplate,
   query: string,
+  agent: string | undefined,
 ): Promise<TemplateResult> {
   const sessionResp = await client.session.create({
     body: { title: `research-runner: ${template.id}` },
@@ -34,7 +35,8 @@ async function runTemplate(
   }
 
   const sessionId = sessionResp.data.id;
-  const fullText = `${systemPrompt}\n\n${template.text}\n\nQuery context: ${query}`;
+  const agentPrompt = agent ? `\n\nAgent instruction: ${agent}` : "";
+  const fullText = `${systemPrompt}${agentPrompt}\n\n${template.text}\n\nQuery context: ${query}`;
 
   const promptResp = await client.session.prompt({
     path: { id: sessionId },
@@ -80,23 +82,28 @@ async function autoApprovePermissions(client: OpencodeClient): Promise<void> {
   }
 }
 
-function parseArgs(): { query: string; templateFilter: string[] } {
+function parseArgs(): { query: string; templateFilter: string[]; agent?: string } {
   const args = process.argv.slice(2);
-  const flagIdx = args.indexOf("--templates");
   let templateFilter: string[] = [];
-  let rest = [...args];
+  let agent = process.env.AI_ENG_AGENT?.trim() || undefined;
+  const rest: string[] = [];
 
-  if (flagIdx !== -1) {
-    templateFilter = (args[flagIdx + 1] ?? "").split(",").filter(Boolean);
-    rest = args.filter((_, i) => i !== flagIdx && i !== flagIdx + 1);
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === "--templates") {
+      templateFilter = (args[++i] ?? "").split(",").filter(Boolean);
+    } else if (args[i] === "--agent") {
+      agent = args[++i]?.trim() || agent;
+    } else {
+      rest.push(args[i]);
+    }
   }
 
   const query = rest.join(" ").trim();
-  return { query, templateFilter };
+  return { query, templateFilter, agent };
 }
 
 async function main(): Promise<void> {
-  const { query, templateFilter } = parseArgs();
+  const { query, templateFilter, agent } = parseArgs();
   if (!query) {
     console.error(
       'Usage: npx tsx runner.ts [--templates A1,M2] "research question"',
@@ -123,7 +130,7 @@ async function main(): Promise<void> {
   console.error(`Running ${templates.length} template(s) in parallel…`);
 
   const results = await Promise.all(
-    templates.map((t) => runTemplate(client, data.systemPrompt, t, query)),
+    templates.map((t) => runTemplate(client, data.systemPrompt, t, query, agent)),
   );
 
   server.close();

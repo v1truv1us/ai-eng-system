@@ -1,37 +1,30 @@
 ---
 name: orchestrate
-description: Use only when the user explicitly types `/orchestrate <goal>` to
-  decompose a large task, spawn a tree of parallel cloud-agent
-  workers/subplanners/verifiers via the Cursor SDK, and collect structured
-  handoffs; do not invoke autonomously.
+description: Use only when the user explicitly types `/orchestrate <goal>` to decompose a large task, spawn a tree of parallel cloud-agent workers/subplanners/verifiers via the Cursor SDK, and collect structured handoffs; do not invoke autonomously.
 metadata:
   version: 1.0.0
   tags: cursor-import, orchestrate
 ---
 
-## Pi Context-Aware Execution
-
-When this skill is invoked in Pi, treat the user's current request and any skill arguments as the task input. Do not treat this file as the task by itself.
-
-Before applying the skill, establish only the context needed for the request:
-
-1. Identify the current working directory and relevant project scope.
-2. Read local guidance first when present: AGENTS.md, CLAUDE.md, TODO.md, or nearby task/spec files.
-3. Inspect the current codebase with targeted searches (prefer rg) and read relevant files before making claims or proposing changes.
-4. Ground findings and recommendations in project evidence: cite file paths, commands, tests, docs, or external sources as applicable.
-5. Ask a concise clarification only when the arguments and codebase context are insufficient to proceed safely.
-
-Operate conservatively: avoid broad scans, large reads, subagents, or parallel fanout unless the user's requested depth clearly requires them.
 # Orchestrate
 
-An explicit `/orchestrate <goal>` fans out a large task across parallel Cursor cloud agents. Workers don't talk to each other; they talk up through structured handoffs. The spawn, wait, and handoff loop lives in `scripts/cli.ts`. The planner writes `plan.json`, the script executes it, and the planner reads handoffs to decide what comes next. Long-running agent loops drift; a script with a JSON state file keeps its footing.
+> **Status: planned.** The spawn/wait/handoff driver (`scripts/cli.ts`) and role references (`references/dispatcher.md`, `references/planner.md`) are not in this repository yet. Until they land, use the **`cursor-sdk`** skill with cloud `Agent.create({ cloud: { repos } })` for multi-agent work, or the local pattern in `agents/research-runner/cursor/runner.ts`.
 
-**Required reading: the `cursor-sdk` skill ([cursor/plugins/cursor-sdk](https://github.com/cursor/plugins/tree/main/cursor-sdk)).** Spawning, auth, and the error taxonomy live there. Don't reimplement what that skill already documents.
+An explicit `/orchestrate <goal>` will fan out a large task across parallel Cursor cloud agents. Workers don't talk to each other; they talk up through structured handoffs. The intended design: a script owns the spawn/wait loop, the planner writes `plan.json`, the script executes it, and the planner reads handoffs to decide what comes next.
 
-## Setup
+**Required reading: the `cursor-sdk` skill** ([cursor/plugins/cursor-sdk](https://github.com/cursor/plugins/tree/main/cursor-sdk) or `skills/cursor-sdk/SKILL.md` in this repo). Spawning, auth, and the error taxonomy live there.
 
-- `CURSOR_API_KEY` must be a personal/user key. Create it from [Cursor Dashboard > Integrations](https://cursor.com/dashboard/integrations), then read `cursor-sdk` Auth before using it.
-- `SLACK_BOT_TOKEN` is optional. When set, pass `--slack-channel <id>` to `kickoff` or the first `run --root`, or set `SLACK_CHANNEL_ID`. The script stores the channel in `plan.slackChannel`, posts the kickoff thread there, mirrors task status, and reads Andon reactions. When the token is unset, the script logs once and runs without Slack visibility; correctness does not change.
+## Setup (when implemented)
+
+- `CURSOR_API_KEY` must be a personal/user key. Create it from [Cursor Dashboard > Integrations](https://cursor.com/dashboard/integrations), then read `cursor-sdk` auth guidance.
+- `SLACK_BOT_TOKEN` is optional for Slack visibility in the upstream design.
+
+## Workaround today
+
+1. Load **`cursor-sdk`**.
+2. Use **cloud** runtime with explicit `cloud: { repos: [...] }` per worker task.
+3. Persist handoffs as JSON files on disk; use deterministic code for phase transitions (see `agents/research-runner/shared/workflow-contract.ts`).
+4. Track `/orchestrate` status in `docs/reference/commands.md` (listed as **planned**).
 
 ## Core principles
 
@@ -54,12 +47,11 @@ These rules make the tree self-converging without global coordination.
 | Verifier       | no             | One target's acceptance criteria | Verdict handoff to spawning planner     |
 | Git            | n/a            | Shared medium                    | Branches (code) + handoffs/ (meaning)   |
 
-## Role
+## Role (when reference docs exist)
 
-Two roles, one skill. Read your role's reference file and skip the other.
+Two roles, one skill:
 
-**Dispatcher.** You're in a local IDE session and the user typed `/orchestrate <goal>`. Your job is to kick off a cloud root planner and return its URL. See `references/dispatcher.md`. One-shot; you are not the planner.
-
-**Planner (root or sub).** You were spawned with a structured prompt that opens with "You are the root planner for:" or "You are a subplanner for:". Or the user chose to run the planning loop locally. You own a scope, publish tasks, read handoffs, decide what's next. See `references/planner.md`.
+- **Dispatcher** — local IDE session; kick off a cloud root planner and return its URL. One-shot; not the planner.
+- **Planner (root or sub)** — owns a scope, publishes tasks, reads handoffs, decides what's next.
 
 `disable-model-invocation: true` means this skill loads only on explicit invocation.

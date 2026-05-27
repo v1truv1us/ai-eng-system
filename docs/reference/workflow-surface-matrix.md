@@ -91,6 +91,7 @@ Complete mapping of every command to its canonical owner: skill, runtime feature
 | `/ai-eng/init` | runtime | install system | `packages/cli/src/install/` |
 | `/ai-eng/knowledge-capture` | skill-backed | `knowledge-capture` | `skills/knowledge-capture/SKILL.md` |
 | `/ai-eng/seo` | agent-backed | `seo-specialist` | Technical SEO review |
+| `ai-eng workflow run seo-review` | CLI runner | `agents/seo-review-runner/` | SEO audit via any of 5 SDK runtimes; writes `.ai-eng/reports/seo-review-*.md` |
 
 ## Alias Commands (Compatibility)
 
