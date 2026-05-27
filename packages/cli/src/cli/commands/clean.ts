@@ -3,9 +3,9 @@
  */
 
 import { parseArgs } from "node:util";
-import type { CleanFlags } from "../../install/types";
 import { runCleaner } from "../../install/clean";
 import { resolveInstallScope } from "../../install/install";
+import type { CleanFlags } from "../../install/types";
 import { parsePlatformArg } from "./install";
 import type { Subcommand } from "./types";
 
@@ -49,7 +49,10 @@ async function runClean(args: string[]): Promise<void> {
         allowPositionals: true,
     });
 
-    const platform = parsePlatformArg(values.platform as string | undefined, true);
+    const platform = parsePlatformArg(
+        values.platform as string | undefined,
+        true,
+    );
 
     const flags: CleanCommandFlags = {
         scope: values.scope as CleanFlags["scope"],

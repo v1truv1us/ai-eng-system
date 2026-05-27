@@ -51,16 +51,22 @@ describe("prompt snapshots", () => {
         const prompt = buildMorningPrompt(FIXED_INPUTS);
         expect(prompt).toContain("You are the Morning workflow");
         expect(prompt).toContain("Focus on overnight changes:");
-        expect(prompt).toContain("- new commits, comments, or PR updates since 5pm yesterday");
+        expect(prompt).toContain(
+            "- new commits, comments, or PR updates since 5pm yesterday",
+        );
         expect(prompt).toContain("Build a brief for date 2026-05-27.");
-        expect(prompt).toContain("Sources available: atlassian-mcp, bitbucket-mcp.");
+        expect(prompt).toContain(
+            "Sources available: atlassian-mcp, bitbucket-mcp.",
+        );
     });
 
     test("week-ahead prompt", () => {
         const prompt = buildWeekAheadPrompt(FIXED_INPUTS);
         expect(prompt).toContain("You are the Week-Ahead workflow");
         expect(prompt).toContain("upcoming week starting 2026-05-27");
-        expect(prompt).toContain("- sprint state and planned epics for the week");
+        expect(prompt).toContain(
+            "- sprint state and planned epics for the week",
+        );
     });
 
     test("dream-digest prompt", () => {
@@ -69,7 +75,9 @@ describe("prompt snapshots", () => {
             sources: [],
         });
         expect(prompt).toContain("You are the Dream-Digest workflow");
-        expect(prompt).toContain("OUTPUT TARGET: ~/.claude/cook-and-brief/dream-digest/");
+        expect(prompt).toContain(
+            "OUTPUT TARGET: ~/.claude/cook-and-brief/dream-digest/",
+        );
         expect(prompt).toContain(
             "NEVER write\nto ~/.claude/projects/<id>/memory/",
         );
@@ -125,7 +133,10 @@ describe("prompt snapshots", () => {
     });
 
     test("empty source list renders as (none)", () => {
-        const prompt = buildTomorrowPrompt({ forDate: "2026-05-27", sources: [] });
+        const prompt = buildTomorrowPrompt({
+            forDate: "2026-05-27",
+            sources: [],
+        });
         expect(prompt).toContain("Sources available: (none).");
     });
 });

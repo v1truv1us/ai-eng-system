@@ -76,7 +76,9 @@ export function syncSkillsTree(
     fs.mkdirSync(targetAgentsSkillsDir, { recursive: true });
 
     let synced = 0;
-    for (const entry of fs.readdirSync(sourceSkillsDir, { withFileTypes: true })) {
+    for (const entry of fs.readdirSync(sourceSkillsDir, {
+        withFileTypes: true,
+    })) {
         const srcPath = path.join(sourceSkillsDir, entry.name);
         const destPath = path.join(targetAgentsSkillsDir, entry.name);
 
@@ -90,8 +92,6 @@ export function syncSkillsTree(
         }
 
         if (entry.isFile() && entry.name.endsWith(".md")) {
-            // Pi/Cursor ignore root .md files in .agents/skills; skip loose files.
-            continue;
         }
     }
 

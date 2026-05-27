@@ -105,7 +105,9 @@ export class CodebaseAnalyzer implements AnalysisAgent {
                 const content = await readFile(file.path, "utf-8");
                 const fileEvidence = this.analyzeFileForEvidence(file, content);
                 evidence.push(...fileEvidence);
-            } catch (error) { /* non-critical, skip */ }
+            } catch (error) {
+                /* non-critical, skip */
+            }
         }
 
         return evidence;
@@ -551,7 +553,9 @@ export class ResearchAnalyzer implements AnalysisAgent {
                     content,
                 );
                 evidence.push(...docEvidence);
-            } catch (error) { /* non-critical, skip */ }
+            } catch (error) {
+                /* non-critical, skip */
+            }
         }
 
         return evidence;

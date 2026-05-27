@@ -5,7 +5,14 @@
  * Usage: bun scripts/verify-all-platform-installs.ts
  */
 
-import { existsSync, mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+    existsSync,
+    mkdirSync,
+    mkdtempSync,
+    readFileSync,
+    rmSync,
+    writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { runInstaller } from "../packages/cli/src/install/install.ts";
@@ -56,10 +63,7 @@ async function main(): Promise<void> {
             join(projectDir, ".opencode", "agent", "ai-eng"),
             "OpenCode agents",
         );
-        assertPath(
-            join(projectDir, ".opencode", "skill"),
-            "OpenCode skills",
-        );
+        assertPath(join(projectDir, ".opencode", "skill"), "OpenCode skills");
 
         const cursorBundle = join(
             projectDir,
@@ -71,7 +75,10 @@ async function main(): Promise<void> {
             join(cursorBundle, ".cursor-plugin", "plugin.json"),
             "Cursor plugin manifest",
         );
-        assertPath(join(cursorBundle, "commands", "plan.md"), "Cursor plan command");
+        assertPath(
+            join(cursorBundle, "commands", "plan.md"),
+            "Cursor plan command",
+        );
         assertPath(
             join(cursorBundle, "hooks", "cursor-hooks.json"),
             "Cursor Ralph hooks",
@@ -98,7 +105,8 @@ async function main(): Promise<void> {
             check(
                 parsed.entries.some(
                     (entry) =>
-                        entry.platform === platform && entry.scope === "project",
+                        entry.platform === platform &&
+                        entry.scope === "project",
                 ),
                 `Manifest missing entry for ${platform}`,
             );

@@ -537,9 +537,9 @@ Missing description field.
             expect(
                 existsSync(join(cursorDir, "skills", "test-skill", "SKILL.md")),
             ).toBe(true);
-            expect(
-                existsSync(join(cursorDir, "agents", "test-agent.md")),
-            ).toBe(true);
+            expect(existsSync(join(cursorDir, "agents", "test-agent.md"))).toBe(
+                true,
+            );
         });
 
         it("should build Gemini bundle structure", async () => {

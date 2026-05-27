@@ -62,13 +62,21 @@ const SECRET_FORMATS: (RegExp | { pattern: RegExp; replacement: string })[] = [
     /ghr_[a-zA-Z0-9]{36}/g,
     // AI service tokens
     /sk-[a-zA-Z0-9]{20,}/g,
-    /sk-ant-[a-zA-Z0-9\-]{20,}/g,
+    /sk-ant-[a-zA-Z0-9-]{20,}/g,
     // Slack tokens
-    /xoxb-[a-zA-Z0-9\-]{10,}/g,
-    /xoxp-[a-zA-Z0-9\-]{10,}/g,
+    /xoxb-[a-zA-Z0-9-]{10,}/g,
+    /xoxp-[a-zA-Z0-9-]{10,}/g,
     // Key=value patterns (preserve key, redact value)
-    { pattern: /(api[_-]?key|access[_-]?token|secret[_-]?key|private[_-]?key|auth[_-]?token|bearer[_-]?token)(["'"]?\s*[:=]\s*["'"]?)([^"'"`,\s]{8,})/gi, replacement: '$1$2[REDACTED]' },
-    { pattern: /(password|passwd|credential|webhook[_-]?url)(["'"]?\s*[:=]\s*["'"]?)([^"'"`,\s]{8,})/gi, replacement: '$1$2[REDACTED]' },
+    {
+        pattern:
+            /(api[_-]?key|access[_-]?token|secret[_-]?key|private[_-]?key|auth[_-]?token|bearer[_-]?token)(["'"]?\s*[:=]\s*["'"]?)([^"'"`,\s]{8,})/gi,
+        replacement: "$1$2[REDACTED]",
+    },
+    {
+        pattern:
+            /(password|passwd|credential|webhook[_-]?url)(["'"]?\s*[:=]\s*["'"]?)([^"'"`,\s]{8,})/gi,
+        replacement: "$1$2[REDACTED]",
+    },
 ];
 
 /**
@@ -79,7 +87,7 @@ function redactSecrets(text: string): string {
     let result = text;
     for (const entry of SECRET_FORMATS) {
         if (entry instanceof RegExp) {
-            result = result.replace(entry, '[REDACTED]');
+            result = result.replace(entry, "[REDACTED]");
             entry.lastIndex = 0;
         } else {
             result = result.replace(entry.pattern, entry.replacement);
@@ -371,7 +379,9 @@ export class RalphLoopRunner {
                             durationMs,
                         );
                     } else {
-                        await this.flowStore.recordFailedCycle(result.cycleState);
+                        await this.flowStore.recordFailedCycle(
+                            result.cycleState,
+                        );
 
                         // Notify Discord: cycle failed
                         this.discordWebhook?.notifyError(
@@ -535,7 +545,9 @@ export class RalphLoopRunner {
         }
 
         // Add previous cycle summary if available
-        const previousCycle = await this.flowStore.getIteration(cycleNumber - 1);
+        const previousCycle = await this.flowStore.getIteration(
+            cycleNumber - 1,
+        );
         if (previousCycle) {
             contextParts.push(
                 `# Previous Cycle (${cycleNumber - 1}) Summary\n\n`,
@@ -1224,7 +1236,7 @@ Output: <promise>SHIP</promise> if all criteria are met, or list remaining issue
         if (dangerous.test(command)) {
             throw new Error(
                 `Gate command rejected: contains shell metacharacters. ` +
-                `Use a direct command (e.g. "bun test", "pnpm lint"). Got: ${command.slice(0, 80)}`
+                    `Use a direct command (e.g. "bun test", "pnpm lint"). Got: ${command.slice(0, 80)}`,
             );
         }
     }

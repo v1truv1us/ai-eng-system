@@ -6,26 +6,26 @@
  */
 
 export interface DriverConfig {
-  apiKey?: string;
-  model?: string;
-  timeoutMs?: number;
-  maxRetries?: number;
+    apiKey?: string;
+    model?: string;
+    timeoutMs?: number;
+    maxRetries?: number;
 }
 
 export interface Driver {
-  runPrompt(prompt: string, config?: DriverConfig): Promise<string>;
-  close?(): Promise<void>;
+    runPrompt(prompt: string, config?: DriverConfig): Promise<string>;
+    close?(): Promise<void>;
 }
 
 export type DriverName = "pi" | "cursor" | "anthropic" | "codex" | "opencode";
 
 export class DriverError extends Error {
-  constructor(
-    message: string,
-    public readonly code: string,
-    public readonly cause?: unknown,
-  ) {
-    super(message);
-    this.name = "DriverError";
-  }
+    constructor(
+        message: string,
+        public readonly code: string,
+        public readonly cause?: unknown,
+    ) {
+        super(message);
+        this.name = "DriverError";
+    }
 }

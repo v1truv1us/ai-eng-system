@@ -64,7 +64,9 @@ async function main() {
     // the package directory or its node_modules deps are missing — keeps
     // the existing build path green for repos that haven't installed the
     // brief SDK deps yet.
-    if (existsSync(resolve(repoRoot, "packages/daily-brief-sdk/package.json"))) {
+    if (
+        existsSync(resolve(repoRoot, "packages/daily-brief-sdk/package.json"))
+    ) {
         try {
             await run("bun run build:briefs");
         } catch (error) {

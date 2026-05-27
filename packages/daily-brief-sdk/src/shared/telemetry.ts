@@ -3,10 +3,10 @@
  * No native deps (better-sqlite3 was rejected — see SPEC §8).
  */
 
-import { appendFileSync, mkdirSync, existsSync } from "node:fs";
+import { appendFileSync, existsSync, mkdirSync } from "node:fs";
 import { dirname } from "node:path";
-import { COOK_AND_BRIEF_DIR, TELEMETRY_FILE } from "./paths.js";
 import type { WorkflowName } from "./paths.js";
+import { COOK_AND_BRIEF_DIR, TELEMETRY_FILE } from "./paths.js";
 
 export interface TelemetryRow {
     workflow: WorkflowName;

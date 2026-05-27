@@ -152,7 +152,16 @@ export interface ContextEnvelope {
 
 /** Interface for memory management (breaks agents ↔ context) */
 export interface IMemoryManager {
-    store(agentId: string, type: string, content: string, relevance?: number): Promise<string>;
-    retrieve(agentId: string, query: string, limit?: number): Promise<MemoryEntry[]>;
+    store(
+        agentId: string,
+        type: string,
+        content: string,
+        relevance?: number,
+    ): Promise<string>;
+    retrieve(
+        agentId: string,
+        query: string,
+        limit?: number,
+    ): Promise<MemoryEntry[]>;
     delete(entryId: string): Promise<boolean>;
 }

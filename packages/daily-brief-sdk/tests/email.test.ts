@@ -53,9 +53,9 @@ describe("email", () => {
     });
 
     test("readSmtpConfigFromEnv throws on missing required keys", () => {
-        expect(() =>
-            readSmtpConfigFromEnv({ SMTP_HOST: "h" }),
-        ).toThrow(/SMTP_USER/);
+        expect(() => readSmtpConfigFromEnv({ SMTP_HOST: "h" })).toThrow(
+            /SMTP_USER/,
+        );
     });
 
     test("readSmtpConfigFromEnv error message names ALL missing keys", () => {

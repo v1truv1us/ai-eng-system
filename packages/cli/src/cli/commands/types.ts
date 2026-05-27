@@ -3,8 +3,8 @@
  */
 
 export interface Subcommand {
-  name: string;
-  aliases?: string[];
-  helpText: string;
-  run(args: string[]): Promise<void>;
+    name: string;
+    aliases?: string[];
+    helpText: string;
+    run(args: string[]): Promise<void>;
 }

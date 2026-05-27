@@ -9,11 +9,11 @@
  * exercises the full pipeline.
  */
 
-import { query, type Options as SdkOptions } from "@anthropic-ai/claude-agent-sdk";
 import {
-    AnyBriefSchema,
-    type TomorrowBrief,
-} from "../shared/brief-schema.js";
+    query,
+    type Options as SdkOptions,
+} from "@anthropic-ai/claude-agent-sdk";
+import { AnyBriefSchema, type TomorrowBrief } from "../shared/brief-schema.js";
 import type { EmailTransport } from "../shared/email.js";
 import { routeBrief } from "../shared/output-router.js";
 import {
@@ -171,11 +171,7 @@ export async function runTomorrow(
         // If the response is missing the workflow discriminator, inject it.
         // The agent is encouraged to include it via the prompt, but a Sonnet
         // run sometimes returns the right shape without the literal field.
-        if (
-            typeof raw === "object" &&
-            raw !== null &&
-            !("workflow" in raw)
-        ) {
+        if (typeof raw === "object" && raw !== null && !("workflow" in raw)) {
             (raw as { workflow: string }).workflow = "tomorrow";
         }
         const parsed = AnyBriefSchema.parse(raw);

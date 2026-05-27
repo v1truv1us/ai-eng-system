@@ -38,7 +38,11 @@ export class DreamDigestPathError extends Error {
  * malicious or buggy override we want to fail loud.
  */
 function assertOutsideMemory(path: string): void {
-    if (/[/\\]\.claude[/\\]projects[/\\][^/\\]+[/\\]memory(?:[/\\]|$)/.test(path)) {
+    if (
+        /[/\\]\.claude[/\\]projects[/\\][^/\\]+[/\\]memory(?:[/\\]|$)/.test(
+            path,
+        )
+    ) {
         throw new DreamDigestPathError(
             `dream-digest output target "${path}" lies inside an auto-memory directory; refusing to write (would poison cross-session memory).`,
         );
@@ -63,9 +67,9 @@ export function nextAvailablePath(date: string, outputDir: string): string {
     );
 }
 
-export function writeDreamDigest(
-    opts: DreamDigestWriteOptions,
-): { path: string } {
+export function writeDreamDigest(opts: DreamDigestWriteOptions): {
+    path: string;
+} {
     const outputDir = opts.outputDir ?? DREAM_DIGEST_DIR;
     if (!existsSync(outputDir)) mkdirSync(outputDir, { recursive: true });
     const path = nextAvailablePath(opts.date, outputDir);

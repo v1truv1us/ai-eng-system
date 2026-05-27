@@ -19,22 +19,9 @@ Use this skill when implementing an OpenAI-backed workflow adapter. Keep the run
 
 ## Workflow adapter contract
 
-```ts
-type WorkflowInput = {
-  goal: string;
-  cwd?: string;
-  model?: string;
-  maxTurns?: number;
-  statePath?: string;
-};
+Shared types: `agents/research-runner/shared/workflow-contract.ts` (`WorkflowInput`, `WorkflowResult`, optional `handoffs`).
 
-type WorkflowResult = {
-  status: "success" | "blocked" | "failed";
-  summary: string;
-  artifacts: string[];
-  handoffs?: unknown[];
-};
-```
+The reference runner lives under `agents/research-runner/codex/` (Codex/OpenAI Agents SDK). CLI entrypoint today; implement full `WorkflowResult` when adding state/resume.
 
 ## Implementation rules
 

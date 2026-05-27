@@ -50,7 +50,8 @@ export function recentCommits(opts: GitFallbackOptions): CommitSummary[] {
     const records = raw.split("\x1e").filter((r) => r.trim() !== "");
     return records.map((record) => {
         const trimmed = record.replace(/^\n/, "");
-        const [sha, short, author, date, ...subjectParts] = trimmed.split("\x00");
+        const [sha, short, author, date, ...subjectParts] =
+            trimmed.split("\x00");
         return {
             sha: sha ?? "",
             short: short ?? "",

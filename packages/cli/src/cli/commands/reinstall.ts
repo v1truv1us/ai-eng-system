@@ -3,9 +3,9 @@
  */
 
 import { parseArgs } from "node:util";
-import type { CleanFlags, InstallFlags } from "../../install/types";
 import { runCleaner } from "../../install/clean";
-import { runInstaller, resolveInstallScope } from "../../install/install";
+import { resolveInstallScope, runInstaller } from "../../install/install";
+import type { CleanFlags, InstallFlags } from "../../install/types";
 import { parsePlatformArg } from "./install";
 import type { Subcommand } from "./types";
 

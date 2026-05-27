@@ -157,7 +157,10 @@ export class FlowStore {
             state,
             lastPhaseOutputs,
         };
-        await fsp.writeFile(checkpointPath, JSON.stringify(checkpoint, null, 2));
+        await fsp.writeFile(
+            checkpointPath,
+            JSON.stringify(checkpoint, null, 2),
+        );
         log.debug("Saved checkpoint", {
             runId: state.runId,
             cycle: state.currentCycle,
@@ -330,7 +333,10 @@ export class FlowStore {
     }
 
     /** Record a successful cycle */
-    async recordSuccessfulCycle(cycle: CycleState, summary: string): Promise<void> {
+    async recordSuccessfulCycle(
+        cycle: CycleState,
+        summary: string,
+    ): Promise<void> {
         const state = await this.load();
         if (!state) {
             throw new Error("No flow state to update");

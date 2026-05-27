@@ -22,6 +22,7 @@
     "seo",
     "communication"
   ],
+  "skills": "./skills/",
   "agents": "./agents/",
   "commands": "./commands/"
 }

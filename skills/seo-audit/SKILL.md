@@ -187,4 +187,3 @@ After completing audit, rate confidence **0.0 to 1.0**:
 - **0.6-0.9**: Lighthouse run but some checks incomplete
 - **0.3-0.6**: Only partial audit completed
 - **0.0-0.3**: Could not access site or run Lighthouse
-

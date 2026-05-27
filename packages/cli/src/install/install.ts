@@ -18,26 +18,23 @@ import {
     extractOpenCodeSkillDirs,
     extractOpenCodeToolPaths,
 } from "./clean";
-import {
-    type InstallManifestEntry,
-    upsertManifestEntry,
-} from "./manifest";
-import type { CleanFlags, InstallFlags, InstallPlatform } from "./types";
-import {
-    getAgentSkillsInstallDir,
-    getHarnessSkillsSourceDir,
-    getInstallTargetDir,
-    getToolkitHarnessSource,
-    resolveInstallBaseDir,
-    type InstallScope,
-    type ToolkitHarness,
-    usesSkillsOnlyInstall,
-} from "./toolkit-path";
+import { type InstallManifestEntry, upsertManifestEntry } from "./manifest";
 import {
     listSkillTreeEntries,
     mergeGeminiHarness,
     syncSkillsTree,
 } from "./sync-skills";
+import {
+    getAgentSkillsInstallDir,
+    getHarnessSkillsSourceDir,
+    getInstallTargetDir,
+    getToolkitHarnessSource,
+    type InstallScope,
+    resolveInstallBaseDir,
+    type ToolkitHarness,
+    usesSkillsOnlyInstall,
+} from "./toolkit-path";
+import type { CleanFlags, InstallFlags, InstallPlatform } from "./types";
 
 const NAMESPACE_PREFIX = "ai-eng";
 
@@ -201,7 +198,9 @@ async function installToolkitHarness(
 
     if (!fs.existsSync(sourceDir)) {
         console.log(`❌ Harness bundle missing in toolkit: ${sourceDir}`);
-        console.log("   Run a release build or reinstall @ai-eng-system/toolkit.");
+        console.log(
+            "   Run a release build or reinstall @ai-eng-system/toolkit.",
+        );
         process.exit(1);
     }
 
@@ -290,7 +289,9 @@ function printToolkitPostInstall(
                 "   Global skills: ~/.agents/skills/ — enable the plugin in Cursor if needed.",
             );
         } else {
-            console.log("   Enable the ai-eng-system plugin in Cursor if needed.");
+            console.log(
+                "   Enable the ai-eng-system plugin in Cursor if needed.",
+            );
             console.log("   Skills also available under .agents/skills/");
         }
     } else if (harness === "gemini") {
@@ -492,5 +493,5 @@ async function installContentFromCore(
     }
 }
 
-export { runInstaller };
 export type { InstallFlags, InstallPlatform } from "./types";
+export { runInstaller };

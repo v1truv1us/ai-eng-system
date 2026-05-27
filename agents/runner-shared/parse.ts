@@ -6,8 +6,8 @@
  */
 
 export interface ParsedArgs {
-  positionals: string[];
-  flags: Record<string, string | boolean>;
+    positionals: string[];
+    flags: Record<string, string | boolean>;
 }
 
 /**
@@ -21,28 +21,25 @@ export interface ParsedArgs {
  * parseArgs(["--templates", "A1,M2", "--agent", "reviewer", "my query"], ["--templates", "--agent"])
  * // => { positionals: ["my query"], flags: { "--templates": "A1,M2", "--agent": "reviewer" } }
  */
-export function parseArgs(
-  argv: string[],
-  knownFlags: string[],
-): ParsedArgs {
-  const positionals: string[] = [];
-  const flags: Record<string, string | boolean> = {};
+export function parseArgs(argv: string[], knownFlags: string[]): ParsedArgs {
+    const positionals: string[] = [];
+    const flags: Record<string, string | boolean> = {};
 
-  for (let i = 0; i < argv.length; i++) {
-    const arg = argv[i];
+    for (let i = 0; i < argv.length; i++) {
+        const arg = argv[i];
 
-    if (arg === undefined) continue;
+        if (arg === undefined) continue;
 
-    if (knownFlags.includes(arg)) {
-      const next = argv[++i];
-      flags[arg] = next ?? "";
-    } else if (arg.startsWith("--")) {
-      // Unknown boolean-style flag (no value)
-      flags[arg] = true;
-    } else {
-      positionals.push(arg);
+        if (knownFlags.includes(arg)) {
+            const next = argv[++i];
+            flags[arg] = next ?? "";
+        } else if (arg.startsWith("--")) {
+            // Unknown boolean-style flag (no value)
+            flags[arg] = true;
+        } else {
+            positionals.push(arg);
+        }
     }
-  }
 
-  return { positionals, flags };
+    return { positionals, flags };
 }

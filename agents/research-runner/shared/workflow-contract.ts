@@ -9,23 +9,23 @@
 export type WorkflowStatus = "success" | "blocked" | "failed";
 
 export interface WorkflowInput {
-  goal: string;
-  cwd?: string;
-  model?: string;
-  maxTurns?: number;
-  maxIterations?: number;
-  templates?: string[];
-  gates?: string[];
-  statePath?: string;
+    goal: string;
+    cwd?: string;
+    model?: string;
+    maxTurns?: number;
+    maxIterations?: number;
+    templates?: string[];
+    gates?: string[];
+    statePath?: string;
 }
 
 export interface WorkflowResult {
-  status: WorkflowStatus;
-  summary: string;
-  artifacts: string[];
-  nextSteps?: string[];
-  handoffs?: unknown[];
-  verification?: string[];
-  piSession?: string;
-  safetyNotes?: string[];
+    status: WorkflowStatus;
+    summary: string;
+    artifacts: string[];
+    nextSteps?: string[];
+    handoffs?: unknown[];
+    verification?: string[];
+    piSession?: string;
+    safetyNotes?: string[];
 }

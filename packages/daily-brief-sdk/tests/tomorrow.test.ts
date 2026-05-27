@@ -1,10 +1,5 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
-import {
-    existsSync,
-    mkdtempSync,
-    readFileSync,
-    rmSync,
-} from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { InMemoryTransport } from "../src/shared/email.js";
@@ -63,7 +58,9 @@ function fakeSdk(briefJson: string, toolUseId = "toolu_fake_01") {
         const iterator = iterate();
         // The real Query is an async-iterator-with-extras; we only need
         // [Symbol.asyncIterator].
-        return iterator as unknown as ReturnType<typeof import("@anthropic-ai/claude-agent-sdk").query>;
+        return iterator as unknown as ReturnType<
+            typeof import("@anthropic-ai/claude-agent-sdk").query
+        >;
     }) as unknown as typeof import("@anthropic-ai/claude-agent-sdk").query;
 }
 
@@ -155,9 +152,7 @@ describe("runTomorrow (SDK orchestration)", () => {
         });
         expect(result.emailed).toBe(true);
         expect(transport.sent).toHaveLength(1);
-        expect(transport.sent[0]!.subject).toBe(
-            "tomorrow brief — 2026-05-28",
-        );
+        expect(transport.sent[0]!.subject).toBe("tomorrow brief — 2026-05-28");
     });
 
     test("rejects an invented metric via ProvenanceValidator + writes failure telemetry", async () => {

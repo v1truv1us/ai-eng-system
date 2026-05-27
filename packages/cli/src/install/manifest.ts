@@ -4,8 +4,8 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import type { InstallPlatform } from "./types";
 import type { InstallScope } from "./toolkit-path";
+import type { InstallPlatform } from "./types";
 
 export const MANIFEST_VERSION = 1;
 
@@ -44,7 +44,10 @@ export function getManifestPath(
     scope: InstallScope,
     projectDir: string,
 ): string {
-    return path.join(getManifestDir(scope, projectDir), "install-manifest.json");
+    return path.join(
+        getManifestDir(scope, projectDir),
+        "install-manifest.json",
+    );
 }
 
 export function readInstallManifest(

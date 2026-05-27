@@ -4,10 +4,21 @@ import { recentCommits } from "../src/shared/git-fallback.js";
 const NUL = "\x00";
 const RS = "\x1e";
 
-function makeGitOutput(commits: { sha: string; short: string; author: string; date: string; subject: string }[]): string {
+function makeGitOutput(
+    commits: {
+        sha: string;
+        short: string;
+        author: string;
+        date: string;
+        subject: string;
+    }[],
+): string {
     return (
         commits
-            .map((c) => `${c.sha}${NUL}${c.short}${NUL}${c.author}${NUL}${c.date}${NUL}${c.subject}`)
+            .map(
+                (c) =>
+                    `${c.sha}${NUL}${c.short}${NUL}${c.author}${NUL}${c.date}${NUL}${c.subject}`,
+            )
             .join(RS) + (commits.length > 0 ? RS : "")
     );
 }

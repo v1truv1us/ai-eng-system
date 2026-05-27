@@ -10,7 +10,7 @@
  *   bun scripts/verify-cursor-plugins-coverage.ts --strict   # exit 1 on gaps
  */
 
-import { readFileSync, readdirSync, statSync, existsSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 
 const ROOT = join(import.meta.dir, "..");
@@ -41,9 +41,13 @@ async function fetchMarketplacePlugins(): Promise<string[]> {
         signal: AbortSignal.timeout(15_000),
     });
     if (!response.ok) {
-        throw new Error(`Failed to fetch cursor/plugins marketplace: ${response.status}`);
+        throw new Error(
+            `Failed to fetch cursor/plugins marketplace: ${response.status}`,
+        );
     }
-    const data = (await response.json()) as { plugins?: Array<{ name: string }> };
+    const data = (await response.json()) as {
+        plugins?: Array<{ name: string }>;
+    };
     return (data.plugins ?? []).map((entry) => entry.name).sort();
 }
 
@@ -88,7 +92,10 @@ function countCursorImportSkills(): number {
             }
             if (entry !== "SKILL.md") continue;
             const content = readFileSync(full, "utf-8");
-            if (content.includes("cursor-import") || content.includes("cursor/plugins")) {
+            if (
+                content.includes("cursor-import") ||
+                content.includes("cursor/plugins")
+            ) {
                 count++;
             }
         }
@@ -121,11 +128,14 @@ function agentCoverage(): {
                 const nativeMarker = MERGED_AGENT_NATIVE_MARKERS[name];
                 const integrated =
                     (nativeMarker && content.includes(nativeMarker)) ||
-                    (content.includes(`Imported from`) && content.includes(name));
+                    (content.includes(`Imported from`) &&
+                        content.includes(name));
                 if (integrated) {
                     merged.push(`${name} -> ${mergeTarget}`);
                 } else {
-                    missing.push(`${name} -> ${mergeTarget} (not natively integrated)`);
+                    missing.push(
+                        `${name} -> ${mergeTarget} (not natively integrated)`,
+                    );
                 }
                 continue;
             }
@@ -147,9 +157,12 @@ async function main(): Promise<void> {
     const marketplacePlugins = await fetchMarketplacePlugins();
 
     const missing = marketplacePlugins.filter(
-        (name) => !IMPORTED_PLUGINS.includes(name) && !EXCLUDED_PLUGINS.has(name),
+        (name) =>
+            !IMPORTED_PLUGINS.includes(name) && !EXCLUDED_PLUGINS.has(name),
     );
-    const extra = IMPORTED_PLUGINS.filter((name) => !marketplacePlugins.includes(name));
+    const extra = IMPORTED_PLUGINS.filter(
+        (name) => !marketplacePlugins.includes(name),
+    );
     const excludedPresent = [...EXCLUDED_PLUGINS].filter((name) =>
         marketplacePlugins.includes(name),
     );
@@ -157,19 +170,27 @@ async function main(): Promise<void> {
     const agentStatus = agentCoverage();
 
     console.log("Cursor plugins coverage verification\n");
-    console.log(`Marketplace plugins (cursor/plugins): ${marketplacePlugins.length}`);
-    console.log(`Imported via import-cursor-plugins.ts: ${IMPORTED_PLUGINS.length}`);
+    console.log(
+        `Marketplace plugins (cursor/plugins): ${marketplacePlugins.length}`,
+    );
+    console.log(
+        `Imported via import-cursor-plugins.ts: ${IMPORTED_PLUGINS.length}`,
+    );
     console.log(`Skills tagged/imported in skills/: ${importSkillCount}`);
     console.log(
         `Cursor agents: ${agentStatus.imported.length} imported, ${agentStatus.merged.length} merged`,
     );
-    console.log(`Intentionally excluded: ${[...EXCLUDED_PLUGINS].join(", ") || "(none)"}`);
+    console.log(
+        `Intentionally excluded: ${[...EXCLUDED_PLUGINS].join(", ") || "(none)"}`,
+    );
 
     if (missing.length) {
         console.log("\n⚠️  Marketplace plugins not imported:");
         for (const name of missing) console.log(`  - ${name}`);
     } else {
-        console.log("\n✅ All marketplace plugins are imported or explicitly excluded");
+        console.log(
+            "\n✅ All marketplace plugins are imported or explicitly excluded",
+        );
     }
 
     if (excludedPresent.length) {
@@ -178,7 +199,9 @@ async function main(): Promise<void> {
     }
 
     if (extra.length) {
-        console.log("\n⚠️  Import list references plugins no longer in marketplace:");
+        console.log(
+            "\n⚠️  Import list references plugins no longer in marketplace:",
+        );
         for (const name of extra) console.log(`  - ${name}`);
     }
 
@@ -187,7 +210,9 @@ async function main(): Promise<void> {
         "utf-8",
     );
     if (!attribution.includes("cursor/plugins")) {
-        console.log("\n⚠️  docs/attribution/cursor-plugins.md missing source reference");
+        console.log(
+            "\n⚠️  docs/attribution/cursor-plugins.md missing source reference",
+        );
     }
 
     if (agentStatus.missing.length) {
@@ -197,7 +222,12 @@ async function main(): Promise<void> {
         console.log("\n✅ All cursor/plugins agents are imported or merged");
     }
 
-    if (strict && (missing.length > 0 || extra.length > 0 || agentStatus.missing.length > 0)) {
+    if (
+        strict &&
+        (missing.length > 0 ||
+            extra.length > 0 ||
+            agentStatus.missing.length > 0)
+    ) {
         process.exit(1);
     }
 }

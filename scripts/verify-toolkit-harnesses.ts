@@ -36,7 +36,9 @@ async function main(): Promise<void> {
     for (const marker of requiredMarkers) {
         await assertExists(marker);
     }
-    console.log("✅ Toolkit harness bundles verified (OpenCode, Cursor, Gemini, Pi, Claude plugin)");
+    console.log(
+        "✅ Toolkit harness bundles verified (OpenCode, Cursor, Gemini, Pi, Claude plugin)",
+    );
 }
 
 main().catch((error) => {

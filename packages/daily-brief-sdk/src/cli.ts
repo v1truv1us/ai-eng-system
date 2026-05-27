@@ -118,7 +118,9 @@ async function main(argv: string[]): Promise<number> {
             );
             return 2;
         default:
-            process.stderr.write(`daily-brief-sdk: unknown command "${cmd}".\n`);
+            process.stderr.write(
+                `daily-brief-sdk: unknown command "${cmd}".\n`,
+            );
             return 2;
     }
 }

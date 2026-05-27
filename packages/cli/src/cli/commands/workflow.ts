@@ -40,12 +40,25 @@ const WORKFLOWS = {
     research: {
         description: "Run research templates and write a dated brief",
         runnerDir: "research-runner",
-        runtimes: ["anthropic", "codex", "cursor", "opencode", "pi"] as WorkflowRuntime[],
+        runtimes: [
+            "anthropic",
+            "codex",
+            "cursor",
+            "opencode",
+            "pi",
+        ] as WorkflowRuntime[],
     },
     "seo-review": {
-        description: "Review a URL for SEO, performance, and accessibility issues",
+        description:
+            "Review a URL for SEO, performance, and accessibility issues",
         runnerDir: "seo-review-runner",
-        runtimes: ["anthropic", "codex", "cursor", "opencode", "pi"] as WorkflowRuntime[],
+        runtimes: [
+            "anthropic",
+            "codex",
+            "cursor",
+            "opencode",
+            "pi",
+        ] as WorkflowRuntime[],
     },
 } as const;
 
@@ -81,7 +94,9 @@ async function runWorkflow(args: string[]): Promise<void> {
     }
 
     if (action !== "run") {
-        throw new Error(`Unknown workflow command "${action}". Use: ai-eng workflow list|run`);
+        throw new Error(
+            `Unknown workflow command "${action}". Use: ai-eng workflow list|run`,
+        );
     }
 
     const { values, positionals } = nodeParseArgs({
@@ -103,7 +118,9 @@ async function runWorkflow(args: string[]): Promise<void> {
 
     const workflowName = positionals[0] as keyof typeof WORKFLOWS | undefined;
     if (!workflowName || !(workflowName in WORKFLOWS)) {
-        throw new Error(`Unknown workflow "${workflowName ?? ""}". Use: ai-eng workflow list`);
+        throw new Error(
+            `Unknown workflow "${workflowName ?? ""}". Use: ai-eng workflow list`,
+        );
     }
 
     const runtime = (values.runtime ?? "pi") as WorkflowRuntime;
@@ -115,11 +132,18 @@ async function runWorkflow(args: string[]): Promise<void> {
 
     const goal = positionals.slice(1).join(" ").trim();
     if (!goal) {
-        throw new Error(`Missing workflow goal. Example: ai-eng workflow run ${workflowName} --runtime ${runtime} "question"`);
+        throw new Error(
+            `Missing workflow goal. Example: ai-eng workflow run ${workflowName} --runtime ${runtime} "question"`,
+        );
     }
 
     const repoRoot = findRepoRoot(process.cwd());
-    const runnerDir = join(repoRoot, "agents", WORKFLOWS[workflowName].runnerDir, runtime);
+    const runnerDir = join(
+        repoRoot,
+        "agents",
+        WORKFLOWS[workflowName].runnerDir,
+        runtime,
+    );
     const runnerPath = join(runnerDir, "runner.ts");
     if (!existsSync(runnerPath)) {
         throw new Error(`Missing runner: ${runnerPath}`);
@@ -132,7 +156,9 @@ async function runWorkflow(args: string[]): Promise<void> {
 
     if (values["dry-run"]) {
         console.log(`cd ${runnerDir}`);
-        console.log(`npx ${runnerArgs.map((arg) => JSON.stringify(arg)).join(" ")}`);
+        console.log(
+            `npx ${runnerArgs.map((arg) => JSON.stringify(arg)).join(" ")}`,
+        );
         return;
     }
 
@@ -148,11 +174,20 @@ async function runWorkflow(args: string[]): Promise<void> {
             },
         });
         child.on("error", (err) =>
-            reject(new Error(`Failed to spawn workflow runner: ${err.message}. Is npx installed?`)),
+            reject(
+                new Error(
+                    `Failed to spawn workflow runner: ${err.message}. Is npx installed?`,
+                ),
+            ),
         );
         child.on("exit", (code) => {
             if (code === 0) resolve();
-            else reject(new Error(`Workflow ${workflowName} failed with exit code ${code ?? "unknown"}`));
+            else
+                reject(
+                    new Error(
+                        `Workflow ${workflowName} failed with exit code ${code ?? "unknown"}`,
+                    ),
+                );
         });
     });
 }

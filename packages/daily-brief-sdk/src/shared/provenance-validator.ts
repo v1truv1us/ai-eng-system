@@ -66,9 +66,7 @@ function collectSourceIds(brief: unknown): string[] {
             typeof (node as { sourceToolCallId: unknown }).sourceToolCallId ===
                 "string"
         ) {
-            ids.push(
-                (node as { sourceToolCallId: string }).sourceToolCallId,
-            );
+            ids.push((node as { sourceToolCallId: string }).sourceToolCallId);
         }
     }
     return ids;

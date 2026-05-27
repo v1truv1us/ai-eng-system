@@ -5,9 +5,9 @@
 import { parseArgs as nodeParseArgs } from "node:util";
 import { loadConfig } from "../../config/loadConfig";
 import { Log } from "../../util/log";
+import type { LogLevel, RalphFlags } from "../flags";
 import { runCli } from "../run-cli";
 import { UI } from "../ui";
-import type { LogLevel, RalphFlags } from "../flags";
 import type { Subcommand } from "./types";
 
 const RALPH_HELP_TEXT = `

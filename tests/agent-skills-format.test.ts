@@ -1,7 +1,7 @@
 import { describe, expect, it } from "bun:test";
-import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
-import { join } from "node:path";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
+import { join } from "node:path";
 import {
     formatSkillContent,
     formatSkillsDirectory,
@@ -41,10 +41,7 @@ description: Line one
 
 # Folded
 `;
-        const result = formatSkillContent(
-            input,
-            "/tmp/skills/folded/SKILL.md",
-        );
+        const result = formatSkillContent(input, "/tmp/skills/folded/SKILL.md");
 
         expect(result.formatted).toContain(
             "description: Line one continues here with more detail for discovery.",
@@ -67,9 +64,9 @@ description: Valid description long enough for agent skill discovery testing.
         expect(
             result.issues.some((issue) => issue.code === "name-dir-mismatch"),
         ).toBe(true);
-        expect(
-            result.issues.some((issue) => issue.level === "error"),
-        ).toBe(true);
+        expect(result.issues.some((issue) => issue.level === "error")).toBe(
+            true,
+        );
     });
 
     it("writes formatted files with --fix", async () => {

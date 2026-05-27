@@ -327,7 +327,7 @@ export class TaskExecutor {
             const dangerous = /[|;&$`(){}!><\n\r]/;
             if (dangerous.test(shellTask.command)) {
                 throw new Error(
-                    `Command rejected: contains shell metacharacters. Got: ${shellTask.command.slice(0, 80)}`
+                    `Command rejected: contains shell metacharacters. Got: ${shellTask.command.slice(0, 80)}`,
                 );
             }
 

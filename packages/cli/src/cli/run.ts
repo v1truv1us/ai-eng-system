@@ -7,13 +7,13 @@
 
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { UI } from "./ui";
+import { cleanCommand } from "./commands/clean";
 import { initCommand } from "./commands/init";
 import { installCommand } from "./commands/install";
-import { cleanCommand } from "./commands/clean";
-import { reinstallCommand } from "./commands/reinstall";
 import { ralphCommand } from "./commands/ralph";
+import { reinstallCommand } from "./commands/reinstall";
 import { workflowCommand } from "./commands/workflow";
+import { UI } from "./ui";
 
 const TOP_HELP_TEXT = `
 ai-eng - AI Engineering System CLI
@@ -76,13 +76,20 @@ function printVersion(): void {
     let dir = dirname(process.argv[1]);
     for (let i = 0; i < 5; i++) {
         try {
-            const pkg = JSON.parse(readFileSync(join(dir, "package.json"), "utf8"));
+            const pkg = JSON.parse(
+                readFileSync(join(dir, "package.json"), "utf8"),
+            );
             if (pkg.name === "@ai-eng-system/cli" && pkg.version) {
                 version = pkg.version;
                 break;
             }
         } catch (e) {
-            if (!(e instanceof Error && (e as NodeJS.ErrnoException).code === "ENOENT")) {
+            if (
+                !(
+                    e instanceof Error &&
+                    (e as NodeJS.ErrnoException).code === "ENOENT"
+                )
+            ) {
                 throw e;
             }
         }

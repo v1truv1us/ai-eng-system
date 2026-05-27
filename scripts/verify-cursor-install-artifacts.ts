@@ -5,7 +5,7 @@
  * Usage: bun scripts/verify-cursor-install-artifacts.ts
  */
 
-import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 
 const ROOT = join(import.meta.dir, "..");
@@ -93,7 +93,9 @@ for (const plugin of PLUGINS) {
               })
             : {};
         if (coreJson.hooks !== "./hooks/cursor-hooks.json") {
-            errors.push("ai-eng-core: hooks path not ./hooks/cursor-hooks.json");
+            errors.push(
+                "ai-eng-core: hooks path not ./hooks/cursor-hooks.json",
+            );
         }
     }
 }

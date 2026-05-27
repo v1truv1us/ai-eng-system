@@ -182,7 +182,9 @@ export class ProgressiveSkillLoader {
             };
 
             // Cache the result
-            if (this.loadedCache.size >= ProgressiveSkillLoader.MAX_CACHE_SIZE) {
+            if (
+                this.loadedCache.size >= ProgressiveSkillLoader.MAX_CACHE_SIZE
+            ) {
                 const oldestKey = this.loadedCache.keys().next().value;
                 if (oldestKey !== undefined) {
                     this.loadedCache.delete(oldestKey);

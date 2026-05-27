@@ -7,8 +7,8 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { runCleaner } from "../../src/install/clean";
-import { readInstallManifest } from "../../src/install/manifest";
 import { runInstaller } from "../../src/install/install";
+import { readInstallManifest } from "../../src/install/manifest";
 import { listSkillTreeEntries } from "../../src/install/sync-skills";
 import {
     getAgentSkillsInstallDir,
@@ -26,11 +26,7 @@ const CURSOR_COMMANDS = [
 ];
 
 function assertCursorBundle(bundleRoot: string): void {
-    const manifestPath = path.join(
-        bundleRoot,
-        ".cursor-plugin",
-        "plugin.json",
-    );
+    const manifestPath = path.join(bundleRoot, ".cursor-plugin", "plugin.json");
     expect(fs.existsSync(manifestPath)).toBe(true);
 
     const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf-8")) as {
@@ -48,9 +44,9 @@ function assertCursorBundle(bundleRoot: string): void {
     expect(manifest.hooks).toBe("./hooks/cursor-hooks.json");
 
     for (const commandFile of CURSOR_COMMANDS) {
-        expect(fs.existsSync(path.join(bundleRoot, "commands", commandFile))).toBe(
-            true,
-        );
+        expect(
+            fs.existsSync(path.join(bundleRoot, "commands", commandFile)),
+        ).toBe(true);
     }
 
     expect(
@@ -78,8 +74,12 @@ describe("cursor install integration", () => {
     beforeEach(() => {
         previousCwd = process.cwd();
         previousHome = process.env.HOME;
-        projectDir = fs.mkdtempSync(path.join(os.tmpdir(), "ai-eng-cursor-proj-"));
-        fakeHome = fs.mkdtempSync(path.join(os.tmpdir(), "ai-eng-cursor-home-"));
+        projectDir = fs.mkdtempSync(
+            path.join(os.tmpdir(), "ai-eng-cursor-proj-"),
+        );
+        fakeHome = fs.mkdtempSync(
+            path.join(os.tmpdir(), "ai-eng-cursor-home-"),
+        );
         process.chdir(projectDir);
     });
 
@@ -103,7 +103,10 @@ describe("cursor install integration", () => {
 
         const bundleRoot = getInstallTargetDir("cursor", projectDir, "project");
         const agentSkillsDir = getAgentSkillsInstallDir("project", projectDir);
-        const sourceSkills = path.join(getToolkitHarnessSource("cursor"), "skills");
+        const sourceSkills = path.join(
+            getToolkitHarnessSource("cursor"),
+            "skills",
+        );
 
         assertCursorBundle(bundleRoot);
 
@@ -136,9 +139,7 @@ describe("cursor install integration", () => {
         const agentSkillsDir = getAgentSkillsInstallDir("global", projectDir);
 
         assertCursorBundle(bundleRoot);
-        expect(agentSkillsDir).toBe(
-            path.join(fakeHome, ".agents", "skills"),
-        );
+        expect(agentSkillsDir).toBe(path.join(fakeHome, ".agents", "skills"));
         expect(fs.existsSync(path.join(agentSkillsDir, "pstack"))).toBe(true);
 
         const manifest = readInstallManifest("global", projectDir);
@@ -146,12 +147,7 @@ describe("cursor install integration", () => {
             (item) => item.platform === "cursor" && item.scope === "global",
         );
         expect(entry?.bundlePath).toBe(
-            path.join(
-                ".cursor",
-                "plugins",
-                "local",
-                "ai-eng-system",
-            ),
+            path.join(".cursor", "plugins", "local", "ai-eng-system"),
         );
     });
 
@@ -177,18 +173,19 @@ describe("cursor install integration", () => {
         );
 
         expect(
-            fs.existsSync(
-                getInstallTargetDir("cursor", projectDir, "project"),
-            ),
+            fs.existsSync(getInstallTargetDir("cursor", projectDir, "project")),
         ).toBe(false);
         expect(
-            fs.existsSync(path.join(agentSkillsDir, "user-owned-skill", "SKILL.md")),
+            fs.existsSync(
+                path.join(agentSkillsDir, "user-owned-skill", "SKILL.md"),
+            ),
         ).toBe(true);
 
         const manifest = readInstallManifest("project", projectDir);
         expect(
             manifest.entries.some(
-                (item) => item.platform === "cursor" && item.scope === "project",
+                (item) =>
+                    item.platform === "cursor" && item.scope === "project",
             ),
         ).toBe(false);
     });

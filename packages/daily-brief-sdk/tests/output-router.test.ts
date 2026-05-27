@@ -12,7 +12,11 @@ function fixtureBrief(): TomorrowBrief {
         generatedAt: "2026-05-26T17:00:00.000Z",
         forDate: "2026-05-27",
         startFreshOn: [
-            { title: "RF-9421: auth", sourceToolCallId: "toolu_01", metrics: [] },
+            {
+                title: "RF-9421: auth",
+                sourceToolCallId: "toolu_01",
+                metrics: [],
+            },
         ],
         carryovers: [],
         skipOrNoise: [],

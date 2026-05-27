@@ -1,12 +1,13 @@
 #!/usr/bin/env bun
+
 /**
  * Import Cursor official plugins into canonical skills/ and content/agents/
  * with dedup merges. Source: tmp/cursor-import (clone of cursor/plugins).
  */
 
+import { spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
-import { spawnSync } from "node:child_process";
 import { basename, dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import YAML from "yaml";
@@ -85,7 +86,10 @@ type ParsedMarkdown = {
     body: string;
 };
 
-function parseFrontmatterDoc(content: string, filePath: string): ParsedMarkdown {
+function parseFrontmatterDoc(
+    content: string,
+    filePath: string,
+): ParsedMarkdown {
     const match = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
     if (!match) {
         throw new Error(`Missing frontmatter: ${filePath}`);
@@ -310,10 +314,7 @@ async function importSkillFile(
 
     if (existsSync(finalPath)) {
         const existing = await readFile(finalPath, "utf-8");
-        if (
-            existing.includes("cursor-import") &&
-            existing.includes(plugin)
-        ) {
+        if (existing.includes("cursor-import") && existing.includes(plugin)) {
             return { action: "skipped", name: parsed.name };
         }
     }
@@ -408,7 +409,9 @@ async function fetchPluginAgentFilesFromGitHub(
     plugin: string,
 ): Promise<string[]> {
     const apiUrl = `https://api.github.com/repos/cursor/plugins/contents/${plugin}/agents?ref=main`;
-    const response = await fetch(apiUrl, { signal: AbortSignal.timeout(30_000) });
+    const response = await fetch(apiUrl, {
+        signal: AbortSignal.timeout(30_000),
+    });
     if (!response.ok) return [];
 
     const entries = (await response.json()) as Array<{
@@ -468,7 +471,9 @@ async function fetchPluginSkillFilesFromGitHub(
     plugin: string,
 ): Promise<string[]> {
     const apiUrl = `https://api.github.com/repos/cursor/plugins/contents/${plugin}/skills?ref=main`;
-    const response = await fetch(apiUrl, { signal: AbortSignal.timeout(30_000) });
+    const response = await fetch(apiUrl, {
+        signal: AbortSignal.timeout(30_000),
+    });
     if (!response.ok) return [];
 
     const entries = (await response.json()) as Array<{

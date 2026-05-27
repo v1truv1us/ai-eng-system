@@ -2,11 +2,11 @@ import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import {
+    MCP_TOOL_PARSERS,
     McpContractError,
     parseAtlassianTicket,
     parseBitbucketCommit,
     parseGrafanaAlert,
-    MCP_TOOL_PARSERS,
 } from "../../src/shared/brief-mcp.js";
 
 const FIXTURE_DIR = join(import.meta.dirname, "fixtures");
@@ -85,9 +85,9 @@ describe("MCP contract tests", () => {
         });
 
         test("rejects raw missing the `state` field", () => {
-            expect(() =>
-                parseGrafanaAlert({ name: "x", folder: "y" }),
-            ).toThrow(McpContractError);
+            expect(() => parseGrafanaAlert({ name: "x", folder: "y" })).toThrow(
+                McpContractError,
+            );
         });
     });
 

@@ -23,8 +23,11 @@ const SECRETS_RULE =
     "Do NOT include credentials, API tokens, or anything matching SMTP_PASS/ATLASSIAN_API_TOKEN/BITBUCKET_API_TOKEN/GRAFANA_API_TOKEN substrings in any field of the output.";
 
 export function buildTomorrowPrompt(inputs: BasePromptInputs): string {
-    const sources = inputs.sources.length > 0 ? inputs.sources.join(", ") : "(none)";
-    const nudge = inputs.userNudge ? `\nUser guidance: ${inputs.userNudge}` : "";
+    const sources =
+        inputs.sources.length > 0 ? inputs.sources.join(", ") : "(none)";
+    const nudge = inputs.userNudge
+        ? `\nUser guidance: ${inputs.userNudge}`
+        : "";
     return [
         "You are the Tomorrow workflow of daily-brief-sdk.",
         `Build a brief for date ${inputs.forDate}.`,
@@ -46,8 +49,11 @@ export function buildTomorrowPrompt(inputs: BasePromptInputs): string {
 }
 
 export function buildMorningPrompt(inputs: BasePromptInputs): string {
-    const sources = inputs.sources.length > 0 ? inputs.sources.join(", ") : "(none)";
-    const nudge = inputs.userNudge ? `\nUser guidance: ${inputs.userNudge}` : "";
+    const sources =
+        inputs.sources.length > 0 ? inputs.sources.join(", ") : "(none)";
+    const nudge = inputs.userNudge
+        ? `\nUser guidance: ${inputs.userNudge}`
+        : "";
     return [
         "You are the Morning workflow of daily-brief-sdk.",
         `Build a brief for date ${inputs.forDate}.`,
@@ -66,8 +72,11 @@ export function buildMorningPrompt(inputs: BasePromptInputs): string {
 }
 
 export function buildWeekAheadPrompt(inputs: BasePromptInputs): string {
-    const sources = inputs.sources.length > 0 ? inputs.sources.join(", ") : "(none)";
-    const nudge = inputs.userNudge ? `\nUser guidance: ${inputs.userNudge}` : "";
+    const sources =
+        inputs.sources.length > 0 ? inputs.sources.join(", ") : "(none)";
+    const nudge = inputs.userNudge
+        ? `\nUser guidance: ${inputs.userNudge}`
+        : "";
     return [
         "You are the Week-Ahead workflow of daily-brief-sdk.",
         `Build a brief projecting the upcoming week starting ${inputs.forDate}.`,
@@ -86,7 +95,9 @@ export function buildWeekAheadPrompt(inputs: BasePromptInputs): string {
 }
 
 export function buildDreamDigestPrompt(inputs: BasePromptInputs): string {
-    const nudge = inputs.userNudge ? `\nUser guidance: ${inputs.userNudge}` : "";
+    const nudge = inputs.userNudge
+        ? `\nUser guidance: ${inputs.userNudge}`
+        : "";
     return [
         "You are the Dream-Digest workflow of daily-brief-sdk.",
         `Build a weekly digest for the week ending ${inputs.forDate}.`,
@@ -107,7 +118,10 @@ export function buildDreamDigestPrompt(inputs: BasePromptInputs): string {
     ].join("\n");
 }
 
-export const PROMPT_BUILDERS: Record<WorkflowName, (inputs: BasePromptInputs) => string> = {
+export const PROMPT_BUILDERS: Record<
+    WorkflowName,
+    (inputs: BasePromptInputs) => string
+> = {
     tomorrow: buildTomorrowPrompt,
     morning: buildMorningPrompt,
     "week-ahead": buildWeekAheadPrompt,

@@ -5,26 +5,23 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { OpenCodeContent } from "@ai-eng-system/core";
-import type { CleanFlags, InstallPlatform } from "./types";
 import {
     findManifestEntry,
+    type InstallManifestEntry,
     readInstallManifest,
     removeManifestEntry,
-    type InstallManifestEntry,
 } from "./manifest";
+import { listSkillTreeEntries, removeSkillTreeEntries } from "./sync-skills";
 import {
     getAgentSkillsInstallDir,
     getHarnessSkillsSourceDir,
     getInstallTargetDir,
-    resolveInstallBaseDir,
     type InstallScope,
+    resolveInstallBaseDir,
     type ToolkitHarness,
     usesSkillsOnlyInstall,
 } from "./toolkit-path";
-import {
-    listSkillTreeEntries,
-    removeSkillTreeEntries,
-} from "./sync-skills";
+import type { CleanFlags, InstallPlatform } from "./types";
 
 const NAMESPACE_PREFIX = "ai-eng";
 
@@ -157,11 +154,7 @@ function cleanGeminiManagedFiles(
         manifestEntry?.geminiCommandFiles ??
         listGeminiCommandFiles(sourceGeminiDir);
     for (const file of commandFiles) {
-        removeFile(
-            path.join(targetGeminiDir, "commands", file),
-            flags,
-            result,
-        );
+        removeFile(path.join(targetGeminiDir, "commands", file), flags, result);
     }
 
     const skillEntries =
@@ -315,7 +308,12 @@ export function cleanToolkitHarness(
                 ? manifestEntry.bundlePath
                 : path.join(baseDir, manifestEntry.bundlePath)
             : getInstallTargetDir(harness, baseDir, scope);
-        removePath(bundlePath, flags, result, path.relative(baseDir, bundlePath));
+        removePath(
+            bundlePath,
+            flags,
+            result,
+            path.relative(baseDir, bundlePath),
+        );
     }
 
     return result;
@@ -352,7 +350,9 @@ export async function runCleaner(
         );
 
         if (targetPlatform === "opencode") {
-            const { getDistOpenCodeContent } = await import("@ai-eng-system/core");
+            const { getDistOpenCodeContent } = await import(
+                "@ai-eng-system/core"
+            );
             const content = await getDistOpenCodeContent();
             const homeDir = process.env.HOME || process.env.USERPROFILE || "";
             const targetOpenCodeDir =
@@ -386,7 +386,9 @@ export async function runCleaner(
     if (flags.dryRun) {
         console.log("\n🔍 dry-run complete (no files changed).");
     } else if (totalRemoved === 0) {
-        console.log("\n✅ Nothing to clean (already removed or never installed).");
+        console.log(
+            "\n✅ Nothing to clean (already removed or never installed).",
+        );
     } else {
         console.log(`\n✅ Clean complete (${totalRemoved} path(s) removed).`);
     }

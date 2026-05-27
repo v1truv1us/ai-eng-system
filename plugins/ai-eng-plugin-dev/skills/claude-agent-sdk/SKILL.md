@@ -21,24 +21,9 @@ Start from the existing runner shape:
 
 ## Workflow adapter contract
 
-Every Claude runner should expose the same harness-neutral contract as the other SDK variants:
+Shared types: `agents/research-runner/shared/workflow-contract.ts` (`WorkflowInput`, `WorkflowResult`).
 
-```ts
-type WorkflowInput = {
-  goal: string;
-  cwd?: string;
-  templates?: string[];
-  maxIterations?: number;
-  statePath?: string;
-};
-
-type WorkflowResult = {
-  status: "success" | "blocked" | "failed";
-  summary: string;
-  artifacts: string[];
-  nextSteps?: string[];
-};
-```
+The reference **research-runner** uses CLI args today (`runner.ts "goal"`, `--templates`) and writes vault briefs; map to `WorkflowResult` when you add resume/state. Every Claude runner should align with the same harness-neutral contract as other SDK variants.
 
 ## Implementation rules
 

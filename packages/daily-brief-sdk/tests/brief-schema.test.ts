@@ -1,5 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import { TomorrowBriefSchema, BriefItemSchema } from "../src/shared/brief-schema.js";
+import {
+    BriefItemSchema,
+    TomorrowBriefSchema,
+} from "../src/shared/brief-schema.js";
 
 describe("brief-schema", () => {
     test("accepts a hand-crafted minimal valid brief", () => {
@@ -53,7 +56,12 @@ describe("brief-schema", () => {
         const item = {
             title: "x",
             sourceToolCallId: "toolu_x",
-            metrics: [{ value: 42 } as unknown as { value: number; sourceToolCallId: string }],
+            metrics: [
+                { value: 42 } as unknown as {
+                    value: number;
+                    sourceToolCallId: string;
+                },
+            ],
         };
         const result = BriefItemSchema.safeParse(item);
         expect(result.success).toBe(false);

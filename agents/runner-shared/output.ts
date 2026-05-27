@@ -12,16 +12,19 @@ import { dirname, join } from "node:path";
  * or a package.json. Returns process.cwd() as fallback.
  */
 export function findRepoRoot(startDir: string): string {
-  let dir = startDir;
-  for (let i = 0; i < 8; i++) {
-    if (existsSync(join(dir, ".git")) || existsSync(join(dir, "package.json"))) {
-      return dir;
+    let dir = startDir;
+    for (let i = 0; i < 8; i++) {
+        if (
+            existsSync(join(dir, ".git")) ||
+            existsSync(join(dir, "package.json"))
+        ) {
+            return dir;
+        }
+        const parent = dirname(dir);
+        if (parent === dir) break;
+        dir = parent;
     }
-    const parent = dirname(dir);
-    if (parent === dir) break;
-    dir = parent;
-  }
-  return process.cwd();
+    return process.cwd();
 }
 
 /**
@@ -34,24 +37,28 @@ export function findRepoRoot(startDir: string): string {
  * @returns Path to the written file
  */
 export function writeReport(
-  url: string,
-  report: string,
-  runtime: string,
-  prefix: string,
+    url: string,
+    report: string,
+    runtime: string,
+    prefix: string,
 ): string {
-  const repoRoot = findRepoRoot(process.cwd());
-  const reportsDir = join(repoRoot, ".ai-eng", "reports");
-  mkdirSync(reportsDir, { recursive: true });
+    const repoRoot = findRepoRoot(process.cwd());
+    const reportsDir = join(repoRoot, ".ai-eng", "reports");
+    mkdirSync(reportsDir, { recursive: true });
 
-  const safeHost = url
-    .replace(/^https?:\/\//, "")
-    .replace(/[^a-zA-Z0-9.-]+/g, "-")
-    .replace(/^-|-$/g, "");
-  const date = new Date().toISOString().slice(0, 10);
-  const reportPath = join(
-    reportsDir,
-    `${prefix}-${safeHost || "site"}-${date}-${runtime}.md`,
-  );
-  writeFileSync(reportPath, `# ${prefix}: ${url} (${runtime})\n\n${report}\n`, "utf8");
-  return reportPath;
+    const safeHost = url
+        .replace(/^https?:\/\//, "")
+        .replace(/[^a-zA-Z0-9.-]+/g, "-")
+        .replace(/^-|-$/g, "");
+    const date = new Date().toISOString().slice(0, 10);
+    const reportPath = join(
+        reportsDir,
+        `${prefix}-${safeHost || "site"}-${date}-${runtime}.md`,
+    );
+    writeFileSync(
+        reportPath,
+        `# ${prefix}: ${url} (${runtime})\n\n${report}\n`,
+        "utf8",
+    );
+    return reportPath;
 }

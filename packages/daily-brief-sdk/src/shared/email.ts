@@ -29,8 +29,15 @@ export interface SmtpConfig {
  * Read SMTP config from process.env. Throws if required keys are missing
  * — explicit failure beats silent fall-through.
  */
-export function readSmtpConfigFromEnv(env: NodeJS.ProcessEnv = process.env): SmtpConfig {
-    const required = ["SMTP_HOST", "SMTP_USER", "SMTP_PASS", "BRIEF_TO"] as const;
+export function readSmtpConfigFromEnv(
+    env: NodeJS.ProcessEnv = process.env,
+): SmtpConfig {
+    const required = [
+        "SMTP_HOST",
+        "SMTP_USER",
+        "SMTP_PASS",
+        "BRIEF_TO",
+    ] as const;
     const missing = required.filter((k) => !env[k]);
     if (missing.length > 0) {
         throw new Error(
@@ -60,7 +67,9 @@ export async function makeNodemailerTransport(
             sendMail: (msg: unknown) => Promise<unknown>;
         };
     };
-    const nodemailer = (await import("nodemailer")) as unknown as NodemailerModule;
+    const nodemailer = (await import(
+        "nodemailer"
+    )) as unknown as NodemailerModule;
     const transport = nodemailer.createTransport({
         host: config.host,
         port: config.port,

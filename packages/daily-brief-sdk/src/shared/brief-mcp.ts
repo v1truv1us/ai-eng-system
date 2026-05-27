@@ -73,24 +73,19 @@ function requireFields<T>(
 }
 
 export function parseAtlassianTicket(raw: unknown): AtlassianTicketResult {
-    return requireFields<AtlassianTicketResult>(raw, "atlassian.searchTickets", [
-        "key",
-        "summary",
-        "status",
-        "updated",
-        "url",
-    ]);
+    return requireFields<AtlassianTicketResult>(
+        raw,
+        "atlassian.searchTickets",
+        ["key", "summary", "status", "updated", "url"],
+    );
 }
 
 export function parseBitbucketCommit(raw: unknown): BitbucketCommitResult {
-    return requireFields<BitbucketCommitResult>(raw, "bitbucket.recentCommits", [
-        "sha",
-        "short",
-        "author",
-        "date",
-        "subject",
-        "repo",
-    ]);
+    return requireFields<BitbucketCommitResult>(
+        raw,
+        "bitbucket.recentCommits",
+        ["sha", "short", "author", "date", "subject", "repo"],
+    );
 }
 
 export function parseGrafanaAlert(raw: unknown): GrafanaAlertResult {

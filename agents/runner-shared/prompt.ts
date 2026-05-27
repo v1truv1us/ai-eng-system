@@ -10,26 +10,26 @@
  * agent instruction.
  */
 export function formatPrompt(
-  systemPrompt: string,
-  templateText: string,
-  query: string,
-  agentInstruction?: string,
+    systemPrompt: string,
+    templateText: string,
+    query: string,
+    agentInstruction?: string,
 ): string {
-  const agentPart = agentInstruction
-    ? `\n\nAgent instruction: ${agentInstruction}`
-    : "";
-  return `${systemPrompt}${agentPart}\n\n${templateText}\n\nQuery context: ${query}`;
+    const agentPart = agentInstruction
+        ? `\n\nAgent instruction: ${agentInstruction}`
+        : "";
+    return `${systemPrompt}${agentPart}\n\n${templateText}\n\nQuery context: ${query}`;
 }
 
 /**
  * Build a single-shot prompt (no template) for workflows like seo-review.
  */
 export function formatSinglePrompt(
-  basePrompt: string,
-  agentInstruction?: string,
+    basePrompt: string,
+    agentInstruction?: string,
 ): string {
-  const agentPart = agentInstruction
-    ? `\n\nAgent instruction: ${agentInstruction}`
-    : "";
-  return `${basePrompt}${agentPart}`;
+    const agentPart = agentInstruction
+        ? `\n\nAgent instruction: ${agentInstruction}`
+        : "";
+    return `${basePrompt}${agentPart}`;
 }

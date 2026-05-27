@@ -10,10 +10,7 @@
 
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import {
-    formatSkillsDirectory,
-    hasFormatErrors,
-} from "./lib/agent-skills.ts";
+import { formatSkillsDirectory, hasFormatErrors } from "./lib/agent-skills.ts";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SKILLS_DIR = join(ROOT, "skills");
@@ -48,10 +45,14 @@ async function main(): Promise<void> {
 
             console.log(`\n${result.skillFile}`);
             if (result.changed) {
-                console.log(`  ${fix ? "updated" : "would update"} frontmatter/body framing`);
+                console.log(
+                    `  ${fix ? "updated" : "would update"} frontmatter/body framing`,
+                );
             }
             for (const issue of notable) {
-                console.log(`  [${issue.level}] ${issue.code}: ${issue.message}`);
+                console.log(
+                    `  [${issue.level}] ${issue.code}: ${issue.message}`,
+                );
             }
         }
     }

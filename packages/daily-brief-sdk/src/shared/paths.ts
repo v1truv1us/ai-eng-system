@@ -24,7 +24,11 @@ export const COOKING_DIR = join(HOME, ".claude", "cooking");
 
 export const MEMORY_GLOB = join(HOME, ".claude", "projects", "*", "memory");
 
-export type WorkflowName = "tomorrow" | "morning" | "week-ahead" | "dream-digest";
+export type WorkflowName =
+    | "tomorrow"
+    | "morning"
+    | "week-ahead"
+    | "dream-digest";
 
 export function briefHtmlPath(workflow: WorkflowName, date: string): string {
     return join(BRIEFS_OUTPUT_DIR, `${workflow}-${date}.html`);

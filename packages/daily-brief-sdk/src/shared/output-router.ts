@@ -3,16 +3,16 @@
  * Pure function over fs + email transport seams; no MCP, no Jira here.
  */
 
-import { mkdirSync, existsSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
+import { renderTomorrowBrief } from "../templates/brief.html.js";
+import type { TomorrowBrief } from "./brief-schema.js";
+import type { EmailTransport } from "./email.js";
 import {
     BRIEFS_OUTPUT_DIR,
     briefHtmlPath,
     type WorkflowName,
 } from "./paths.js";
-import type { TomorrowBrief } from "./brief-schema.js";
-import { renderTomorrowBrief } from "../templates/brief.html.js";
-import type { EmailTransport } from "./email.js";
 
 export interface OutputResult {
     htmlPath: string;

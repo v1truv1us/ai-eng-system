@@ -8,7 +8,10 @@ describe("ProvenanceValidator", () => {
     test("captures tool_use ids from a typical SDK message stream", () => {
         const validator = new ProvenanceValidator();
         const stream = [
-            { type: "assistant", content: [{ type: "tool_use", id: "toolu_01" }] },
+            {
+                type: "assistant",
+                content: [{ type: "tool_use", id: "toolu_01" }],
+            },
             {
                 type: "assistant",
                 content: [
@@ -16,7 +19,10 @@ describe("ProvenanceValidator", () => {
                     { type: "tool_use", id: "toolu_02", name: "search" },
                 ],
             },
-            { type: "user", content: [{ type: "tool_result", tool_use_id: "toolu_01" }] },
+            {
+                type: "user",
+                content: [{ type: "tool_result", tool_use_id: "toolu_01" }],
+            },
         ];
         for (const msg of stream) validator.observe(msg);
         expect(validator.observedCount).toBe(2);
@@ -116,7 +122,9 @@ describe("ProvenanceValidator", () => {
         const brief = {
             startFreshOn: [{ title: "x", sourceToolCallId: "toolu_unseen" }],
         };
-        expect(() => validator.assertProvenance(brief)).toThrow(ProvenanceError);
+        expect(() => validator.assertProvenance(brief)).toThrow(
+            ProvenanceError,
+        );
     });
 
     test("accepts a brief with no sourceToolCallId fields at all", () => {

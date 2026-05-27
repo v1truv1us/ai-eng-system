@@ -5,17 +5,17 @@
 import { describe, expect, it } from "bun:test";
 import fs from "node:fs";
 import os from "node:os";
-import { parseArgs } from "node:util";
 import path from "node:path";
+import { parseArgs } from "node:util";
+import { syncSkillsTree } from "../../src/install/sync-skills";
 import {
     getAgentSkillsInstallDir,
-    getInstallTargetDir,
     getHomeDirectory,
+    getInstallTargetDir,
     resolveInstallBaseDir,
     resolveToolkitRoot,
     usesSkillsOnlyInstall,
 } from "../../src/install/toolkit-path";
-import { syncSkillsTree } from "../../src/install/sync-skills";
 
 describe("install platform flags", () => {
     it("should parse --platform cursor", () => {
@@ -42,13 +42,7 @@ describe("install platform flags", () => {
         const home = "/Users/tester";
         const target = getInstallTargetDir("cursor", home, "global");
         expect(target).toBe(
-            path.join(
-                home,
-                ".cursor",
-                "plugins",
-                "local",
-                "ai-eng-system",
-            ),
+            path.join(home, ".cursor", "plugins", "local", "ai-eng-system"),
         );
     });
 

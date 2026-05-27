@@ -47,20 +47,33 @@ function renderSources(sources: Record<string, SourceStatus>): string {
 
 function section(label: string, body: string, count?: number): string {
     const open = count !== undefined && count > 0 ? " open" : "";
-    const heading = count !== undefined ? `${escapeHtml(label)} (${count})` : escapeHtml(label);
+    const heading =
+        count !== undefined
+            ? `${escapeHtml(label)} (${count})`
+            : escapeHtml(label);
     return `<details${open}><summary>${heading}</summary>${body}</details>`;
 }
 
 function listOr(items: string[], emptyMessage: string): string {
-    if (items.length === 0) return `<p class="empty">${escapeHtml(emptyMessage)}</p>`;
+    if (items.length === 0)
+        return `<p class="empty">${escapeHtml(emptyMessage)}</p>`;
     return `<ul>${items.join("")}</ul>`;
 }
 
 export function renderTomorrowBrief(brief: TomorrowBrief): string {
-    const startBody = listOr(brief.startFreshOn.map(renderItem), "no fresh starts");
+    const startBody = listOr(
+        brief.startFreshOn.map(renderItem),
+        "no fresh starts",
+    );
     const carryBody = listOr(brief.carryovers.map(renderItem), "no carryovers");
-    const skipBody = listOr(brief.skipOrNoise.map(renderItem), "nothing to skip");
-    const calBody = listOr(brief.calendar.map(renderEvent), "no calendar configured");
+    const skipBody = listOr(
+        brief.skipOrNoise.map(renderItem),
+        "nothing to skip",
+    );
+    const calBody = listOr(
+        brief.calendar.map(renderEvent),
+        "no calendar configured",
+    );
     const riskBody = listOr(brief.risks.map(renderRisk), "no risks flagged");
     const sourcesBody = `<ul class="sources">${renderSources(brief.sources)}</ul>`;
 

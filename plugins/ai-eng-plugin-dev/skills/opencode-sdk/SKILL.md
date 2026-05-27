@@ -18,25 +18,9 @@ Use this skill when implementing a local OpenCode workflow runner. OpenCode is b
 
 ## Workflow adapter contract
 
-Expose the same shape as other harnesses:
+Shared types: `agents/research-runner/shared/workflow-contract.ts` (`WorkflowInput`, `WorkflowResult`).
 
-```ts
-type WorkflowInput = {
-  goal: string;
-  cwd: string;
-  model?: string;
-  maxIterations?: number;
-  gates?: string[];
-  statePath?: string;
-};
-
-type WorkflowResult = {
-  status: "success" | "blocked" | "failed";
-  summary: string;
-  artifacts: string[];
-  verification?: string[];
-};
-```
+The reference **research-runner** uses CLI args today; `packages/cli/src/execution/ralph-loop.ts` is the richer loop runner. New OpenCode workflows should use the shared contract for status, artifacts, and resume.
 
 ## Implementation rules
 

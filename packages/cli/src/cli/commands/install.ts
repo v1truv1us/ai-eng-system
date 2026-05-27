@@ -3,8 +3,8 @@
  */
 
 import { parseArgs } from "node:util";
-import type { InstallFlags } from "../../install/types";
 import { runInstaller } from "../../install/install";
+import type { InstallFlags } from "../../install/types";
 import type { Subcommand } from "./types";
 
 const INSTALL_HELP_TEXT = `

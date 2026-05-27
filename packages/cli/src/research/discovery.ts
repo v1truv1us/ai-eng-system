@@ -164,7 +164,9 @@ export class CodebaseLocator implements DiscoveryAgent {
                     if (this.meetsConstraints(fileRef, constraints)) {
                         allFiles.push(fileRef);
                     }
-                } catch (error) { /* non-critical, skip */ }
+                } catch (error) {
+                    /* non-critical, skip */
+                }
             }
         }
 
@@ -409,7 +411,9 @@ export class ResearchLocator implements DiscoveryAgent {
                     if (this.meetsDocConstraints(docRef, constraints)) {
                         allDocs.push(docRef);
                     }
-                } catch (error) { /* non-critical, skip */ }
+                } catch (error) {
+                    /* non-critical, skip */
+                }
             }
         }
 
@@ -669,7 +673,9 @@ export class PatternFinder implements DiscoveryAgent {
                         };
                         patternFiles.push(fileRef);
                     }
-                } catch (error) { /* non-critical, skip */ }
+                } catch (error) {
+                    /* non-critical, skip */
+                }
             }
 
             if (patternFiles.length > 0) {

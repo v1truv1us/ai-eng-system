@@ -8,38 +8,42 @@
  */
 
 import { createDriver } from "../../runner-shared/drivers/index.js";
+import { writeReport } from "../../runner-shared/output.js";
 import { parseArgs } from "../../runner-shared/parse.js";
 import { buildSeoPrompt } from "../../runner-shared/seo-prompt.js";
-import { writeReport } from "../../runner-shared/output.js";
 
 async function main(): Promise<void> {
-  const { positionals, flags } = parseArgs(process.argv.slice(2), ["--agent"]);
+    const { positionals, flags } = parseArgs(process.argv.slice(2), [
+        "--agent",
+    ]);
 
-  const url = positionals.join(" ").trim();
-  if (!url) {
-    console.error('Usage: npx tsx runner.ts [--agent technical-seo] "https://example.com"');
-    process.exit(1);
-  }
+    const url = positionals.join(" ").trim();
+    if (!url) {
+        console.error(
+            'Usage: npx tsx runner.ts [--agent technical-seo] "https://example.com"',
+        );
+        process.exit(1);
+    }
 
-  const agent = (flags["--agent"] as string | undefined) ??
-    process.env.AI_ENG_AGENT?.trim() ||
-    undefined;
+    const agent =
+        (flags["--agent"] as string | undefined) ??
+        (process.env.AI_ENG_AGENT?.trim() || undefined);
 
-  const prompt = buildSeoPrompt(url, agent);
-  console.error(`Running SEO review via Cursor driver for ${url}…`);
+    const prompt = buildSeoPrompt(url, agent);
+    console.error(`Running SEO review via Cursor driver for ${url}…`);
 
-  const driver = await createDriver("cursor");
-  try {
-    const report = await driver.runPrompt(prompt);
-    const reportPath = writeReport(url, report, "cursor", "seo-review");
-    console.error(`SEO review written to: ${reportPath}`);
-    console.log(report);
-  } finally {
-    await driver.close?.();
-  }
+    const driver = await createDriver("cursor");
+    try {
+        const report = await driver.runPrompt(prompt);
+        const reportPath = writeReport(url, report, "cursor", "seo-review");
+        console.error(`SEO review written to: ${reportPath}`);
+        console.log(report);
+    } finally {
+        await driver.close?.();
+    }
 }
 
 main().catch((err) => {
-  console.error(err instanceof Error ? err.message : err);
-  process.exit(1);
+    console.error(err instanceof Error ? err.message : err);
+    process.exit(1);
 });

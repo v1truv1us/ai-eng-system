@@ -3,6 +3,7 @@
  * @see https://agentskills.io/specification
  */
 
+import type { Dirent } from "node:fs";
 import { readdir, readFile, writeFile } from "node:fs/promises";
 import { basename, dirname, join } from "node:path";
 import YAML from "yaml";
@@ -351,7 +352,8 @@ export function formatSkillContent(
         issues.push({
             level: "error",
             code: "missing-frontmatter",
-            message: "SKILL.md must start with YAML frontmatter delimited by ---",
+            message:
+                "SKILL.md must start with YAML frontmatter delimited by ---",
         });
         return {
             skillFile,
@@ -375,7 +377,7 @@ export function formatSkillContent(
 
 export async function findSkillFiles(dir: string): Promise<string[]> {
     const out: string[] = [];
-    let entries;
+    let entries: Dirent[];
     try {
         entries = await readdir(dir, { withFileTypes: true });
     } catch {

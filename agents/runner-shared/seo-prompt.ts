@@ -3,8 +3,8 @@
  */
 
 export function buildSeoPrompt(url: string, agent?: string): string {
-  const agentPrompt = agent ? `\n\nAgent instruction: ${agent}` : "";
-  return `You are running an SEO review workflow for ${url}.${agentPrompt}
+    const agentPrompt = agent ? `\n\nAgent instruction: ${agent}` : "";
+    return `You are running an SEO review workflow for ${url}.${agentPrompt}
 
 Review the URL for:
 - Lighthouse-style SEO, performance, accessibility, and best-practices risks
