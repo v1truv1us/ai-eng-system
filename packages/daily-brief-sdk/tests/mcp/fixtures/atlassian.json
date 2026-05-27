@@ -1,0 +1,21 @@
+{
+    "tool": "atlassian.searchTickets",
+    "results": [
+        {
+            "key": "RF-9421",
+            "summary": "Investigate auth flow regression after token refresh",
+            "status": "In Progress",
+            "assignee": "j.ferguson",
+            "updated": "2026-05-26T16:32:11.000Z",
+            "url": "https://rainfocus.atlassian.net/browse/RF-9421"
+        },
+        {
+            "key": "RF-8210",
+            "summary": "Reduce p95 latency on /api/sessions",
+            "status": "Open",
+            "assignee": null,
+            "updated": "2026-05-25T10:14:00.000Z",
+            "url": "https://rainfocus.atlassian.net/browse/RF-8210"
+        }
+    ]
+}

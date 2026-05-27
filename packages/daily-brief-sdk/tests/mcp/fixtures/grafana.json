@@ -1,0 +1,17 @@
+{
+    "tool": "grafana.alerts",
+    "results": [
+        {
+            "name": "API p95 latency > 500ms",
+            "state": "ok",
+            "folder": "platform-api",
+            "summary": "p95 currently at 220ms"
+        },
+        {
+            "name": "Error rate > 1%",
+            "state": "alerting",
+            "folder": "platform-api",
+            "summary": "Currently 1.4% over the last 5m"
+        }
+    ]
+}

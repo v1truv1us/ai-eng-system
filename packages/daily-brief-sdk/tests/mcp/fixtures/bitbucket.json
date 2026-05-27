@@ -1,0 +1,21 @@
+{
+    "tool": "bitbucket.recentCommits",
+    "results": [
+        {
+            "sha": "abc123def4567890",
+            "short": "abc123d",
+            "author": "j.ferguson",
+            "date": "2026-05-26T15:00:00-07:00",
+            "subject": "fix(auth): handle token refresh edge case",
+            "repo": "rainfocus/platform-api"
+        },
+        {
+            "sha": "def456abc7890123",
+            "short": "def456a",
+            "author": "a.colleague",
+            "date": "2026-05-26T14:22:00-07:00",
+            "subject": "chore: bump zod 3.22 -> 3.23",
+            "repo": "rainfocus/platform-api"
+        }
+    ]
+}
