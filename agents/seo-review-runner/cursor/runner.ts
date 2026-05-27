@@ -5,60 +5,37 @@
  * Usage:
  *   npx tsx runner.ts "https://example.com"
  *   npx tsx runner.ts --agent technical-seo "https://example.com"
- *
- * Requires CURSOR_API_KEY set in the environment (from cursor.com/dashboard).
  */
 
-import "dotenv/config";
-import { Agent } from "@cursor/sdk";
-import { buildPrompt, parseArgs, writeReport } from "../shared/prompt.ts";
+import { createDriver } from "../../runner-shared/drivers/index.js";
+import { parseArgs } from "../../runner-shared/parse.js";
+import { buildSeoPrompt } from "../../runner-shared/seo-prompt.js";
+import { writeReport } from "../../runner-shared/output.js";
 
 async function main(): Promise<void> {
-  const apiKey = process.env.CURSOR_API_KEY?.trim();
-  if (!apiKey) {
-    console.error(
-      "Error: CURSOR_API_KEY is not set.\n" +
-        "Add it to agents/seo-review-runner/cursor/.env:\n" +
-        "  CURSOR_API_KEY=your-key-from-cursor.com/dashboard",
-    );
-    process.exit(1);
-  }
+  const { positionals, flags } = parseArgs(process.argv.slice(2), ["--agent"]);
 
-  const { url, agent: agentInstruction } = parseArgs();
+  const url = positionals.join(" ").trim();
   if (!url) {
     console.error('Usage: npx tsx runner.ts [--agent technical-seo] "https://example.com"');
     process.exit(1);
   }
 
-  const prompt = buildPrompt(url, agentInstruction);
-  console.error(`Running SEO review via Cursor SDK for ${url}…`);
+  const agent = (flags["--agent"] as string | undefined) ??
+    process.env.AI_ENG_AGENT?.trim() ||
+    undefined;
 
-  const agent = await Agent.create({
-    apiKey,
-    model: { id: "composer-2" },
-    local: { cwd: process.cwd() },
-  });
+  const prompt = buildSeoPrompt(url, agent);
+  console.error(`Running SEO review via Cursor driver for ${url}…`);
 
+  const driver = await createDriver("cursor");
   try {
-    const agentRun = await agent.send(prompt);
-    let report = "";
-
-    for await (const event of agentRun.stream()) {
-      const e = event as unknown as Record<string, unknown>;
-      if (typeof e["text"] === "string") {
-        report += e["text"];
-      } else if (e["type"] === "text" && typeof e["content"] === "string") {
-        report += e["content"];
-      } else if (typeof e["delta"] === "string") {
-        report += e["delta"];
-      }
-    }
-
-    const reportPath = writeReport(url, report.trim() || "(no report)", "cursor");
+    const report = await driver.runPrompt(prompt);
+    const reportPath = writeReport(url, report, "cursor", "seo-review");
     console.error(`SEO review written to: ${reportPath}`);
     console.log(report);
   } finally {
-    await agent[Symbol.asyncDispose]();
+    await driver.close?.();
   }
 }
 

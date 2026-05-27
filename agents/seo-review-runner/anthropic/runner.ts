@@ -5,36 +5,38 @@
  * Usage:
  *   npx tsx runner.ts "https://example.com"
  *   npx tsx runner.ts --agent technical-seo "https://example.com"
- *
- * Requires ANTHROPIC_API_KEY set in the environment.
  */
 
-import { query } from "@anthropic-ai/claude-agent-sdk";
-import { buildPrompt, parseArgs, writeReport } from "../shared/prompt.ts";
+import { createDriver } from "../../runner-shared/drivers/index.js";
+import { parseArgs } from "../../runner-shared/parse.js";
+import { buildSeoPrompt } from "../../runner-shared/seo-prompt.js";
+import { writeReport } from "../../runner-shared/output.js";
 
 async function main(): Promise<void> {
-  const { url, agent } = parseArgs();
+  const { positionals, flags } = parseArgs(process.argv.slice(2), ["--agent"]);
+
+  const url = positionals.join(" ").trim();
   if (!url) {
     console.error('Usage: npx tsx runner.ts [--agent technical-seo] "https://example.com"');
     process.exit(1);
   }
 
-  const prompt = buildPrompt(url, agent);
-  console.error(`Running SEO review via Claude Agent SDK for ${url}…`);
+  const agent = (flags["--agent"] as string | undefined) ??
+    process.env.AI_ENG_AGENT?.trim() ||
+    undefined;
 
-  let report = "(no text response)";
-  for await (const message of query({
-    prompt,
-    options: { allowedTools: [] },
-  })) {
-    if ("result" in message && typeof message.result === "string") {
-      report = message.result;
-    }
+  const prompt = buildSeoPrompt(url, agent);
+  console.error(`Running SEO review via Anthropic driver for ${url}…`);
+
+  const driver = await createDriver("anthropic");
+  try {
+    const report = await driver.runPrompt(prompt);
+    const reportPath = writeReport(url, report, "anthropic", "seo-review");
+    console.error(`SEO review written to: ${reportPath}`);
+    console.log(report);
+  } finally {
+    await driver.close?.();
   }
-
-  const reportPath = writeReport(url, report.trim() || "(no report)", "anthropic");
-  console.error(`SEO review written to: ${reportPath}`);
-  console.log(report);
 }
 
 main().catch((err) => {
