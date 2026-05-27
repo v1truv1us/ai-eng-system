@@ -1662,34 +1662,34 @@ async function syncToMarketplacePlugins(): Promise<void> {
                 }
                 await copyCookingHookScripts(pluginHooksDir);
 
+                // Schema per https://code.claude.com/docs/en/hooks:
+                //   { "hooks": { <EventName>: [...] } }
+                // Stop and SessionStart do not support `matcher` (silently ignored).
                 const hooksJson = {
-                    hooks: [
-                        {
-                            matcher: {
-                                event: "notification",
-                                type: "session_start",
+                    hooks: {
+                        SessionStart: [
+                            {
+                                hooks: [
+                                    {
+                                        type: "command",
+                                        command:
+                                            "echo '🔧 AI Engineering System loaded. Key commands: /plan, /work, /review, /research'",
+                                    },
+                                ],
                             },
-                            hooks: [
-                                {
-                                    type: "command",
-                                    command:
-                                        "echo '🔧 AI Engineering System loaded. Key commands: /plan, /work, /review, /research'",
-                                },
-                            ],
-                        },
-                    ],
-                    Stop: [
-                        {
-                            matcher: "*",
-                            hooks: [
-                                {
-                                    type: "command",
-                                    command:
-                                        "$CLAUDE_PLUGIN_DIR/hooks/cooking-stop-hook.sh",
-                                },
-                            ],
-                        },
-                    ],
+                        ],
+                        Stop: [
+                            {
+                                hooks: [
+                                    {
+                                        type: "command",
+                                        command:
+                                            "$CLAUDE_PLUGIN_DIR/hooks/cooking-stop-hook.sh",
+                                    },
+                                ],
+                            },
+                        ],
+                    },
                 };
                 await writeFile(
                     join(pluginDir, "hooks.json"),
@@ -1706,23 +1706,27 @@ async function syncToMarketplacePlugins(): Promise<void> {
                 // the gap.
                 await copyBranchGuardHookScripts(pluginHooksDir);
 
-                const hooksJson = {
-                    PreToolUse: [
-                        {
-                            matcher: "Bash",
-                            hooks: [
-                                {
-                                    type: "command",
-                                    command:
-                                        "$CLAUDE_PLUGIN_DIR/hooks/cooking-branch-guard.sh",
-                                },
-                            ],
-                        },
-                    ],
+                // Schema per https://code.claude.com/docs/en/hooks:
+                //   { "hooks": { PreToolUse: [{ matcher: "Bash", hooks: [...] }] } }
+                const devopsHooksJson = {
+                    hooks: {
+                        PreToolUse: [
+                            {
+                                matcher: "Bash",
+                                hooks: [
+                                    {
+                                        type: "command",
+                                        command:
+                                            "$CLAUDE_PLUGIN_DIR/hooks/cooking-branch-guard.sh",
+                                    },
+                                ],
+                            },
+                        ],
+                    },
                 };
                 await writeFile(
                     join(pluginDir, "hooks.json"),
-                    JSON.stringify(hooksJson, null, 2),
+                    JSON.stringify(devopsHooksJson, null, 2),
                 );
             }
         }

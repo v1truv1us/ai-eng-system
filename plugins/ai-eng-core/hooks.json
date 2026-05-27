@@ -1,27 +1,24 @@
 {
-  "hooks": [
-    {
-      "matcher": {
-        "event": "notification",
-        "type": "session_start"
-      },
-      "hooks": [
-        {
-          "type": "command",
-          "command": "echo '🔧 AI Engineering System loaded. Key commands: /plan, /work, /review, /research'"
-        }
-      ]
-    }
-  ],
-  "Stop": [
-    {
-      "matcher": "*",
-      "hooks": [
-        {
-          "type": "command",
-          "command": "$CLAUDE_PLUGIN_DIR/hooks/cooking-stop-hook.sh"
-        }
-      ]
-    }
-  ]
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '🔧 AI Engineering System loaded. Key commands: /plan, /work, /review, /research'"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PLUGIN_DIR/hooks/cooking-stop-hook.sh"
+          }
+        ]
+      }
+    ]
+  }
 }
