@@ -1,6 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
-import { homedir } from "node:os";
 import { join } from "node:path";
 import { spawn } from "node:child_process";
 
@@ -10,12 +9,14 @@ export interface TemplateResult {
   text: string;
 }
 
-const VAULT_PATH =
-  process.env.VAULT_PATH ??
-  join(
-    homedir(),
-    "Library/CloudStorage/ProtonDrive-john.ferguson@unfergettabledesigns.com-folder/Obsidian",
+function getVaultPath(): string {
+  const envPath = process.env.VAULT_PATH?.trim();
+  if (envPath) return envPath;
+  throw new Error(
+    "VAULT_PATH is not set. Set it to your Obsidian vault directory, " +
+      "e.g. export VAULT_PATH=~/Documents/Obsidian",
   );
+}
 
 function callClaudeCli(prompt: string): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -73,7 +74,8 @@ export function writeBrief(
   synthesis?: string,
 ): string {
   const date = todayISO();
-  const briefPath = join(VAULT_PATH, "wiki/briefs", `${date}.md`);
+  const vaultPath = getVaultPath();
+  const briefPath = join(vaultPath, "wiki/briefs", `${date}.md`);
 
   const sections = results
     .map((r) => `## ${r.id} — ${r.name}\n\n${r.text}`)

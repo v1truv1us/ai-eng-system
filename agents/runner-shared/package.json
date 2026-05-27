@@ -1,0 +1,18 @@
+{
+  "name": "@ai-eng-system/runner-shared",
+  "version": "0.1.0",
+  "description": "Shared drivers and utilities for ai-eng-system workflow runners",
+  "type": "module",
+  "private": true,
+  "exports": {
+    "./drivers": "./drivers/index.ts",
+    "./drivers/types": "./drivers/types.ts",
+    "./parse": "./parse.ts",
+    "./prompt": "./prompt.ts",
+    "./output": "./output.ts"
+  },
+  "scripts": {
+    "test": "bun test"
+  },
+  "license": "MIT"
+}

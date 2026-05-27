@@ -1,17 +1,15 @@
 /**
  * Pi coding-agent research runner.
  *
- * Spawns one `pi` process per query template in parallel (print mode, --mode json),
- * collects results, then writes a brief to the vault.
- *
- * Requires: `pi` CLI installed and on PATH (https://github.com/badlogic/lemmy)
- *
  * Usage:
  *   npx tsx runner.ts "your research question"
  *   npx tsx runner.ts --templates A1,M2 "targeted question"
  */
 
-import { spawn } from "node:child_process";
+import { createDriver } from "../../runner-shared/drivers/index.js";
+import { parseArgs } from "../../runner-shared/parse.js";
+import { formatPrompt } from "../../runner-shared/prompt.js";
+import { mapLimit } from "../../runner-shared/pool.js";
 import { loadTemplates, type QueryTemplate } from "../shared/templates.ts";
 import {
   synthesize,
@@ -19,85 +17,25 @@ import {
   type TemplateResult,
 } from "../shared/output.ts";
 
-function runPi(prompt: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    let stdout = "";
-    let stderr = "";
-
-    const child = spawn("pi", ["-p", prompt, "--mode", "json"], {
-      stdio: ["ignore", "pipe", "pipe"],
-    });
-
-    child.stdout.on("data", (chunk: Buffer) => {
-      stdout += chunk.toString();
-    });
-    child.stderr.on("data", (chunk: Buffer) => {
-      stderr += chunk.toString();
-    });
-    child.on("error", reject);
-    child.on("close", (code) => {
-      if (code === 0) {
-        resolve(stdout.trim());
-      } else {
-        reject(
-          new Error(
-            `pi exited with code ${code}${stderr ? `\nstderr: ${stderr.trim()}` : ""}`,
-          ),
-        );
-      }
-    });
-  });
-}
-
 async function runTemplate(
+  driver: Awaited<ReturnType<typeof createDriver>>,
   template: QueryTemplate,
   systemPrompt: string,
   query: string,
   agent: string | undefined,
 ): Promise<TemplateResult> {
-  const agentPrompt = agent ? `\n\nAgent instruction: ${agent}` : "";
-  const fullPrompt = `${systemPrompt}${agentPrompt}\n\n${template.text}\n\nQuery context: ${query}`;
-  const raw = await runPi(fullPrompt);
-
-  // pi --json wraps output in { content: string } or { text: string };
-  // fall back to raw string if it's not parseable JSON
-  let text = raw;
-  try {
-    const parsed: unknown = JSON.parse(raw);
-    if (parsed && typeof parsed === "object") {
-      const p = parsed as Record<string, unknown>;
-      text = (typeof p.content === "string" ? p.content : null)
-        ?? (typeof p.text === "string" ? p.text : null)
-        ?? raw;
-    }
-  } catch {
-    // Not JSON — use raw string as-is
-  }
-
+  const prompt = formatPrompt(systemPrompt, template.text, query, agent);
+  const text = await driver.runPrompt(prompt);
   return { id: template.id, name: template.name, text };
 }
 
-function parseArgs(): { query: string; templateFilter: string[]; agent?: string } {
-  const args = process.argv.slice(2);
-  let templateFilter: string[] = [];
-  let agent = process.env.AI_ENG_AGENT?.trim() || undefined;
-  const rest: string[] = [];
-
-  for (let i = 0; i < args.length; i++) {
-    if (args[i] === "--templates") {
-      templateFilter = (args[++i] ?? "").split(",").filter(Boolean);
-    } else if (args[i] === "--agent") {
-      agent = args[++i]?.trim() || agent;
-    } else {
-      rest.push(args[i]);
-    }
-  }
-
-  return { query: rest.join(" ").trim(), templateFilter, agent };
-}
-
 async function main(): Promise<void> {
-  const { query, templateFilter, agent } = parseArgs();
+  const { positionals, flags } = parseArgs(process.argv.slice(2), [
+    "--templates",
+    "--agent",
+  ]);
+
+  const query = positionals.join(" ").trim();
   if (!query) {
     console.error(
       'Usage: npx tsx runner.ts [--templates A1,M2] "research question"',
@@ -105,26 +43,39 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
+  const agent = (flags["--agent"] as string | undefined) ??
+    process.env.AI_ENG_AGENT?.trim() ||
+    undefined;
+  const templateFilter = ((flags["--templates"] as string) ?? "")
+    .split(",")
+    .filter(Boolean);
+
   const data = loadTemplates();
-  const templates =
-    templateFilter.length > 0
-      ? data.templates.filter((t) => templateFilter.includes(t.id))
-      : data.templates;
+  const templates = templateFilter.length > 0
+    ? data.templates.filter((t) => templateFilter.includes(t.id))
+    : data.templates;
 
   if (templates.length === 0) {
     console.error(`No templates matched: ${templateFilter.join(",")}`);
     process.exit(1);
   }
 
-  console.error(`Spawning ${templates.length} pi instance(s) in parallel…`);
+  console.error(`Running ${templates.length} template(s) via Pi driver…`);
 
-  const results = await Promise.all(
-    templates.map((t) => runTemplate(t, data.systemPrompt, query, agent)),
-  );
+  const driver = await createDriver("pi");
+  try {
+    const results = await mapLimit(
+      templates,
+      3,
+      (t) => runTemplate(driver, t, data.systemPrompt, query, agent),
+    );
 
-  const synthesis = await synthesize(query, results);
-  const briefPath = writeBrief(query, results, "pi", synthesis);
-  console.error(`Brief written to: ${briefPath}`);
+    const synthesis = await synthesize(query, results);
+    const briefPath = writeBrief(query, results, "pi", synthesis);
+    console.error(`Brief written to: ${briefPath}`);
+  } finally {
+    await driver.close?.();
+  }
 }
 
 main().catch((err) => {

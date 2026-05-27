@@ -5,119 +5,38 @@
  * Usage:
  *   npx tsx runner.ts "https://example.com"
  *   npx tsx runner.ts --agent technical-seo "https://example.com"
- *
- * Authentication: uses your OpenAI OAuth token from ~/.pi/agent/auth.json
- * (same credential as opencode / pi). OPENAI_API_KEY is accepted as a fallback.
  */
 
-import "dotenv/config";
-import { promises as fs } from "node:fs";
-import { homedir } from "node:os";
-import { join } from "node:path";
-import { Agent, run, setDefaultOpenAIKey } from "@openai/agents";
-import { buildPrompt, parseArgs, writeReport } from "../shared/prompt.ts";
-
-const MODEL = process.env.OPENAI_MODEL ?? "gpt-4o";
-const AUTH_PATH = join(homedir(), ".pi", "agent", "auth.json");
-const TOKEN_REFRESH_URL = "https://auth.openai.com/oauth/token";
-const CLIENT_ID = "app_EMoamEEZ73f0CkXaXp7hrann";
-
-interface OAuthEntry {
-  type: string;
-  access: string;
-  refresh: string;
-  expires: number;
-}
-
-interface AuthStore {
-  "openai-codex": OAuthEntry;
-  [key: string]: unknown;
-}
-
-interface RefreshResponse {
-  access_token: string;
-  refresh_token?: string;
-  expires_in?: number;
-}
-
-async function getOpenAIToken(): Promise<string> {
-  const raw = await fs.readFile(AUTH_PATH, "utf-8");
-  const store = JSON.parse(raw) as AuthStore;
-  const entry = store["openai-codex"];
-
-  if (!entry?.access) {
-    throw new Error(`No openai-codex entry found in ${AUTH_PATH}`);
-  }
-
-  if (Date.now() >= entry.expires - 60_000) {
-    console.error("OAuth token expiring soon — refreshing…");
-    const res = await fetch(TOKEN_REFRESH_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        grant_type: "refresh_token",
-        refresh_token: entry.refresh,
-        client_id: CLIENT_ID,
-      }),
-    });
-
-    if (!res.ok) {
-      throw new Error(`Token refresh failed: ${res.status} ${res.statusText}`);
-    }
-
-    const data = (await res.json()) as RefreshResponse;
-    entry.access = data.access_token;
-    if (data.refresh_token) entry.refresh = data.refresh_token;
-    if (data.expires_in) entry.expires = Date.now() + data.expires_in * 1000;
-
-    store["openai-codex"] = entry;
-    await fs.writeFile(AUTH_PATH, JSON.stringify(store, null, 2), "utf-8");
-  }
-
-  return entry.access;
-}
+import { createDriver } from "../../runner-shared/drivers/index.js";
+import { parseArgs } from "../../runner-shared/parse.js";
+import { buildSeoPrompt } from "../../runner-shared/seo-prompt.js";
+import { writeReport } from "../../runner-shared/output.js";
 
 async function main(): Promise<void> {
-  let apiKey: string;
-  try {
-    apiKey = await getOpenAIToken();
-    console.error("Using OpenAI OAuth token from ~/.pi/agent/auth.json");
-  } catch (oauthErr) {
-    const fallback = process.env.OPENAI_API_KEY?.trim();
-    if (!fallback) {
-      console.error(
-        "Error: OAuth token unavailable and OPENAI_API_KEY is not set.\n" +
-          `  OAuth error: ${oauthErr instanceof Error ? oauthErr.message : String(oauthErr)}`,
-      );
-      process.exit(1);
-    }
-    console.error("OAuth token unavailable — falling back to OPENAI_API_KEY.");
-    apiKey = fallback;
-  }
+  const { positionals, flags } = parseArgs(process.argv.slice(2), ["--agent"]);
 
-  setDefaultOpenAIKey(apiKey);
-
-  const { url, agent: agentInstruction } = parseArgs();
+  const url = positionals.join(" ").trim();
   if (!url) {
     console.error('Usage: npx tsx runner.ts [--agent technical-seo] "https://example.com"');
     process.exit(1);
   }
 
-  const prompt = buildPrompt(url, agentInstruction);
-  console.error(`Running SEO review via OpenAI Agents SDK (${MODEL}) for ${url}…`);
+  const agent = (flags["--agent"] as string | undefined) ??
+    process.env.AI_ENG_AGENT?.trim() ||
+    undefined;
 
-  const seoAgent = new Agent({
-    name: "SEOReviewer",
-    instructions: "You are an expert SEO analyst. Provide thorough, actionable SEO reviews.",
-    model: MODEL,
-  });
+  const prompt = buildSeoPrompt(url, agent);
+  console.error(`Running SEO review via Codex driver for ${url}…`);
 
-  const result = await run(seoAgent, prompt);
-  const report = (result.finalOutput as string | undefined) ?? "(no text response)";
-
-  const reportPath = writeReport(url, report.trim() || "(no report)", "codex");
-  console.error(`SEO review written to: ${reportPath}`);
-  console.log(report);
+  const driver = await createDriver("codex");
+  try {
+    const report = await driver.runPrompt(prompt);
+    const reportPath = writeReport(url, report, "codex", "seo-review");
+    console.error(`SEO review written to: ${reportPath}`);
+    console.log(report);
+  } finally {
+    await driver.close?.();
+  }
 }
 
 main().catch((err) => {
