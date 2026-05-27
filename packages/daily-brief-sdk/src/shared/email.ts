@@ -1,7 +1,6 @@
 /**
  * Email transport abstraction. Production path uses nodemailer over SMTP
- * with creds from ~/.claude/cook-and-brief/.env (loaded via the launchd
- * wrapper shell, never via plist EnvironmentVariables — see SPEC §17).
+ * with creds from process.env or a .env file loaded by the caller.
  *
  * The interface is small enough to mock in tests and small enough to drop
  * a mailx-shell-out alternative behind it later.
@@ -35,7 +34,7 @@ export function readSmtpConfigFromEnv(env: NodeJS.ProcessEnv = process.env): Smt
     const missing = required.filter((k) => !env[k]);
     if (missing.length > 0) {
         throw new Error(
-            `daily-brief-sdk: missing required env vars: ${missing.join(", ")}. Check ~/.claude/cook-and-brief/.env`,
+            `daily-brief-sdk: missing required env vars: ${missing.join(", ")}. Set them in the environment or a .env file.`,
         );
     }
     return {

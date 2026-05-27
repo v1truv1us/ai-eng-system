@@ -5,17 +5,11 @@
   "type": "module",
   "private": true,
   "main": "./dist/cli.mjs",
-  "bin": {
-    "daily-brief": "./dist/cli.mjs"
-  },
   "files": [
     "dist/",
     "src/",
     "bin/",
-    "launchd/",
-    "README.md",
-    "INSTALL.md",
-    "LICENSE"
+    "README.md"
   ],
   "scripts": {
     "build": "bun run typecheck && bun build src/cli.ts --outdir dist --target node --format esm --banner '#!/usr/bin/env node' && mv dist/cli.js dist/cli.mjs && chmod +x dist/cli.mjs",

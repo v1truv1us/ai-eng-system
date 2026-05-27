@@ -3,13 +3,22 @@ import { join } from "node:path";
 
 const HOME = homedir();
 
-export const COOK_AND_BRIEF_DIR = join(HOME, ".claude", "cook-and-brief");
+/**
+ * Base directory for cook-and-brief state. Override with COOK_AND_BRIEF_DIR.
+ */
+export const COOK_AND_BRIEF_DIR =
+    process.env.COOK_AND_BRIEF_DIR ?? join(HOME, ".claude", "cook-and-brief");
+
 export const ENV_FILE = join(COOK_AND_BRIEF_DIR, ".env");
 export const TELEMETRY_FILE = join(COOK_AND_BRIEF_DIR, "telemetry.jsonl");
 export const DREAM_DIGEST_DIR = join(COOK_AND_BRIEF_DIR, "dream-digest");
 export const LOGS_DIR = join(COOK_AND_BRIEF_DIR, "logs");
 
-export const BRIEFS_OUTPUT_DIR = join(HOME, "Documents", "daily-briefs");
+/**
+ * Where rendered HTML briefs are written. Override with BRIEFS_OUTPUT_DIR.
+ */
+export const BRIEFS_OUTPUT_DIR =
+    process.env.BRIEFS_OUTPUT_DIR ?? join(HOME, "Documents", "daily-briefs");
 
 export const COOKING_DIR = join(HOME, ".claude", "cooking");
 
