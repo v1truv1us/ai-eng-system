@@ -1,0 +1,8 @@
+node_modules/
+logs/
+locks/
+scheduled/output/
+scheduled/usage.json
+*.log
+.env
+auth.json

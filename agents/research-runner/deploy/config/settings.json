@@ -1,0 +1,9 @@
+{
+  "defaultProvider": "cursor-agent",
+  "defaultModel": "claude-sonnet-4-6",
+  "defaultThinkingLevel": "minimal",
+  "hideThinkingBlock": false,
+  "packages": [
+    "npm:@curio-data/pi-intelli-search"
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "version": 2,
+  "default_provider": "cursor-agent",
+  "description": "Model registry using only cursor-agent (verified working). Add other providers after testing with 'pi -p --model <provider>/<model> \"test\"'",
+  "task_types": {
+    "research": "Deep investigation, synthesis, verification — needs strong reasoning",
+    "brief": "Daily briefs, status reports, triage — lighter, faster models OK",
+    "scan": "Web research, competitive analysis — needs web access, medium reasoning",
+    "review": "Document QA — needs good reading comprehension, medium cost"
+  },
+  "models": [
+    {
+      "id": "claude-opus-4-7",
+      "provider": "cursor-agent",
+      "name": "Claude Opus 4.7",
+      "cost_tier": "expensive",
+      "cost_score": 10,
+      "context": 200000,
+      "thinking": true,
+      "tasks": ["research", "review"],
+      "daily_limit": 8,
+      "enabled": true
+    },
+    {
+      "id": "claude-sonnet-4-6",
+      "provider": "cursor-agent",
+      "name": "Claude Sonnet 4.6",
+      "cost_tier": "medium",
+      "cost_score": 5,
+      "context": 200000,
+      "thinking": true,
+      "tasks": ["research", "scan", "review", "brief"],
+      "daily_limit": 15,
+      "enabled": true
+    },
+    {
+      "id": "claude-sonnet-4-5",
+      "provider": "cursor-agent",
+      "name": "Claude Sonnet 4.5",
+      "cost_tier": "medium",
+      "cost_score": 5,
+      "context": 200000,
+      "thinking": true,
+      "tasks": ["research", "scan", "review", "brief"],
+      "daily_limit": 15,
+      "enabled": true
+    },
+    {
+      "id": "gemini-3.1-pro-preview",
+      "provider": "cursor-agent",
+      "name": "Gemini 3.1 Pro",
+      "cost_tier": "cheap",
+      "cost_score": 2,
+      "context": 200000,
+      "thinking": true,
+      "tasks": ["research", "scan", "review", "brief"],
+      "daily_limit": 20,
+      "enabled": true
+    },
+    {
+      "id": "gemini-3.5-flash",
+      "provider": "cursor-agent",
+      "name": "Gemini 3.5 Flash",
+      "cost_tier": "cheap",
+      "cost_score": 1,
+      "context": 200000,
+      "thinking": false,
+      "tasks": ["brief", "scan"],
+      "daily_limit": 30,
+      "enabled": true
+    },
+    {
+      "id": "default",
+      "provider": "cursor-agent",
+      "name": "Cursor Default",
+      "cost_tier": "medium",
+      "cost_score": 4,
+      "context": 200000,
+      "thinking": false,
+      "tasks": ["research", "scan", "review", "brief"],
+      "daily_limit": 20,
+      "enabled": true
+    }
+  ],
+  "scoring": {
+    "cost_weight": 0.35,
+    "recency_weight": 0.45,
+    "random_weight": 0.2,
+    "max_recency_hours": 48
+  }
+}
