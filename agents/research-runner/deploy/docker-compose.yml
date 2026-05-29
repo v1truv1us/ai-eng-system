@@ -1,3 +1,7 @@
+# Research Runner — background cron worker (no HTTP port).
+# Coolify: compose path agents/research-runner/deploy/docker-compose.yml, base directory /
+# Full guide: docs/deploy/coolify.md
+
 services:
   pi-runner:
     build:
@@ -5,6 +9,7 @@ services:
       dockerfile: agents/research-runner/deploy/Dockerfile
     container_name: pi-runner
     restart: unless-stopped
+    # No ports: — not a web service; do not set Coolify "Port Exposes" to 3000
     environment:
       - TZ=America/Los_Angeles
       # Optional: short auth JSON if your Coolify env editor allows it.

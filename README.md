@@ -12,6 +12,12 @@ This repository ships three npm packages:
 
 The repo root package is private and is never published.
 
+## Deploy on Coolify
+
+Scheduled **Research Runner** (Pi cron on your VPS): [docs/deploy/coolify.md](docs/deploy/coolify.md)
+
+Optional **docs site**: [docs-site/DEPLOYMENT.md](docs-site/DEPLOYMENT.md)
+
 ## Quick Start
 
 ### Install the CLI

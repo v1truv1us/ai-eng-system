@@ -14,8 +14,11 @@ Scheduled research agent that runs on Coolify as a Docker container.
 
 ## Deploy to Coolify
 
-1. **Connect repo**: Coolify → server-stuff → New Resource → Docker Compose → connect `v1truv1us/ai-eng-system`
-2. **Set compose path**: Point to `agents/research-runner/deploy/docker-compose.yml` (or move it to repo root if Coolify needs it there)
+Full checklist (docs site, webhooks, troubleshooting): [docs/deploy/coolify.md](../../../docs/deploy/coolify.md)
+
+1. **Connect repo**: Coolify → server-stuff → New Resource → Docker Compose → `v1truv1us/ai-eng-system`
+2. **Compose path**: `agents/research-runner/deploy/docker-compose.yml`, base directory `/`
+3. **No public URL** — leave domains empty; clear port `3000` if Coolify added it (this is not a web app)
 3. **Auth on the VPS** (recommended — Coolify env vars are too short for full `auth.json`):
    ```bash
    # SSH to the VPS (same machine Coolify uses for Docker)
