@@ -96,4 +96,14 @@ echo "  pi-runner ready"
 echo "========================================"
 echo ""
 
-exec crond -f -l 8
+# Run crond in foreground; if it exits, keep the container up so logs are visible.
+crond -f -l 8 >>/app/logs/crond.log 2>&1 &
+CROND_PID=$!
+sleep 2
+if ! kill -0 "$CROND_PID" 2>/dev/null; then
+    echo "[fatal] crond failed to start. Log:" >&2
+    cat /app/logs/crond.log >&2 || true
+    exit 1
+fi
+echo "[init] crond running (pid $CROND_PID)"
+tail -f /app/logs/crond.log
