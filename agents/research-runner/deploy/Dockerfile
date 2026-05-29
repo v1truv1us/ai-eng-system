@@ -7,7 +7,7 @@
 #   1. Node.js runtime
 #   2. pi CLI (agent sessions)
 #   3. pi-intelli-search (web research tools)
-#   4. ai-eng-system (built from source — research-runner engine + templates)
+#   4. ai-eng-system research-runner (TypeScript, runs via tsx — no build needed)
 #   5. ofelia (cron scheduler)
 #   6. App scripts + skills + config
 
@@ -30,20 +30,15 @@ RUN ARCH=$(uname -m) && \
       "https://github.com/mcuadros/ofelia/releases/download/v0.5.7/ofelia-v0.5.7-linux-${OFELIA_ARCH}" && \
     chmod +x /usr/local/bin/ofelia
 
-# ── Build ai-eng-system from source ──
-# Everything is already in the build context (Coolify cloned the whole repo)
-WORKDIR /opt/ai-eng-system
-COPY package.json package-lock.json* bun.lock* ./
-COPY agents/ agents/
-COPY runner-shared/ agents/runner-shared/ 2>/dev/null || true
-COPY content/ content/
-COPY src/ src/
-COPY dist/ dist/
-COPY tsconfig.json ./
+# ── ai-eng-system research-runner (runs via tsx, no build step) ──
+# Copy only what the research-runner needs
+COPY agents/research-runner/pi/ /opt/ai-eng-system/agents/research-runner/pi/
+COPY agents/research-runner/shared/ /opt/ai-eng-system/agents/research-runner/shared/
+COPY agents/runner-shared/ /opt/ai-eng-system/agents/runner-shared/
 
-RUN npm install && npm run build 2>/dev/null || true
-RUN cd agents/research-runner/pi && npm install
-RUN cd agents/runner-shared && npm install
+# Install dependencies (tsx for running .ts, anthropic sdk for pi driver)
+RUN cd /opt/ai-eng-system/agents/research-runner/pi && npm install
+RUN cd /opt/ai-eng-system/agents/runner-shared && npm install || true
 
 # ── App layer ──
 RUN mkdir -p /app/scripts /app/scheduled /app/data/vault/wiki \
