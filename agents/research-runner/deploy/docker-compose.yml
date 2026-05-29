@@ -14,10 +14,8 @@ services:
     volumes:
       # Persistent data: vault, logs, output, auth survive redeployments
       - pi-runner-data:/app/data
-      # Topic files — edit in repo and redeploy to change
-      - ./agents/research-runner/deploy/scheduled/competitors.txt:/app/scheduled/competitors.txt:ro
-      - ./agents/research-runner/deploy/scheduled/research-topics.txt:/app/scheduled/research-topics.txt:ro
-      - ./agents/research-runner/deploy/scheduled/models.json:/app/scheduled/models.json:ro
+      # Scheduled config (competitors, topics, models) is copied into the image at build time.
+      # Redeploy after editing files under deploy/scheduled/ in the repo.
     healthcheck:
       test: ["CMD", "pgrep", "ofelia"]
       interval: 60s
