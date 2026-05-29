@@ -40,13 +40,14 @@ Full checklist (docs site, webhooks, troubleshooting): [docs/deploy/coolify.md](
 
 ### Web UI on your phone (recommended)
 
-Add a domain in Coolify for the pi-runner service → `https://research.v1truv1us.dev` (points to port `8080`).
+The domain is declared in `docker-compose.yml` via Traefik labels — Coolify's proxy auto-discovers it on deploy. No manual domain clicking needed.
 
 Set the password in Coolify **Environment Variables**:
 - `QUEUE_UI_PASSWORD` — your password (required; leave blank and the UI rejects all logins)
 - `QUEUE_UI_USER` — optional, default `admin`
+- `QUEUE_UI_DOMAIN` — optional, default `research.v1truv1us.dev`
 
-Then open `https://research.v1truv1us.dev` on your phone, log in, and submit topics.
+Redeploy, then open `https://research.v1truv1us.dev` on your phone, log in, and submit topics.
 
 ### CLI on the VPS
 

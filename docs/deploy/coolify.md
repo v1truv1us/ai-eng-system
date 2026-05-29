@@ -20,17 +20,21 @@ Background worker (cron + pi). No HTTP UI.
 | Build pack | Docker Compose |
 | Compose file | `agents/research-runner/deploy/docker-compose.yml` |
 | Base directory | `/` |
-| Domains | Leave empty |
-| Port exposes | `8080` only (queue UI) — clear `3000` |
+| Domains | Auto-configured in `docker-compose.yml` (optional queue UI) |
+| Port exposes | Clear all — no host port bindings; Coolify's proxy routes internally |
 | Health check | Compose (`pgrep crond`) — disable HTTP check |
 
 ### Queue UI (phone-friendly)
 
-1. In Coolify, open the **pi-runner** service → **Domains** → add `research.v1truv1us.dev` → choose port `8080`.
-2. In **Environment Variables**, add:
+The domain and route are **declared in `docker-compose.yml`** via Traefik labels. Coolify's proxy auto-discovers them — no manual domain clicking needed.
+
+1. In **Environment Variables** on the pi-runner service, add:
    - `QUEUE_UI_PASSWORD` — required password for the form
    - `QUEUE_UI_USER` — optional, default `admin`
-3. Redeploy. Open `https://research.v1truv1us.dev` on your phone, log in, submit topics.
+   - `QUEUE_UI_DOMAIN` — optional, default `research.v1truv1us.dev`
+2. Redeploy. Coolify's proxy (Traefik) auto-provisions SSL.
+
+Open `https://research.v1truv1us.dev` on your phone, log in, submit topics.
 
 Disable the UI anytime by setting `QUEUE_UI_DISABLE=1`.
 

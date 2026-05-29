@@ -9,8 +9,8 @@ services:
       dockerfile: agents/research-runner/deploy/Dockerfile
     container_name: pi-runner
     restart: unless-stopped
-    ports:
-      - "8080:8080"
+    # Port 8080 is exposed in Dockerfile for Coolify's proxy.
+    # Do NOT add a host ports: binding here — let Coolify route the domain internally.
     environment:
       - TZ=America/Los_Angeles
       # Optional: short auth JSON if your Coolify env editor allows it.
@@ -18,6 +18,7 @@ services:
       - QUEUE_UI_USER=${QUEUE_UI_USER:-admin}
       - QUEUE_UI_PASSWORD=${QUEUE_UI_PASSWORD:-}
       - QUEUE_UI_PORT=8080
+      - QUEUE_UI_DOMAIN=${QUEUE_UI_DOMAIN:-research.v1truv1us.dev}
     volumes:
       # Persistent data: vault, logs, auth.json — survives redeployments (see setup-vps-auth.sh)
       - pi-runner-data:/app/data
@@ -39,6 +40,12 @@ services:
           cpus: "0.25"
     labels:
       - "coolify.managed=true"
+      # Queue UI — routed through Coolify's proxy (Traefik).
+      # Set QUEUE_UI_DOMAIN env var to override the default domain.
+      - "traefik.enable=true"
+      - "traefik.http.routers.pi-runner-queue.rule=Host(`${QUEUE_UI_DOMAIN}`)"
+      - "traefik.http.routers.pi-runner-queue.tls=true"
+      - "traefik.http.services.pi-runner-queue.loadbalancer.server.port=8080"
 
 volumes:
   pi-runner-data:
