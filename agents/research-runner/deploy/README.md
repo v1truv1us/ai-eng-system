@@ -22,7 +22,9 @@ Scheduled research agent that runs on Coolify as a Docker container.
    npm install -g @earendil-works/pi-coding-agent
    pi    # sign in once
    cd /path/to/ai-eng-system/agents/research-runner/deploy
+   git pull
    ./setup-vps-auth.sh   # copies auth into the pi-runner-data Docker volume
+   ./verify-pi-runner.sh # confirm auth is visible in the container
    ```
    Coolify does not pass arbitrary host bind-mounts from compose; auth lives at `/app/data/auth.json` inside the persistent volume. Re-run `setup-vps-auth.sh` after `pi` login when tokens expire, then restart the container.
 
@@ -81,7 +83,8 @@ deploy/
 │   ├── wiki-research-personal/
 │   └── auto-research/
 ├── get-auth.sh                 # Extract minimal auth for PI_AUTH_JSON (optional)
-├── setup-vps-auth.sh           # Copy host pi login → /data/pi-runner/auth.json
+├── setup-vps-auth.sh           # Copy host pi login → Docker volume auth.json
+├── verify-pi-runner.sh         # VPS diagnostic (auth, volume, container)
 ├── add-research.sh             # Add item to running container's queue
 └── .gitignore
 ```

@@ -99,14 +99,12 @@ echo "  pi-runner ready"
 echo "========================================"
 echo ""
 
-# Run crond in foreground; if it exits, keep the container up so logs are visible.
-crond -f -l 8 >>/app/logs/crond.log 2>&1 &
-CROND_PID=$!
+# dcron daemon (background). Keep PID 1 alive for Docker healthcheck.
+crond -l 6
 sleep 2
-if ! kill -0 "$CROND_PID" 2>/dev/null; then
-    echo "[fatal] crond failed to start. Log:" >&2
-    cat /app/logs/crond.log >&2 || true
+if ! pgrep crond >/dev/null 2>&1; then
+    echo "[fatal] crond failed to start" >&2
     exit 1
 fi
-echo "[init] crond running (pid $CROND_PID)"
-tail -f /app/logs/crond.log
+echo "[init] crond running (pid $(pgrep crond | head -1))"
+exec tail -f /dev/null
