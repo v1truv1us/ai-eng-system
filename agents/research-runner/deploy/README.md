@@ -38,7 +38,19 @@ Full checklist (docs site, webhooks, troubleshooting): [docs/deploy/coolify.md](
 
 ## Managing research (easy)
 
-On the VPS, use **`manage-research.sh`** (copy to `~/` or run from this directory):
+### Web UI on your phone (recommended)
+
+Add a domain in Coolify for the pi-runner service → `https://research.v1truv1us.dev` (points to port `8080`).
+
+Set the password in Coolify **Environment Variables**:
+- `QUEUE_UI_PASSWORD` — your password (required; leave blank and the UI rejects all logins)
+- `QUEUE_UI_USER` — optional, default `admin`
+
+Then open `https://research.v1truv1us.dev` on your phone, log in, and submit topics.
+
+### CLI on the VPS
+
+Use **`manage-research.sh`** (copy to `~/` or run from this directory):
 
 ```bash
 ./manage-research.sh list
@@ -108,6 +120,7 @@ deploy/
 │   ├── wiki-research-personal/
 │   └── auto-research/
 ├── manage-research.sh          # Add/list/edit queue and topic files (run on VPS)
+├── queue-server.js             # Zero-dep web UI for adding to the queue (port 8080)
 ├── get-auth.sh                 # Extract minimal auth for PI_AUTH_JSON (optional)
 ├── setup-vps-auth.sh           # Copy host pi login → Docker volume auth.json
 ├── verify-pi-runner.sh         # VPS diagnostic (auth, volume, container)

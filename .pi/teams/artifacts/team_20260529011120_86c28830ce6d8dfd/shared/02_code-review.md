@@ -1,0 +1,63 @@
+FAILED / BLOCKED — `Switchboard.md` is not available in the current checkout.
+
+## Findings
+
+### Critical — Review target is missing
+Evidence:
+- `find *Switchboard.md` returned no matches.
+- Only Switchboard-related directory found: `Research/Switchboard/`.
+- `Research/Switchboard/04-output/2026-05-28_switchboard_comprehensive_report.md` contains only a placeholder:
+  - “Full report delivered in agent conversation”
+  - “External web tools were unavailable…”
+- `Research/Switchboard/04-output/test.md` contains only `(see attached image)`.
+
+I cannot evaluate product coherence, missing requirements, MVP scope, or architecture risks without the actual concept text.
+
+**Recommendation:** provide/restore the actual `Switchboard.md` path or paste its contents.
+
+### High — Switchboard must reconcile with existing orchestration contracts
+Evidence:
+- `docs/reference/orchestration-contract.md` already defines:
+  - `CONTEXT_HANDOFF_V1`
+  - `RESULT_V1`
+  - severity ordering
+  - confidence handling
+  - quality gates
+  - delegation and merge rules
+
+Any Switchboard concept involving agent routing, coordination, state, or reviews should explicitly reuse or supersede these contracts.
+
+### High — Orchestration runtime appears planned, not implemented
+Evidence:
+- `skills/orchestrate/SKILL.md` says `/orchestrate` is “planned” and that the spawn/wait/handoff driver and role references are not yet in the repository.
+
+If Switchboard depends on orchestration runtime behavior, that dependency should be treated as an MVP blocker unless the MVP is only documentation/contracts.
+
+## Files inspected
+
+- `Research/Switchboard/04-output/2026-05-28_switchboard_comprehensive_report.md`
+- `Research/Switchboard/04-output/test.md`
+- `docs/reference/orchestration-contract.md`
+- `content/commands/orchestrate.md`
+- `skills/orchestrate/SKILL.md`
+- `agents/runner-shared/prompt.ts`
+- `CLAUDE.md`
+- `TODO.md`
+
+## Verification evidence
+
+Read-only checks only. No files modified.
+
+Commands/tools used:
+- searched for `Switchboard.md`
+- listed `Research/Switchboard`
+- read available Switchboard-related outputs
+- inspected existing orchestration docs/skills for integration context
+
+## Next recommended action
+
+Provide the actual `Switchboard.md` content/path, then re-run the review against:
+1. the concept document,
+2. `docs/reference/orchestration-contract.md`,
+3. `skills/orchestrate/SKILL.md`,
+4. pi-crew state/artifact conventions.

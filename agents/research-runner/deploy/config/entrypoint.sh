@@ -97,7 +97,21 @@ echo "crond: $(which crond)"
 echo "Vault: $VAULT"
 echo ""
 
-# ── 6. Start cron ──
+# ── 6. Start queue web UI (background, auto-restarts if it crashes) ──
+if [ -z "${QUEUE_UI_DISABLE:-}" ]; then
+    echo "[init] Starting queue UI server on :${QUEUE_UI_PORT:-8080}"
+    (
+        while true; do
+            node /app/queue-server.js || true
+            echo "[queue-ui] crashed, restarting in 5s..."
+            sleep 5
+        done
+    ) &
+else
+    echo "[init] Queue UI disabled (QUEUE_UI_DISABLE set)"
+fi
+
+# ── 7. Start cron ──
 mkdir -p /app/logs
 touch /app/logs/cron.log
 echo "=== Starting cron scheduler (dcron) ==="

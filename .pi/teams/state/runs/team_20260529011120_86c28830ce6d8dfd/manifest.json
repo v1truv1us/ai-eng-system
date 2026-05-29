@@ -1,0 +1,666 @@
+{
+  "schemaVersion": 1,
+  "runId": "team_20260529011120_86c28830ce6d8dfd",
+  "team": "review",
+  "workflow": "review",
+  "goal": "Thoroughly review Switchboard.md as a product/architecture concept. Evaluate coherence, missing requirements, architectural risks, MVP scope, integration with ai-eng-system/pi-crew patterns, and produce a concise review with severity-ranked findings and recommendations. Do not edit files.",
+  "status": "completed",
+  "workspaceMode": "single",
+  "createdAt": "2026-05-29T01:11:20.178Z",
+  "updatedAt": "2026-05-29T01:13:34.455Z",
+  "cwd": "/Users/johnferguson/Github/ai-eng-system",
+  "stateRoot": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/state/runs/team_20260529011120_86c28830ce6d8dfd",
+  "artifactsRoot": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd",
+  "tasksPath": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/state/runs/team_20260529011120_86c28830ce6d8dfd/tasks.json",
+  "eventsPath": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/state/runs/team_20260529011120_86c28830ce6d8dfd/events.jsonl",
+  "artifacts": [
+    {
+      "kind": "prompt",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/goal.md",
+      "createdAt": "2026-05-29T01:11:20.180Z",
+      "producer": "team-tool",
+      "sizeBytes": 290,
+      "contentHash": "8c02dc8b2631fe344b3c582454d2df79c183e3b18fa6dd9f3eb52b04e6ad0614",
+      "retention": "run"
+    },
+    {
+      "kind": "prompt",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/prompts/01_explore.md",
+      "createdAt": "2026-05-29T01:11:20.486Z",
+      "producer": "01_explore",
+      "sizeBytes": 11725,
+      "contentHash": "2c94a37863fc9358642bd245c0c9119c13dd520fb1aa1901cfe59a6fb6f870fb",
+      "retention": "run"
+    },
+    {
+      "kind": "result",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/results/01_explore.txt",
+      "createdAt": "2026-05-29T01:11:58.375Z",
+      "producer": "01_explore",
+      "sizeBytes": 3660,
+      "contentHash": "f51013de1ed0a92a2a54c168b5cd3166c4ad9dcd7aab6001c3f4a59906c03d17",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/01_explore.inputs.json",
+      "createdAt": "2026-05-29T01:11:20.487Z",
+      "producer": "01_explore",
+      "sizeBytes": 46,
+      "contentHash": "4220d037ccad16132d4c28359451985b4a2fa51e74ec340212cab8b688b9b5f6",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/01_explore.coordination-bridge.md",
+      "createdAt": "2026-05-29T01:11:20.487Z",
+      "producer": "01_explore",
+      "sizeBytes": 1118,
+      "contentHash": "2e677e31108158567e7140d7e6e9193baa545889e0305412171c694de850e9f3",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/01_explore.skills.md",
+      "createdAt": "2026-05-29T01:11:20.487Z",
+      "producer": "01_explore",
+      "sizeBytes": 4459,
+      "contentHash": "8dd7e14fb3ad3a349c6d72cbc5d696c35d9aaa29cca381ab897228fbaedee417",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/01_explore.task-packet.json",
+      "createdAt": "2026-05-29T01:11:58.384Z",
+      "producer": "01_explore",
+      "sizeBytes": 1454,
+      "contentHash": "b1d9017ca7d0026a100d6d9efd06ab60333ad0bdda0d6e98f75dc099ab77390e",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/01_explore.verification.json",
+      "createdAt": "2026-05-29T01:11:58.384Z",
+      "producer": "01_explore",
+      "sizeBytes": 192,
+      "contentHash": "818c9ace7d546384f2d2504b6dd7595fad288269848be32c359563a6facc5d94",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/01_explore.startup-evidence.json",
+      "createdAt": "2026-05-29T01:11:58.385Z",
+      "producer": "01_explore",
+      "sizeBytes": 273,
+      "contentHash": "08f310fe3bc842e191efca1b1833ac8d291b5cc7b67c168f593f19f00b10e4d6",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/01_explore.permission.json",
+      "createdAt": "2026-05-29T01:11:58.385Z",
+      "producer": "01_explore",
+      "sizeBytes": 58,
+      "contentHash": "d068e91667e545c975984e28d67f9be31819d406340e92fa33ed35edca2e8860",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/01_explore.capabilities.json",
+      "createdAt": "2026-05-29T01:11:58.385Z",
+      "producer": "01_explore",
+      "sizeBytes": 718,
+      "contentHash": "a558c1cf688b08eb5c13ff18015b9a7bcd9e2097e7e38140c3c2bedab1993b5e",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/01_explore.prompt-pipeline.json",
+      "createdAt": "2026-05-29T01:11:58.386Z",
+      "producer": "01_explore",
+      "sizeBytes": 1008,
+      "contentHash": "ef29d08fd25ea45e7a21ceac82e49eef9cd77f2ef0bd2224a3c3274e9b14d70e",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/01_explore.output-validation.json",
+      "createdAt": "2026-05-29T01:11:58.386Z",
+      "producer": "01_explore",
+      "sizeBytes": 156,
+      "contentHash": "9bfc22743e8bfa83d4e00e4ae05230b0e11a9e85182ac2709a778eef9c5ef34c",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/shared/01_explore.md",
+      "createdAt": "2026-05-29T01:11:58.384Z",
+      "producer": "01_explore",
+      "sizeBytes": 3661,
+      "contentHash": "ecdce8ea50c244c1fda05e162ac6be75cc9dcd820aae2f5f2aa35e69fff5e1d5",
+      "retention": "run"
+    },
+    {
+      "kind": "log",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/logs/01_explore.log",
+      "createdAt": "2026-05-29T01:11:58.375Z",
+      "producer": "01_explore",
+      "sizeBytes": 3927,
+      "contentHash": "86325173ec53ccc101d861b0144ca0c73bf5e17f68bd0327820fce9763771c3f",
+      "retention": "run"
+    },
+    {
+      "kind": "log",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/transcripts/01_explore.attempt-0.jsonl",
+      "createdAt": "2026-05-29T01:11:58.379Z",
+      "producer": "01_explore",
+      "sizeBytes": 44282,
+      "contentHash": "41c97749841191233e3da7e6e131bc906879217b1da3754088fd6022fd84e670",
+      "retention": "run"
+    },
+    {
+      "kind": "prompt",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/prompts/02_code-review.md",
+      "createdAt": "2026-05-29T01:11:20.478Z",
+      "producer": "02_code-review",
+      "sizeBytes": 11599,
+      "contentHash": "b7b4430427aaa6b133b3c5d8a25f2e011fa36e6506b8446e5a24fa4dd59d450c",
+      "retention": "run"
+    },
+    {
+      "kind": "result",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/results/02_code-review.txt",
+      "createdAt": "2026-05-29T01:12:11.543Z",
+      "producer": "02_code-review",
+      "sizeBytes": 2441,
+      "contentHash": "2e13293bf532f63fc31da8e029aae2d476cacaf4e370695a5e92cfcc34b1a87e",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/02_code-review.inputs.json",
+      "createdAt": "2026-05-29T01:11:20.479Z",
+      "producer": "02_code-review",
+      "sizeBytes": 169,
+      "contentHash": "921a7afa718c9ce978a539732d25d344314afaa77a4c2e87755a967546b62684",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/02_code-review.coordination-bridge.md",
+      "createdAt": "2026-05-29T01:11:20.479Z",
+      "producer": "02_code-review",
+      "sizeBytes": 1122,
+      "contentHash": "daea5794960d688276e9af820ab8868eb4d5597414230e05b191136f5001b87a",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/02_code-review.skills.md",
+      "createdAt": "2026-05-29T01:11:20.479Z",
+      "producer": "02_code-review",
+      "sizeBytes": 4628,
+      "contentHash": "6e178d28b78781c4b529545092d19d29fe2a98922565e2273b4c4cd0946b8451",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/02_code-review.task-packet.json",
+      "createdAt": "2026-05-29T01:12:11.552Z",
+      "producer": "02_code-review",
+      "sizeBytes": 1178,
+      "contentHash": "13c7a0dd7f7edfe5f0a4c4b7e6c7ea5187dc5379bbf666c8ccf83f7637336aae",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/02_code-review.verification.json",
+      "createdAt": "2026-05-29T01:12:11.552Z",
+      "producer": "02_code-review",
+      "sizeBytes": 192,
+      "contentHash": "818c9ace7d546384f2d2504b6dd7595fad288269848be32c359563a6facc5d94",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/02_code-review.startup-evidence.json",
+      "createdAt": "2026-05-29T01:12:11.553Z",
+      "producer": "02_code-review",
+      "sizeBytes": 273,
+      "contentHash": "c7c22f018dc48ffedc6ed5834fd8afbabd16ef4a31f40ab5b7d3c4acd9955625",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/02_code-review.permission.json",
+      "createdAt": "2026-05-29T01:12:11.553Z",
+      "producer": "02_code-review",
+      "sizeBytes": 58,
+      "contentHash": "3d69fcfcff0a8196018095cd410926167729ec6cd150df2e818e42ddacc84b88",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/02_code-review.capabilities.json",
+      "createdAt": "2026-05-29T01:12:11.553Z",
+      "producer": "02_code-review",
+      "sizeBytes": 734,
+      "contentHash": "d632575df5822cefae5661eb6511ebeece196cff8806259ebd13efd28243de49",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/02_code-review.prompt-pipeline.json",
+      "createdAt": "2026-05-29T01:12:11.554Z",
+      "producer": "02_code-review",
+      "sizeBytes": 1036,
+      "contentHash": "4cc0c9341554dae7c7252dc25d656232df551f9a9c9528a60c3f309e5db40b70",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/02_code-review.output-validation.json",
+      "createdAt": "2026-05-29T01:12:11.554Z",
+      "producer": "02_code-review",
+      "sizeBytes": 156,
+      "contentHash": "ebfc0fcea6b4550dfc92d20b2aa0951174179c1f4abd6e0eba2f6ebbdad145b7",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/shared/02_code-review.md",
+      "createdAt": "2026-05-29T01:12:11.553Z",
+      "producer": "02_code-review",
+      "sizeBytes": 2442,
+      "contentHash": "897f683366d77ad029caf94193d958965cccca4da2d2df0d5004a49716f48e39",
+      "retention": "run"
+    },
+    {
+      "kind": "log",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/logs/02_code-review.log",
+      "createdAt": "2026-05-29T01:12:11.544Z",
+      "producer": "02_code-review",
+      "sizeBytes": 2698,
+      "contentHash": "333522a5834284614cea121e560d5740a9bd167714d4870c0cafd4ae781808ed",
+      "retention": "run"
+    },
+    {
+      "kind": "log",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/transcripts/02_code-review.attempt-0.jsonl",
+      "createdAt": "2026-05-29T01:12:11.547Z",
+      "producer": "02_code-review",
+      "sizeBytes": 44513,
+      "contentHash": "9875dc99cdd6bf8302115e640272695e21cda478862306018bc640528cc755bb",
+      "retention": "run"
+    },
+    {
+      "kind": "summary",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/batches/01_explore+02_code-review.md",
+      "createdAt": "2026-05-29T01:12:11.563Z",
+      "producer": "team-runner",
+      "sizeBytes": 7278,
+      "contentHash": "07f9a3b44a9c089835cc31d401fefe11a8291d29099357aa316806ab9786b5ef",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/group-joins/team_20260529011120_86c28830ce6d8dfd_01_explore+02_code-review.json",
+      "createdAt": "2026-05-29T01:12:11.564Z",
+      "producer": "group-join",
+      "sizeBytes": 524,
+      "contentHash": "6437a030460ad3037de31fd0e838f7a35cdcc7c7c51c1995f54aaa4a8589e5cc",
+      "retention": "run"
+    },
+    {
+      "kind": "prompt",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/prompts/03_security-review.md",
+      "createdAt": "2026-05-29T01:12:11.598Z",
+      "producer": "03_security-review",
+      "sizeBytes": 15828,
+      "contentHash": "458ec8fef218d9d0ea24668e4bcb4a920d8c101b1c880acd06abdbf7f9636ae7",
+      "retention": "run"
+    },
+    {
+      "kind": "result",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/results/03_security-review.txt",
+      "createdAt": "2026-05-29T01:13:34.387Z",
+      "producer": "03_security-review",
+      "sizeBytes": 5768,
+      "contentHash": "2bd8fd40bde19fd0eb9934b1526c0a8a62a7ae872930fe2d5f7356aaf84014f6",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/03_security-review.inputs.json",
+      "createdAt": "2026-05-29T01:12:11.598Z",
+      "producer": "03_security-review",
+      "sizeBytes": 4861,
+      "contentHash": "37621d746d8e9d0a584d111af337e9de86b8852e443453cd4af4b870b25fa7a2",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/03_security-review.coordination-bridge.md",
+      "createdAt": "2026-05-29T01:12:11.599Z",
+      "producer": "03_security-review",
+      "sizeBytes": 1126,
+      "contentHash": "dca7ad388975232329a5f5cfb314e5256d436c4946c5bcf869d483f5de76d437",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/03_security-review.skills.md",
+      "createdAt": "2026-05-29T01:12:11.598Z",
+      "producer": "03_security-review",
+      "sizeBytes": 4509,
+      "contentHash": "e04d62a5479c6fa6a710cc4662444bd128f14fcd3365268fd1c9821664b2108a",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/03_security-review.task-packet.json",
+      "createdAt": "2026-05-29T01:13:34.402Z",
+      "producer": "03_security-review",
+      "sizeBytes": 1161,
+      "contentHash": "f1d7f9a15fa2133c51f7b0b46bc766b70b084f8ad8f3883f66534dfeb9de59f6",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/03_security-review.verification.json",
+      "createdAt": "2026-05-29T01:13:34.402Z",
+      "producer": "03_security-review",
+      "sizeBytes": 192,
+      "contentHash": "818c9ace7d546384f2d2504b6dd7595fad288269848be32c359563a6facc5d94",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/03_security-review.startup-evidence.json",
+      "createdAt": "2026-05-29T01:13:34.403Z",
+      "producer": "03_security-review",
+      "sizeBytes": 273,
+      "contentHash": "b5c0e4f8c4b7cb3646553e8159351b255dc88b67ff68180361d5fa1910d518ed",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/03_security-review.permission.json",
+      "createdAt": "2026-05-29T01:13:34.403Z",
+      "producer": "03_security-review",
+      "sizeBytes": 67,
+      "contentHash": "9371d0b7b370a30706064a3c068a72cb454c5d65ce1628dcd5dfd2fe68c13fd5",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/03_security-review.capabilities.json",
+      "createdAt": "2026-05-29T01:13:34.404Z",
+      "producer": "03_security-review",
+      "sizeBytes": 790,
+      "contentHash": "7e4d01369ff0695bba8797d273220f336d7700a0947cbf1cddcbb28e9b47e308",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/03_security-review.prompt-pipeline.json",
+      "createdAt": "2026-05-29T01:13:34.404Z",
+      "producer": "03_security-review",
+      "sizeBytes": 1064,
+      "contentHash": "f9f3bcd6d95a88bac2c06aec88698aa8e41092e006efdb032650db378a8b4246",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/03_security-review.output-validation.json",
+      "createdAt": "2026-05-29T01:13:34.404Z",
+      "producer": "03_security-review",
+      "sizeBytes": 165,
+      "contentHash": "fa62cdd9c742f7bb08780583d7368b1ffd5a8b169419bd95d9b9e89636c5c487",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/shared/03_security-review.md",
+      "createdAt": "2026-05-29T01:13:34.403Z",
+      "producer": "03_security-review",
+      "sizeBytes": 5769,
+      "contentHash": "73b0cf9f5c425b92650a56038906624f6cfb3753612a0cd27b987492a46fd203",
+      "retention": "run"
+    },
+    {
+      "kind": "log",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/logs/03_security-review.log",
+      "createdAt": "2026-05-29T01:13:34.387Z",
+      "producer": "03_security-review",
+      "sizeBytes": 5971,
+      "contentHash": "acf96780b4e57b92a332521ba8d1e285fc53aab46f0d16d20336ea0297c5e990",
+      "retention": "run"
+    },
+    {
+      "kind": "log",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/transcripts/03_security-review.attempt-0.jsonl",
+      "createdAt": "2026-05-29T01:13:34.393Z",
+      "producer": "03_security-review",
+      "sizeBytes": 28047,
+      "contentHash": "462231bd030edc62cc8a319ab49b276dfafad904ea1fcbf3f6cd6e1f9c3641a8",
+      "retention": "run"
+    },
+    {
+      "kind": "prompt",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/prompts/04_verify.md",
+      "createdAt": "2026-05-29T01:12:11.587Z",
+      "producer": "04_verify",
+      "sizeBytes": 15368,
+      "contentHash": "c5c55a8882bc2c3e91c537d5cf88f7ccbec0cee1d55af7fba2681b41f8b7feeb",
+      "retention": "run"
+    },
+    {
+      "kind": "result",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/results/04_verify.txt",
+      "createdAt": "2026-05-29T01:12:34.720Z",
+      "producer": "04_verify",
+      "sizeBytes": 1189,
+      "contentHash": "d538feae926d8f98f30ba7e2cfe858ce880f88220933148c3e373d8eb5c20b8e",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/04_verify.inputs.json",
+      "createdAt": "2026-05-29T01:12:11.587Z",
+      "producer": "04_verify",
+      "sizeBytes": 3846,
+      "contentHash": "66cae27ebe01763655e5afec7914cad372a60d639eff0366c2cb40f680ac93d1",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/04_verify.coordination-bridge.md",
+      "createdAt": "2026-05-29T01:12:11.588Z",
+      "producer": "04_verify",
+      "sizeBytes": 1117,
+      "contentHash": "024f55225e9f3a0244c1ff0bad7ec3c85d0c6173cc02dd03c14ca425248feb35",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/04_verify.skills.md",
+      "createdAt": "2026-05-29T01:12:11.588Z",
+      "producer": "04_verify",
+      "sizeBytes": 4634,
+      "contentHash": "c472f432f3555516a032fe023faac49d6ec745efdee034fb5d49388509138824",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/04_verify.task-packet.json",
+      "createdAt": "2026-05-29T01:12:34.732Z",
+      "producer": "04_verify",
+      "sizeBytes": 1417,
+      "contentHash": "61b96c6439de4a0183b8c9d0dc7f5fd9a76ec5290f856a0f21c3f2eef3b2eb25",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/04_verify.verification.json",
+      "createdAt": "2026-05-29T01:12:34.732Z",
+      "producer": "04_verify",
+      "sizeBytes": 200,
+      "contentHash": "070c265a9052c4d6cd6d554acf3c35f2ae77bc26d6b93af727c9002d877fa95b",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/04_verify.startup-evidence.json",
+      "createdAt": "2026-05-29T01:12:34.733Z",
+      "producer": "04_verify",
+      "sizeBytes": 273,
+      "contentHash": "3d55e0e3cadfac318474a75b245bbbaf486eb70bf71781a6bf97962bfea5e372",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/04_verify.permission.json",
+      "createdAt": "2026-05-29T01:12:34.733Z",
+      "producer": "04_verify",
+      "sizeBytes": 58,
+      "contentHash": "53f87f9c1502d52ea350de5a15759879c77d7059176fb0bc3fec405c35446dc3",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/04_verify.capabilities.json",
+      "createdAt": "2026-05-29T01:12:34.733Z",
+      "producer": "04_verify",
+      "sizeBytes": 733,
+      "contentHash": "c9c12d644026c8f5433501628f94a050f0cf22bc172d9d7adad92ae4b3a87949",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/04_verify.prompt-pipeline.json",
+      "createdAt": "2026-05-29T01:12:34.734Z",
+      "producer": "04_verify",
+      "sizeBytes": 1001,
+      "contentHash": "ae14e7c70c3b8ca089c9f8fbac19d9d1c15fbe3fc4d6a7897b5ca9a767162f40",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/04_verify.output-validation.json",
+      "createdAt": "2026-05-29T01:12:34.734Z",
+      "producer": "04_verify",
+      "sizeBytes": 156,
+      "contentHash": "5b5d4fff4f381b533ab8b3d62216fccc756c8d6e38bbd148c43d2c7a7d6e59a1",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/shared/04_verify.md",
+      "createdAt": "2026-05-29T01:12:34.733Z",
+      "producer": "04_verify",
+      "sizeBytes": 1190,
+      "contentHash": "a7251ecfb9dc619f2f1e7f2bfe3fdcb8b8cc4d1ea1754a9d94c40c61b6aad566",
+      "retention": "run"
+    },
+    {
+      "kind": "log",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/logs/04_verify.log",
+      "createdAt": "2026-05-29T01:12:34.720Z",
+      "producer": "04_verify",
+      "sizeBytes": 1388,
+      "contentHash": "2fb316ca71724678fc83c678d1535b2b99e682f2d5cc2b077dacdd2b72d594ea",
+      "retention": "run"
+    },
+    {
+      "kind": "log",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/transcripts/04_verify.attempt-0.jsonl",
+      "createdAt": "2026-05-29T01:12:34.725Z",
+      "producer": "04_verify",
+      "sizeBytes": 16361,
+      "contentHash": "dc26ce6243d2433c913c40c8f225da61606fad5efcd5be970aa7f8416afc7774",
+      "retention": "run"
+    },
+    {
+      "kind": "summary",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/batches/03_security-review+04_verify.md",
+      "createdAt": "2026-05-29T01:13:34.420Z",
+      "producer": "team-runner",
+      "sizeBytes": 8162,
+      "contentHash": "f22b6ffab2c29d1c9b119c5ce960929cee8b04d8da42555fd02b99987196a773",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/group-joins/team_20260529011120_86c28830ce6d8dfd_03_security-review+04_verify.json",
+      "createdAt": "2026-05-29T01:13:34.421Z",
+      "producer": "group-join",
+      "sizeBytes": 536,
+      "contentHash": "171cda59da2ff77f8e4ce8a85cf35f717d5c06737fbc41b1f11dfd28721f09f5",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/metadata/branch-freshness.json",
+      "createdAt": "2026-05-29T01:13:34.451Z",
+      "producer": "branch-freshness",
+      "sizeBytes": 169,
+      "contentHash": "eb5728a5dbe269f03e9b640455cf1241f4014249c7292c4099483bf01f1dcc3d",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/policy-decisions.json",
+      "createdAt": "2026-05-29T01:13:34.452Z",
+      "producer": "policy-engine",
+      "sizeBytes": 185,
+      "contentHash": "c202dd024e396c78bf0b0ba88b97bd3278f938c08df63538b35ba01f0db9f944",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/recovery-ledger.json",
+      "createdAt": "2026-05-29T01:13:34.452Z",
+      "producer": "recovery-engine",
+      "sizeBytes": 20,
+      "contentHash": "364b37738032a28a72829f4d2192b70bd9353c9ee8dddfc5b70c2785f995d6ac",
+      "retention": "run"
+    },
+    {
+      "kind": "progress",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/progress.md",
+      "createdAt": "2026-05-29T01:13:34.454Z",
+      "producer": "team-runner",
+      "sizeBytes": 835,
+      "contentHash": "20ee6464ad4565396b91ec0feaa725b359d0e4cad15a4649843ef3c91f2f6de6",
+      "retention": "run"
+    },
+    {
+      "kind": "summary",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/summary.md",
+      "createdAt": "2026-05-29T01:13:34.455Z",
+      "producer": "team-runner",
+      "sizeBytes": 1191,
+      "contentHash": "bfcb36a13dd65c689c8e22ca270bac745f306d29586206251019bbf5ada97736",
+      "retention": "run"
+    }
+  ],
+  "ownerSessionId": "019e7121-6a96-77c2-a7c3-32ef1c008aad",
+  "summary": "Team workflow completed.",
+  "runtimeResolution": {
+    "kind": "child-process",
+    "requestedMode": "auto",
+    "safety": "trusted",
+    "available": true,
+    "resolvedAt": "2026-05-29T01:11:20.182Z"
+  },
+  "runConfig": {},
+  "policyDecisions": [
+    {
+      "action": "closeout",
+      "reason": "run_complete",
+      "message": "All tasks completed and no policy blockers were found.",
+      "createdAt": "2026-05-29T01:13:34.451Z"
+    }
+  ]
+}

@@ -89,3 +89,10 @@ plugins/ai-eng-*/plugin.json
 
 # Development package.json backups (for dual package.json system)
 packages/*/package.json.dev
+
+/.crew/
+/.crew
+!.crew/artifacts/
+!.crew/graphs/
+!.crew/artifacts/.gitkeep
+!.crew/graphs/.gitkeep

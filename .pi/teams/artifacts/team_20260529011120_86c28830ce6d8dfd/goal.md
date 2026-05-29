@@ -1,0 +1,1 @@
+Thoroughly review Switchboard.md as a product/architecture concept. Evaluate coherence, missing requirements, architectural risks, MVP scope, integration with ai-eng-system/pi-crew patterns, and produce a concise review with severity-ranked findings and recommendations. Do not edit files.

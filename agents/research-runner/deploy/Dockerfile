@@ -45,11 +45,15 @@ COPY agents/research-runner/deploy/skills/ /app/skills/
 COPY agents/research-runner/deploy/config/crontab /etc/crontabs/root
 COPY agents/research-runner/deploy/config/entrypoint.sh /app/entrypoint.sh
 COPY agents/research-runner/deploy/config/settings.json /app/config/settings.json
+COPY agents/research-runner/deploy/queue-server.js /app/queue-server.js
 
-RUN chmod +x /app/scripts/*.sh /app/entrypoint.sh && chmod 600 /etc/crontabs/root
+RUN chmod +x /app/scripts/*.sh /app/entrypoint.sh /app/queue-server.js && chmod 600 /etc/crontabs/root
 
 # Vault data survives redeployments
 VOLUME ["/app/data"]
+
+# Queue UI
+EXPOSE 8080
 
 # Health check
 HEALTHCHECK --interval=60s --timeout=10s --retries=3 --start-period=30s \

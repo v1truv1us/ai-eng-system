@@ -1,0 +1,40 @@
+{
+  "dependencies": [
+    {
+      "taskId": "02_code-review",
+      "role": "reviewer",
+      "status": "completed",
+      "resultSummary": "FAILED / BLOCKED — `Switchboard.md` is not available in the current checkout.\n\n## Findings\n\n### Critical — Review target is missing\nEvidence:\n- `find *Switchboard.md` returned no matches.\n- Only Switchboard-related directory found: `Research/Switchboard/`.\n- `Research/Switchboard/04-output/2026-05-28_switchboard_comprehensive_report.md` contains only a placeholder:\n  - “Full report delivered in agent conversation”\n  - “External web tools were unavailable…”\n- `Research/Switchboard/04-output/test.md` contains only `(see attached image)`.\n\nI cannot evaluate product coherence, missing requirements, MVP scope, or architecture risks without the actual concept text.\n\n**Recommendation:** provide/restore the actual `Switchboard.md` path or paste its contents.\n\n### High — Switchboard must reconcile with existing orchestration contracts\nEvidence:\n- `docs/reference/orchestration-contract.md` already defines:\n  - `CONTEXT_HANDOFF_V1`\n  - `RESULT_V1`\n  - severity ordering\n  - confidence handling\n  - quality gates\n  - delegation and merge rules\n\nAny Switchboard concept involving agent routing, coordination, state, or reviews should explicitly reuse or supersede these contracts.\n\n### High — Orchestration runtime appears planned, not implemented\nEvidence:\n- `skills/orchestrate/SKILL.md` says `/orchestrate` is “planned” and that the spawn/wait/handoff driver and role references are not yet in the repository.\n\nIf Switchboard depends on orchestration runtime behavior, that dependency should be treated as an MVP blocker unless the MVP is only documentation/contracts.\n\n## Files inspected\n\n- `Research/Switchboard/04-output/2026-05-28_switchboard_comprehensive_report.md`\n- `Research/Switchboard/04-output/test.md`\n- `docs/reference/orchestration-contract.md`\n- `content/commands/orchestrate.md`\n- `skills/orchestrate/SKILL.md`\n- `agents/runner-shared/prompt.ts`\n- `CLAUDE.md`\n- `TODO.md`\n\n## Verification evidence\n\nRead-only checks only. No files modified.\n\nCommands/tools used:\n- searched for `Switchboard.md`\n- listed `Research/Switchboard`\n- read available Switchboard-related outputs\n- inspected existing orchestration docs/skills for integration context\n\n## Next recommended action\n\nProvide the actual `Switchboard.md` content/path, then re-run the review against:\n1. the concept document,\n2. `docs/reference/orchestration-contract.md`,\n3. `skills/orchestrate/SKILL.md`,\n4. pi-crew state/artifact conventions.",
+      "resultPath": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260529011120_86c28830ce6d8dfd/results/02_code-review.txt",
+      "artifactsProduced": [
+        "prompts/02_code-review.md",
+        "results/02_code-review.txt",
+        "metadata/02_code-review.inputs.json",
+        "metadata/02_code-review.coordination-bridge.md",
+        "metadata/02_code-review.skills.md",
+        "metadata/02_code-review.task-packet.json",
+        "metadata/02_code-review.verification.json",
+        "metadata/02_code-review.startup-evidence.json",
+        "metadata/02_code-review.permission.json",
+        "metadata/02_code-review.capabilities.json",
+        "metadata/02_code-review.prompt-pipeline.json",
+        "metadata/02_code-review.output-validation.json",
+        "shared/02_code-review.md",
+        "logs/02_code-review.log",
+        "transcripts/02_code-review.attempt-0.jsonl"
+      ],
+      "usage": {
+        "inputTokens": 44625,
+        "outputTokens": 1216,
+        "durationMs": 51091
+      }
+    },
+    {
+      "taskId": "03_security-review",
+      "role": "security-reviewer",
+      "status": "queued",
+      "resultSummary": ""
+    }
+  ],
+  "sharedReads": []
+}

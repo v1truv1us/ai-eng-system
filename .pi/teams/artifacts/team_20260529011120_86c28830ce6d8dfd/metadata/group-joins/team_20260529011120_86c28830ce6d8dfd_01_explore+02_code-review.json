@@ -1,0 +1,20 @@
+{
+  "batchId": "team_20260529011120_86c28830ce6d8dfd_01_explore+02_code-review",
+  "mode": "smart",
+  "partial": false,
+  "taskIds": [
+    "01_explore",
+    "02_code-review"
+  ],
+  "completed": [
+    "01_explore",
+    "02_code-review"
+  ],
+  "failed": [],
+  "skipped": [],
+  "remaining": [],
+  "requestId": "team_20260529011120_86c28830ce6d8dfd:group-join:completed:team_20260529011120_86c28830ce6d8dfd_01_explore+02_code-review",
+  "ackRequired": true,
+  "ackStatus": "pending",
+  "createdAt": "2026-05-29T01:12:11.564Z"
+}

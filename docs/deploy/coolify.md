@@ -21,8 +21,18 @@ Background worker (cron + pi). No HTTP UI.
 | Compose file | `agents/research-runner/deploy/docker-compose.yml` |
 | Base directory | `/` |
 | Domains | Leave empty |
-| Port exposes | Clear `3000` if set — nothing listens on HTTP |
+| Port exposes | `8080` only (queue UI) — clear `3000` |
 | Health check | Compose (`pgrep crond`) — disable HTTP check |
+
+### Queue UI (phone-friendly)
+
+1. In Coolify, open the **pi-runner** service → **Domains** → add `research.v1truv1us.dev` → choose port `8080`.
+2. In **Environment Variables**, add:
+   - `QUEUE_UI_PASSWORD` — required password for the form
+   - `QUEUE_UI_USER` — optional, default `admin`
+3. Redeploy. Open `https://research.v1truv1us.dev` on your phone, log in, submit topics.
+
+Disable the UI anytime by setting `QUEUE_UI_DISABLE=1`.
 
 Watch paths (optional): `agents/research-runner/deploy/**`
 
@@ -48,7 +58,9 @@ Enable Coolify webhook / deploy on push to `main`.
 
 ## 4. Update research topics
 
-On the VPS, copy `manage-research.sh` once, then:
+**Phone / web:** `https://research.v1truv1us.dev` (see Queue UI above).
+
+**VPS CLI:** copy `manage-research.sh` once, then:
 
 ```bash
 ./manage-research.sh list

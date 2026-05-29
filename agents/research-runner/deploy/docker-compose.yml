@@ -9,11 +9,15 @@ services:
       dockerfile: agents/research-runner/deploy/Dockerfile
     container_name: pi-runner
     restart: unless-stopped
-    # No ports: — not a web service; do not set Coolify "Port Exposes" to 3000
+    ports:
+      - "8080:8080"
     environment:
       - TZ=America/Los_Angeles
       # Optional: short auth JSON if your Coolify env editor allows it.
       - PI_AUTH_JSON=${PI_AUTH_JSON:-}
+      - QUEUE_UI_USER=${QUEUE_UI_USER:-admin}
+      - QUEUE_UI_PASSWORD=${QUEUE_UI_PASSWORD:-}
+      - QUEUE_UI_PORT=8080
     volumes:
       # Persistent data: vault, logs, auth.json — survives redeployments (see setup-vps-auth.sh)
       - pi-runner-data:/app/data

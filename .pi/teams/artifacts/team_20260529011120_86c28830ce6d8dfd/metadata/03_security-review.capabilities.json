@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "taskId": "03_security-review",
+  "role": "security-reviewer",
+  "agent": "security-reviewer",
+  "runtime": "child-process",
+  "permissionMode": "read_only",
+  "tools": [
+    "bash",
+    "find",
+    "grep",
+    "ls",
+    "read"
+  ],
+  "extensions": [],
+  "skills": {
+    "names": [
+      "ownership-session-security",
+      "secure-agent-orchestration-review"
+    ],
+    "paths": [
+      "/Users/johnferguson/.pi/agent/npm/node_modules/pi-crew/skills/ownership-session-security",
+      "/Users/johnferguson/.pi/agent/npm/node_modules/pi-crew/skills/secure-agent-orchestration-review"
+    ],
+    "disabled": false
+  },
+  "model": {
+    "fallbacks": []
+  },
+  "inheritance": {
+    "projectContext": true,
+    "skills": false,
+    "systemPromptMode": "replace"
+  }
+}

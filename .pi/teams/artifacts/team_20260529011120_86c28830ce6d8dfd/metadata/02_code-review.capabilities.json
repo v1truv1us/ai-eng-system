@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "taskId": "02_code-review",
+  "role": "reviewer",
+  "agent": "reviewer",
+  "runtime": "child-process",
+  "permissionMode": "read_only",
+  "tools": [
+    "bash",
+    "find",
+    "grep",
+    "ls",
+    "read"
+  ],
+  "extensions": [],
+  "skills": {
+    "names": [
+      "multi-perspective-review",
+      "read-only-explorer"
+    ],
+    "paths": [
+      "/Users/johnferguson/.pi/agent/npm/node_modules/pi-crew/skills/multi-perspective-review",
+      "/Users/johnferguson/.pi/agent/npm/node_modules/pi-crew/skills/read-only-explorer"
+    ],
+    "disabled": false
+  },
+  "model": {
+    "fallbacks": []
+  },
+  "inheritance": {
+    "projectContext": true,
+    "skills": false,
+    "systemPromptMode": "replace"
+  }
+}

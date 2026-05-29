@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "taskId": "03_security-review",
+  "stages": [
+    {
+      "name": "task-packet-built",
+      "references": [
+        "metadata/03_security-review.task-packet.json"
+      ]
+    },
+    {
+      "name": "dependency-context-collected",
+      "references": [
+        "metadata/03_security-review.inputs.json"
+      ]
+    },
+    {
+      "name": "skills-rendered-or-disabled",
+      "references": [
+        "metadata/03_security-review.skills.md"
+      ],
+      "details": {
+        "disabled": false,
+        "skillInstructionCount": 2
+      }
+    },
+    {
+      "name": "capability-inventory-recorded",
+      "references": [
+        "metadata/03_security-review.capabilities.json"
+      ]
+    },
+    {
+      "name": "coordination-bridge-attached",
+      "references": [
+        "metadata/03_security-review.coordination-bridge.md"
+      ]
+    },
+    {
+      "name": "prompt-rendered",
+      "references": []
+    },
+    {
+      "name": "prompt-artifact-written",
+      "references": [
+        "prompts/03_security-review.md"
+      ]
+    }
+  ]
+}
