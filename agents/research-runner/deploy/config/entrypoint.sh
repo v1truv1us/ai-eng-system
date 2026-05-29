@@ -8,6 +8,7 @@ echo "========================================"
 echo "  pi-runner starting"
 echo "========================================"
 
+export HOME="${HOME:-/root}"
 PI_DIR="${HOME}/.pi/agent"
 
 # ── 1. Set up settings.json (packages, model config) ──
@@ -87,7 +88,7 @@ echo ""
 # ── 6. Start ofelia ──
 echo "=== Starting cron scheduler ==="
 echo "Scheduled jobs:"
-grep -E '^\[job-' /app/ofelia.ini 2>/dev/null | sed 's/\[job-exec "\([^"]*\)"\]/  • \1/' | while read line; do
+grep -E '^\[job-' /app/ofelia.ini 2>/dev/null | sed 's/\[job-local "\([^"]*\)"\]/  • \1/' | while read line; do
     echo "$line"
 done
 echo ""
