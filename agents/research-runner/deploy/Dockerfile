@@ -37,7 +37,8 @@ COPY agents/research-runner/shared/ /opt/ai-eng-system/agents/research-runner/sh
 COPY agents/runner-shared/ /opt/ai-eng-system/agents/runner-shared/
 
 # Install dependencies (tsx for running .ts, anthropic sdk for pi driver)
-RUN cd /opt/ai-eng-system/agents/research-runner/pi && npm install
+# Use npm ci for reproducible installs; esbuild platform binaries are optional deps of tsx.
+RUN cd /opt/ai-eng-system/agents/research-runner/pi && npm ci
 RUN cd /opt/ai-eng-system/agents/runner-shared && npm install || true
 
 # ── App layer ──

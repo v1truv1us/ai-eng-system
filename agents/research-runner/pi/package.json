@@ -7,8 +7,7 @@
     "run": "tsx runner.ts"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.52.0",
-    "@esbuild/linux-arm64": "^0.28.0"
+    "@anthropic-ai/sdk": "^0.52.0"
   },
   "devDependencies": {
     "tsx": "^4.0.0",
