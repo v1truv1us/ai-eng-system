@@ -7,13 +7,15 @@ services:
     restart: unless-stopped
     environment:
       - TZ=America/Los_Angeles
-      # ── Auth: set this in Coolify's env var editor ──
-      # Get the value: cd deploy && ./get-auth.sh
-      # Mark as LOCKED in Coolify to hide from logs.
+      # Optional: short auth JSON if your Coolify env editor allows it.
       - PI_AUTH_JSON=${PI_AUTH_JSON:-}
+      # Host path to auth.json (create on VPS — see deploy/README.md).
+      - PI_AUTH_HOST_FILE=${PI_AUTH_HOST_FILE:-/data/pi-runner/auth.json}
     volumes:
-      # Persistent data: vault, logs, output, auth survive redeployments
+      # Persistent data: vault, logs, output survive redeployments
       - pi-runner-data:/app/data
+      # Pi credentials from VPS host (login with pi on the server, copy auth.json here)
+      - ${PI_AUTH_HOST_FILE}:/root/.pi/agent/auth.json:ro
       # Scheduled config (competitors, topics, models) is copied into the image at build time.
       # Redeploy after editing files under deploy/scheduled/ in the repo.
     healthcheck:
