@@ -7,8 +7,8 @@ set -euo pipefail
 # Usage: pick-model.sh --task-type <research|brief|scan|review>
 # Outputs: model identifier ready for pi --model
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCHEDULED_DIR="${SCRIPT_DIR}/../scheduled"
+# shellcheck source=paths.sh
+. "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/paths.sh"
 MODELS_FILE="${SCHEDULED_DIR}/models.json"
 USAGE_FILE="${SCHEDULED_DIR}/usage.json"
 

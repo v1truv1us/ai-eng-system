@@ -61,6 +61,9 @@ The runner processes unchecked items and archives completed ones.
 
 ## #personal
 - [ ] <!-- Example: Best travel routers for digital nomads 2026 -->
+
+## Archive
+<!-- Completed items are moved here by the wiki research jobs -->
 QUEUE
     echo "[init] Research queue initialized"
 fi
@@ -74,9 +77,15 @@ INDEX
     echo "[init] Wiki index initialized"
 fi
 
-# ── 4. Initialize usage tracking ──
-if [ ! -f /app/scheduled/usage.json ]; then
-    echo '{"days":{},"last_picked":{}}' > /app/scheduled/usage.json
+# ── 4. Scheduled config on persistent volume (editable without redeploy) ──
+mkdir -p /app/data/scheduled /app/data/output
+for f in competitors.txt research-topics.txt models.json; do
+    if [ ! -f "/app/data/scheduled/$f" ] && [ -f "/app/scheduled/$f" ]; then
+        cp "/app/scheduled/$f" "/app/data/scheduled/$f"
+    fi
+done
+if [ ! -f /app/data/scheduled/usage.json ]; then
+    echo '{"days":{},"last_picked":{}}' > /app/data/scheduled/usage.json
 fi
 
 # ── 5. Verify pi works ──

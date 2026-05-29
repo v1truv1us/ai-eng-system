@@ -2,14 +2,15 @@
 set -euo pipefail
 
 # Deep research — rotates through research topics
-TOPICS="/app/scheduled/research-topics.txt"
+# shellcheck source=paths.sh
+. /app/scripts/paths.sh
 PI_DIR="${HOME}/.pi/agent"
 LOG_DIR="/app/logs"
 LOCK_DIR="/app/locks"
 
-mkdir -p "$LOG_DIR" "$LOCK_DIR" "/app/scheduled/output"
+mkdir -p "$LOG_DIR" "$LOCK_DIR" "$OUTPUT_DIR"
 
-QUESTION=$("/app/scripts/rotate-topic.sh" "$TOPICS")
+QUESTION=$("/app/scripts/rotate-topic.sh" "${SCHEDULED_DIR}/research-topics.txt")
 
 if [ -z "$QUESTION" ]; then
     echo "$(date '+%Y-%m-%d %H:%M:%S') — No research topics in rotation list. Skipping."
@@ -18,7 +19,7 @@ fi
 
 TODAY=$(date '+%Y-%m-%d')
 SLUG=$(echo "$QUESTION" | tr '[:upper:]' '[:lower:]' | tr -cs 'a-z0-9' '-' | sed 's/-$//')
-OUT_FILE="/app/scheduled/output/research-deep-${TODAY}-${SLUG}.md"
+OUT_FILE="${OUTPUT_DIR}/research-deep-${TODAY}-${SLUG}.md"
 
 MODEL=$(/app/scripts/pick-model.sh --task-type research 2>>"${LOG_DIR}/research-deep.log" || echo "")
 MODEL_FLAG=""

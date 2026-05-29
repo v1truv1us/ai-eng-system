@@ -46,7 +46,19 @@ See [agents/research-runner/deploy/README.md](../../agents/research-runner/deplo
 
 Enable Coolify webhook / deploy on push to `main`.
 
-## 4. Troubleshooting
+## 4. Update research topics
+
+On the VPS, copy `manage-research.sh` once, then:
+
+```bash
+./manage-research.sh list
+./manage-research.sh add engineering "Your question"
+./manage-research.sh topics-add "Deep research question"
+```
+
+See [agents/research-runner/deploy/README.md](../../agents/research-runner/deploy/README.md).
+
+## 5. Troubleshooting
 
 | Symptom | Fix |
 |---------|-----|

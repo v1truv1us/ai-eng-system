@@ -10,9 +10,9 @@ set -euo pipefail
 QUESTION="${1:-}"
 
 if [ -z "$QUESTION" ]; then
-    # Rotate to next topic from the queue
-    TOPICS="/app/scheduled/research-topics.txt"
-    QUESTION=$(/app/scripts/rotate-topic.sh "$TOPICS")
+    # shellcheck source=paths.sh
+    . /app/scripts/paths.sh
+    QUESTION=$(/app/scripts/rotate-topic.sh "${SCHEDULED_DIR}/research-topics.txt")
 fi
 
 if [ -z "$QUESTION" ]; then

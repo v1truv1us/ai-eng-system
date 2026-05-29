@@ -36,15 +36,37 @@ Full checklist (docs site, webhooks, troubleshooting): [docs/deploy/coolify.md](
    Alternative (small auth only): `PI_AUTH_JSON` from `./get-auth.sh` on your Mac.
 4. **Deploy**
 
-## Adding research items
+## Managing research (easy)
+
+On the VPS, use **`manage-research.sh`** (copy to `~/` or run from this directory):
 
 ```bash
-# Via Coolify terminal or SSH:
-docker exec -it pi-runner vi /app/data/vault/RESEARCH_QUEUE.md
+./manage-research.sh list
+./manage-research.sh add engineering "How does X work?"
+./manage-research.sh add research "Latest on agentic browsing"
+./manage-research.sh add personal "Best travel routers 2026"
+./manage-research.sh edit                    # full queue in vi
 
-# Or edit topic files in the repo and redeploy:
-vi scheduled/competitors.txt
-vi scheduled/research-topics.txt
+./manage-research.sh topics                  # deep-research rotation list
+./manage-research.sh topics-add "Question for Wednesday deep run"
+
+./manage-research.sh competitors
+./manage-research.sh competitors-add "Competitor Inc"
+```
+
+| What | Where it lives | Schedule |
+|------|----------------|----------|
+| Wiki queue (`#engineering`, `#research`, `#personal`) | `/app/data/vault/RESEARCH_QUEUE.md` | Weekdays / Sunday |
+| Deep research topics | `/app/data/scheduled/research-topics.txt` | Wed 2pm PT |
+| Competitor scans | `/app/data/scheduled/competitors.txt` | Mon 9am PT |
+
+All of the above persist on the **data volume** — no redeploy needed when you add or edit items.
+
+From your Mac (with SSH/docker to the VPS):
+
+```bash
+scp manage-research.sh coolify@v1truv1us.dev:~/
+ssh coolify@v1truv1us.dev './manage-research.sh add research "Your topic"'
 ```
 
 ## Refreshing auth
@@ -85,6 +107,7 @@ deploy/
 │   ├── wiki-research-research/
 │   ├── wiki-research-personal/
 │   └── auto-research/
+├── manage-research.sh          # Add/list/edit queue and topic files (run on VPS)
 ├── get-auth.sh                 # Extract minimal auth for PI_AUTH_JSON (optional)
 ├── setup-vps-auth.sh           # Copy host pi login → Docker volume auth.json
 ├── verify-pi-runner.sh         # VPS diagnostic (auth, volume, container)

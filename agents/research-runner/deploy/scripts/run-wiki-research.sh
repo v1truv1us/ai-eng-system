@@ -5,6 +5,8 @@ set -euo pipefail
 # Usage: run-wiki-research.sh <engineering|research|personal>
 
 TAG="${1:?Usage: run-wiki-research.sh <engineering|research|personal>}"
+# shellcheck source=paths.sh
+. /app/scripts/paths.sh
 VAULT="/app/data/vault"
 PI_DIR="${HOME}/.pi/agent"
 LOG_DIR="/app/logs"
@@ -31,8 +33,8 @@ LOCK="${LOCK_DIR}/wiki-research-${TAG}.lock"
 START=$(date '+%Y-%m-%d %H:%M:%S')
 echo "[$TAG] START $START" >> "${LOG_DIR}/runtimes.log"
 
-OUT_DIR="/app/scheduled/output"
-mkdir -p "$OUT_DIR"
+mkdir -p "$OUTPUT_DIR"
+OUT_DIR="$OUTPUT_DIR"
 
 pi -p $MODEL_FLAG --skill "/app/skills/wiki-research-${TAG}" \
     "Process all unchecked #${TAG} items in RESEARCH_QUEUE.md. Research each topic using intelli_research, create or update wiki pages, mark items done, and move them to Archive. Append a log entry to wiki/log.md." \

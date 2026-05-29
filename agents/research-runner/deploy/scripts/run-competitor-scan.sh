@@ -2,12 +2,14 @@
 set -euo pipefail
 
 # Competitor scan — rotates through competitor list
-TOPICS="/app/scheduled/competitors.txt"
+# shellcheck source=paths.sh
+. /app/scripts/paths.sh
+TOPICS="${SCHEDULED_DIR}/competitors.txt"
 PI_DIR="${HOME}/.pi/agent"
 LOG_DIR="/app/logs"
 LOCK_DIR="/app/locks"
 
-mkdir -p "$LOG_DIR" "$LOCK_DIR" "/app/scheduled/output"
+mkdir -p "$LOG_DIR" "$LOCK_DIR" "$OUTPUT_DIR"
 
 TARGET=$("/app/scripts/rotate-topic.sh" "$TOPICS")
 
@@ -17,7 +19,7 @@ if [ -z "$TARGET" ]; then
 fi
 
 TODAY=$(date '+%Y-%m-%d')
-OUT_FILE="/app/scheduled/output/competitor-scan-${TODAY}-${TARGET// /-}.md"
+OUT_FILE="${OUTPUT_DIR}/competitor-scan-${TODAY}-${TARGET// /-}.md"
 
 MODEL=$(/app/scripts/pick-model.sh --task-type scan 2>>"${LOG_DIR}/competitor-scan.log" || echo "")
 MODEL_FLAG=""
