@@ -22,20 +22,17 @@ fi
 
 # ── 2. Auth (priority: host bind-mount → volume copy → PI_AUTH_JSON env) ──
 AUTH_FILE="${PI_DIR}/auth.json"
-AUTH_HOST_FILE="${PI_AUTH_HOST_FILE:-/data/pi-runner/auth.json}"
-
-if [ -f "$AUTH_FILE" ] && [ -s "$AUTH_FILE" ]; then
-    echo "[init] Auth present at ${AUTH_FILE} (host mount or prior run)"
-elif [ -f /app/data/auth.json ]; then
+if [ -f /app/data/auth.json ] && [ -s /app/data/auth.json ]; then
     cp /app/data/auth.json "$AUTH_FILE"
     echo "[init] Auth configured from /app/data/auth.json"
+elif [ -f "$AUTH_FILE" ] && [ -s "$AUTH_FILE" ]; then
+    echo "[init] Auth present at ${AUTH_FILE}"
 elif [ -n "${PI_AUTH_JSON:-}" ]; then
     echo "$PI_AUTH_JSON" > "$AUTH_FILE"
     echo "[init] Auth configured from PI_AUTH_JSON env var"
 else
     echo "[WARN] No auth configured."
-    echo "[WARN] On the VPS: pi login, then: cp ~/.pi/agent/auth.json ${AUTH_HOST_FILE}"
-    echo "[WARN] Or set PI_AUTH_HOST_FILE in Coolify to your auth.json path."
+    echo "[WARN] On the VPS run: ./setup-vps-auth.sh  (copies into the pi-runner data volume)"
     echo "[WARN] Scheduled jobs will fail until auth exists."
 fi
 

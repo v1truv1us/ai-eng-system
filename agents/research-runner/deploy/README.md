@@ -21,13 +21,14 @@ Scheduled research agent that runs on Coolify as a Docker container.
    # SSH to the VPS (same machine Coolify uses for Docker)
    npm install -g @earendil-works/pi-coding-agent
    pi    # sign in once
-   ./setup-vps-auth.sh   # copies ~/.pi/agent/auth.json → /data/pi-runner/auth.json
+   cd /path/to/ai-eng-system/agents/research-runner/deploy
+   ./setup-vps-auth.sh   # copies auth into the pi-runner-data Docker volume
    ```
-   Compose bind-mounts that file into the container. To refresh tokens later, run `pi` on the VPS again and re-run `setup-vps-auth.sh` (no redeploy needed if the mount path is unchanged).
+   Coolify does not pass arbitrary host bind-mounts from compose; auth lives at `/app/data/auth.json` inside the persistent volume. Re-run `setup-vps-auth.sh` after `pi` login when tokens expire, then restart the container.
 
-   Optional: set `PI_AUTH_HOST_FILE` in Coolify if you use a path other than `/data/pi-runner/auth.json`.
+   `cat /data/pi-runner/auth.json` as user `coolify` will fail with permission denied — that is normal (`chmod 600`, owned by root). Use `sudo cat` to inspect.
 
-   Alternative (small auth only): `PI_AUTH_JSON` from `./get-auth.sh` on your Mac — only works if the JSON fits Coolify’s env editor.
+   Alternative (small auth only): `PI_AUTH_JSON` from `./get-auth.sh` on your Mac.
 4. **Deploy**
 
 ## Adding research items
