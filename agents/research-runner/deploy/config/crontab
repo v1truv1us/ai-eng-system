@@ -1,0 +1,8 @@
+# pi-runner schedules (America/Los_Angeles via TZ env)
+# min hour day month weekday command
+
+0 9 * * 1-5 /bin/bash /app/scripts/run-wiki-research.sh engineering >>/app/logs/cron.log 2>&1
+30 9 * * 1-5 /bin/bash /app/scripts/run-wiki-research.sh research >>/app/logs/cron.log 2>&1
+0 10 * * 0 /bin/bash /app/scripts/run-wiki-research.sh personal >>/app/logs/cron.log 2>&1
+0 9 * * 1 /bin/bash /app/scripts/run-competitor-scan.sh >>/app/logs/cron.log 2>&1
+0 14 * * 3 /bin/bash /app/scripts/run-research-runner.sh >>/app/logs/cron.log 2>&1

@@ -17,7 +17,7 @@ services:
       # Scheduled config (competitors, topics, models) is copied into the image at build time.
       # Redeploy after editing files under deploy/scheduled/ in the repo.
     healthcheck:
-      test: ["CMD", "pgrep", "ofelia"]
+      test: ["CMD", "pgrep", "crond"]
       interval: 60s
       timeout: 10s
       retries: 3

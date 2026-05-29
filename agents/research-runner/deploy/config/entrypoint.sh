@@ -81,20 +81,19 @@ echo ""
 echo "=== Verification ==="
 echo "Node: $(node --version)"
 echo "pi: $(which pi)"
-echo "ofelia: $(which ofelia)"
+echo "crond: $(which crond)"
 echo "Vault: $VAULT"
 echo ""
 
-# ── 6. Start ofelia ──
-echo "=== Starting cron scheduler ==="
-echo "Scheduled jobs:"
-grep -E '^\[job-' /app/ofelia.ini 2>/dev/null | sed 's/\[job-local "\([^"]*\)"\]/  • \1/' | while read line; do
-    echo "$line"
-done
+# ── 6. Start cron ──
+mkdir -p /app/logs
+touch /app/logs/cron.log
+echo "=== Starting cron scheduler (dcron) ==="
+grep -E '^[0-9*]' /etc/crontabs/root | sed 's/^/  /' || true
 echo ""
 echo "========================================"
 echo "  pi-runner ready"
 echo "========================================"
 echo ""
 
-exec ofelia daemon --config /app/ofelia.ini
+exec crond -f -l 8

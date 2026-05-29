@@ -8,27 +8,19 @@
 #   2. pi CLI (agent sessions)
 #   3. pi-intelli-search (web research tools)
 #   4. ai-eng-system research-runner (TypeScript, runs via tsx — no build needed)
-#   5. ofelia (cron scheduler)
+#   5. dcron (cron scheduler)
 #   6. App scripts + skills + config
 
 FROM node:22-alpine
 
 # System deps
-RUN apk add --no-cache git python3 bash curl make g++ procps
+RUN apk add --no-cache git python3 bash curl make g++ procps dcron
 
 # Install pi globally
 RUN npm install -g @earendil-works/pi-coding-agent
 
 # Install pi-intelli-search (provides intelli_search, intelli_research, intelli_extract, etc.)
 RUN npm install -g @curio-data/pi-intelli-search
-
-# Install ofelia — cron scheduler
-RUN ARCH=$(uname -m) && \
-    OFELIA_ARCH="amd64" && \
-    if [ "$ARCH" = "aarch64" ]; then OFELIA_ARCH="arm64"; fi && \
-    curl -L -o /usr/local/bin/ofelia \
-      "https://github.com/mcuadros/ofelia/releases/download/v0.5.7/ofelia-v0.5.7-linux-${OFELIA_ARCH}" && \
-    chmod +x /usr/local/bin/ofelia
 
 # ── ai-eng-system research-runner (runs via tsx, no build step) ──
 # Copy only what the research-runner needs
@@ -50,17 +42,17 @@ WORKDIR /app
 COPY agents/research-runner/deploy/scripts/ /app/scripts/
 COPY agents/research-runner/deploy/scheduled/ /app/scheduled/
 COPY agents/research-runner/deploy/skills/ /app/skills/
-COPY agents/research-runner/deploy/config/ofelia.ini /app/ofelia.ini
+COPY agents/research-runner/deploy/config/crontab /etc/crontabs/root
 COPY agents/research-runner/deploy/config/entrypoint.sh /app/entrypoint.sh
 COPY agents/research-runner/deploy/config/settings.json /app/config/settings.json
 
-RUN chmod +x /app/scripts/*.sh /app/entrypoint.sh
+RUN chmod +x /app/scripts/*.sh /app/entrypoint.sh && chmod 600 /etc/crontabs/root
 
 # Vault data survives redeployments
 VOLUME ["/app/data"]
 
 # Health check
 HEALTHCHECK --interval=60s --timeout=10s --retries=3 --start-period=30s \
-    CMD pgrep ofelia || exit 1
+    CMD pgrep crond || exit 1
 
 ENTRYPOINT ["/app/entrypoint.sh"]
