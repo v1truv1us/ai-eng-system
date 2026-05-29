@@ -14,7 +14,7 @@
 FROM node:22-alpine
 
 # System deps
-RUN apk add --no-cache git python3 bash curl make g++
+RUN apk add --no-cache git python3 bash curl make g++ procps
 
 # Install pi globally
 RUN npm install -g @earendil-works/pi-coding-agent
