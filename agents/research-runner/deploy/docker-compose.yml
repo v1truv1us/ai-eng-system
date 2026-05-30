@@ -43,7 +43,7 @@ services:
       # Queue UI — routed through Coolify's proxy (Traefik).
       # Set QUEUE_UI_DOMAIN env var to override the default domain.
       - "traefik.enable=true"
-      - "traefik.http.routers.pi-runner-queue.rule=Host(${QUEUE_UI_DOMAIN})"
+      - "traefik.http.routers.pi-runner-queue.rule=Host(`research.v1truv1us.dev`)"
       - "traefik.http.routers.pi-runner-queue.entrypoints=http,https"
       - "traefik.http.routers.pi-runner-queue.tls=true"
       - "traefik.http.routers.pi-runner-queue.service=pi-runner-queue"
