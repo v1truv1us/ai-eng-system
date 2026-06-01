@@ -8,20 +8,20 @@ metadata:
 
 # Orchestrate
 
-> **Status: planned.** The spawn/wait/handoff driver (`scripts/cli.ts`) and role references (`references/dispatcher.md`, `references/planner.md`) are not in this repository yet. Until they land, use the **`cursor-sdk`** skill with cloud `Agent.create({ cloud: { repos } })` for multi-agent work, or the local pattern in `agents/research-runner/cursor/runner.ts`.
+> **Status: planned.** The spawn/wait/handoff driver (`scripts/cli.ts`) and role references (`references/dispatcher.md`, `references/planner.md`) are not in this repository yet. Until they land, use the **`agents-sdk-dev`** skill (harness=cursor) with cloud `Agent.create({ cloud: { repos } })` for multi-agent work, or the local pattern in `agents/research-runner/cursor/runner.ts`.
 
 An explicit `/orchestrate <goal>` will fan out a large task across parallel Cursor cloud agents. Workers don't talk to each other; they talk up through structured handoffs. The intended design: a script owns the spawn/wait loop, the planner writes `plan.json`, the script executes it, and the planner reads handoffs to decide what comes next.
 
-**Required reading: the `cursor-sdk` skill** ([cursor/plugins/cursor-sdk](https://github.com/cursor/plugins/tree/main/cursor-sdk) or `skills/cursor-sdk/SKILL.md` in this repo). Spawning, auth, and the error taxonomy live there.
+**Required reading: the `agents-sdk-dev` skill** (`skills/agents-sdk-dev/SKILL.md` in this repo, specify harness=cursor). Spawning, auth, and the error taxonomy live there.
 
 ## Setup (when implemented)
 
-- `CURSOR_API_KEY` must be a personal/user key. Create it from [Cursor Dashboard > Integrations](https://cursor.com/dashboard/integrations), then read `cursor-sdk` auth guidance.
+- `CURSOR_API_KEY` must be a personal/user key. Create it from [Cursor Dashboard > Integrations](https://cursor.com/dashboard/integrations), then read `agents-sdk-dev` (harness=cursor) auth guidance.
 - `SLACK_BOT_TOKEN` is optional for Slack visibility in the upstream design.
 
 ## Workaround today
 
-1. Load **`cursor-sdk`**.
+1. Load **`agents-sdk-dev`** with harness=cursor.
 2. Use **cloud** runtime with explicit `cloud: { repos: [...] }` per worker task.
 3. Persist handoffs as JSON files on disk; use deterministic code for phase transitions (see `agents/research-runner/shared/workflow-contract.ts`).
 4. Track `/orchestrate` status in `docs/reference/commands.md` (listed as **planned**).

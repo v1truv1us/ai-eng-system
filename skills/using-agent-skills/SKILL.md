@@ -83,12 +83,12 @@ SPECIALIZED
   → Creating plugins/commands/skills?
     → plugin-dev
   → Building a harness workflow runner (Cursor, Claude, OpenCode, OpenAI, Pi)?
-    → cursor-sdk, claude-agent-sdk, opencode-sdk, openai-agents-sdk, or pi-agent-sdk
+    → agents-sdk-dev (unified — specify harness)
     → See agents/research-runner/ for reference implementations
   → Gemini workflow adapter (not shipped yet)?
     → gemini-agent-sdk
   → Large cloud multi-agent tree (/orchestrate)?
-    → orchestrate (planned; use cursor-sdk until scripts/cli.ts exists)
+    → orchestrate (planned; use agents-sdk-dev with harness=cursor until scripts/cli.ts exists)
   → Optimizing prompts?
     → incentive-prompting or prompt-refinement
   → Cleaning up AI verbosity?

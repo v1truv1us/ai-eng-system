@@ -223,7 +223,7 @@ Analysis:
       "mode": "primary",
       "prompt": "{file:./prompts/primary-agent.txt}",
       "skills": ["agent-orchestration"],
-      "model": "anthropic/claude-sonnet-4-20250514"
+      "model": "anthropic/claude-sonnet-4-6"
     },
     "plan": {
       "mode": "primary",

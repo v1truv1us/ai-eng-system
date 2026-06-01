@@ -73,13 +73,9 @@ ai-eng-system currently ships 33 canonical skills organized by lifecycle phase a
 ## Plugin, Extension, and Agent SDK Development
 
 - `plugin-dev` - Claude Code/OpenCode plugin, command, agent, skill, and tool development
-- `cursor-sdk` - Cursor TypeScript SDK workflows and cloud/local agents
-- `claude-agent-sdk` - Claude/Anthropic SDK workflow adapters
-- `opencode-sdk` - OpenCode SDK local workflow runners
-- `openai-agents-sdk` - OpenAI Agents SDK / Codex-style workflow adapters
+- `agents-sdk-dev` - Unified agent scaffolding across 5 harnesses (Anthropic, Cursor, OpenAI, OpenCode, Pi). Interactive project generator, per-harness SDK patterns, and built-in verification
 - `gemini-agent-sdk` - Gemini SDK/ADK-style workflow adapters (runner not in repo yet)
-- `pi-agent-sdk` - Pi CLI workflow adapters (subagents are separate from research-runner and seo-review-runner)
-- `orchestrate` - Planned Cursor cloud planner/worker tree; use `cursor-sdk` until implemented
+- `orchestrate` - Planned Cursor cloud planner/worker tree; use `agents-sdk-dev` with harness=cursor until implemented
 
 Reference runners: `agents/research-runner/` (research templates, 5 runtimes), `agents/seo-review-runner/` (SEO audit, 5 runtimes). Shared prompt helpers: `agents/seo-review-runner/shared/prompt.ts`. Shared workflow types: `agents/research-runner/shared/workflow-contract.ts`.
 

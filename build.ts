@@ -1423,12 +1423,8 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
         skills: [
             "plugin-dev",
             "monorepo-initialization",
-            "cursor-sdk",
-            "claude-agent-sdk",
-            "opencode-sdk",
-            "openai-agents-sdk",
+            "agents-sdk-dev",
             "gemini-agent-sdk",
-            "pi-agent-sdk",
         ],
         description:
             "Meta-tooling for creating plugins, agents, commands, and skills",
