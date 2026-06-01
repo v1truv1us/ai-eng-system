@@ -97,7 +97,7 @@ Complete mapping of every command to its canonical owner: skill, runtime feature
 
 | Alias | Canonical Target |
 |-------|-----------------|
-| `/spec` | `/ai-eng/specify` |
+| `/spec` | `/ai-eng/spec` |
 | `/plan` | `/ai-eng/plan` |
 | `/build` | `/ai-eng/work` |
 | `/test` | TDD entrypoint via `test-driven-development` skill |

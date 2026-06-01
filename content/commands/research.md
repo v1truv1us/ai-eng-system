@@ -75,6 +75,6 @@ Save research document to `docs/research/[date]-[topic-slug].md` with findings, 
 
 ## Integration
 
-- Feeds into: `/ai-eng/specify` (via `--feed-into=specify`), `/ai-eng/plan` (via `--feed-into=plan`)
+- Feeds into: `/ai-eng/spec` (via `--feed-into=spec`), `/ai-eng/plan` (via `--feed-into=plan`)
 
 $ARGUMENTS

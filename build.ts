@@ -70,7 +70,7 @@ const COOKING_HOOKS_DIR = join(ROOT, "hooks", "cooking");
 /** Core workflow commands shipped in the monolithic Cursor bundle */
 const CURSOR_BUNDLE_COMMANDS = [
     "research",
-    "specify",
+    "spec",
     "plan",
     "work",
     "review",
@@ -1180,7 +1180,7 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "plan",
             "work",
             "review",
-            "specify",
+            "spec",
             "research",
             "simplify",
             "context",

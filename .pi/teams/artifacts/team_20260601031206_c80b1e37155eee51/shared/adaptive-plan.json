@@ -1,0 +1,50 @@
+Now I have a thorough understanding of the codebase. Let me summarize my assessment and produce the plan.
+
+## Assessment Summary
+
+**Repository state discovered:**
+
+1. **`src/agents/claude-router/`** already exists with an empty `__tests__/` subdirectory. No implementation files yet.
+2. **`src/agents/types.ts`** has rich types: `AgentType` enum, `AgentTask`, `AgentInput`, `AgentOutput`, `RoutingDecision`, `ExecutionStrategy`, `ConfidenceLevel`, etc. The new router must use these types.
+3. **`src/agents/coordinator.ts`** is a 400+ line orchestration engine with dependency resolution, parallel/sequential/conditional execution, caching, and result aggregation. The conductor should follow similar patterns but focused on task→subagent routing.
+4. **SKILL.md format** (from `claude-agent-sdk` and `comprehensive-research`): YAML frontmatter with `name`, `description`, `metadata.version`, `metadata.tags`, followed by markdown sections.
+5. **Content agent definitions** (from `content/agents/`): YAML frontmatter with `name`, `description`, `mode`, `temperature`, `tools`, `category`, then markdown body.
+6. **Command definitions** (from `content/commands/`): Minimal frontmatter referencing a skill, e.g. `name`, `description`, `agent`, `version`.
+7. **Tests** use `bun:test` (import from `"bun:test"`), follow `describe/it` pattern.
+8. **`.pi/skills/dynamic-claude-router/`** exists but is empty — ready for `SKILL.md`.
+9. **No cross-references to existing code** — the `claude-router` directory and skill directory are both empty shells. No risk of overwriting existing work.
+
+**Work breakdown (5 independent output groups):**
+
+| Group | Files | Dependencies |
+|-------|-------|-------------|
+| A: Router types + subagent defs | `types.ts`, `subagents.ts` | None (foundational) |
+| B: Conductor logic + index | `conductor.ts`, `index.ts` | Depends on A |
+| C: SKILL.md | `.pi/skills/dynamic-claude-router/SKILL.md` | None |
+| D: Agent + command content defs | 6 agent MDs + 1 command MD in `content/` | None |
+| E: Tests | `__tests__/conductor.test.ts` | Depends on A + B |
+
+Groups C and D are documentation-only, independent of the TypeScript code. Groups A→B→E are sequential. The most efficient crew: Phase 1 does A+C+D in parallel. Phase 2 does B (depends on A). Phase 3 does E (depends on A+B) plus a verifier.
+
+ADAPTIVE_PLAN_JSON_START
+```json
+{
+  "phases": [
+    {
+      "name": "foundation-and-docs",
+      "tasks": [
+        {
+          "role": "executor",
+          "title": "Create router types and subagent definitions",
+          "task": "Create `src/agents/claude-router/types.ts` and `src/agents/claude-router/subagents.ts`.\n\n## types.ts\nDefine router-specific types:\n- `TaskComplexity` enum: `TRIVIAL`, `SIMPLE`, `MODERATE`, `COMPLEX`, `CRITICAL`\n- `TaskIntent` enum: `LOOKUP`, `WORK`, `PLAN`, `DEBUG`, `REFACTOR`\n- `TaskInput` interface: `{ description: string; context?: Record<string, unknown>; intentHints?: TaskIntent[]; complexityHints?: TaskComplexity }`\n- `SubagentType` string union: `'lookup' | 'work' | 'planner' | 'debugger' | 'refactor'`\n- `SubagentConfig` interface: `{ type: SubagentType; model: string; description: string; capabilities: string[] }`\n- `RoutingDecision` (reuse from `src/agents/types.ts` if compatible, or create a router-local version): `{ subagent: SubagentType; model: string; complexity: TaskComplexity; intent: TaskIntent; chain?: SubagentType[]; reasoning: string }`\n- `SubagentResult` interface: `{ subagent: SubagentType; success: boolean; output: string; executionTime: number; error?: string }`\n\nImport and reuse `AgentType`, `AgentInput`, `AgentOutput`, `ConfidenceLevel` from `../../agents/types` where applicable. Do NOT duplicate types already defined there.\n\n## subagents.ts\n- Export `ANTHROPIC_MODELS` const object: `{ HAIKU: 'claude-3-5-haiku', SONNET: 'claude-sonnet-4', OPUS: 'claude-opus-4' }`\n- Export `SUBAGENT_CONFIGS: Record<SubagentType, SubagentConfig>` mapping each subagent to its model and capabilities:\n  - lookup → claude-3-5-haiku (fast scanning, quick info retrieval, file search)\n  - work → claude-sonnet-4 (balanced coding, implementation, editing)\n  - planner → claude-opus-4 (architecture, system design, complex reasoning)\n  - debugger → claude-sonnet-4 (error tracing, root cause analysis, log inspection)\n  - refactor → claude-opus-4 (code restructuring, design patterns, improvement)\n- Export `getModelForSubagent(type: SubagentType): string`\n- Export `getSubagentForIntent(intent: TaskIntent): SubagentType`\n\nCritical constraints:\n- Anthropic models ONLY. Zero references to OpenAI, Google, Gemini, or any non-Anthropic model.\n- No TODOs, stubs, or empty bodies.\n- Follow existing TypeScript conventions in `src/agents/types.ts`."
+        },
+        {
+          "role": "writer",
+          "title": "Create SKILL.md documentation",
+          "task": "Create `.pi/skills/dynamic-claude-router/SKILL.md`.\n\nFollow the YAML frontmatter format from `.pi/skills/claude-agent-sdk/SKILL.md`:\n```yaml\n---\nname: dynamic-claude-router\ndescription: Conductor/subagent routing pattern using Anthropic models. Assesses task complexity and intent, routes to the optimal Claude model (haiku/sonnet/opus), and optionally chains subagents for multi-step tasks.\nmetadata:\n  version: 1.0.0\n  tags: routing, conductor, subagent, anthropic, claude, task-routing, model-selection\n---\n```\n\nThen include markdown sections:\n1. **Purpose** — What this skill does\n2. **Architecture** — Conductor receives task → assesses complexity + intent → selects subagent → assigns model → optionally chains\n3. **Subagent Roles** table with columns: Subagent | Model | Use Case | Capabilities\n   - LookupAgent | claude-3-5-haiku | Fast scanning, quick info | ...\n   - WorkAgent | claude-sonnet-4 | Coding, implementation | ...\n   - PlannerAgent | claude-opus-4 | Architecture, hard problems | ...\n   - DebuggerAgent | claude-sonnet-4 | Debugging, root cause | ...\n   - RefactorAgent | claude-opus-4 | Code restructuring | ...\n4. **Model Mapping** table\n5. **CLI Usage** — `/dynamic-task <description>` examples\n6. **Routing Logic** — How complexity assessment works (keyword signals, scope indicators)\n7. **Chaining** — When and how subagents are chained\n8. **Integration Notes** — How to use with existing ai-eng system\n\nDo NOT reference any non-Anthropic models anywhere."
+        },
+        {
+          "role": "writer",
+          "title": "Create agent and command content definitions",
+          "task": "Create 6 agent definition files and 1 command definition file.\n\n## Agent definitions in `content/agents/`\n\nFollow the exact YAML frontmatter format from existing agents like `content/agents/ai-engineer.md` and `content/agents/planner.md`.\n\n### `content/agents/claude-conductor.md`\n```yaml\n---\nname: claude-conductor\ndescription: Routes tasks to optimal Anthropic subagents based on complexity and intent assessment. Entry point for the dynamic-claude-router skill.\nmode: subagent\ntemperature: 0.1\ntools:\n  read: true\n  grep: true\n  glob: true\n  list: true\n  bash: false\n  edit: false\n  write: false\ncategory: orchestration\n---\n```\nBody: describe conductor role — receives task, assesses complexity/intent, routes to correct subagent, handles chaining.\n\n### `content/agents/claude-lookup-agent.md`\n```yaml\n---\nname: claude-lookup-agent\ndescription: Fast, cheap information retrieval using claude-3-5-haiku. Scans codebases, finds files, retrieves quick facts.\nmode: subagent\ntemperature: 0.0\ntools:\n  read: true\n  grep: true\n  glob: true\n  list: true\n  bash: false\n  edit: false\n  write: false\ncategory: research\n---\n```\nBody: describe lookup capabilities — fast scanning, file search, quick info retrieval.\n\n### `content/agents/claude-work-agent.md`\n```yaml\n---\nname: claude-work-agent\ndescription: Balanced coding and implementation agent using claude-sonnet-4. Handles normal development tasks, edits, and feature work.\nmode: subagent\ntemperature: 0.2\ntools:\n  read: true\n  grep: true\n  glob: true\n  list: true\n  bash: true\n  edit: true\n  write: true\ncategory: development\n---\n```\nBody: describe work age
+[pi-crew compacted 11362 chars]

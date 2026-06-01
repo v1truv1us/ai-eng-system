@@ -196,7 +196,7 @@ This is the core Ralph Wiggum pattern - continuous iteration until completion.
 **Execute**:
 ```bash
 # If research was generated
-/ai-eng/specify "$FEATURE_DESCRIPTION" \
+/ai-eng/spec "$FEATURE_DESCRIPTION" \
   --from-research=$RESEARCH_OUTPUT \
   --ralph \
   --ralph-max-iterations $MAX_PHASE_ITERATIONS \
@@ -408,7 +408,7 @@ Based on gap analysis from 3.1:
     "this_cycle": 12450,
     "by_phase": {
       "research": 8450,
-      "specify": 5230,
+      "spec": 5230,
       "plan": 12100,
       "work": 19450
     }
@@ -676,7 +676,7 @@ Enter choice (1-5): _
    - Output: docs/research/[date]-[feature].md
 
 2. SPECIFY (2 iterations estimated)
-   - Command: /ai-eng/specify --from-research=... --ralph --max-phase-iterations 3
+   - Command: /ai-eng/spec --from-research=... --ralph --max-phase-iterations 3
    - Output: specs/[feature]/spec.md
 
 3. PLAN (4 iterations estimated)
@@ -750,7 +750,7 @@ This command orchestrates existing ai-eng-system commands:
 
 ### Specify Phase
 ```bash
-/ai-eng/specify "$FEATURE" --from-research=$RESEARCH_OUTPUT --ralph --ralph-max-iterations $MAX
+/ai-eng/spec "$FEATURE" --from-research=$RESEARCH_OUTPUT --ralph --ralph-max-iterations $MAX
 ```
 
 ### Plan Phase

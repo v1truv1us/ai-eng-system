@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "runId": "team_20260601031206_c80b1e37155eee51",
+  "sessionId": "crew-team202606010312",
+  "team": "implementation",
+  "workflow": "implementation",
+  "goal": "Create a complete `dynamic-claude-router` skill under `.pi/skills/dynamic-claude-router/` for the ai-eng-system Claude plugin. Implements a conductor/subagent routing pattern using only Anthropic models.\n\n## Architecture\n\n### Conductor Agent\n- Receives user task, assesses complexity and intent\n- Routes to correct subagent based on task characteristics\n- Optionally chains subagents for multi-step tasks\n\n### Subagents (all Anthropic-only models)\n- `LookupAgent` → claude-3-5-haiku (fast, cheap, scanning/quick info)\n- `WorkAgent` → claude-sonnet-4 (balanced, normal coding/work)  \n- `PlannerAgent` → claude-opus-4 (highest reasoning, planning/architecture/hard problems)\n- `DebuggerAgent` → claude-sonnet-4 (debugging, tracing, root-cause analysis)\n- `RefactorAgent` → claude-opus-4 (code restructuring, design improvement)\n\n### Skill Layer\n- Exposes as a CLI command via the existing ai-eng command system\n- SKILL.md with full documentation\n\n## Deliverables\n\n1. **SKILL.md** at `.pi/skills/dynamic-claude-router/SKILL.md` — frontmatter, purpose, architecture, role descriptions, model mapping table, CLI usage examples, integration notes. Follow existing skill conventions (see `.pi/skills/claude-agent-sdk/SKILL.md` and `.pi/skills/comprehensive-research/SKILL.md` for format).\n\n2. **TypeScript conductor implementation** at `src/agents/claude-router/` with:\n   - `conductor.ts` — TaskComplexity assessment, routing logic, subagent chaining\n   - `subagents.ts` — Subagent type definitions and model constants (all Anthropic)\n   - `types.ts` — Router-specific types (TaskInput, TaskComplexity, RoutingDecision, SubagentResult)\n   - `index.ts` — Public exports\n\n3. **Agent definitions** at `content/agents/` following the plugin-dev conventions:\n   - `claude-conductor.md` — Conductor agent definition\n   - `claude-lookup-agent.md` — Lookup agent definition  \n   - `claude-work-agent.md` — Work agent definition\n   - `claude-planner-agent.md` — Planner agent definition\n   - `claude-debugger-agent.md` — Debugger agent definition\n   - `claude-refactor-agent.md` — Refactor agent definition\n\n4. **Command definition** at `content/commands/` for the CLI command `dynamic-task`\n\n5. **Tests** at `src/agents/claude-router/__tests__/`:\n   - `conductor.test.ts` — Unit tests for routing logic (complexity assessment, correct subagent selection, chaining)\n   - Smoke test with sample inputs of varying complexity\n\n## Critical Constraints\n\n- **Anthropic models ONLY**. Zero references to OpenAI, Google, Gemini, or any non-Anthropic model anywhere in the code.\n- Follow existing project conventions exactly (TypeScript, file layout, naming, agent types from `src/agents/types.ts`)\n- No TODOs, stubs, empty bodies, or placeholder implementations\n- Match SKILL.md format from existing skills (YAML frontmatter with name/description/metadata)\n- The conductor routing logic must be deterministic and testable: complexity assessment → subagent selection → model assignment\n\n## Existing Context\n\n- Agent types are in `src/agents/types.ts` with `AgentType` enum, `AgentTask`, `AgentInput`, `AgentOutput` etc.\n- Agent coordinator is in `src/agents/coordinator.ts` — follow similar patterns\n- Skills live in `.pi/skills/<name>/SKILL.md` with YAML frontmatter\n- Content for Claude plugin goes in `content/agents/` and `content/commands/`\n- Build: `bun run build`, typecheck: `bun run typecheck`, lint: `bun run lint`",
+  "status": "failed",
+  "workspaceMode": "single",
+  "createdAt": "2026-06-01T03:12:06.849Z",
+  "updatedAt": "2026-06-01T03:15:22.457Z",
+  "cwd": "/Users/johnferguson/Github/ai-eng-system",
+  "stateRoot": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/state/runs/team_20260601031206_c80b1e37155eee51",
+  "artifactsRoot": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260601031206_c80b1e37155eee51",
+  "tasksPath": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/state/runs/team_20260601031206_c80b1e37155eee51/tasks.json",
+  "eventsPath": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/state/runs/team_20260601031206_c80b1e37155eee51/events.jsonl",
+  "artifacts": [
+    {
+      "kind": "prompt",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260601031206_c80b1e37155eee51/goal.md",
+      "createdAt": "2026-06-01T03:12:06.852Z",
+      "producer": "team-tool",
+      "sizeBytes": 3441,
+      "contentHash": "9898b9c6771ad4e32ca970ac3b4944b61f3d205ee9f1e3dbb64d3eb3dad887c3",
+      "retention": "run"
+    },
+    {
+      "kind": "progress",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260601031206_c80b1e37155eee51/progress.md",
+      "createdAt": "2026-06-01T03:12:06.917Z",
+      "producer": "team-runner",
+      "sizeBytes": 481,
+      "contentHash": "8ab2923a028fa43c58649f440bd805c23cc104deb336a8330cb192d13b68620e",
+      "retention": "run"
+    },
+    {
+      "kind": "prompt",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260601031206_c80b1e37155eee51/prompts/01_assess.md",
+      "createdAt": "2026-06-01T03:12:06.944Z",
+      "producer": "01_assess",
+      "sizeBytes": 24986,
+      "contentHash": "0dcb44bf60f9e48c41db6e21929afe9cca6f5297e86588a4cf78536f0c6dde34",
+      "retention": "run"
+    },
+    {
+      "kind": "result",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260601031206_c80b1e37155eee51/results/01_assess.txt",
+      "createdAt": "2026-06-01T03:15:13.096Z",
+      "producer": "01_assess",
+      "sizeBytes": 8268,
+      "contentHash": "f4bae1de87752d255b3b1a2b7a8f2fc05f8116a2881d2b3632936420dc169978",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260601031206_c80b1e37155eee51/metadata/01_assess.inputs.json",
+      "createdAt": "2026-06-01T03:12:06.944Z",
+      "producer": "01_assess",
+      "sizeBytes": 46,
+      "contentHash": "4220d037ccad16132d4c28359451985b4a2fa51e74ec340212cab8b688b9b5f6",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260601031206_c80b1e37155eee51/metadata/01_assess.coordination-bridge.md",
+      "createdAt": "2026-06-01T03:12:06.945Z",
+      "producer": "01_assess",
+      "sizeBytes": 1117,
+      "contentHash": "da85e8f25f92a43d1b3ca2e680b4fbe1acc6700cea5939d04fce09d848c401f3",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260601031206_c80b1e37155eee51/metadata/01_assess.skills.md",
+      "createdAt": "2026-06-01T03:12:06.945Z",
+      "producer": "01_assess",
+      "sizeBytes": 4385,
+      "contentHash": "693140ba34888e7a27eb8cf00d62ab207b479086483e25946a44e9e925b44ffa",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260601031206_c80b1e37155eee51/metadata/01_assess.task-packet.json",
+      "createdAt": "2026-06-01T03:15:13.106Z",
+      "producer": "01_assess",
+      "sizeBytes": 6322,
+      "contentHash": "4a49a9fa42634eae39c41d27eb9912e16028d45d0a335d4c7361a46fae2a18bf",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260601031206_c80b1e37155eee51/metadata/01_assess.verification.json",
+      "createdAt": "2026-06-01T03:15:13.106Z",
+      "producer": "01_assess",
+      "sizeBytes": 192,
+      "contentHash": "818c9ace7d546384f2d2504b6dd7595fad288269848be32c359563a6facc5d94",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260601031206_c80b1e37155eee51/metadata/01_assess.startup-evidence.json",
+      "createdAt": "2026-06-01T03:15:13.107Z",
+      "producer": "01_assess",
+      "sizeBytes": 274,
+      "contentHash": "af4c6642b8a2b5d595613f25f0dcf52b79b76c5c897786f16be79210dafe8f6a",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260601031206_c80b1e37155eee51/metadata/01_assess.permission.json",
+      "createdAt": "2026-06-01T03:15:13.107Z",
+      "producer": "01_assess",
+      "sizeBytes": 57,
+      "contentHash": "27cf104152f1392dae0ad213ed59e417d613c3e1477cbd29181f823301d176e0",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260601031206_c80b1e37155eee51/metadata/01_assess.capabilities.json",
+      "createdAt": "2026-06-01T03:15:13.107Z",
+      "producer": "01_assess",
+      "sizeBytes": 723,
+      "contentHash": "1674166288dd0b2277d6f67fbd663cb265b4c268f8be19b47c851b86fd0c800f",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260601031206_c80b1e37155eee51/metadata/01_assess.prompt-pipeline.json",
+      "createdAt": "2026-06-01T03:15:13.107Z",
+      "producer": "01_assess",
+      "sizeBytes": 1001,
+      "contentHash": "6f78dc36973660a7b0ff4f2d805155b6ed95f1ce759497968cea03892ae043cf",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260601031206_c80b1e37155eee51/metadata/01_assess.output-validation.json",
+      "createdAt": "2026-06-01T03:15:13.108Z",
+      "producer": "01_assess",
+      "sizeBytes": 148,
+      "contentHash": "5edc917dfc5443eeadaed2e72cc8dc6ebd0556edcd496e2c305e67c38527ae2f",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260601031206_c80b1e37155eee51/shared/adaptive-plan.json",
+      "createdAt": "2026-06-01T03:15:13.106Z",
+      "producer": "01_assess",
+      "sizeBytes": 8269,
+      "contentHash": "049cb5adb9efb8a0f6b9eab3cd8eb9254ef931d3ca8e763ac27f91e3c5602a34",
+      "retention": "run"
+    },
+    {
+      "kind": "log",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260601031206_c80b1e37155eee51/logs/01_assess.log",
+      "createdAt": "2026-06-01T03:15:13.097Z",
+      "producer": "01_assess",
+      "sizeBytes": 8909,
+      "contentHash": "117c01e6e302d25974566e1fbdc7cc0e47006e30339fa2e011eaaac98bb4e5e2",
+      "retention": "run"
+    },
+    {
+      "kind": "log",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260601031206_c80b1e37155eee51/transcripts/01_assess.attempt-0.jsonl",
+      "createdAt": "2026-06-01T03:15:13.101Z",
+      "producer": "01_assess",
+      "sizeBytes": 84900,
+      "contentHash": "2bf436a7987249cf3633a3c7496aeb09f7a6822e14183be4e8126b852d7b20c7",
+      "retention": "run"
+    }
+  ],
+  "ownerSessionId": "019e811d-432a-7775-9d57-7ee9833fa567",
+  "summary": "Stale run reconciled: All tasks already terminal — no repair needed",
+  "runtimeResolution": {
+    "kind": "child-process",
+    "requestedMode": "auto",
+    "safety": "trusted",
+    "available": true,
+    "resolvedAt": "2026-06-01T03:12:06.854Z"
+  },
+  "runConfig": {}
+}

@@ -1,6 +1,6 @@
 {
   "name": "ai-eng-core",
-  "version": "1.6.3",
+  "version": "1.6.4",
   "description": "Core workflow: plan, work, review cycle with research and context engineering",
   "author": {
     "name": "v1truv1us"
@@ -10,7 +10,7 @@
     "./commands/plan.md",
     "./commands/work.md",
     "./commands/review.md",
-    "./commands/specify.md",
+    "./commands/spec.md",
     "./commands/research.md",
     "./commands/simplify.md",
     "./commands/context.md",

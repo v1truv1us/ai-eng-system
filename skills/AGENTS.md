@@ -71,7 +71,7 @@ The table below highlights the most commonly invoked skills in this repository. 
 
 | Skill | Description | Invoked By |
 |-------|-------------|------------|
-| `prompt-refinement` | Transform prompts into structured TCRO format | `/ai-eng/research`, `/ai-eng/plan`, `/ai-eng/work`, `/ai-eng/specify` |
+| `prompt-refinement` | Transform prompts into structured TCRO format | `/ai-eng/research`, `/ai-eng/plan`, `/ai-eng/work`, `/ai-eng/spec` |
 | `incentive-prompting` | Research-backed prompting techniques (+45-115% quality) | `/ai-eng/optimize`, agent enhancement |
 | `comprehensive-research` | Multi-phase research orchestration | `/ai-eng/research` |
 | `code-review-and-quality` | Multi-axis review before merge | `/ai-eng/code-review` |

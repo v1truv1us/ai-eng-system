@@ -22,7 +22,7 @@ Every user-facing surface in ai-eng-system maps to one of four ownership categor
 
 | Phase | Canonical Skill | Command Entrypoint | Alias |
 |-------|----------------|--------------------|-------|
-| Define | `idea-refine` | `/ai-eng/specify` | `/spec` |
+| Define | `idea-refine` | `/ai-eng/spec` | `/spec` |
 | Define | `spec-driven-development` | `/ai-eng/specify` | `/spec` |
 | Plan | `planning-and-task-breakdown` | `/ai-eng/plan` | `/plan` |
 | Build | `incremental-implementation` | `/ai-eng/work` | `/build` |

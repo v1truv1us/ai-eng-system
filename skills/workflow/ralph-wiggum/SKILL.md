@@ -337,7 +337,7 @@ Ralph Wiggum enhances the `/ai-eng/work` phase:
 
 ```bash
 /ai-eng/research "authentication patterns"
-/ai-eng/specify "user authentication"
+/ai-eng/spec "user authentication"
 /ai-eng/plan --from-spec=specs/auth
 /ai-eng/work "specs/auth/plan"  # Use Ralph Wiggum patterns here
 /ai-eng/review

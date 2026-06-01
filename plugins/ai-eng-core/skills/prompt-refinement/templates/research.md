@@ -81,7 +81,7 @@ Define deliverable format:
   - Console output only
 
 - **How will this research be used?**
-  - Feed into a specification via `/ai-eng/specify`
+  - Feed into a specification via `/ai-eng/spec`
   - Inform an implementation plan via `/ai-eng/plan`
   - Standalone for reference
 
@@ -104,7 +104,7 @@ Requirements:
 Output:
   - Format: [summary|detailed|recommendations|examples]
   - Location: [path to save research]
-  - Feed into: [specify|plan|standalone]
+  - Feed into: [spec|plan|standalone]
 ```
 
 ## Example Transformations
@@ -170,7 +170,7 @@ Requirements:
 Output:
   - Format: Detailed research with code examples, pros/cons of each approach, specific recommendation for Node.js/Express stack
   - Location: docs/research/2025-12-26-caching-patterns.md
-  - Feed into: /ai-eng/specify for caching feature specification
+  - Feed into: /ai-eng/spec for caching feature specification
 ```
 
 ### Example 2: More Specific Input
@@ -219,14 +219,14 @@ Requirements:
 Output:
   - Format: Detailed comparison with feature table, code examples for common patterns (CRUD, relationships, migrations), specific recommendation based on criteria
   - Location: docs/research/2025-12-26-orm-comparison.md
-  - Feed into: /ai-eng/specify for data access layer specification
+  - Feed into: /ai-eng/spec for data access layer specification
 ```
 
 ## Special Considerations
 
 ### Research That Feeds Into Specification
 
-When research will inform `/ai-eng/specify`, ensure:
+When research will inform `/ai-eng/spec`, ensure:
 
 - Focus on functional requirements (what capabilities are needed)
 - Consider user experience implications

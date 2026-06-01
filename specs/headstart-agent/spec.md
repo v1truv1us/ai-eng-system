@@ -9,7 +9,7 @@
 | Date | 2026-05-29 |
 | Status | Draft |
 | Author | AI Engineering System |
-| Depends on | `headstart-newsletter` skill, `ud-monthly-updates` skill, Coolify deployment infrastructure |
+| Depends on | `headstart-newsletter` skill, `ud-monthly-updates` skill, Coolify deployment infrastructure, Mailgun (free tier) |
 
 ---
 
@@ -24,7 +24,7 @@ The Headstart Autonomous Agent is a long-running service deployed to a VPS via C
 1. **Newsletter Ingestion** — Receives PDF newsletter attachments via email webhook, validates the sender, copies the PDF to the correct repo path, updates the calendar JSON, commits, pushes a branch, and opens a PR.
 2. **Monthly Maintenance Audit** — On a scheduled cron trigger, checks for outdated dependencies, runs Lighthouse performance/SEO audits, verifies content freshness (copyright year, last newsletter date, broken links), and opens a PR if any actionable changes are found.
 3. **Job Queue Management** — Persists all work in a SQLite-backed queue with idempotency, retries, and failure recovery.
-4. **Observability** — Exposes health, job status, and structured logs for monitoring.
+4. **Observability** — Exposes health, job status, and structured logs for monitoring. Reports all errors to Sentry and sends email alerts on permanently failed jobs.
 
 ### Target Users
 
@@ -42,6 +42,7 @@ The Headstart Autonomous Agent is a long-running service deployed to a VPS via C
 | 3 | No duplicate PRs for the same newsletter month | Idempotency: branch `agent/newsletter-{month}-{year}` blocks reprocessing |
 | 4 | Failed jobs retry 3× with exponential backoff | SQLite `retryCount` and `status` fields confirm retry behavior |
 | 5 | Service is deployable to Coolify with a single `Dockerfile` and env vars | `docker build` succeeds; `docker run` with env vars starts the service |
+| 7 | Failed jobs alert via email and Sentry | Alert email sent within 1 min of permanent failure; Sentry issue created with job context |
 | 6 | All changes arrive as PRs; the agent never pushes to `main` directly | GitHub branch protection + agent logic guarantee this |
 
 ---
@@ -204,29 +205,29 @@ async function createPullRequest(params: {
 ### 3.1 New Files
 
 ```
-apps/headstart-agent/
+headstart-agent/              # Standalone repository
 ├── src/
 │   ├── index.ts              # Entry point: starts HTTP server + scheduler
-│   ├── server.ts             # Fastify/Express webhook receiver + status endpoints
+│   ├── server.ts             # Fastify webhook receiver + status endpoints
 │   ├── scheduler.ts          # node-cron setup for monthly audit
 │   ├── queue.ts              # SQLite job queue (create, claim, complete, fail)
 │   ├── config.ts             # Env var validation with zod
 │   ├── logger.ts             # Structured pino logger
 │   ├── github.ts             # Octokit wrapper for PR creation, branch push
 │   ├── repo.ts               # Clone/pull repo, commit, push helpers
+│   ├── alerts.ts             # Email alert + Sentry error reporting
 │   ├── tasks/
 │   │   ├── index.ts          # Task registry
 │   │   ├── newsletter.ts     # Newsletter ingestion task
 │   │   └── monthly-audit.ts  # Monthly maintenance audit task
 │   └── types.ts              # Shared TypeScript interfaces
-├── prisma/
-│   └── schema.prisma         # SQLite schema (optional; plain SQL also acceptable)
 ├── data/
-│   └── .gitkeep              # Runtime SQLite DB + logs mount point
+│   └── .gitkeep              # Runtime SQLite DB mount point
 ├── tests/
 │   ├── unit/
 │   │   ├── queue.test.ts
 │   │   ├── config.test.ts
+│   │   ├── alerts.test.ts
 │   │   └── tasks.test.ts
 │   ├── integration/
 │   │   ├── webhook.test.ts
@@ -234,22 +235,16 @@ apps/headstart-agent/
 │   └── fixtures/
 │       └── sample-newsletter.pdf
 ├── .env.example
+├── .gitignore
 ├── Dockerfile
-├── coolify.yaml
+├── docker-compose.yml        # Local development stack
+├── coolify.yaml              # Coolify deployment spec
 ├── package.json
 ├── tsconfig.json
 └── README.md                 # Deployment and operation guide
 ```
 
-### 3.2 Files Modified in ai-eng-system Monorepo
-
-| File | Change |
-|---|---|
-| `package.json` (root) | Add `apps/headstart-agent` to workspaces if using pnpm/bun workspaces |
-| `.github/workflows/ci.yml` | Add build/test step for `apps/headstart-agent` |
-| `README.md` (root) | Link to agent README in apps section |
-
-### 3.3 Runtime Directory Layout (in Container)
+### 3.2 Runtime Directory Layout (in Container)
 
 ```
 /app              # Application code (read-only layer)
@@ -269,6 +264,8 @@ apps/headstart-agent/
 - **GitHub Client:** `@octokit/rest`
 - **Scheduling:** `node-cron`
 - **Logging:** `pino` (structured JSON)
+- **Error Tracking:** `@sentry/node` for automatic error capture and tracing
+- **Email Alerts:** `nodemailer` for SMTP-based failure alerts
 - **Validation:** `zod` for env vars and webhook payloads
 
 ### 4.2 Naming Conventions
@@ -364,12 +361,23 @@ it('ingests newsletter email and creates PR', async () => {
 
 ### 5.5 CI Integration
 
+Standalone GitHub Actions workflow at `.github/workflows/ci.yml`:
+
 ```yaml
-# In .github/workflows/ci.yml (root)
-- name: Test headstart-agent
-  working-directory: apps/headstart-agent
-  run: bun test
+name: CI
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install
+      - run: bun test
+      - run: bun run typecheck
 ```
+
+
 
 ---
 
@@ -384,13 +392,14 @@ it('ingests newsletter email and creates PR', async () => {
 5. **Always retry failed jobs** — Use exponential backoff (5min, 15min, 45min) up to 3 times before marking permanently failed.
 6. **Always clone/pull fresh** — Before any task, ensure the repo at `/repos/headstart` is at the latest `main`.
 7. **Always leave the repo clean on failure** — If a task fails mid-run, delete any partially created branch and uncommitted changes.
+8. **Always alert on permanent failure** — When a job reaches `retryCount = 3` and `status = failed`, send an alert email and report to Sentry with full job context.
 
 ### 6.2 Ask First
 
 1. **Auto-merge PRs if checks pass?** — Currently the spec requires human review. If you later want auto-merge for low-risk changes (e.g., dependency patch updates), confirm the policy.
 2. **Add more client sites?** — The current architecture is single-site. If you want to manage UD, Spring Creek, etc. from the same agent, the config schema and queue need multi-tenant support.
-3. **Alert on failure?** — Currently failures are logged and retried silently. Should failed jobs email you, post to Slack, or create a GitHub issue?
-4. **Proton Mail Bridge instead of webhook?** — If you later want to avoid Mailgun/Postmark, we can add an IMAP polling adapter. This is out of scope for v1 but architected to plug in.
+3. **Proton Mail Bridge instead of webhook?** — If you later want to avoid Mailgun, we can add an IMAP polling adapter. This is out of scope for v1 but architected to plug in.
+4. **Slack/Discord alerts?** — Currently email + Sentry. If you want chat notifications, we can add a webhook adapter later.
 
 ### 6.3 Never Do
 
@@ -400,11 +409,35 @@ it('ingests newsletter email and creates PR', async () => {
 4. **Never expose the webhook without signature verification** — Production webhook endpoints must verify the Mailgun/Postmark HMAC signature.
 5. **Never process the same email twice** — Use the job queue idempotency key (derived from `sender + subject + attachment-hash`) to deduplicate.
 6. **Never leave the SQLite database locked** — Use `better-sqlite3`'s synchronous API or short-lived transactions to avoid WAL growth or lock contention.
-7. **Never commit the `.env` file** — `apps/headstart-agent/.env` must be in `.gitignore`.
+7. **Never commit the `.env` file** — `.env` must be in `.gitignore`.
 
 ---
 
-## 7. Open Questions & Assumptions
+## 7. Configuration
+
+Environment variables (Coolify-managed or `.env` for local development):
+
+| Variable | Required | Description |
+|---|---|---|
+| `GITHUB_REPO` | Yes | `owner/headstart` |
+| `GITHUB_TOKEN` | Yes | Fine-grained PAT with `contents:write`, `pull_requests:write` |
+| `MAILGUN_API_KEY` | Yes | For webhook signature verification |
+| `ALLOWED_SENDERS` | Yes | Comma-separated authorized email addresses |
+| `WEBHOOK_SECRET` | Yes | Shared secret for webhook HMAC verification |
+| `SCHEDULE_MONTHLY` | No | Cron expression. Default: `0 9 1 * *` |
+| `LOG_LEVEL` | No | `debug` \| `info` \| `warn` \| `error`. Default: `info` |
+| `DATA_DIR` | No | SQLite + repo cache path. Default: `/data` |
+| `SENTRY_DSN` | No | Sentry project DSN for error tracking |
+| `ALERT_SMTP_HOST` | No | SMTP server for failure alerts (e.g., `smtp.gmail.com`) |
+| `ALERT_SMTP_PORT` | No | SMTP port. Default: `587` |
+| `ALERT_SMTP_USER` | No | SMTP username |
+| `ALERT_SMTP_PASS` | No | SMTP password or app-specific password |
+| `ALERT_TO_EMAIL` | No | Address to receive failure alerts |
+| `ALERT_FROM_EMAIL` | No | From address for alert emails. Default: `headstart-agent@yourdomain.dev` |
+
+---
+
+## 8. Open Questions & Assumptions
 
 | # | Question | Assumption for v1 |
 |---|---|---|
@@ -413,10 +446,12 @@ it('ingests newsletter email and creates PR', async () => {
 | 3 | Repo location on VPS? | Cloned to `/repos/headstart` at runtime |
 | 4 | Bun vs. Node for runtime? | Bun (matches existing monorepo) |
 | 5 | Monthly audit auto-runs dependency updates? | Yes — minor/patch updates are committed; major version bumps are flagged in PR body but not auto-updated |
+| 6 | Failure alerting? | Email via SMTP + Sentry issue tracking |
+| 7 | Email provider? | Mailgun (free tier: 5k emails/mo) |
 
 ---
 
-## 8. Acceptance Criteria
+## 9. Acceptance Criteria
 
 ### AC-1: Newsletter Webhook
 **Given** a valid email with PDF attachment from an allowed sender  
@@ -448,9 +483,14 @@ it('ingests newsletter email and creates PR', async () => {
 **When** the service is deployed  
 **Then** it starts successfully, responds to `/health`, and processes webhooks and cron jobs as specified.
 
+### AC-7: Failure Alerting
+**Given** a job has failed 3 times and is marked permanently failed  
+**When** the failure is recorded  
+**Then** an alert email is sent to the configured address and a Sentry issue is created containing the job ID, type, payload, and error message.
+
 ---
 
-## 9. Related Resources
+## 10. Related Resources
 
 - Existing skill: `/Users/johnferguson/.agents/skills/headstart-newsletter/SKILL.md`
 - Existing skill: `/Users/johnferguson/.agents/skills/ud-monthly-updates/SKILL.md`

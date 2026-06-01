@@ -1,0 +1,8 @@
+{
+  "valid": false,
+  "formatMatch": true,
+  "structurePreserved": false,
+  "issues": [
+    "Unclosed code block — output may be truncated"
+  ]
+}

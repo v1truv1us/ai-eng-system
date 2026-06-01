@@ -1,6 +1,6 @@
 ---
 name: prompt-refinement
-description: Transform prompts into structured TCRO format with phase-specific clarification. Automatically invoked by /ai-eng/research, /ai-eng/plan, /ai-eng/work, and /ai-eng/specify commands. Use when refining vague prompts, structuring requirements, or enhancing user input quality before execution.
+description: Transform prompts into structured TCRO format with phase-specific clarification. Automatically invoked by /ai-eng/research, /ai-eng/plan, /ai-eng/work, and /ai-eng/spec commands. Use when refining vague prompts, structuring requirements, or enhancing user input quality before execution.
 metadata:
   version: 1.0.0
   tags: prompting, clarification, structuring, tcro
@@ -46,14 +46,14 @@ Transform messy, incomplete prompts into well-structured specifications using th
 
 This skill is **ALWAYS** invoked at the start of:
 - `/ai-eng/research`
-- `/ai-eng/specify`
+- `/ai-eng/spec`
 - `/ai-eng/plan`
 - `/ai-eng/work`
 
 Commands should include this directive:
 ```markdown
 Use skill: prompt-refinement
-Phase: [research|specify|plan|work]
+Phase: [research|spec|plan|work]
 ```
 
 ## The TCRO Framework
@@ -87,7 +87,7 @@ Determine which phase based on:
 
 Based on detected phase, load the appropriate template:
 - `templates/research.md` for `/ai-eng/research`
-- `templates/specify.md` for `/ai-eng/specify`
+- `templates/specify.md` for `/ai-eng/spec`
 - `templates/plan.md` for `/ai-eng/plan`
 - `templates/work.md` for `/ai-eng/work`
 
@@ -158,7 +158,7 @@ agent: [agent]
 ---
 
 Use skill: prompt-refinement
-Phase: [research|specify|plan|work]
+Phase: [research|spec|plan|work]
 
 # [Command Name]
 

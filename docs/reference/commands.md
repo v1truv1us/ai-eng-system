@@ -5,7 +5,7 @@ Commands shipped under the `ai-eng/` namespace, plus lifecycle shorthand entrypo
 ## Spec-Driven Workflow
 
 - `/ai-eng/research` - multi-phase research and discovery
-- `/ai-eng/specify` - feature/spec generation
+- `/ai-eng/spec` - feature/spec generation
 - `/ai-eng/plan` - implementation planning
 - `/ai-eng/work` - guided execution with quality gates
 - `/verify` - lint, typecheck, test, build verification loop
@@ -16,7 +16,7 @@ Commands shipped under the `ai-eng/` namespace, plus lifecycle shorthand entrypo
 
 | Shorthand | Canonical Command |
 |-------|-------------------|
-| `/spec` | `/ai-eng/specify` |
+| `/spec` | `/ai-eng/spec` |
 | `/build` | `/ai-eng/work` |
 | `/verify` | lint, typecheck, test, build loop |
 

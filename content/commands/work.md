@@ -90,7 +90,7 @@ For each task in dependency order:
 
 ## Integration
 
-- Reads from: `/ai-eng/plan` output (plan.md), `/ai-eng/specify` output (spec.md)
+- Reads from: `/ai-eng/plan` output (plan.md), `/ai-eng/spec` output (spec.md)
 - Feeds into: `/verify`, then `/ai-eng/review`
 
 $ARGUMENTS
