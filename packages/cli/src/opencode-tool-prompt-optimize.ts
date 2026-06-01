@@ -16,7 +16,8 @@ interface PromptOptimizationResult {
     skipReason?: string;
 }
 
-export default tool({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const promptOptimizeTool: any = tool({
     description:
         "Step-by-step prompt optimization with research-backed techniques. Returns JSON with optimized prompt and steps. Use ! prefix to skip.",
 
@@ -24,8 +25,7 @@ export default tool({
         prompt: tool.schema.string().describe("The user's prompt to optimize"),
     },
 
-    async execute(args) {
-        const { prompt } = args;
+    async execute({ prompt }: { prompt: string }) {
 
         // Escape hatch: ! prefix skips optimization
         if (prompt.startsWith("!")) {
@@ -182,3 +182,5 @@ export default tool({
         return JSON.stringify(result, null, 2);
     },
 });
+
+export default promptOptimizeTool;
