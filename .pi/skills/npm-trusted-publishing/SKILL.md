@@ -1,56 +1,55 @@
 ---
 name: npm-trusted-publishing
-description: Publish npm packages via GitHub Actions with OIDC trusted
-  publishing and provenance. Use when setting up automated npm publishes,
-  debugging ENEEDAUTH/E404 errors, or configuring provenance attestations.
+description: Publish npm packages via GitHub Actions with OIDC trusted publishing and provenance. Use when setting up automated npm publishes, debugging ENEEDAUTH/E404 errors, configuring provenance attestations, or setting up a new package for publication.
 metadata:
-  version: 1.0.0
+  version: 2.0.0
 ---
 
-## Pi Context-Aware Execution
+# npm Trusted Publishing
 
-When this skill is invoked in Pi, treat the user's current request and any skill arguments as the task input. Do not treat this file as the task by itself.
+Publish npm packages from GitHub Actions without long-lived tokens. Uses OIDC
+for authentication and generates provenance attestations automatically.
 
-Before applying the skill, establish only the context needed for the request:
+## How It Works
 
-1. Identify the current working directory and relevant project scope.
-2. Read local guidance first when present: AGENTS.md, CLAUDE.md, TODO.md, or nearby task/spec files.
-3. Inspect the current codebase with targeted searches (prefer rg) and read relevant files before making claims or proposing changes.
-4. Ground findings and recommendations in project evidence: cite file paths, commands, tests, docs, or external sources as applicable.
-5. Ask a concise clarification only when the arguments and codebase context are insufficient to proceed safely.
+1. GitHub Actions workflow runs on tag push
+2. Workflow requests short-lived OIDC token from GitHub
+3. npm exchanges OIDC token for publish token via registry
+4. Package publishes with provenance attestation (supply-chain security)
+5. No `NPM_TOKEN` secret needed — ever
 
-Operate conservatively: avoid broad scans, large reads, subagents, or parallel fanout unless the user's requested depth clearly requires them.
-# npm Trusted Publishing Skill
+## Prerequisites
 
-## Critical Requirement
+### npmjs.org (one-time per package)
 
-**npm CLI 11.5.1+ is mandatory for trusted publishing.** `actions/setup-node@v4` with Node 22 still bundles npm 10.x, which CANNOT complete the OIDC token exchange for the actual registry publish. The error is a misleading `404 Not Found` on `PUT https://registry.npmjs.org/<package>` — *after* provenance successfully signs. This wastes hours if you don't know the root cause.
+1. Go to https://www.npmjs.com/settings/
+2. Packages → your package → Settings → Trusted publishing
+3. Provider: GitHub Actions
+4. Organization or user: matches GitHub username exactly (case-sensitive)
+5. Repository: matches repo name exactly (case-sensitive)
+6. Workflow filename: `publish.yml` (exact — not `publish.yaml`)
+7. No environment name unless using GitHub deployment environments
 
-## The Misleading Error
+### package.json
 
-When using npm 10.x with trusted publishing configured correctly, you see:
-
-```
-npm notice publish Signed provenance statement with source and build information from GitHub Actions
-npm http fetch PUT 404 https://registry.npmjs.org/your-package - Not found
-npm error 404  'your-package@x.y.z' is not in this registry.
-```
-
-**This is NOT a missing package or auth config problem. It is npm 10.x being unable to exchange the OIDC token for a publish token.**
-
-## The Fix: Use npm 11 for Publish Only
-
-Never try to globally upgrade npm in GitHub Actions. `setup-node` prepends its own PATH, so `npm install -g npm@latest` and `corepack` both silently fail to override it.
-
-Use `npx` to run npm 11 exclusively for the publish command:
-
-```yaml
-- name: Publish to npm
-  run: npx npm@11 publish
-  working-directory: ./your-package
+```json
+{
+  "name": "@scope/package-name",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/user/repo"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
 ```
 
-This downloads npm 11 on demand and uses it for just the publish operation. No global install, no PATH wrestling.
+Requirements:
+- `repository.url` matches `https://github.com/<user>/<repo>` (no `.git` suffix)
+- Package must be public (private packages cannot use provenance)
+- Repository must be public (private repos cannot generate provenance)
 
 ## Complete Working Workflow
 
@@ -61,6 +60,17 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish'
+        required: true
+        type: string
+      dry_run:
+        description: 'Dry run'
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -74,91 +84,111 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: npm install
 
-      - name: Publish to npm with trusted publishing
-        run: npx npm@11 publish
+      - name: Build
+        run: npm run build
+
+      - name: Publish to npm
+        if: <!-- not a dry run -->
+        run: npm publish --access public --provenance
 ```
 
-## Checklist
+## Node Version Note
 
-### npmjs.org Setup (one-time per package)
-- [ ] Go to Package Settings → Trusted publishing
-- [ ] Provider: GitHub Actions
-- [ ] Organization or user: matches GitHub username exactly (case-sensitive)
-- [ ] Repository: matches repo name exactly (case-sensitive)
-- [ ] Workflow filename: `publish.yml` (exact — not `publish.yaml`)
-- [ ] No environment name unless using GitHub deployment environments
+| Node | Bundled npm | Trusted publishing |
+|------|-------------|-------------------|
+| 18.x | 9.x | ❌ Not supported |
+| 20.x | 10.x | ❌ Not supported |
+| 22.x | 10.x | ❌ Use `npx npm@11 publish` |
+| 24.x | 11.x | ✅ Works directly |
+| 26.x | 11.x | ✅ Works directly |
 
-### package.json Requirements
-- [ ] `repository.url` matches `https://github.com/<user>/<repo>` (no `.git` suffix)
-- [ ] Package is public (private packages cannot use provenance)
-- [ ] Repository is public (private repos cannot generate provenance)
-- [ ] Version being published does not already exist in the registry
+**For Node 20/22:** Use `npx npm@11 publish` instead of `npm publish`.
 
-### Workflow Requirements
-- [ ] `permissions: id-token: write` at job or workflow level
-- [ ] `actions/setup-node@v4` with `registry-url: 'https://registry.npmjs.org'`
-- [ ] Publish step uses `npx npm@11 publish` (NOT `npm publish`)
-- [ ] NO `--provenance` flag needed — provenance is automatic on GitHub Actions
-- [ ] NO `NPM_TOKEN` secret needed — OIDC replaces it entirely
-- [ ] NO `secrets` context in step `if` conditions — GitHub Actions rejects this silently
+## Multi-Package Workspaces
 
-## Anti-Patterns to Avoid
+For monorepos with multiple publishable packages:
 
-| Anti-Pattern | Why It Fails |
-|--------------|-------------|
-| `npm publish --provenance` | Flag is automatic; manual flag can conflict |
-| `npm install -g npm@latest` | `setup-node` PATH takes precedence; still runs npm 10 |
-| `corepack prepare npm@11 --activate` | Same PATH precedence problem |
-| `npx npm@latest publish` | Could pull a future broken version; pin to `@11` |
-| `secrets.NPM_TOKEN != ''` in step `if` | `secrets` context unavailable in step conditions; step skips silently |
-| Removing `registry-url` from `setup-node` | Breaks `.npmrc` auth config; npm cannot authenticate at all |
-| `.git` suffix in `repository.url` | npm normalizes it with a warning; harmless but noisy |
+```yaml
+- name: Publish core
+  working-directory: ./packages/core
+  run: npm publish --access public --provenance
 
-## Verification After Publish
+- name: Publish toolkit
+  working-directory: ./packages/toolkit
+  run: npm publish --access public --provenance
+```
+
+## Dry Run
+
+Test without publishing:
+
+```yaml
+- name: Dry run
+  run: npm publish --dry-run --access public --provenance
+```
+
+## Provenance Verification
+
+After publish:
 
 ```bash
 # Confirm version is live
-npm view <package> version
+npm view @scope/package version
 
 # Confirm provenance attestation exists
-npm view <package> dist.attestations.provenance
+npm view @scope/package dist.attestations.provenance
 
 # View full provenance details
-npm view <package> --json | jq '.dist.attestations'
+npm view @scope/package --json | jq '.dist.attestations'
 ```
+
+On npmjs.com package page, look for the **"Provenance"** badge.
 
 ## Debugging Failed Publishes
 
-1. Check the npm version in the publish step output:
-   ```
-   npm info using npm@10.9.7   ← FAILS (too old)
-   npm info using npm@11.5.1   ← WORKS
-   ```
+### Check npm version
+```bash
+npm --version  # Must be 11.x for trusted publishing
+```
 
-2. Check if provenance signed but PUT failed:
-   ```
-   "Signed provenance statement" followed by "404 Not Found" → npm version issue
-   ```
+### Check OIDC env vars
+```yaml
+- run: |
+    echo "ACTIONS_ID_TOKEN_REQUEST_URL: ${ACTIONS_ID_TOKEN_REQUEST_URL:+set}"
+    echo "ACTIONS_ID_TOKEN_REQUEST_TOKEN: ${ACTIONS_ID_TOKEN_REQUEST_TOKEN:+set}"
+```
 
-3. Check if OIDC env vars are present:
-   ```yaml
-   - run: |
-       echo "ACTIONS_ID_TOKEN_REQUEST_URL: ${ACTIONS_ID_TOKEN_REQUEST_URL:+set}"
-       echo "ACTIONS_ID_TOKEN_REQUEST_TOKEN: ${ACTIONS_ID_TOKEN_REQUEST_TOKEN:+set}"
-   ```
+### Check trusted publisher config
+- Org/user, repo, and workflow filename are all **case-sensitive**
+- npm does NOT validate the config on save
+- Must match exactly: `https://github.com/Org/Repo` vs `https://github.com/org/repo`
 
-4. Check npmjs.org Trusted Publisher config matches exactly:
-   - Org/user, repo, and workflow filename are all case-sensitive
-   - npm does NOT validate the config on save
+### Common errors
 
-## Related Skills
+| Error | Cause | Fix |
+|-------|-------|-----|
+| `ENEEDAUTH` | No `registry-url` in setup-node | Add `registry-url: 'https://registry.npmjs.org'` |
+| `404 Not Found` | npm 10.x with trusted publishing | Use Node 24+ or `npx npm@11 publish` |
+| `403 Forbidden` | Trusted publisher mismatch | Check case-sensitive org/repo/workflow |
+| `EPUBLISHCONFLICT` | Version already exists | Bump version or check if already published |
 
-- `ci-cd-and-automation` — General CI/CD patterns and security
-- `shipping-and-launch` — Pre-launch checklists and rollback procedures
-- `security-and-hardening` — Token-less auth and secrets management
+## Security Best Practices
+
+- ✅ Use `permissions: id-token: write` (minimal)
+- ✅ No `NPM_TOKEN` secret needed
+- ✅ No `--provenance` flag needed (automatic on GitHub Actions)
+- ❌ Never commit `.npmrc` with auth tokens
+- ❌ Never use `secrets.NPM_TOKEN` in workflow
+- ❌ Never use long-lived publish tokens
+
+## Related
+
+- `ci-cd-and-automation` — General CI/CD patterns
+- `shipping-and-launch` — Pre-launch checklists
+- `security-and-hardening` — Secrets management
