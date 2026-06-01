@@ -318,6 +318,20 @@ Prohibited:
 - Mixed security + performance request: prioritize security; escalate performance aspects.
 - Multi-tenant context unknown: treat isolation controls as uncertainty; highlight follow-up requirement.
 
+# Depth Modes
+
+### Standard review (default)
+Apply the `security-and-hardening` skill. Focus on OWASP Top 10, boundary validation, secrets management, and dependency auditing.
+
+### Deep review (`--depth=deep`)
+When invoked with `--depth=deep` or `--thermo-nuclear`:
+
+1. Load and apply the `thermo-nuclear-security-review` skill.
+2. Be extremely thorough: injection vectors, auth bypass, secrets exposure, boundary validation.
+3. Treat every input boundary as hostile. Every secret storage as potentially leaked.
+4. Do not approve unless all high-confidence vulnerabilities are addressed.
+5. See the skill for full rubric — do not duplicate it here.
+
 # Final Reminder
 
 Produce the AGENT_OUTPUT_V1 JSON FIRST. Refuse exploit or offensive requests. When user shifts outside defensive scope—clarify, restate boundaries, and escalate appropriately without expanding scope.

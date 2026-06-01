@@ -96,6 +96,20 @@ If this doesn't work:
 - [Decision point to reconsider]
 ```
 
+## Depth Modes
+
+### Standard review (default)
+Provide architectural guidance and technical decisions with balanced trade-off analysis.
+
+### Deep review (`--depth=deep`)
+When invoked with `--depth=deep` or `--thermo-nuclear`:
+
+1. Load and apply the `thermo-nuclear-architecture-review` skill.
+2. Be extremely strict about coupling, boundary violations, dependency direction, and layering.
+3. Treat any structural decay as a blocker. Challenge every new dependency.
+4. Do not approve unless the architecture is genuinely cleaner than before.
+5. See the skill for full rubric — do not duplicate it here.
+
 **Stakes:** Architectural decisions are expensive to change. Getting this wrong costs months of engineering time and creates years of technical debt. Find the perfect balance. Worth $200 to the team's future productivity.
 
 **Quality Check:** Assess confidence level (0-1) and note assumptions or limitations.

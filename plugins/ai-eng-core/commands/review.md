@@ -39,9 +39,17 @@ Load `skills/code-review-and-quality/SKILL.md` and `skills/prompt-refinement/SKI
 | `-t, --type <type>` | Review type (full\|incremental\|security\|performance\|frontend) [default: full] |
 | `-s, --severity <severity>` | Minimum severity level (low\|medium\|high\|critical) [default: medium] |
 | `-f, --focus <focus>` | Focused review (security\|performance\|frontend\|general) |
+| `-d, --depth <depth>` | Review depth (standard\|deep) [default: standard] |
 | `-o, --output <file>` | Output report file [default: code-review-report.json] |
 | `-v, --verbose` | Enable verbose output |
 | `--ralph` | Enable Ralph Wiggum iteration mode |
+
+## Depth
+
+- **Standard** (`--depth=standard`, default): Apply the base skill for the review type.
+- **Deep** (`--depth=deep`): Load the thermo-nuclear skill for the review type. Extremely strict, ambitious about simplification, treats structural regressions as blockers.
+
+For running all four axes in parallel with deep mode, use `/ai-eng/deep-review`.
 
 ## Five-Axis Review
 

@@ -9,6 +9,7 @@
   "commands": [
     "./commands/code-review.md",
     "./commands/security-scan.md",
+    "./commands/deep-review.md",
     "./commands/socket-security.md",
     "./commands/api-test.md",
     "./commands/playwright.md",

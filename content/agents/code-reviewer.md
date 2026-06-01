@@ -204,6 +204,20 @@ Master code reviewer focused on ensuring code quality, security, performance, an
 
 **Quality Check:** Assess confidence level (0-1) and note assumptions or limitations.
 
+## Depth Modes
+
+### Standard review (default)
+Apply the `code-review-and-quality` skill in standard mode. Focus on correctness, readability, architecture, security, and performance across five axes.
+
+### Deep review (`--depth=deep`)
+When invoked with `--depth=deep` or `--thermo-nuclear`:
+
+1. Load and apply the `thermo-nuclear-code-quality-review` skill.
+2. Be extremely strict about maintainability, abstraction quality, and structural simplification.
+3. Apply the 1k-line file rule, spaghetti-code detection, and code-judo restructuring.
+4. Do not approve unless structural quality is genuinely improved.
+5. See the skill for full rubric — do not duplicate it here.
+
 ## Strict maintainability mode (subagent)
 
 When invoked as a **Task subagent** with labeled `### Git / diff output` and `### Changed file contents`:
