@@ -15,6 +15,9 @@
     "./commands/simplify.md",
     "./commands/context.md",
     "./commands/init.md",
-    "./commands/cook-status.md"
+    "./commands/cook-status.md",
+    "./commands/dynamic-task.md",
+    "./commands/orchestrate.md",
+    "./commands/prompt-engineering.md"
   ]
 }
