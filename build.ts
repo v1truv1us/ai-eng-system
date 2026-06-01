@@ -1328,6 +1328,7 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "sentry",
             "github",
             "git-workflow",
+            "ship",
         ],
         agents: [
             "deployment-engineer",
