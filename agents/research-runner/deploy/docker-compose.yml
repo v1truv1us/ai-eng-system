@@ -9,8 +9,8 @@ services:
       dockerfile: agents/research-runner/deploy/Dockerfile
     container_name: pi-runner
     restart: unless-stopped
-    # Port 8080 is exposed in Dockerfile for Coolify's proxy.
-    # Do NOT add a host ports: binding here — let Coolify route the domain internally.
+    # Port 8080 is exposed in Dockerfile for internal queue UI/debugging only.
+    # Do NOT add public Traefik routing here; research.v1truv1us.dev is owned by research-queue.
     environment:
       - TZ=America/Los_Angeles
       # Optional: short auth JSON if your Coolify env editor allows it.
@@ -40,15 +40,8 @@ services:
           cpus: "0.25"
     labels:
       - "coolify.managed=true"
-      # Queue UI — routed through Coolify's proxy (Traefik).
-      # Set QUEUE_UI_DOMAIN env var to override the default domain.
-      - "traefik.enable=true"
-      - "traefik.http.routers.pi-runner-queue.rule=Host(`research.v1truv1us.dev`)"
-      - "traefik.http.routers.pi-runner-queue.entrypoints=http,https"
-      - "traefik.http.routers.pi-runner-queue.tls=true"
-      - "traefik.http.routers.pi-runner-queue.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.pi-runner-queue.service=pi-runner-queue"
-      - "traefik.http.services.pi-runner-queue.loadbalancer.server.port=8080"
+      # The runner is internal-only. The public queue UI lives in v1truv1us/research-queue.
+      - "traefik.enable=false"
     networks:
       - coolify
       - default
