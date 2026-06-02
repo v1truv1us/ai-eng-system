@@ -328,6 +328,10 @@ function transformAgentMarkdownForOpenCode(
     // category is only used for directory structure, not valid in OpenCode frontmatter
     meta.category = undefined;
 
+    // Strip Claude-only fields that OpenCode does not support
+    meta.model = undefined;
+    meta.temperature = undefined;
+
     // Transform named colors to hex format for OpenCode compatibility
     // OpenCode requires hex format: ^#[0-9a-fA-F]{6}$
     if (meta.color && typeof meta.color === "string") {
@@ -362,6 +366,25 @@ function transformAgentMarkdownForOpenCode(
         category,
         markdown: `---\n${fm}\n---\n${parsed.body}`,
     };
+}
+
+function transformAgentMarkdownForCursor(
+    markdown: string,
+    filePathForErrors: string,
+): string {
+    const parsed = parseFrontmatterStrict(markdown, filePathForErrors);
+    if (!parsed.hasFrontmatter) {
+        return markdown;
+    }
+
+    const meta = { ...parsed.meta };
+
+    // Strip Claude-only fields that Cursor does not support
+    meta.model = undefined;
+    meta.temperature = undefined;
+
+    const fm = serializeFrontmatter(meta);
+    return `---\n${fm}\n---\n${parsed.body}`;
 }
 
 async function validateOpenCodeOutput(opencodeRoot: string): Promise<void> {
@@ -685,7 +708,12 @@ async function buildCursor(): Promise<void> {
 
     await copySkillsPreservePath(SKILLS_DIR, cursorSkillsDir);
     await mkdir(cursorAgentsDir, { recursive: true });
-    await copyMarkdownFiles(join(CONTENT_DIR, "agents"), cursorAgentsDir);
+    const cursorAgentFiles = await getMarkdownFiles(join(CONTENT_DIR, "agents"));
+    for (const src of cursorAgentFiles) {
+        const content = await readFile(src, "utf-8");
+        const transformed = transformAgentMarkdownForCursor(content, src);
+        await writeFile(join(cursorAgentsDir, basename(src)), transformed);
+    }
     await copySelectedMarkdownFiles(
         join(CONTENT_DIR, "commands"),
         cursorCommandsDir,
