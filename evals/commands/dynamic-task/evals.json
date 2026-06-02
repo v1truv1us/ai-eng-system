@@ -1,0 +1,27 @@
+{
+  "command_name": "dynamic-task",
+  "evals": [
+    {
+      "id": 1,
+      "name": "basic-invocation",
+      "prompt": "Run the /dynamic-task command",
+      "expected_output": "Output that follows the dynamic-task command's instructions, including its agent routing and process steps.",
+      "assertions": [
+        "The output contains the command's process or workflow steps",
+        "The output is actionable, not purely descriptive",
+        "The output routes to the correct agent or skill if specified"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "body-structure",
+      "prompt": "Describe the structure of the /dynamic-task command",
+      "expected_output": "A summary of the command's sections and their purposes.",
+      "assertions": [
+        "The output mentions section \"Usage\"",
+        "The output mentions section \"How It Works\"",
+        "The output mentions section \"Execution\""
+      ]
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "agent_name": "startup-review",
+  "evals": [
+    {
+      "id": 1,
+      "name": "role-clarity",
+      "prompt": "What is the startup-review agent's role and when should it be used?",
+      "expected_output": "A clear description of the agent's purpose, when to invoke it, and what it produces.",
+      "assertions": [
+        "The output contains the agent's purpose or role",
+        "The output mentions when to use the agent",
+        "The output describes expected deliverables"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "mode-validation",
+      "prompt": "What mode does the startup-review agent operate in?",
+      "expected_output": "The agent's mode (subagent, ask, edit, etc.) and what that means for execution.",
+      "assertions": [
+        "The output mentions mode \"subagent\"",
+        "The output explains what the mode means"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "section-completeness",
+      "prompt": "Does the startup-review agent have all required sections?",
+      "expected_output": "Verification that the agent markdown includes required sections.",
+      "assertions": [
+        "The output mentions section \"Trigger\"",
+        "The output mentions section \"Workflow\"",
+        "The output mentions section \"Output\""
+      ]
+    }
+  ]
+}

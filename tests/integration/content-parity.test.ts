@@ -52,14 +52,14 @@ describe("Content Parity", () => {
             expect(count).toBeGreaterThanOrEqual(32);
         });
 
-        it("should have at least 38 agents", () => {
+        it("should have at least 44 agents", () => {
             const count = countFiles(join(ROOT, "content/agents"), /\.md$/);
-            expect(count).toBeGreaterThanOrEqual(38);
+            expect(count).toBeGreaterThanOrEqual(44);
         });
 
-        it("should have at least 47 content commands", () => {
+        it("should have at least 28 content commands", () => {
             const count = countFiles(join(ROOT, "content/commands"), /\.md$/);
-            expect(count).toBeGreaterThanOrEqual(47);
+            expect(count).toBeGreaterThanOrEqual(28);
         });
     });
 
@@ -92,7 +92,7 @@ describe("Content Parity", () => {
     });
 
     describe("Lifecycle aliases", () => {
-        const aliases = ["spec", "build", "test", "code-simplify", "ship"];
+        const aliases = ["spec", "ship"];
 
         for (const alias of aliases) {
             it(`should have alias command: /${alias}`, () => {
@@ -102,14 +102,18 @@ describe("Content Parity", () => {
         }
     });
 
-    describe("New agents", () => {
+    describe("Core agents", () => {
         const agents = [
-            "planner",
-            "tdd-guide",
-            "build-error-resolver",
-            "docs-lookup",
-            "e2e-runner",
-            "harness-optimizer",
+            "claude-conductor",
+            "claude-planner-agent",
+            "claude-work-agent",
+            "claude-debugger-agent",
+            "claude-refactor-agent",
+            "claude-lookup-agent",
+            "code-reviewer",
+            "security-scanner",
+            "performance-engineer",
+            "architect-advisor",
         ];
 
         for (const agent of agents) {
@@ -155,20 +159,22 @@ describe("Content Parity", () => {
             ).toBe(true);
         });
 
-        it("skills reference should mention 32 skills", () => {
+        it("skills reference should mention current skill count", () => {
             const content = readFileSync(
                 join(ROOT, "docs/reference/skills.md"),
                 "utf-8",
             );
-            expect(content).toContain("32");
+            const count = countSkillsRecursive(join(ROOT, "skills"));
+            expect(content).toContain(String(count));
         });
 
-        it("agents reference should mention 38 agents", () => {
+        it("agents reference should mention current agent count", () => {
             const content = readFileSync(
                 join(ROOT, "docs/reference/agents.md"),
                 "utf-8",
             );
-            expect(content).toContain("38");
+            const count = countFiles(join(ROOT, "content/agents"), /\.md$/);
+            expect(content).toContain(String(count));
         });
     });
 });

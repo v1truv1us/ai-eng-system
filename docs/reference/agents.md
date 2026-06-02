@@ -1,6 +1,6 @@
 # Agents Reference
 
-38 specialized agents for engineering workflows.
+44 specialized agents for engineering workflows.
 
 ---
 
@@ -12,7 +12,7 @@
 | backend-architect | Backend system design |
 | infrastructure-builder | Cloud infrastructure design |
 | aws-architect | AWS architecture and Well-Architected guidance |
-| planner | Feature implementation planning and task decomposition |
+| claude-planner-agent | Feature planning and task decomposition (Claude router) |
 
 ---
 
@@ -29,7 +29,9 @@
 | data-engineer | Data pipelines, warehousing, and streaming systems |
 | documentation-specialist | Comprehensive technical documentation |
 | docs-writer | Concise product and feature documentation |
-| docs-lookup | Documentation retrieval and verification from official sources |
+| claude-work-agent | Implementation and code changes (Claude router) |
+| claude-refactor-agent | Code refactoring and restructuring (Claude router) |
+| claude-lookup-agent | Fast lookups and fact retrieval (Claude router) |
 
 ---
 
@@ -39,13 +41,11 @@
 |-------|---------|
 | code-reviewer | Code quality assessment |
 | test-generator | Automated test generation |
-| tdd-guide | Test-driven development enforcement |
 | security-scanner | Security vulnerability detection |
 | performance-engineer | Application performance optimization |
-| build-error-resolver | Build and compilation error diagnosis |
-| e2e-runner | End-to-end Playwright testing |
 | plugin-validator | Plugin structure validation |
 | text-cleaner | AI-generated verbosity cleanup |
+| claude-debugger-agent | Systematic debugging and error recovery (Claude router) |
 
 ---
 
@@ -56,7 +56,7 @@
 | deployment-engineer | CI/CD pipeline design |
 | monitoring-expert | System monitoring |
 | cost-optimizer | Cloud cost optimization |
-| harness-optimizer | Agent harness reliability and cost tuning |
+| ci-watcher | CI pipeline monitoring and alerting |
 
 ---
 
@@ -95,6 +95,26 @@
 | Agent | Purpose |
 |-------|---------|
 | subagent-orchestration | Specialist routing and multi-agent coordination |
+| claude-conductor | Claude router conductor for intent-based agent dispatch |
+
+---
+
+## Review & Validation
+
+| Agent | Purpose |
+|-------|---------|
+| compatibility-scan-review | Agent compatibility validation |
+| docs-reliability-review | Documentation accuracy and freshness review |
+| startup-review | Agent startup path validation |
+| validation-review | End-to-end validation and verification |
+
+---
+
+## Learning & Memory
+
+| Agent | Purpose |
+|-------|---------|
+| agents-memory-updater | Automatic memory and skill updates from sessions |
 
 ---
 

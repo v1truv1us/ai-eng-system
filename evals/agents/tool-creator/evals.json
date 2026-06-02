@@ -1,0 +1,67 @@
+{
+  "agent_name": "tool-creator",
+  "evals": [
+    {
+      "id": 1,
+      "name": "role-clarity",
+      "prompt": "What is the tool-creator agent's role and when should it be used?",
+      "expected_output": "A clear description of the agent's purpose, when to invoke it, and what it produces.",
+      "assertions": [
+        "The output contains the agent's purpose or role",
+        "The output mentions when to use the agent",
+        "The output describes expected deliverables"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "mode-validation",
+      "prompt": "What mode does the tool-creator agent operate in?",
+      "expected_output": "The agent's mode (subagent, ask, edit, etc.) and what that means for execution.",
+      "assertions": [
+        "The output mentions mode \"subagent\"",
+        "The output explains what the mode means"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "tools-permissions",
+      "prompt": "What tools can the tool-creator agent use?",
+      "expected_output": "A list of available tools and any restrictions on their use.",
+      "assertions": [
+        "The output mentions at least one tool",
+        "The output describes tool usage boundaries"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "prompt-quality",
+      "prompt": "Evaluate the tool-creator agent's prompt quality",
+      "expected_output": "Assessment of whether the prompt is specific, actionable, and produces consistent results.",
+      "assertions": [
+        "The output mentions prompt specificity",
+        "The output mentions expected behavior consistency"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "capabilities",
+      "prompt": "What can the tool-creator agent do?",
+      "expected_output": "A list of capabilities and how they map to tasks.",
+      "assertions": [
+        "The output lists specific capabilities",
+        "The output maps capabilities to use cases"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "section-completeness",
+      "prompt": "Does the tool-creator agent have all required sections?",
+      "expected_output": "Verification that the agent markdown includes required sections.",
+      "assertions": [
+        "The output mentions section \"Tool Creation Process\"",
+        "The output mentions section \"Output Format\"",
+        "The output mentions section \"Tool Categories\""
+      ]
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Skills Reference
 
-ai-eng-system currently ships 33 canonical skills organized by lifecycle phase and repository-specific purpose.
+ai-eng-system currently ships 83 skills organized by lifecycle phase, domain, and repository-specific purpose.
 
 ## Namespaced Skills
 

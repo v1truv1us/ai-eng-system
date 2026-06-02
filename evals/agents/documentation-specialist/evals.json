@@ -1,0 +1,47 @@
+{
+  "agent_name": "documentation-specialist",
+  "evals": [
+    {
+      "id": 1,
+      "name": "role-clarity",
+      "prompt": "What is the documentation-specialist agent's role and when should it be used?",
+      "expected_output": "A clear description of the agent's purpose, when to invoke it, and what it produces.",
+      "assertions": [
+        "The output contains the agent's purpose or role",
+        "The output mentions when to use the agent",
+        "The output describes expected deliverables"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "mode-validation",
+      "prompt": "What mode does the documentation-specialist agent operate in?",
+      "expected_output": "The agent's mode (subagent, ask, edit, etc.) and what that means for execution.",
+      "assertions": [
+        "The output mentions mode \"subagent\"",
+        "The output explains what the mode means"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "capabilities",
+      "prompt": "What can the documentation-specialist agent do?",
+      "expected_output": "A list of capabilities and how they map to tasks.",
+      "assertions": [
+        "The output lists specific capabilities",
+        "The output maps capabilities to use cases"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "section-completeness",
+      "prompt": "Does the documentation-specialist agent have all required sections?",
+      "expected_output": "Verification that the agent markdown includes required sections.",
+      "assertions": [
+        "The output mentions section \"Primary Objective\"",
+        "The output mentions section \"Anti-Objectives\"",
+        "The output mentions section \"Capabilities\""
+      ]
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "command_name": "research",
+  "evals": [
+    {
+      "id": 1,
+      "name": "basic-invocation",
+      "prompt": "Run the /research command",
+      "expected_output": "Output that follows the research command's instructions, including its agent routing and process steps.",
+      "assertions": [
+        "The output contains the command's process or workflow steps",
+        "The output is actionable, not purely descriptive",
+        "The output routes to the correct agent or skill if specified"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "agent-routing",
+      "prompt": "What agent does /research route to?",
+      "expected_output": "The correct agent name and mode from the command frontmatter.",
+      "assertions": [
+        "The output mentions agent \"plan\"",
+        "The output describes the agent's role"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "body-structure",
+      "prompt": "Describe the structure of the /research command",
+      "expected_output": "A summary of the command's sections and their purposes.",
+      "assertions": [
+        "The output mentions section \"Quick Start\"",
+        "The output mentions section \"Options\"",
+        "The output mentions section \"Process\""
+      ]
+    }
+  ]
+}
