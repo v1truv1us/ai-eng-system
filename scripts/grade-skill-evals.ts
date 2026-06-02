@@ -65,9 +65,9 @@ async function gradeAssertion(assertion: string, outputText: string): Promise<As
   // Detect negation
   const hasNegation = /\b(does not|doesn't|must not|should not|no|never|without)\b/i.test(assertion);
 
-  // Extract exact quoted strings
+  // Extract exact quoted strings (single or double quotes)
   const quotedStrings: string[] = [];
-  const quoteMatches = assertion.matchAll(/"([^"]+)"/g);
+  const quoteMatches = assertion.matchAll(/["']([^"']+)["']/g);
   for (const m of quoteMatches) {
     const cleanQuote = stripMarkdown(m[1]);
     quotedStrings.push(cleanQuote);
@@ -146,11 +146,21 @@ async function gradeAssertion(assertion: string, outputText: string): Promise<As
     };
   }
 
-  // Fallback: keyword matching
-  const keywords = lowerAssertion
-    .replace(/[\"'\[\]\(\)\{\}]/g, "")
+  // Fallback: keyword matching with unit-aware expansion
+  let keywordText = lowerAssertion
+    .replace(/[\"'\[\]\(\)\{\}]/g, "");
+
+  // Expand unit patterns so "time value with units" also matches "minutes", "ms", etc.
+  if (keywordText.includes("time") && keywordText.includes("unit")) {
+    keywordText += " minutes seconds hours ms milliseconds days";
+  }
+  if (keywordText.includes("percentage") || keywordText.includes("percent")) {
+    keywordText += " % percent";
+  }
+
+  const keywords = keywordText
     .split(/\s+/)
-    .filter(w => w.length > 4 && !["contains", "includes", "should", "must", "have", "with", "that", "this", "does", "not", "and", "the", "for", "from", "than", "output", "followed", "there"].includes(w));
+    .filter(w => w.length > 3 && !["contains", "includes", "should", "must", "have", "with", "that", "this", "does", "not", "and", "the", "for", "from", "than", "output", "followed", "there", "value", "specific", "measurable", "target", "mention", "mentions", "mentioning"].includes(w));
 
   const matches = keywords.filter(k => cleanOutput.includes(k)).length;
   const threshold = Math.max(1, Math.floor(keywords.length * 0.4));

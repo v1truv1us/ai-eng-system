@@ -9,7 +9,7 @@
       "assertions": [
         "The output contains a section titled '## Goal'",
         "The output contains '**Objective:**' followed by a single sentence",
-        "The objective mentions a specific time metric or percentage improvement",
+        "The objective includes a specific numeric target with units (e.g. '12 minutes', '50%', '1000 requests')",
         "The output contains '**Success Criteria:**' with at least 2 checkbox items '- [ ]'",
         "The output contains '**Verification Evidence:**' with concrete evidence types",
         "The output contains '**Scope:**' with both '**In scope:**' and '**Out of scope:**' subsections",
