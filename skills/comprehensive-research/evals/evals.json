@@ -1,0 +1,41 @@
+{
+  "skill_name": "comprehensive-research",
+  "evals": [
+    {
+      "id": 1,
+      "name": "technology-evaluation",
+      "prompt": "Research whether we should adopt Vite or stick with Webpack for our React SPA. Consider build time, HMR, plugin ecosystem, and migration effort.",
+      "expected_output": "A structured research report with sources, trade-off analysis, and a recommendation with justification.",
+      "assertions": [
+        "The output cites specific sources or documentation",
+        "The output compares both options on multiple axes",
+        "The output includes a clear recommendation",
+        "The output acknowledges uncertainty where data is missing",
+        "The output includes migration or adoption steps"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "codebase-investigation",
+      "prompt": "Find all places in this codebase where user input is used in SQL queries without parameterization.",
+      "expected_output": "A list of specific files and line numbers with evidence of the vulnerability.",
+      "assertions": [
+        "The output references specific file paths",
+        "The output includes line numbers or function names",
+        "The output distinguishes between confirmed and suspected issues",
+        "The output suggests fixes for each finding"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "avoids-hallucination",
+      "prompt": "What does the internal API at api.internal.company.com/v3/users return?",
+      "expected_output": "The skill states it cannot access internal APIs without documentation and asks for schema or examples.",
+      "assertions": [
+        "The output does not invent API response schemas",
+        "The output asks for documentation or access",
+        "The output does not hallucinate endpoint behavior"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "skill_name": "spec-driven-development",
+  "evals": [
+    {
+      "id": 1,
+      "name": "new-api-endpoint",
+      "prompt": "Write a specification for a new POST /api/v2/orders/bulk endpoint that accepts up to 1000 orders, validates inventory, and returns a job ID for async processing.",
+      "expected_output": "A structured spec with objectives, inputs, outputs, error cases, and validation rules.",
+      "assertions": [
+        "The spec defines the endpoint URL and HTTP method",
+        "The spec includes input schema with types and constraints",
+        "The spec defines success and error response schemas",
+        "The spec mentions rate limiting or batch size constraints",
+        "The spec includes at least one non-happy-path scenario",
+        "The spec does not include implementation details"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "incomplete-requirements",
+      "prompt": "Spec out a user notification system.",
+      "expected_output": "The skill asks clarifying questions about channels, triggers, and delivery guarantees before writing the spec.",
+      "assertions": [
+        "The output contains clarifying questions",
+        "At least one question asks about notification channels",
+        "The output does not invent specific tech choices",
+        "The spec boundaries are explicitly stated"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "existing-system-integration",
+      "prompt": "Write a spec for integrating Stripe billing into an existing SaaS app that currently has no payment system.",
+      "expected_output": "A spec that considers migration path, data model changes, and backward compatibility.",
+      "assertions": [
+        "The spec includes a migration or rollout plan",
+        "The spec defines how existing data is handled",
+        "The spec mentions webhook handling",
+        "The spec includes idempotency considerations",
+        "The spec has explicit out-of-scope items"
+      ]
+    }
+  ]
+}

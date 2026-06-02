@@ -110,6 +110,18 @@ If the user wants the goal persisted, save it to:
 
 Use kebab-case slugs derived from the objective (first 3-5 words).
 
+## Handoff to `/goal`
+
+On **Pi** (with `pi-codex-goal`) or **Codex**, the `/goal` command takes a **single text objective** — not a full markdown document. After this skill produces the goal, extract the **Objective** sentence and pass it to `/goal`:
+
+```
+/goal Reduce the GitHub Actions CI build time from 12 minutes to under 5 minutes without changing the primary build tool
+```
+
+The full markdown document (success criteria, verification evidence, scope, etc.) stays in the conversation as context. The agent working toward the `/goal` uses it as the completion contract.
+
+On **Claude Code**, **OpenCode**, **Cursor**, or **Gemini** (no native `/goal` command), paste the full markdown output into the conversation. The agent follows it as standing instructions.
+
 ## Example
 
 **User:** "I want to make the build faster"

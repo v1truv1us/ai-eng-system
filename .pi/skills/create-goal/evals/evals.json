@@ -1,0 +1,75 @@
+{
+  "skill_name": "create-goal",
+  "evals": [
+    {
+      "id": 1,
+      "name": "vague-idea-build-faster",
+      "prompt": "I want to make the build faster",
+      "expected_output": "A structured goal with an objective about build time reduction, success criteria with measurable targets, verification evidence, scope boundaries, iteration policy, completion audit, and blocked stop condition.",
+      "assertions": [
+        "The output contains a section titled '## Goal'",
+        "The output contains '**Objective:**' followed by a single sentence",
+        "The objective mentions a specific time metric or percentage improvement",
+        "The output contains '**Success Criteria:**' with at least 2 checkbox items '- [ ]'",
+        "The output contains '**Verification Evidence:**' with concrete evidence types",
+        "The output contains '**Scope:**' with both '**In scope:**' and '**Out of scope:**' subsections",
+        "The output contains '**Iteration Policy:**'",
+        "The output contains '**Completion Audit:**'",
+        "The output contains '**Blocked Stop Condition:**'",
+        "The output contains clarifying questions before the goal draft"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "specific-feature-oauth",
+      "prompt": "Add OAuth2 login with Google to the existing auth system. Must support refresh tokens and handle session expiry gracefully.",
+      "expected_output": "A goal with a specific objective about OAuth2 integration, success criteria covering refresh tokens and session expiry, and clear scope boundaries.",
+      "assertions": [
+        "The output contains '**Objective:**' followed by a single sentence",
+        "The objective mentions OAuth2 or Google login",
+        "The success criteria include refresh tokens",
+        "The success criteria include session expiry handling",
+        "The scope explicitly states what auth providers are in scope",
+        "The blocked stop condition mentions API credentials or missing dependencies"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "drifting-goal-refactor",
+      "prompt": "I started refactoring the database layer but now I'm not sure what the goal is anymore. I just know the current code is messy.",
+      "expected_output": "A goal that helps the user re-establish scope and boundaries for an in-progress refactor, with clear success criteria and out-of-scope items.",
+      "assertions": [
+        "The output contains '**Objective:**' followed by a single sentence",
+        "The objective does not assume specific technologies unless stated",
+        "The scope has explicit '**Out of scope:**' items to prevent drift",
+        "The completion audit emphasizes mapping requirements to existing changes",
+        "The blocked stop condition addresses partially completed work"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "edge-case-too-vague",
+      "prompt": "make it better",
+      "expected_output": "Either clarifying questions that expose the vagueness, or a goal that forces specificity by asking for metrics and boundaries.",
+      "assertions": [
+        "The output contains clarifying questions",
+        "At least one question asks 'what does better mean' or similar",
+        "The objective does not use the word 'better' without a metric",
+        "If a goal is drafted, the success criteria are pass/fail verifiable"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "research-goal",
+      "prompt": "Research whether we should use PostgreSQL or MySQL for the new analytics pipeline. We need to handle 10M events/day.",
+      "expected_output": "A goal with a research-oriented objective, success criteria that include evidence-based recommendations, and clear constraints on the decision.",
+      "assertions": [
+        "The objective is a single sentence about comparing PostgreSQL and MySQL",
+        "The success criteria include a recommendation with justification",
+        "The verification evidence includes benchmarks or load tests",
+        "The scope limits the research to the analytics pipeline use case",
+        "The constraints mention the 10M events/day requirement"
+      ]
+    }
+  ]
+}

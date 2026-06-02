@@ -1,10 +1,10 @@
 ---
 name: create-goal
 description: "Transform a vague idea, request, or prompt into a concrete, actionable goal with clear success criteria, scope boundaries, and measurable outcomes. Use when the user has an intention but needs help defining what \"done\" looks like."
-argument-hint: "<task or idea>"
 metadata:
   version: 1.1.0
   tags: ai-eng-core, goal-setting, planning
+argument-hint: <task or idea>
 ---
 
 # Create Goal
@@ -109,6 +109,18 @@ If the user wants the goal persisted, save it to:
 - `~/.ai-eng/goals/<slug>.md` (personal goal library)
 
 Use kebab-case slugs derived from the objective (first 3-5 words).
+
+## Handoff to `/goal`
+
+On **Pi** (with `pi-codex-goal`) or **Codex**, the `/goal` command takes a **single text objective** — not a full markdown document. After this skill produces the goal, extract the **Objective** sentence and pass it to `/goal`:
+
+```
+/goal Reduce the GitHub Actions CI build time from 12 minutes to under 5 minutes without changing the primary build tool
+```
+
+The full markdown document (success criteria, verification evidence, scope, etc.) stays in the conversation as context. The agent working toward the `/goal` uses it as the completion contract.
+
+On **Claude Code**, **OpenCode**, **Cursor**, or **Gemini** (no native `/goal` command), paste the full markdown output into the conversation. The agent follows it as standing instructions.
 
 ## Example
 

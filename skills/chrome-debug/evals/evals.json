@@ -1,0 +1,27 @@
+{
+  "skill_name": "chrome-debug",
+  "evals": [
+    {
+      "id": 1,
+      "name": "basic-invocation",
+      "prompt": "Apply the chrome-debug skill to the following task: implement a user authentication feature with JWT tokens in a Node.js Express app.",
+      "expected_output": "Output that follows the chrome-debug skill's guidance, including its key sections and recommendations.",
+      "assertions": [
+        "The output references or follows chrome-debug guidance",
+        "The output provides actionable guidance",
+        "The output is specific, not generic"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "ambiguous-input",
+      "prompt": "The codebase is messy and needs cleanup. Apply the chrome-debug skill.",
+      "expected_output": "The skill handles vague input by either asking clarifying questions or providing bounded guidance.",
+      "assertions": [
+        "The output does not hallucinate specific technologies not mentioned",
+        "The output is relevant to the skill domain",
+        "The output is actionable rather than purely descriptive"
+      ]
+    }
+  ]
+}
