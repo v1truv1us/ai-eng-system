@@ -192,32 +192,6 @@
         "meta-tooling",
         "code-generation"
       ]
-    },
-    {
-      "name": "ai-eng-pstack",
-      "source": "./plugins/ai-eng-pstack",
-      "description": "Pstack deep-work skills (architecture, TDD, principles) imported from cursor/plugins",
-      "version": "1.6.4",
-      "author": {
-        "name": "v1truv1us",
-        "email": "contact@v1truv1us.dev"
-      },
-      "homepage": "https://github.com/v1truv1us/ai-eng-system#readme",
-      "repository": "https://github.com/v1truv1us/ai-eng-system",
-      "license": "MIT",
-      "keywords": [
-        "pstack",
-        "principles",
-        "architecture",
-        "tdd",
-        "deep-work"
-      ],
-      "category": "development",
-      "tags": [
-        "pstack",
-        "deep-work",
-        "cursor-import"
-      ]
     }
   ]
 }

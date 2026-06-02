@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "taskId": "01_01-agent",
+  "role": "agent",
+  "agent": "explorer",
+  "runtime": "child-process",
+  "permissionMode": "workspace_write",
+  "tools": [
+    "find",
+    "grep",
+    "ls",
+    "read"
+  ],
+  "extensions": [],
+  "skills": {
+    "names": [],
+    "paths": [],
+    "disabled": false
+  },
+  "model": {
+    "fallbacks": []
+  },
+  "inheritance": {
+    "projectContext": true,
+    "skills": false,
+    "systemPromptMode": "replace"
+  }
+}

@@ -16,7 +16,7 @@ const PLUGIN_NAMES = [
     "ai-eng-quality",
     "ai-eng-content",
     "ai-eng-plugin-dev",
-    "ai-eng-pstack",
+    
 ];
 
 const sources = [

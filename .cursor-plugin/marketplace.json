@@ -39,11 +39,6 @@
       "name": "ai-eng-plugin-dev",
       "source": "./plugins/ai-eng-plugin-dev",
       "description": "Meta-tooling for creating plugins, agents, commands, and skills"
-    },
-    {
-      "name": "ai-eng-pstack",
-      "source": "./plugins/ai-eng-pstack",
-      "description": "Pstack deep-work skills (architecture, TDD, principles) imported from cursor/plugins"
     }
   ]
 }

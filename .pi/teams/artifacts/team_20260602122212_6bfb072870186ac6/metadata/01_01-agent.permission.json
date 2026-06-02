@@ -1,0 +1,4 @@
+{
+  "role": "agent",
+  "permissionMode": "workspace_write"
+}

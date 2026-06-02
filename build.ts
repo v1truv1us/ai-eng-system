@@ -86,7 +86,6 @@ const CURSOR_PLUGIN_DISPLAY_NAMES: Record<string, string> = {
     "ai-eng-quality": "AI Engineering Quality",
     "ai-eng-content": "AI Engineering Content",
     "ai-eng-plugin-dev": "AI Engineering Plugin Dev",
-    "ai-eng-pstack": "AI Engineering Pstack",
 };
 const ROOT_OPENCODE_DIR = join(ROOT, ".opencode");
 const ROOT_CLAUDE_DIR = join(ROOT, ".claude");
@@ -1226,6 +1225,12 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "deprecation-and-migration",
             "documentation-and-adrs",
             "orchestrate",
+            "architect",
+            "unslop",
+            "principle-laziness-protocol",
+            "principle-fix-root-causes",
+            "principle-prove-it-works",
+            "principle-never-block-on-the-human",
         ],
         description:
             "Core workflow: plan, work, review cycle with research and context engineering",
@@ -1411,6 +1416,9 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "thermo-nuclear-security-review",
             "thermo-nuclear-architecture-review",
             "thermo-nuclear-performance-review",
+            "tdd",
+            "interrogate",
+            "principle-type-system-discipline",
         ],
         description:
             "Testing, security scanning, code review, and quality assurance",
@@ -1468,16 +1476,6 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
         category: "development",
         keywords: ["plugin", "agent", "meta-tooling", "code-generation"],
         tags: ["plugin-development", "meta-tooling", "code-generation"],
-    },
-    "ai-eng-pstack": {
-        commands: [],
-        agents: ["poteto-agent"],
-        skills: ["pstack"],
-        description:
-            "Pstack deep-work skills (architecture, TDD, principles) imported from cursor/plugins",
-        category: "development",
-        keywords: ["pstack", "principles", "architecture", "tdd", "deep-work"],
-        tags: ["pstack", "deep-work", "cursor-import"],
     },
 };
 

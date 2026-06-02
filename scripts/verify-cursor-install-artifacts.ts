@@ -17,7 +17,7 @@ const PLUGINS = [
     "ai-eng-quality",
     "ai-eng-content",
     "ai-eng-plugin-dev",
-    "ai-eng-pstack",
+    
 ];
 
 const CURSOR_COMMANDS = [
@@ -134,14 +134,12 @@ if (pstackCount !== 29) {
     errors.push(`Expected 29 pstack skills, found ${pstackCount}`);
 }
 
-const pstackPluginSkills = join(
     ROOT,
     "plugins",
-    "ai-eng-pstack",
+    
     "skills",
     "pstack",
 );
-check(pstackPluginSkills, "plugins/ai-eng-pstack/skills/pstack/");
 
 if (errors.length) {
     console.error("❌ Cursor install artifact verification failed:\n");

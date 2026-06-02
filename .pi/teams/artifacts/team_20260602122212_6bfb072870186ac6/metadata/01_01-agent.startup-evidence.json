@@ -1,0 +1,11 @@
+{
+  "lastLifecycleState": "finished",
+  "command": "pi",
+  "promptSentAt": "2026-06-02T12:22:13.315Z",
+  "promptAccepted": true,
+  "trustPromptDetected": false,
+  "transportHealthy": true,
+  "childProcessAlive": false,
+  "elapsedMs": 199573,
+  "classification": "unknown"
+}

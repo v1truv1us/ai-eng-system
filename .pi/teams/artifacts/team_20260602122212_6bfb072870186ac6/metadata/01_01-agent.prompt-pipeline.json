@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "taskId": "01_01-agent",
+  "stages": [
+    {
+      "name": "task-packet-built",
+      "references": [
+        "metadata/01_01-agent.task-packet.json"
+      ]
+    },
+    {
+      "name": "dependency-context-collected",
+      "references": [
+        "metadata/01_01-agent.inputs.json"
+      ]
+    },
+    {
+      "name": "skills-rendered-or-disabled",
+      "references": [],
+      "details": {
+        "disabled": false,
+        "skillInstructionCount": 0
+      }
+    },
+    {
+      "name": "capability-inventory-recorded",
+      "references": [
+        "metadata/01_01-agent.capabilities.json"
+      ]
+    },
+    {
+      "name": "coordination-bridge-attached",
+      "references": [
+        "metadata/01_01-agent.coordination-bridge.md"
+      ]
+    },
+    {
+      "name": "prompt-rendered",
+      "references": []
+    },
+    {
+      "name": "prompt-artifact-written",
+      "references": [
+        "prompts/01_01-agent.md"
+      ]
+    }
+  ]
+}

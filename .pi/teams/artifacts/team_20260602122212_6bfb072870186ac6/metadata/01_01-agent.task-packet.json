@@ -1,0 +1,26 @@
+{
+  "objective": "Read-only review. Inspect /Users/johnferguson/Github/research-queue local repo and relevant environment/config references. Goal: validate research-queue deployment state and identify exact next steps after Coolify build/routing issues. Focus on docker-compose.yml, Dockerfile, package/lockfile, README/env docs, API routes, auth behavior, and any likely routing/domain conflicts with old pi-runner. Do not modify files, do not SSH, do not call external APIs. Return concise findings with evidence and suggested next steps.",
+  "scope": "workspace",
+  "repo": "ai-eng-system",
+  "branchPolicy": "Use the current checkout; do not create branches unless explicitly requested.",
+  "acceptanceTests": [],
+  "commitPolicy": "Do not commit unless explicitly requested by the user or workflow.",
+  "reportingContract": "Report intended/changed files, verification evidence, blockers, conflict risks, and next recommended action.",
+  "escalationPolicy": "Stop and report if scope is ambiguous, destructive action is needed, permissions are missing, verification cannot be completed, or edits may overlap with another worker/task.",
+  "constraints": [
+    "Stay within the assigned task scope.",
+    "Do not claim completion without verification evidence.",
+    "Use mailbox/API state for coordination when available.",
+    "Do not make overlapping edits to the same file/symbol without explicit leader sequencing or ownership guidance."
+  ],
+  "expectedArtifacts": [
+    "prompt",
+    "result",
+    "verification"
+  ],
+  "verification": {
+    "requiredGreenLevel": "none",
+    "commands": [],
+    "allowManualEvidence": true
+  }
+}
