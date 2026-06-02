@@ -7,7 +7,6 @@
   },
   "license": "MIT",
   "commands": [
-    "./commands/knowledge-architecture.md",
     "./commands/decision-journal.md",
     "./commands/quality-gate.md",
     "./commands/maintenance-review.md",

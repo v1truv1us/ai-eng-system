@@ -7,16 +7,7 @@
   },
   "license": "MIT",
   "commands": [
-    "./commands/code-review.md",
-    "./commands/security-scan.md",
     "./commands/deep-review.md",
-    "./commands/socket-security.md",
-    "./commands/verify.md",
-    "./commands/api-test.md",
-    "./commands/playwright.md",
-    "./commands/chrome-debug.md",
-    "./commands/ios-sim.md",
-    "./commands/xcodebuild.md",
-    "./commands/db-optimize.md"
+    "./commands/verify.md"
   ]
 }

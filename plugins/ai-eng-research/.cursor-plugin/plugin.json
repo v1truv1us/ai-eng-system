@@ -23,6 +23,5 @@
     "knowledge-capture"
   ],
   "skills": "./skills/",
-  "agents": "./agents/",
-  "commands": "./commands/"
+  "agents": "./agents/"
 }

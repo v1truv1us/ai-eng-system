@@ -1215,7 +1215,6 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "cook-status",
             "dynamic-task",
             "orchestrate",
-            "prompt-engineering",
         ],
         agents: [
             "architect-advisor",
@@ -1259,6 +1258,7 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "principle-fix-root-causes",
             "principle-prove-it-works",
             "principle-never-block-on-the-human",
+            "agent-analyzer",
         ],
         description:
             "Core workflow: plan, work, review cycle with research and context engineering",
@@ -1281,7 +1281,6 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
     },
     "ai-eng-learning": {
         commands: [
-            "knowledge-architecture",
             "decision-journal",
             "quality-gate",
             "maintenance-review",
@@ -1294,6 +1293,7 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "knowledge-architecture",
             "continuous-learning",
             "dreaming-consolidator",
+            "verbalize",
         ],
         assetDirs: [
             "docs/knowledge",
@@ -1323,13 +1323,7 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
         ],
     },
     "ai-eng-research": {
-        commands: [
-            "deep-research",
-            "research-companion",
-            "context7-docs",
-            "fact-check",
-            "knowledge-capture",
-        ],
+        commands: [],
         agents: [
             "ai-engineer",
             "docs-writer",
@@ -1353,14 +1347,6 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
     "ai-eng-devops": {
         commands: [
             "deploy",
-            "coolify",
-            "docker",
-            "k8s",
-            "cloudflare",
-            "monitoring",
-            "sentry",
-            "github",
-            "git-workflow",
             "ship",
         ],
         agents: [
@@ -1380,6 +1366,15 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "loop-on-ci",
             "cross-repo-refactor",
             "git-workflow-and-versioning",
+            "cloudflare",
+            "coolify-deploy",
+            "docker",
+            "github",
+            "k8s",
+            "monitoring",
+            "sentry",
+            "slack",
+            "git-worktree",
             "npm-trusted-publishing",
             "shipping-and-launch",
         ],
@@ -1397,17 +1392,8 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
     },
     "ai-eng-quality": {
         commands: [
-            "code-review",
-            "security-scan",
             "deep-review",
-            "socket-security",
             "verify",
-            "api-test",
-            "playwright",
-            "chrome-debug",
-            "ios-sim",
-            "xcodebuild",
-            "db-optimize",
         ],
         agents: [
             "code-reviewer",
@@ -1447,6 +1433,14 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "tdd",
             "interrogate",
             "principle-type-system-discipline",
+            "api-test",
+            "chrome-debug",
+            "db-optimize",
+            "ios-sim",
+            "playwright",
+            "security-scan",
+            "socket-security",
+            "xcodebuild",
         ],
         description:
             "Testing, security scanning, code review, and quality assurance",
@@ -1462,14 +1456,11 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
     },
     "ai-eng-content": {
         commands: [
-            "content-optimize",
             "seo",
-            "verbalize",
-            "slack",
             "ralph-wiggum",
         ],
         agents: ["seo-specialist", "text-cleaner", "prompt-optimizer"],
-        skills: ["seo-audit"],
+        skills: ["seo-audit", "content-optimization", "verbalize", "slack"],
         description: "Content optimization, SEO, and communication tools",
         category: "development",
         keywords: ["content", "seo", "optimization", "communication"],
@@ -1482,7 +1473,6 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "create-skill",
             "create-tool",
             "create-plugin",
-            "agent-analyzer",
         ],
         agents: [
             "agent-creator",
@@ -1498,6 +1488,7 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "agents-sdk-dev",
             "gemini-agent-sdk",
             "cli-for-agents",
+            "agent-analyzer",
         ],
         description:
             "Meta-tooling for creating plugins, agents, commands, and skills",
