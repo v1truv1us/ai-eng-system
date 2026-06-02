@@ -38,7 +38,7 @@ import type { CleanFlags, InstallFlags, InstallPlatform } from "./types";
 import { appendTelemetryEvent, isTelemetryEnabled } from "./telemetry";
 
 const NAMESPACE_PREFIX = "ai-eng";
-const PACKAGE_VERSION = "1.6.4"; // TODO: read from package.json at build time
+const PACKAGE_VERSION = "1.6.5"; // TODO: read from package.json at build time
 
 async function copyRecursive(src: string, dest: string): Promise<void> {
     const stat = await fsp.stat(src);

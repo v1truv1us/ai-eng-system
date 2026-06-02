@@ -1,6 +1,6 @@
 {
   "name": "@ai-eng-system/core",
-  "version": "1.6.3",
+  "version": "1.6.5",
   "description": "AI Engineering System - Core agents, skills, and commands",
   "type": "module",
   "main": "./dist/index.js",
