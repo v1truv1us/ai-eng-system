@@ -46,42 +46,120 @@ function parseArgs(): { skill?: string; output?: string; all?: boolean; workspac
   };
 }
 
+function stripMarkdown(text: string): string {
+  return text
+    .replace(/\*\*/g, "")
+    .replace(/\*/g, "")
+    .replace(/__/g, "")
+    .replace(/_/g, "")
+    .replace(/`/g, "")
+    .replace(/#{1,6}\s/g, "")
+    .toLowerCase();
+}
+
 async function gradeAssertion(assertion: string, outputText: string): Promise<AssertionResult> {
-  // Simple keyword-based grading for now
-  const lowerOutput = outputText.toLowerCase();
+  const rawOutput = outputText.toLowerCase();
+  const cleanOutput = stripMarkdown(outputText);
   const lowerAssertion = assertion.toLowerCase();
 
-  // Extract key phrases from assertion (nouns, verbs, specific terms)
-  const keywords = lowerAssertion
-    .replace(/^(the output |output |it )/i, "")
- .replace(/[\"'\[\]\(\)\{\}]/g, "")
- .split(/\s+/)
- .filter(w => w.length > 3 && !["contains", "includes", "should", "must", "have", "with", "that", "this", "does", "not", "and", "the", "for", "from", "than"].includes(w));
+  // Detect negation
+  const hasNegation = /\b(does not|doesn't|must not|should not|no|never|without)\b/i.test(assertion);
 
-  // Check for negation
-  const hasNegation = lowerAssertion.includes("does not") || lowerAssertion.includes("not ") || lowerAssertion.includes("no ");
-  const matches = keywords.filter(k => lowerOutput.includes(k)).length;
-  const threshold = Math.max(1, Math.floor(keywords.length * 0.5));
+  // Extract exact quoted strings
+  const quotedStrings: string[] = [];
+  const quoteMatches = assertion.matchAll(/"([^"]+)"/g);
+  for (const m of quoteMatches) {
+    const cleanQuote = stripMarkdown(m[1]);
+    quotedStrings.push(cleanQuote);
+    // Also try raw match for things like "- [ ]"
+    if (m[1].includes("[")) quotedStrings.push(m[1].toLowerCase());
+  }
 
+  // Pattern: contains a section titled 'X'
+  const sectionMatch = lowerAssertion.match(/section titled ['"]([^'"]+)['"]/);
+  if (sectionMatch) {
+    const sectionName = stripMarkdown(sectionMatch[1]);
+    const found = cleanOutput.includes(sectionName) || rawOutput.includes("## " + sectionName);
+    if (hasNegation) {
+      return { text: assertion, passed: !found, evidence: found ? `Found section ${sectionName}` : `Section ${sectionName} not found` };
+    }
+    return { text: assertion, passed: found, evidence: found ? `Found section "${sectionName}"` : `Section "${sectionName}" not found` };
+  }
+
+  // Pattern: contains '**X:**' or '**X**'
+  const boldMatch = lowerAssertion.match(/\*\*([^*]+)\*\*/);
+  if (boldMatch) {
+    const boldText = stripMarkdown(boldMatch[1]);
+    const found = cleanOutput.includes(boldText);
+    if (hasNegation) {
+      return { text: assertion, passed: !found, evidence: found ? `Found ${boldText}` : `${boldText} not found` };
+    }
+    return { text: assertion, passed: found, evidence: found ? `Found "${boldText}"` : `"${boldText}" not found` };
+  }
+
+  // Pattern: at least N occurrences of X
+  const countMatch = lowerAssertion.match(/at least (\d+) .*?(?:checkbox|- \[ \]|item)/i);
+  if (countMatch) {
+    const minCount = parseInt(countMatch[1], 10);
+    const checkboxPattern = /- \[ \]/g;
+    const count = (outputText.match(checkboxPattern) || []).length;
+    const found = count >= minCount;
+    return { text: assertion, passed: found, evidence: `Found ${count} checkboxes (need ${minCount})` };
+  }
+
+  // Pattern: does not contain / does not use
   if (hasNegation) {
-    // For negation assertions, PASS if keywords are NOT found
-    const passed = matches === 0;
+    // Check quoted strings first
+    const forbiddenFound = quotedStrings.filter(q => cleanOutput.includes(q));
+    if (quotedStrings.length > 0) {
+      const passed = forbiddenFound.length === 0;
+      return {
+        text: assertion,
+        passed,
+        evidence: passed ? `None of the forbidden phrases found` : `Found forbidden phrases: ${forbiddenFound.slice(0, 3).join(", ")}`,
+      };
+    }
+
+    // Extract key noun from the assertion
+    const words = lowerAssertion
+      .replace(/\b(does not|doesn't|must not|should not|no|never|without|contain|include|have|use|assume|the|output|it|is|are|be|being|been|a|an|and|or|but|with|for|from|than|this|that|these|those|word|words)\b/g, " ")
+      .split(/\s+/)
+      .filter(w => w.length > 3);
+
+    const found = words.filter(w => cleanOutput.includes(w));
+    const passed = found.length === 0;
     return {
       text: assertion,
       passed,
-      evidence: passed
-        ? `None of the restricted keywords (${keywords.slice(0, 5).join(", ")}) found in output`
-        : `Found ${matches} restricted keywords in output`,
+      evidence: passed ? `Forbidden concepts not found` : `Found: ${found.slice(0, 5).join(", ")}`,
     };
   }
 
+  // Positive assertions: check quoted strings, then keywords
+  if (quotedStrings.length > 0) {
+    const found = quotedStrings.filter(q => cleanOutput.includes(q));
+    const passed = found.length >= Math.max(1, Math.floor(quotedStrings.length * 0.5));
+    return {
+      text: assertion,
+      passed,
+      evidence: passed ? `Matched ${found.length}/${quotedStrings.length} quoted phrases` : `Only matched ${found.length}/${quotedStrings.length}`,
+    };
+  }
+
+  // Fallback: keyword matching
+  const keywords = lowerAssertion
+    .replace(/[\"'\[\]\(\)\{\}]/g, "")
+    .split(/\s+/)
+    .filter(w => w.length > 4 && !["contains", "includes", "should", "must", "have", "with", "that", "this", "does", "not", "and", "the", "for", "from", "than", "output", "followed", "there"].includes(w));
+
+  const matches = keywords.filter(k => cleanOutput.includes(k)).length;
+  const threshold = Math.max(1, Math.floor(keywords.length * 0.4));
   const passed = matches >= threshold;
+
   return {
     text: assertion,
     passed,
-    evidence: passed
-      ? `Found ${matches}/${keywords.length} relevant keywords: ${keywords.filter(k => lowerOutput.includes(k)).slice(0, 5).join(", ")}`
-      : `Only found ${matches}/${keywords.length} keywords in output`,
+    evidence: passed ? `Found ${matches}/${keywords.length} keywords` : `Only found ${matches}/${keywords.length} keywords`,
   };
 }
 
