@@ -1,0 +1,12 @@
+{
+  "lastLifecycleState": "failed",
+  "command": "pi",
+  "promptSentAt": "2026-06-02T14:27:09.044Z",
+  "promptAccepted": false,
+  "trustPromptDetected": false,
+  "transportHealthy": true,
+  "childProcessAlive": false,
+  "elapsedMs": 1263746,
+  "stderrPreview": "Child Pi produced no new output for 300000ms; process was terminated as unresponsive.",
+  "classification": "worker_crashed"
+}

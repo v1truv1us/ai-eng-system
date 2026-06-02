@@ -1,0 +1,16 @@
+{
+  "entries": [
+    {
+      "scenario": "task_failed",
+      "taskId": "03_execute",
+      "decisionReason": "task_failed",
+      "attempt": 1,
+      "state": "planned",
+      "steps": [
+        "rerun_task"
+      ],
+      "message": "Task failed: Child Pi produced no new output for 300000ms; process was terminated as unresponsive.",
+      "createdAt": "2026-06-02T14:48:13.339Z"
+    }
+  ]
+}

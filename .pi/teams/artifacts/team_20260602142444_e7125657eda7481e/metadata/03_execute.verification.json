@@ -1,0 +1,7 @@
+{
+  "requiredGreenLevel": "none",
+  "observedGreenLevel": "none",
+  "satisfied": true,
+  "commands": [],
+  "notes": "Task failed: Child Pi produced no new output for 300000ms; process was terminated as unresponsive."
+}

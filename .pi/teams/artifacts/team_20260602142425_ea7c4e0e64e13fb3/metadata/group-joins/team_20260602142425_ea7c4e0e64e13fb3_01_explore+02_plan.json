@@ -1,0 +1,21 @@
+{
+  "batchId": "team_20260602142425_ea7c4e0e64e13fb3_01_explore+02_plan",
+  "mode": "smart",
+  "partial": false,
+  "taskIds": [
+    "01_explore",
+    "02_plan"
+  ],
+  "completed": [
+    "01_explore"
+  ],
+  "failed": [
+    "02_plan"
+  ],
+  "skipped": [],
+  "remaining": [],
+  "requestId": "team_20260602142425_ea7c4e0e64e13fb3:group-join:completed:team_20260602142425_ea7c4e0e64e13fb3_01_explore+02_plan",
+  "ackRequired": true,
+  "ackStatus": "pending",
+  "createdAt": "2026-06-02T14:48:13.160Z"
+}

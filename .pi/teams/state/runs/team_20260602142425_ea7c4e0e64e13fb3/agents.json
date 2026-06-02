@@ -354,198 +354,391 @@
     "agent": "planner",
     "role": "planner",
     "runtime": "child-process",
-    "status": "running",
+    "status": "failed",
     "startedAt": "2026-06-02T14:24:25.563Z",
+    "completedAt": "2026-06-02T14:48:12.732Z",
+    "resultArtifactPath": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260602142425_ea7c4e0e64e13fb3/results/02_plan.txt",
+    "transcriptPath": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260602142425_ea7c4e0e64e13fb3/transcripts/02_plan.attempt-0.jsonl",
     "statusPath": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/state/runs/team_20260602142425_ea7c4e0e64e13fb3/agents/02_plan/status.json",
     "eventsPath": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/state/runs/team_20260602142425_ea7c4e0e64e13fb3/agents/02_plan/events.jsonl",
     "outputPath": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/state/runs/team_20260602142425_ea7c4e0e64e13fb3/agents/02_plan/output.log",
-    "toolUses": 36,
+    "toolUses": 62,
+    "jsonEvents": 473,
     "model": "opencode-go/qwen3.6-plus",
+    "routing": {
+      "requested": "opencode-go/qwen3.6-plus",
+      "resolved": "opencode-go/qwen3.6-plus",
+      "fallbackChain": [
+        "opencode-go/qwen3.6-plus",
+        "github-copilot/claude-haiku-4.5",
+        "github-copilot/claude-opus-4.5",
+        "github-copilot/claude-opus-4.6",
+        "github-copilot/claude-opus-4.7",
+        "github-copilot/claude-opus-4.8",
+        "github-copilot/claude-sonnet-4.5",
+        "github-copilot/claude-sonnet-4.6",
+        "github-copilot/gemini-2.5-pro",
+        "github-copilot/gemini-3-flash-preview",
+        "github-copilot/gemini-3.1-pro-preview",
+        "github-copilot/gemini-3.5-flash",
+        "github-copilot/gpt-4.1",
+        "github-copilot/gpt-4o",
+        "github-copilot/gpt-5-mini",
+        "github-copilot/gpt-5.2",
+        "github-copilot/gpt-5.2-codex",
+        "github-copilot/gpt-5.3-codex",
+        "github-copilot/gpt-5.4",
+        "github-copilot/gpt-5.4-mini",
+        "github-copilot/gpt-5.5",
+        "github-copilot/grok-code-fast-1",
+        "kimi-coding/kimi-for-coding",
+        "kimi-coding/kimi-k2-thinking",
+        "openai-codex/gpt-5.2",
+        "openai-codex/gpt-5.3-codex",
+        "openai-codex/gpt-5.3-codex-spark",
+        "openai-codex/gpt-5.4",
+        "openai-codex/gpt-5.4-mini",
+        "openai-codex/gpt-5.5",
+        "zai/glm-4.5-air",
+        "zai/glm-4.7",
+        "zai/glm-5-turbo",
+        "zai/glm-5.1",
+        "zai/glm-5v-turbo",
+        "cursor-agent/default",
+        "cursor-agent/gpt-5.3-codex",
+        "cursor-agent/gpt-5.3-codex-fast",
+        "cursor-agent/gpt-5.2",
+        "cursor-agent/gpt-5.2-codex",
+        "cursor-agent/gpt-5.2-codex-fast",
+        "cursor-agent/gpt-5.1-codex-max",
+        "cursor-agent/gpt-5.1-codex-max-fast",
+        "cursor-agent/composer-2.5",
+        "cursor-agent/claude-opus-4-8-thinking-high",
+        "cursor-agent/claude-opus-4-8-thinking-high-fast",
+        "cursor-agent/gpt-5.5-high",
+        "cursor-agent/gpt-5.5-high-fast",
+        "cursor-agent/claude-opus-4-7-thinking-high",
+        "cursor-agent/claude-opus-4-7-thinking-high-fast",
+        "cursor-agent/composer-2.5-fast",
+        "cursor-agent/claude-opus-4-8-low",
+        "cursor-agent/claude-opus-4-8-low-fast",
+        "cursor-agent/claude-opus-4-8-medium",
+        "cursor-agent/claude-opus-4-8-medium-fast",
+        "cursor-agent/claude-opus-4-8-high",
+        "cursor-agent/claude-opus-4-8-high-fast",
+        "cursor-agent/claude-opus-4-8-xhigh",
+        "cursor-agent/claude-opus-4-8-xhigh-fast",
+        "cursor-agent/claude-opus-4-8-max",
+        "cursor-agent/claude-opus-4-8-max-fast",
+        "cursor-agent/claude-opus-4-8-thinking-low",
+        "cursor-agent/claude-opus-4-8-thinking-low-fast",
+        "cursor-agent/claude-opus-4-8-thinking-medium",
+        "cursor-agent/claude-opus-4-8-thinking-medium-fast",
+        "cursor-agent/claude-opus-4-8-thinking-xhigh",
+        "cursor-agent/claude-opus-4-8-thinking-xhigh-fast",
+        "cursor-agent/claude-opus-4-8-thinking-max",
+        "cursor-agent/claude-opus-4-8-thinking-max-fast",
+        "cursor-agent/gpt-5.5-none",
+        "cursor-agent/gpt-5.5-none-fast",
+        "cursor-agent/gpt-5.5-low",
+        "cursor-agent/gpt-5.5-low-fast",
+        "cursor-agent/gpt-5.5-medium",
+        "cursor-agent/gpt-5.5-medium-fast",
+        "cursor-agent/gpt-5.5-extra-high",
+        "cursor-agent/gpt-5.5-extra-high-fast",
+        "cursor-agent/claude-sonnet-4-6",
+        "cursor-agent/claude-opus-4-7-low",
+        "cursor-agent/claude-opus-4-7-low-fast",
+        "cursor-agent/claude-opus-4-7-medium",
+        "cursor-agent/claude-opus-4-7-medium-fast",
+        "cursor-agent/claude-opus-4-7-high",
+        "cursor-agent/claude-opus-4-7-high-fast",
+        "cursor-agent/claude-opus-4-7-xhigh",
+        "cursor-agent/claude-opus-4-7-xhigh-fast",
+        "cursor-agent/claude-opus-4-7-max",
+        "cursor-agent/claude-opus-4-7-max-fast",
+        "cursor-agent/claude-opus-4-7-thinking-low",
+        "cursor-agent/claude-opus-4-7-thinking-low-fast",
+        "cursor-agent/claude-opus-4-7-thinking-medium",
+        "cursor-agent/claude-opus-4-7-thinking-medium-fast",
+        "cursor-agent/claude-opus-4-7-thinking-xhigh",
+        "cursor-agent/claude-opus-4-7-thinking-xhigh-fast",
+        "cursor-agent/claude-opus-4-7-thinking-max",
+        "cursor-agent/claude-opus-4-7-thinking-max-fast",
+        "cursor-agent/grok-build-0.1",
+        "cursor-agent/gpt-5.4",
+        "cursor-agent/gpt-5.4-fast",
+        "cursor-agent/claude-opus-4-6",
+        "cursor-agent/claude-opus-4-6-max",
+        "cursor-agent/claude-4.6-opus-high-thinking-fast",
+        "cursor-agent/claude-4.6-opus-max-thinking-fast",
+        "cursor-agent/claude-opus-4-5",
+        "cursor-agent/gpt-5.2-fast",
+        "cursor-agent/gemini-3.1-pro-preview",
+        "cursor-agent/gpt-5.4-mini",
+        "cursor-agent/gpt-5.4-nano",
+        "cursor-agent/grok-4.3",
+        "cursor-agent/claude-sonnet-4-5",
+        "cursor-agent/gpt-5.1",
+        "cursor-agent/gemini-3-flash-preview",
+        "cursor-agent/gemini-3.5-flash",
+        "cursor-agent/gpt-5.1-codex-mini",
+        "cursor-agent/claude-sonnet-4-0",
+        "cursor-agent/gpt-5-mini",
+        "cursor-agent/kimi-k2.5",
+        "kimi-for-coding-oauth/kimi-for-coding",
+        "nvidia/abacusai/dracarys-llama-3.1-70b-instruct",
+        "nvidia/bytedance/seed-oss-36b-instruct",
+        "nvidia/deepseek-ai/deepseek-v4-flash",
+        "nvidia/deepseek-ai/deepseek-v4-pro",
+        "nvidia/meta/llama-3.1-70b-instruct",
+        "nvidia/meta/llama-3.2-90b-vision-instruct",
+        "nvidia/meta/llama-3.3-70b-instruct",
+        "nvidia/microsoft/phi-4-multimodal-instruct",
+        "nvidia/minimaxai/minimax-m2.7",
+        "nvidia/mistralai/mistral-large-3-675b-instruct-2512",
+        "nvidia/mistralai/mistral-medium-3.5-128b",
+        "nvidia/mistralai/mistral-nemotron",
+        "nvidia/mistralai/mistral-small-4-119b-2603",
+        "nvidia/moonshotai/kimi-k2.6",
+        "nvidia/nvidia/gliner-pii",
+        "nvidia/nvidia/ising-calibration-1-35b-a3b",
+        "nvidia/nvidia/nemotron-3-content-safety",
+        "nvidia/nvidia/nemotron-3-super-120b-a12b",
+        "nvidia/openai/gpt-oss-120b",
+        "nvidia/qwen/qwen3-coder-480b-a35b-instruct",
+        "nvidia/qwen/qwen3-next-80b-a3b-instruct",
+        "nvidia/qwen/qwen3.5-122b-a10b",
+        "nvidia/qwen/qwen3.5-397b-a17b",
+        "nvidia/sarvamai/sarvam-m",
+        "nvidia/stepfun-ai/step-3.5-flash",
+        "nvidia/stepfun-ai/step-3.7-flash",
+        "nvidia/stockmark/stockmark-2-100b-instruct",
+        "nvidia/z-ai/glm-5.1",
+        "opencode-go/minimax-m3",
+        "opencode-go/minimax-m2.7",
+        "opencode-go/minimax-m2.5",
+        "opencode-go/kimi-k2.6",
+        "opencode-go/kimi-k2.5",
+        "opencode-go/glm-5.1",
+        "opencode-go/glm-5",
+        "opencode-go/deepseek-v4-pro",
+        "opencode-go/deepseek-v4-flash",
+        "opencode-go/qwen3.7-max",
+        "opencode-go/qwen3.5-plus",
+        "opencode-go/mimo-v2-pro",
+        "opencode-go/mimo-v2-omni",
+        "opencode-go/mimo-v2.5-pro",
+        "opencode-go/mimo-v2.5",
+        "opencode-go/hy3-preview",
+        "opencode/deepseek-v4-flash-free",
+        "opencode/mimo-v2.5-free",
+        "opencode/qwen3.6-plus-free",
+        "opencode/minimax-m3-free",
+        "opencode/nemotron-3-super-free",
+        "openrouter/openrouter/owl-alpha",
+        "openrouter/google/lyria-3-pro-preview",
+        "openrouter/google/lyria-3-clip-preview",
+        "openrouter/openrouter/free"
+      ],
+      "reason": "configured Pi fallback chain",
+      "usedAttempt": 0
+    },
+    "usage": {
+      "input": 2130037,
+      "output": 20605,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "cost": 0,
+      "turns": 0
+    },
     "progress": {
       "recentTools": [
         {
-          "tool": "find",
-          "args": "{\"path\":\"/Users/johnferguson/.agents/skills\",\"pattern\":\"**/headstart-newsletter/**\"}",
-          "endedAt": "2026-06-02T14:25:02.983Z"
+          "tool": "read",
+          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/spec.md\",\"limit\":60,\"offset\":101}",
+          "endedAt": "2026-06-02T14:28:58.638Z"
         },
         {
           "tool": "read",
-          "args": "{\"path\":\"/Users/johnferguson/.agents/skills/ud-monthly-updates/SKILL.md\"}",
-          "endedAt": "2026-06-02T14:25:06.168Z"
+          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/spec.md\",\"limit\":60,\"offset\":161}",
+          "endedAt": "2026-06-02T14:29:06.027Z"
         },
         {
           "tool": "read",
-          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-001.md\",\"limit\":30}",
-          "endedAt": "2026-06-02T14:25:12.973Z"
+          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/spec.md\",\"limit\":60,\"offset\":221}",
+          "endedAt": "2026-06-02T14:29:13.805Z"
+        },
+        {
+          "tool": "read",
+          "args": "{\"limit\":60,\"offset\":281,\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/spec.md\"}",
+          "endedAt": "2026-06-02T14:29:22.811Z"
+        },
+        {
+          "tool": "read",
+          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/spec.md\",\"offset\":341,\"limit\":60}",
+          "endedAt": "2026-06-02T14:29:33.331Z"
+        },
+        {
+          "tool": "read",
+          "args": "{\"offset\":401,\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/spec.md\"}",
+          "endedAt": "2026-06-02T14:29:44.983Z"
         },
         {
           "tool": "ls",
           "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs\"}",
-          "endedAt": "2026-06-02T14:25:20.939Z"
+          "endedAt": "2026-06-02T14:29:56.340Z"
         },
         {
           "tool": "read",
-          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/Research/Switchboard/04-output\"}",
-          "endedAt": "2026-06-02T14:25:24.482Z"
-        },
-        {
-          "tool": "find",
-          "args": "{\"limit\":10,\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs\",\"pattern\":\"**/*.md\"}",
-          "endedAt": "2026-06-02T14:25:32.353Z"
-        },
-        {
-          "tool": "read",
-          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/plan.md\",\"offset\":1,\"limit\":5}",
-          "endedAt": "2026-06-02T14:25:40.141Z"
-        },
-        {
-          "tool": "read",
-          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-002.md\",\"limit\":5}",
-          "endedAt": "2026-06-02T14:25:47.426Z"
-        },
-        {
-          "tool": "read",
-          "args": "{\"limit\":10,\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-010.md\"}",
-          "endedAt": "2026-06-02T14:25:59.072Z"
-        },
-        {
-          "tool": "read",
-          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-005.md\",\"limit\":10}",
-          "endedAt": "2026-06-02T14:26:08.493Z"
-        },
-        {
-          "tool": "read",
-          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-006.md\",\"limit\":10}",
-          "endedAt": "2026-06-02T14:26:15.965Z"
-        },
-        {
-          "tool": "read",
-          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-008.md\",\"limit\":10}",
-          "endedAt": "2026-06-02T14:26:30.091Z"
-        },
-        {
-          "tool": "read",
-          "args": "{\"limit\":5,\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-015.md\"}",
-          "endedAt": "2026-06-02T14:26:41.805Z"
-        },
-        {
-          "tool": "read",
-          "args": "{\"limit\":5,\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-003.md\"}",
-          "endedAt": "2026-06-02T14:26:50.559Z"
-        },
-        {
-          "tool": "read",
-          "args": "{\"limit\":10,\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-009.md\"}",
-          "endedAt": "2026-06-02T14:26:59.877Z"
-        },
-        {
-          "tool": "read",
-          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-011.md\",\"limit\":10}",
-          "endedAt": "2026-06-02T14:27:12.678Z"
-        },
-        {
-          "tool": "read",
-          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-012.md\",\"limit\":10}",
-          "endedAt": "2026-06-02T14:27:27.237Z"
-        },
-        {
-          "tool": "read",
-          "args": "{\"limit\":10,\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-013.md\"}",
-          "endedAt": "2026-06-02T14:27:34.833Z"
-        },
-        {
-          "tool": "read",
-          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-004.md\",\"limit\":10}",
-          "endedAt": "2026-06-02T14:27:44.666Z"
-        },
-        {
-          "tool": "read",
-          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-016.md\",\"limit\":10}",
-          "endedAt": "2026-06-02T14:27:55.717Z"
-        },
-        {
-          "tool": "read",
-          "args": "{\"limit\":5,\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-017.md\"}",
-          "endedAt": "2026-06-02T14:28:04.008Z"
-        },
-        {
-          "tool": "read",
-          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-007.md\",\"limit\":10}",
-          "endedAt": "2026-06-02T14:28:11.902Z"
-        },
-        {
-          "tool": "read",
-          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-014.md\",\"limit\":10}",
-          "endedAt": "2026-06-02T14:28:20.744Z"
+          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/plan.md\"}",
+          "endedAt": "2026-06-02T14:30:04.387Z"
         },
         {
           "tool": "read",
           "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-001.md\"}",
-          "endedAt": "2026-06-02T14:28:33.175Z"
+          "endedAt": "2026-06-02T14:30:16.019Z"
         },
         {
           "tool": "read",
-          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/spec.md\",\"offset\":1,\"limit\":40}",
-          "endedAt": "2026-06-02T14:28:40.559Z"
+          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-002.md\"}",
+          "endedAt": "2026-06-02T14:30:24.624Z"
+        },
+        {
+          "tool": "read",
+          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-003.md\"}",
+          "endedAt": "2026-06-02T14:30:34.869Z"
+        },
+        {
+          "tool": "read",
+          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-004.md\"}",
+          "endedAt": "2026-06-02T14:30:40.446Z"
+        },
+        {
+          "tool": "read",
+          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-005.md\"}",
+          "endedAt": "2026-06-02T14:30:48.767Z"
+        },
+        {
+          "tool": "read",
+          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-006.md\"}",
+          "endedAt": "2026-06-02T14:30:55.802Z"
+        },
+        {
+          "tool": "read",
+          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-007.md\"}",
+          "endedAt": "2026-06-02T14:31:06.898Z"
+        },
+        {
+          "tool": "read",
+          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-008.md\"}",
+          "endedAt": "2026-06-02T14:31:19.193Z"
+        },
+        {
+          "tool": "read",
+          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-009.md\"}",
+          "endedAt": "2026-06-02T14:31:31.393Z"
+        },
+        {
+          "tool": "read",
+          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-010.md\"}",
+          "endedAt": "2026-06-02T14:31:41.992Z"
+        },
+        {
+          "tool": "read",
+          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-011.md\"}",
+          "endedAt": "2026-06-02T14:31:50.479Z"
+        },
+        {
+          "tool": "read",
+          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-012.md\"}",
+          "endedAt": "2026-06-02T14:31:59.965Z"
+        },
+        {
+          "tool": "read",
+          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-013.md\"}",
+          "endedAt": "2026-06-02T14:32:09.701Z"
+        },
+        {
+          "tool": "read",
+          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-014.md\"}",
+          "endedAt": "2026-06-02T14:32:22.350Z"
+        },
+        {
+          "tool": "read",
+          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-015.md\"}",
+          "endedAt": "2026-06-02T14:32:31.374Z"
+        },
+        {
+          "tool": "read",
+          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-016.md\"}",
+          "endedAt": "2026-06-02T14:32:43.420Z"
+        },
+        {
+          "tool": "read",
+          "args": "{\"path\":\"/Users/johnferguson/Github/ai-eng-system/specs/headstart-agent/tasks/T-017.md\"}",
+          "endedAt": "2026-06-02T14:32:54.997Z"
         }
       ],
       "recentOutput": [
-        "- [ ] Steps: checkout, setup Bun, install deps, run tests, run typecheck",
-        "[9 more lines in file. Use offset=11 to continue.]",
-        "Now I have all the context needed. Let me create the implementation plan.",
-        "# T-017: Final Integration and Verification",
-        "**Depends On:** T-012, T-014, T-016",
-        "**Priority:** high",
-        "**Estimated Time:** 30 min",
-        "[17 more lines in file. Use offset=6 to continue.]",
+        "- `Dockerfile` — Create production Docker image",
+        "- `docker-compose.yml` — Create local development stack",
+        "## Spec Reference",
+        "- Section 3.3: Runtime Directory Layout",
+        "- Section 5: Coolify Deployability (success criterion)",
+        "- AC-6: Coolify Deployability",
+        "Now I have full context from the headstart-agent spec/plan, the ud-monthly-updates skill, and the repo conventions. Let me write the implementation plan.",
+        "- [ ] Documents all required env vars with descriptions",
+        "- [ ] Includes domain configuration placeholder",
+        "- [ ] README.md updated with Coolify deployment steps",
+        "## Files",
+        "- `coolify.yaml` — Create Coolify deployment specification",
+        "- `README.md` — Update with deployment section",
+        "## Spec Reference",
+        "- Section 3.1: coolify.yaml in project structure",
+        "- Section 5: Coolify Deployability (success criterion)",
+        "- AC-6: Coolify Deployability",
+        "Now I have full context from the headstart-agent spec/plan, the ud-monthly-updates skill, and the repo conventions. Let me create the implementation plan.",
+        "- [ ] Mocks GitHub API (Octokit) and SMTP (nodemailer) to avoid external calls",
+        "- [ ] Uses test SQLite DB in `/data/test.db` isolated from production",
+        "- [ ] Cleans up: stops server, removes test DB and repo after test",
+        "- [ ] Test completes within 30 seconds",
+        "## Files",
+        "- `tests/integration/smoke.test.ts` — Create E2E smoke test",
+        "- `tests/fixtures/sample-newsletter.pdf` — Create minimal valid PDF fixture",
+        "## Spec Reference",
+        "- Section 5.3: E2E / Smoke Test",
+        "- AC-1: Newsletter Webhook",
         "Now I have full context. Let me create the implementation plan.",
-        "# T-007: Implement Repo Clone/Pull Helpers",
-        "**Depends On:** T-002, T-006",
-        "**Priority:** critical",
-        "**Estimated Time:** 35 min",
-        "**Complexity:** Medium",
-        "## Acceptance Criteria",
-        "- [ ] `src/repo.ts` exports: `ensureRepo()`, `createCommit(files, message, branch)`, `pushBranch(branch)`",
-        "- [ ] `ensureRepo()` clones repo to `/repos/headstart` if missing; pulls latest `main` if exists",
-        "[15 more lines in file. Use offset=11 to continue.]",
-        "Now I have all the context needed. Let me create the implementation plan.",
-        "# T-014: Create Coolify Deployment Configuration",
-        "**Depends On:** T-013",
-        "**Priority:** medium",
-        "**Estimated Time:** 25 min",
         "**Complexity:** Low",
         "## Acceptance Criteria",
-        "- [ ] `coolify.yaml` defines the service with build pack: Dockerfile",
-        "- [ ] Specifies port 3000, health check endpoint `/health`",
-        "[14 more lines in file. Use offset=11 to continue.]",
-        "Now I have all the context needed. Let me create the implementation plan.",
-        "- `tsconfig.json` — Create with strict TypeScript config",
-        "- `.gitignore` — Create standard Node.js gitignore",
-        "- `.env.example` — Create from spec section 7",
-        "- `src/index.ts` — Create empty entry point",
-        "- `src/types.ts` — Create empty types file",
-        "- `README.md` — Create with setup instructions",
+        "- [ ] `.github/workflows/ci.yml` runs on push and pull request",
+        "- [ ] Steps: checkout, setup Bun, install deps, run tests, run typecheck",
+        "- [ ] CI passes with all unit and integration tests green",
+        "- [ ] `.github/workflows/ci.yml` is committed to the standalone repo",
+        "## Files",
+        "- `.github/workflows/ci.yml` — Create GitHub Actions workflow",
         "## Spec Reference",
-        "- Section 3.1: Project Structure",
-        "- Section 4.1: Language & Runtime",
-        "- Section 7: Configuration",
-        "Now I have full context. Let me create the implementation plan.",
-        "### Target Users",
-        "| User | Role | Need |",
-        "|---|---|---|",
-        "| Site maintainer (you) | Primary operator | Eliminate manual monthly upkeep; review PRs at your convenience |",
-        "| Headstart staff | Email senders | Forward newsletter PDFs to an address; no technical steps required |",
-        "### Success Criteria",
-        "| # | Criterion | Measurement |",
-        "|---|---|---|",
-        "| 1 | Newsletter PR created within 5 minutes of valid email receipt | Time from webhook 202 to PR URL in GitHub |",
-        "[462 more lines in file. Use offset=41 to continue.]"
+        "- Section 5.5: CI Integration",
+        "Now I have full context from the existing headstart-agent spec/plan, the ud-monthly-updates skill, and the repo conventions. Let me create the implementation plan.",
+        "- [ ] `bun test` passes with all tests green",
+        "- [ ] `docker build` succeeds and image runs",
+        "- [ ] All spec acceptance criteria (AC-1 through AC-7) are traceable to at least one task",
+        "- [ ] README.md is complete: description, setup, env vars, deployment, testing",
+        "- [ ] No `[NEEDS CLARIFICATION]` markers remain in any file",
+        "## Files",
+        "- All files in the project",
+        "## Spec Reference",
+        "- All acceptance criteria (AC-1 through AC-7)",
+        "- Section 6: Boundaries"
       ],
-      "toolCount": 36,
-      "lastActivityAt": "2026-06-02T14:28:42.506Z",
+      "toolCount": 62,
+      "lastActivityAt": "2026-06-02T14:32:58.143Z",
       "activityState": "active",
-      "durationMs": 256943,
-      "tokens": 37596
-    }
+      "durationMs": 512580,
+      "tokens": 2150642,
+      "turns": 0
+    },
+    "error": "Child Pi produced no new output for 300000ms; process was terminated as unresponsive."
   }
 ]
