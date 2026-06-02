@@ -1,0 +1,43 @@
+{
+  "skill_name": "security-and-hardening",
+  "evals": [
+    {
+      "id": 1,
+      "name": "auth-vulnerability-assessment",
+      "prompt": "Audit the auth flow: JWT stored in localStorage, refresh token in httpOnly cookie, password reset via email link with 1-hour expiry.",
+      "expected_output": "A security assessment identifying XSS risks from localStorage, CSRF considerations, and token rotation gaps.",
+      "assertions": [
+        "The output identifies XSS risk from localStorage JWT",
+        "The output mentions CSRF protection for refresh endpoint",
+        "The output checks for token rotation on refresh",
+        "The output verifies secure flag on cookies",
+        "The output does not invent non-existent vulnerabilities"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "dependency-audit",
+      "prompt": "Run a security audit on a Node.js project using npm audit. The report shows 3 moderate and 1 high severity vulnerabilities.",
+      "expected_output": "Prioritized remediation plan with CVSS scores, exploitability assessment, and update path.",
+      "assertions": [
+        "The output prioritizes by severity and exploitability",
+        "The output distinguishes between direct and transitive dependencies",
+        "The output suggests specific version upgrades",
+        "The output mentions breaking change risks from updates",
+        "The output does not recommend ignoring vulnerabilities"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "input-validation-review",
+      "prompt": "A form accepts user-generated HTML for a rich text editor. How should this be hardened?",
+      "expected_output": "Sanitization strategy, CSP headers, and output encoding recommendations.",
+      "assertions": [
+        "The output mentions HTML sanitization (DOMPurify or similar)",
+        "The output mentions Content Security Policy",
+        "The output warns against raw innerHTML insertion",
+        "The output suggests allowing only specific HTML tags"
+      ]
+    }
+  ]
+}
