@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "taskId": "02_plan",
+  "role": "planner",
+  "agent": "planner",
+  "runtime": "child-process",
+  "permissionMode": "read_only",
+  "tools": [
+    "find",
+    "grep",
+    "ls",
+    "read"
+  ],
+  "extensions": [],
+  "skills": {
+    "names": [
+      "delegation-patterns",
+      "requirements-to-task-packet"
+    ],
+    "paths": [
+      "/Users/johnferguson/.pi/agent/npm/node_modules/pi-crew/skills/delegation-patterns",
+      "/Users/johnferguson/.pi/agent/npm/node_modules/pi-crew/skills/requirements-to-task-packet"
+    ],
+    "disabled": false
+  },
+  "model": {
+    "fallbacks": []
+  },
+  "inheritance": {
+    "projectContext": true,
+    "skills": false,
+    "systemPromptMode": "replace"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "scheduledJobs": [
+    {
+      "id": "a3b8dab9-5c5c-4694-9c9d-cb553a842187",
+      "name": "default: Run monthly SEO, lighthouse, accessibility, and dependency a",
+      "description": "Scheduled run for team 'default'",
+      "schedule": "0 9 1 * *",
+      "scheduleType": "cron",
+      "subagentType": "team",
+      "prompt": "{\"action\":\"run\",\"team\":\"default\",\"goal\":\"Run monthly SEO, lighthouse, accessibility, and dependency audits for all UD client sites (headstart, ud, carrie-on, valkyrie, sand-sage, pie) with confirmed production URLs. Use the ud-monthly-updates skill and seo-audit skill. Save report to ~/Research/ud-monthly-audit/YYYY-MM-DD-audit.md\"}",
+      "enabled": true,
+      "createdAt": "2026-06-02T14:07:04.131Z",
+      "nextRun": "2026-07-01T09:00:00.000Z",
+      "runCount": 0
+    }
+  ]
+}

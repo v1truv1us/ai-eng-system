@@ -1,0 +1,11 @@
+{
+  "dependencies": [
+    {
+      "taskId": "01_explore",
+      "role": "explorer",
+      "status": "queued",
+      "resultSummary": ""
+    }
+  ],
+  "sharedReads": []
+}

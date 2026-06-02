@@ -1,0 +1,208 @@
+Now I have sufficient context. Here is the implementation plan:
+
+---
+
+# Implementation Plan: ud-audit-agent
+
+## Metadata
+
+| Field | Value |
+|---|---|
+| Feature | ud-audit-agent — VPS-hosted monthly audit service |
+| Version | 1.0.0 |
+| Date | 2026-06-02 |
+| Status | Draft |
+| Depends on | `seo-audit` skill patterns, Coolify deployment skill, `headstart-agent` architecture reference |
+
+---
+
+## 1. Objective
+
+Build a VPS-hosted Fastify + Bun service that performs **monthly Lighthouse, SEO, accessibility, and dependency audits** for UD client sites, **applies safe fixes automatically**, and **opens GitHub PRs** for human review.
+
+Unlike `headstart-agent`, this agent has **no email webhook** — it is purely cron-driven. It also manages **multiple client sites** from a single instance.
+
+### Success Criteria
+
+| # | Criterion | Measurement |
+|---|---|---|
+| 1 | Monthly audit runs on schedule for all configured sites | Cron fires; each site gets a job with completed/failed status |
+| 2 | Lighthouse scores captured for mobile + desktop | JSON output parsed; scores written to PR body |
+| 3 | SEO, a11y, and dependency issues detected | Audit report lists findings with severity |
+| 4 | Safe fixes applied automatically | Auto-fixes committed to PR branch; unsafe findings listed as recommendations only |
+| 5 | PR opened per site per audit cycle | Idempotency: one PR per site per month |
+| 6 | Service deployable via Coolify with `Dockerfile` + env vars | `docker build` succeeds; `/health` responds |
+| 7 | Failed jobs alert via Sentry | Sentry issue created with job context |
+
+---
+
+## 2. Scope
+
+### In Scope
+- Standalone Fastify + Bun service under `ud-audit-agent/`
+- SQLite job queue (create, claim, complete, fail, retry)
+- Multi-site configuration via env vars or JSON config
+- Cron scheduler for monthly audit runs
+- Lighthouse CLI integration (mobile + desktop)
+- SEO/a11y checks (leveraging `seo-audit` skill patterns)
+- Dependency audit via `bun outdated` parsing
+- Auto-fix engine for safe, deterministic fixes
+- GitHub PR creation via `@octokit/rest`
+- Sentry error reporting
+- Docker + Coolify deployment config
+- Unit + integration tests
+
+### Out of Scope
+- Email webhooks or newsletter ingestion (headstart-agent covers this)
+- Real-time monitoring dashboards
+- Auto-merge of PRs (always requires human review)
+- Dependency major version auto-updates (flagged only)
+
+---
+
+## 3. Architecture
+
+### 3.1 High-Level Data Flow
+
+```
+Cron fires → Scheduler creates audit jobs per site
+           → Job Queue stores jobs
+           → Job Processor claims jobs one-by-one
+                → Clone/pull site repo
+                → Run Lighthouse (mobile + desktop)
+                → Run SEO/a11y checks
+                → Run dependency audit
+                → Apply safe auto-fixes
+                → Commit + push to agent branch
+                → Open PR with audit report
+           → Mark job complete/failed
+           → Retry on failure (3× exponential backoff)
+```
+
+### 3.2 Project Structure
+
+```
+ud-audit-agent/
+├── src/
+│   ├── index.ts                 # Entry: starts server + scheduler + job processor
+│   ├── server.ts                # Fastify: /health, /jobs, /trigger endpoints
+│   ├── scheduler.ts             # node-cron: monthly schedule, manual trigger support
+│   ├── queue.ts                 # SQLite job queue (better-sqlite3)
+│   ├── config.ts                # Zod env validation + multi-site config
+│   ├── logger.ts                # Pino structured logging
+│   ├── github.ts                # @octokit/rest wrapper
+│   ├── repo.ts                  # Clone, pull, commit, push helpers
+│   ├── alerts.ts                # Sentry error reporting
+│   ├── types.ts                 # Shared interfaces
+│   └── audit/
+│       ├── orchestrator.ts      # Runs all audit checks, aggregates results
+│       ├── lighthouse.ts        # Lighthouse CLI wrapper (mobile + desktop)
+│       ├── seo.ts               # SEO checks (meta tags, structured data, sitemaps)
+│       ├── a11y.ts              # Accessibility checks (ARIA, contrast, labels)
+│       ├── dependencies.ts      # bun outdated parser, safe update logic
+│       ├── autofix.ts           # Deterministic fix appliers
+│       └── reporter.ts          # PR body generator from audit results
+├── data/
+│   └── .gitkeep                 # SQLite DB mount point
+├── tests/
+│   ├── unit/
+│   │   ├── queue.test.ts
+│   │   ├── config.test.ts
+│   │   ├── lighthouse.test.ts
+│   │   ├── seo.test.ts
+│   │   ├── dependencies.test.ts
+│   │   └── autofix.test.ts
+│   └── integration/
+│       ├── github.test.ts
+│       └── orchestrator.test.ts
+├── .env.example
+├── Dockerfile
+├── coolify.yaml
+├── package.json
+├── tsconfig.json
+└── README.md
+```
+
+### 3.3 Technology Stack
+
+| Component | Choice | Rationale |
+|---|---|---|
+| Runtime | Bun | Matches existing ai-eng-system stack |
+| HTTP | Fastify | Lightweight, built-in JSON schema validation |
+| Database | better-sqlite3 | Sync SQLite, single-writer, no async complexity |
+| GitHub API | @octokit/rest | Official, well-typed |
+| Scheduling | node-cron | Simple cron expressions |
+| Logging | pino | Structured JSON |
+| Validation | zod | Env vars + config schemas |
+| Error Tracking | @sentry/node | Automatic capture + tracing |
+| Testing | bun:test | Built-in, no extra deps |
+| Auditing | lighthouse (npm package) | Programmatic CLI access |
+
+---
+
+## 4. Implementation Tasks
+
+### Phase 1: Foundation (1.0 hrs)
+
+| ID | Task | Time | Complexity | Depends On |
+|---|---|---|---|---|
+| T-001 | Initialize project scaffold | 15 min | Low | None |
+| T-002 | Config + multi-site schema (zod) | 20 min | Low | T-001 |
+| T-003 | Structured logger (pino) | 10 min | Low | T-002 |
+| T-004 | Shared types (Site, Job, AuditResult, Fix) | 15 min | Low | T-001 |
+
+**Phase Exit:** `bun install`, `bun run typecheck` pass; `config.ts`, `logger.ts`, `types.ts` exist and compile.
+
+### Phase 2: Core Infrastructure (1.75 hrs)
+
+| ID | Task | Time | Complexity | Depends On |
+|---|---|---|---|---|
+| T-005 | SQLite job queue | 40 min | Medium | T-002, T-004 |
+| T-006 | GitHub API wrapper | 30 min | Medium | T-002 |
+| T-007 | Repo clone/pull/commit/push helpers | 35 min | Medium | T-006 |
+
+**Phase Exit:** Queue CRUD + retry tests pass; GitHub mock tests pass; repo mock tests pass.
+
+### Phase 3: Audit Engine (2.75 hrs)
+
+| ID | Task | Time | Complexity | Depends On |
+|---|---|---|---|---|
+| T-008 | Lighthouse CLI wrapper | 35 min | Medium | T-002 |
+| T-009 | SEO audit checks | 40 min | Medium | T-008 |
+| T-010 | Accessibility checks | 30 min | Medium | T-008 |
+| T-011 | Dependency audit + safe update logic | 40 min | Medium | T-002, T-007 |
+| T-012 | Audit orchestrator (runs T-008–T-011, aggregates) | 30 min | Medium | T-008, T-009, T-010, T-011 |
+
+**Phase Exit:** Each audit module has unit tests with mocked Lighthouse output; orchestrator aggregates correctly.
+
+### Phase 4: Auto-Fix + Reporting (1.5 hrs)
+
+| ID | Task | Time | Complexity | Depends On |
+|---|---|---|---|---|
+| T-013 | Auto-fix engine (deterministic, safe fixes only) | 45 min | High | T-012 |
+| T-014 | PR body reporter (from audit results + fixes) | 25 min | Medium | T-012, T-013 |
+
+**Auto-Fix Scope (v1 — safe, deterministic only):**
+- Add missing `alt=""` to images without alt text
+- Add `rel="noopener"` to external `target="_blank"` links
+- Fix meta description length (trim or pad)
+- Update copyright year in configured files
+- Safe dependency patch/minor updates (pin exact versions)
+- **Never:** delete content, modify business logic, change layout
+
+**Phase Exit:** autofix tests verify each fix type; reporter generates correct PR body format.
+
+### Phase 5: Server + Orchestration (1.5 hrs)
+
+| ID | Task | Time | Complexity | Depends On |
+|---|---|---|---|---|
+| T-015 | Fastify server (/health, /jobs, /trigger) | 30 min | Medium | T-003, T-005 |
+| T-016 | Scheduler + job processor loop | 45 min | Medium | T-005, T-012, T-013, T-014 |
+| T-017 | Sentry alerting | 15 min | Low | T-003, T-005 |
+
+**Phase Exit:** `bun run dev` starts without errors; manual `/trigger` creates jobs; processor executes and reports; SIGTERM graceful shutdown.
+
+### Phase 6: Deployment (0.75 hrs)
+
+| ID | Task | Time 
+[pi-crew compacted 6292 chars]

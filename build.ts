@@ -1259,6 +1259,7 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "principle-prove-it-works",
             "principle-never-block-on-the-human",
             "agent-analyzer",
+            "create-goal",
         ],
         description:
             "Core workflow: plan, work, review cycle with research and context engineering",

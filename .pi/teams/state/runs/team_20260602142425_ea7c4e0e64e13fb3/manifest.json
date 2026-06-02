@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "runId": "team_20260602142425_ea7c4e0e64e13fb3",
+  "sessionId": "crew-team202606021424",
+  "team": "default",
+  "workflow": "default",
+  "goal": "Build ud-audit-agent: a VPS-hosted Fastify + Bun service that performs monthly Lighthouse, SEO, a11y, and dependency audits for UD client sites, applies fixes, and opens GitHub PRs",
+  "status": "running",
+  "workspaceMode": "single",
+  "createdAt": "2026-06-02T14:24:25.188Z",
+  "updatedAt": "2026-06-02T14:26:33.914Z",
+  "cwd": "/Users/johnferguson/Github/ai-eng-system",
+  "stateRoot": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/state/runs/team_20260602142425_ea7c4e0e64e13fb3",
+  "artifactsRoot": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260602142425_ea7c4e0e64e13fb3",
+  "tasksPath": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/state/runs/team_20260602142425_ea7c4e0e64e13fb3/tasks.json",
+  "eventsPath": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/state/runs/team_20260602142425_ea7c4e0e64e13fb3/events.jsonl",
+  "artifacts": [
+    {
+      "kind": "prompt",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260602142425_ea7c4e0e64e13fb3/goal.md",
+      "createdAt": "2026-06-02T14:24:25.194Z",
+      "producer": "team-tool",
+      "sizeBytes": 181,
+      "contentHash": "65dc0638e72d9a552810231733ac5256a1224cf44e207211f64034451ea5d20b",
+      "retention": "run"
+    },
+    {
+      "kind": "progress",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260602142425_ea7c4e0e64e13fb3/progress.md",
+      "createdAt": "2026-06-02T14:24:25.504Z",
+      "producer": "team-runner",
+      "sizeBytes": 596,
+      "contentHash": "26109b87f117d27e54a79d86046d625bfbfc86e7dbf8d8199ae786c445ad1724",
+      "retention": "run"
+    },
+    {
+      "kind": "prompt",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260602142425_ea7c4e0e64e13fb3/prompts/01_explore.md",
+      "createdAt": "2026-06-02T14:24:25.622Z",
+      "producer": "01_explore",
+      "sizeBytes": 11366,
+      "contentHash": "487be78cb1da9cd3196537c402ca275a15bfbf7484cab774b3cbd6dce11333d5",
+      "retention": "run"
+    },
+    {
+      "kind": "result",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260602142425_ea7c4e0e64e13fb3/results/01_explore.txt",
+      "createdAt": "2026-06-02T14:26:33.794Z",
+      "producer": "01_explore",
+      "sizeBytes": 5547,
+      "contentHash": "baccabe289399f86a494ed3bfb37f2f7db47376455c0958309b45772056a326b",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260602142425_ea7c4e0e64e13fb3/metadata/01_explore.inputs.json",
+      "createdAt": "2026-06-02T14:24:25.623Z",
+      "producer": "01_explore",
+      "sizeBytes": 46,
+      "contentHash": "4220d037ccad16132d4c28359451985b4a2fa51e74ec340212cab8b688b9b5f6",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260602142425_ea7c4e0e64e13fb3/metadata/01_explore.coordination-bridge.md",
+      "createdAt": "2026-06-02T14:24:25.624Z",
+      "producer": "01_explore",
+      "sizeBytes": 1118,
+      "contentHash": "2e677e31108158567e7140d7e6e9193baa545889e0305412171c694de850e9f3",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260602142425_ea7c4e0e64e13fb3/metadata/01_explore.skills.md",
+      "createdAt": "2026-06-02T14:24:25.624Z",
+      "producer": "01_explore",
+      "sizeBytes": 4417,
+      "contentHash": "b8c1314e8e86cab26e42aaca2580a72d81de7f386050b3672aa805e10bf92351",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260602142425_ea7c4e0e64e13fb3/metadata/01_explore.task-packet.json",
+      "createdAt": "2026-06-02T14:26:33.907Z",
+      "producer": "01_explore",
+      "sizeBytes": 1333,
+      "contentHash": "8139d47847094e5c1294ffd71583d642df909bfbf3c863b76ec95d258742b3a2",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260602142425_ea7c4e0e64e13fb3/metadata/01_explore.verification.json",
+      "createdAt": "2026-06-02T14:26:33.908Z",
+      "producer": "01_explore",
+      "sizeBytes": 192,
+      "contentHash": "818c9ace7d546384f2d2504b6dd7595fad288269848be32c359563a6facc5d94",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260602142425_ea7c4e0e64e13fb3/metadata/01_explore.startup-evidence.json",
+      "createdAt": "2026-06-02T14:26:33.911Z",
+      "producer": "01_explore",
+      "sizeBytes": 274,
+      "contentHash": "18e52d6b330733a065c7219b51a2839df4f3848a6c32db134ae9d7bd61194b10",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260602142425_ea7c4e0e64e13fb3/metadata/01_explore.permission.json",
+      "createdAt": "2026-06-02T14:26:33.911Z",
+      "producer": "01_explore",
+      "sizeBytes": 58,
+      "contentHash": "d068e91667e545c975984e28d67f9be31819d406340e92fa33ed35edca2e8860",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260602142425_ea7c4e0e64e13fb3/metadata/01_explore.capabilities.json",
+      "createdAt": "2026-06-02T14:26:33.912Z",
+      "producer": "01_explore",
+      "sizeBytes": 718,
+      "contentHash": "a558c1cf688b08eb5c13ff18015b9a7bcd9e2097e7e38140c3c2bedab1993b5e",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260602142425_ea7c4e0e64e13fb3/metadata/01_explore.prompt-pipeline.json",
+      "createdAt": "2026-06-02T14:26:33.913Z",
+      "producer": "01_explore",
+      "sizeBytes": 1008,
+      "contentHash": "ef29d08fd25ea45e7a21ceac82e49eef9cd77f2ef0bd2224a3c3274e9b14d70e",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260602142425_ea7c4e0e64e13fb3/metadata/01_explore.output-validation.json",
+      "createdAt": "2026-06-02T14:26:33.914Z",
+      "producer": "01_explore",
+      "sizeBytes": 156,
+      "contentHash": "9bfc22743e8bfa83d4e00e4ae05230b0e11a9e85182ac2709a778eef9c5ef34c",
+      "retention": "run"
+    },
+    {
+      "kind": "metadata",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260602142425_ea7c4e0e64e13fb3/shared/01_explore.md",
+      "createdAt": "2026-06-02T14:26:33.910Z",
+      "producer": "01_explore",
+      "sizeBytes": 5548,
+      "contentHash": "bec7ef76c27d511a23cf436aa6728ed2bdd318b3af1444e6a6907fda744edddd",
+      "retention": "run"
+    },
+    {
+      "kind": "log",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260602142425_ea7c4e0e64e13fb3/logs/01_explore.log",
+      "createdAt": "2026-06-02T14:26:33.798Z",
+      "producer": "01_explore",
+      "sizeBytes": 6608,
+      "contentHash": "2e1d2d2ecfc7a6e05593621ad823f8755b338692766e6ca792c4e5dd9a67cda4",
+      "retention": "run"
+    },
+    {
+      "kind": "log",
+      "path": "/Users/johnferguson/Github/ai-eng-system/.pi/teams/artifacts/team_20260602142425_ea7c4e0e64e13fb3/transcripts/01_explore.attempt-0.jsonl",
+      "createdAt": "2026-06-02T14:26:33.855Z",
+      "producer": "01_explore",
+      "sizeBytes": 117556,
+      "contentHash": "b64e9a6a122d912435ae923546feee3e87325d0e15cc61296f68593bab6396ac",
+      "retention": "run"
+    }
+  ],
+  "ownerSessionId": "019e888e-8a17-7c6b-8367-08385b80321f",
+  "summary": "Executing team workflow.",
+  "runtimeResolution": {
+    "kind": "child-process",
+    "requestedMode": "auto",
+    "safety": "trusted",
+    "available": true,
+    "resolvedAt": "2026-06-02T14:24:25.197Z"
+  },
+  "runConfig": {}
+}

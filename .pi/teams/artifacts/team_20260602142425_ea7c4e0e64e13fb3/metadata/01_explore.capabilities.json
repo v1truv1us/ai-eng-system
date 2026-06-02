@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "taskId": "01_explore",
+  "role": "explorer",
+  "agent": "explorer",
+  "runtime": "child-process",
+  "permissionMode": "read_only",
+  "tools": [
+    "find",
+    "grep",
+    "ls",
+    "read"
+  ],
+  "extensions": [],
+  "skills": {
+    "names": [
+      "context-artifact-hygiene",
+      "read-only-explorer"
+    ],
+    "paths": [
+      "/Users/johnferguson/.pi/agent/npm/node_modules/pi-crew/skills/context-artifact-hygiene",
+      "/Users/johnferguson/.pi/agent/npm/node_modules/pi-crew/skills/read-only-explorer"
+    ],
+    "disabled": false
+  },
+  "model": {
+    "fallbacks": []
+  },
+  "inheritance": {
+    "projectContext": true,
+    "skills": false,
+    "systemPromptMode": "replace"
+  }
+}
