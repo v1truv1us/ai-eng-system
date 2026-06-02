@@ -35,8 +35,10 @@ import {
     usesSkillsOnlyInstall,
 } from "./toolkit-path";
 import type { CleanFlags, InstallFlags, InstallPlatform } from "./types";
+import { appendTelemetryEvent, isTelemetryEnabled } from "./telemetry";
 
 const NAMESPACE_PREFIX = "ai-eng";
+const PACKAGE_VERSION = "1.6.4"; // TODO: read from package.json at build time
 
 async function copyRecursive(src: string, dest: string): Promise<void> {
     const stat = await fsp.stat(src);
@@ -271,6 +273,21 @@ async function installToolkitHarness(
         buildToolkitManifestEntry(harness, scope, baseDir, skillsSourceDir),
     );
 
+    // Telemetry
+    if (!flags.dryRun && isTelemetryEnabled()) {
+        appendTelemetryEvent({
+            event: "install",
+            timestamp: new Date().toISOString(),
+            version: PACKAGE_VERSION,
+            platform: harness,
+            scope,
+            command_count: 0,
+            agent_count: 0,
+            skill_count: skillCount,
+            tool_count: 0,
+        });
+    }
+
     console.log("\n✅ Installation complete!");
     printToolkitPostInstall(harness, scope, skillsOnly);
 }
@@ -392,6 +409,21 @@ async function runInstaller(flags: InstallFlags): Promise<void> {
         projectDir,
         buildOpenCodeManifestEntry(scope, openCodeContent),
     );
+
+    // Telemetry
+    if (!flags.dryRun && isTelemetryEnabled()) {
+        appendTelemetryEvent({
+            event: "install",
+            timestamp: new Date().toISOString(),
+            version: PACKAGE_VERSION,
+            platform: "opencode",
+            scope,
+            command_count: openCodeContent.commands.length,
+            agent_count: openCodeContent.agents.length,
+            skill_count: openCodeContent.skills.length,
+            tool_count: openCodeContent.tools.length,
+        });
+    }
 
     console.log("\n✅ Installation complete!");
     console.log(
