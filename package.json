@@ -1,6 +1,6 @@
 {
   "name": "@ai-eng-system/workspace",
-  "version": "1.6.5",
+  "version": "1.6.6",
   "description": "AI Engineering System: AI-powered engineering automation with comprehensive research, validation, and deployment workflows",
   "private": true,
   "type": "module",
@@ -36,7 +36,7 @@
   "scripts": {
     "build": "bun scripts/build-all.ts",
     "build:core": "cd packages/core && bun run build && cd ../.. && cp -r packages/core/opencode packages/core/dist/.opencode",
-    "sync:core-dist": "cp -r packages/toolkit/.opencode/* packages/core/dist/.opencode/ 2>/dev/null; cp -r packages/toolkit/.claude-plugin/* packages/cli/dist/.claude-plugin/ 2>/dev/null; echo '\u2705 Synced toolkit output to core/cli dist'",
+    "sync:core-dist": "cp -r packages/toolkit/.opencode/* packages/core/dist/.opencode/ 2>/dev/null; cp -r packages/toolkit/.claude-plugin/* packages/cli/dist/.claude-plugin/ 2>/dev/null; echo '✅ Synced toolkit output to core/cli dist'",
     "build:cli": "cd packages/cli && bun run build:cli",
     "build:briefs": "cd packages/daily-brief-sdk && bun run build",
     "copy:content": "cp packages/core/dist/index.js dist/ && cp packages/core/dist/*.d.ts dist/",
