@@ -5,5 +5,11 @@
   "hideThinkingBlock": false,
   "packages": [
     "npm:@curio-data/pi-intelli-search"
-  ]
+  ],
+  "pi-intelli-search": {
+    "searchModel": { "provider": "zai", "model": "glm-4.5-air" },
+    "extractModel": { "provider": "zai", "model": "glm-4.5-air" },
+    "collateModel": { "provider": "zai", "model": "glm-4.5-air" },
+    "cacheDir": ".search"
+  }
 }
