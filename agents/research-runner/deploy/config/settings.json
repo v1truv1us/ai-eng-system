@@ -1,6 +1,6 @@
 {
-  "defaultProvider": "opencode",
-  "defaultModel": "claude-sonnet-4-6",
+  "defaultProvider": "zai",
+  "defaultModel": "glm-4.5-air",
   "defaultThinkingLevel": "minimal",
   "hideThinkingBlock": false,
   "packages": [
