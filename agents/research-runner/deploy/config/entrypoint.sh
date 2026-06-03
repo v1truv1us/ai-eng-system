@@ -43,7 +43,10 @@ if [ -f "$AUTH_FILE" ] && [ -w "$AUTH_FILE" ] && [ ! -f /app/data/auth.json ]; t
 fi
 
 # ── 3. Initialize vault if empty ──
-VAULT="/app/data/vault"
+VAULT="${VAULT_PATH:-/app/data/vault}"
+if [ -x /app/scripts/sync-wiki-repo.sh ]; then
+    /app/scripts/sync-wiki-repo.sh || echo "[WARN] Initial wiki git sync failed; falling back to local vault init"
+fi
 mkdir -p "$VAULT/wiki"
 
 if [ ! -f "$VAULT/RESEARCH_QUEUE.md" ]; then

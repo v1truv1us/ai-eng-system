@@ -7,7 +7,7 @@ set -euo pipefail
 TAG="${1:?Usage: run-wiki-research.sh <engineering|research|personal>}"
 # shellcheck source=paths.sh
 . /app/scripts/paths.sh
-VAULT="/app/data/vault"
+VAULT="${VAULT_PATH:-/app/data/vault}"
 PI_DIR="${HOME}/.pi/agent"
 LOG_DIR="/app/logs"
 LOCK_DIR="/app/locks"
@@ -45,7 +45,14 @@ END=$(date '+%Y-%m-%d %H:%M:%S')
 if [ $EXIT -ne 0 ]; then
     echo "[$TAG] FAIL exit=$EXIT at $END" >> "${LOG_DIR}/runtimes.log"
 else
-    echo "[$TAG] OK at $END" >> "${LOG_DIR}/runtimes.log"
+    if [ -x /app/scripts/sync-wiki-repo.sh ]; then
+        VAULT_PATH="$VAULT" WIKI_COMMIT_MESSAGE="research: scheduled ${TAG} $(date '+%Y-%m-%d')" /app/scripts/sync-wiki-repo.sh >>"$LOG_FILE" 2>&1 || EXIT=$?
+    fi
+    if [ $EXIT -ne 0 ]; then
+        echo "[$TAG] FAIL wiki-sync exit=$EXIT at $END" >> "${LOG_DIR}/runtimes.log"
+    else
+        echo "[$TAG] OK at $END" >> "${LOG_DIR}/runtimes.log"
+    fi
 fi
 
 echo "$(date '+%Y-%m-%d %H:%M:%S') — ${TAG} queue processed.${MODEL:+ (model: $MODEL)}" | tee -a "$LOG_FILE"
