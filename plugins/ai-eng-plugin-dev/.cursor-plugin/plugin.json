@@ -1,7 +1,7 @@
 {
   "name": "ai-eng-plugin-dev",
   "displayName": "AI Engineering Plugin Dev",
-  "version": "1.6.5",
+  "version": "1.6.6",
   "description": "Meta-tooling for creating plugins, agents, commands, and skills",
   "author": {
     "name": "v1truv1us",
