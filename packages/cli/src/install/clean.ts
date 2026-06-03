@@ -268,6 +268,8 @@ export function cleanOpenCodeInstall(
             result,
             flags.verbose,
         );
+        // Also clean old OpenCode-specific skill location during migration
+        cleanOpenCodeSkills(targetOpenCodeDir, skillDirs, flags, result);
     } else {
         cleanOpenCodeSkills(targetOpenCodeDir, skillDirs, flags, result);
     }
