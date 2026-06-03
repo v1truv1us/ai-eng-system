@@ -13,6 +13,7 @@ const REINSTALL_HELP_TEXT = `
 ai-eng reinstall - Clean previous ai-eng install, then install fresh
 
 Shortcut for: ai-eng clean && ai-eng install
+All platforms share skills through ~/.agents/skills/ (global) or .agents/skills/ (project).
 
 USAGE:
   ai-eng reinstall [options]

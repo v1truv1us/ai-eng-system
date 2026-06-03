@@ -10,6 +10,8 @@ import type { Subcommand } from "./types";
 const INSTALL_HELP_TEXT = `
 ai-eng install - Install platform assets from @ai-eng-system/toolkit / core
 
+All platforms share skills through ~/.agents/skills/ (global) or .agents/skills/ (project).
+Platform-specific assets (commands, agents, plugins) go to their native directories.
 Claude Code: use the Claude marketplace plugin (not this command).
 
 USAGE:
@@ -27,12 +29,13 @@ OPTIONS:
 
 EXAMPLES:
   ai-eng install                                    # OpenCode (auto scope, clean first)
-  ai-eng install --platform cursor                  # project: plugin + .agents/skills/
-  ai-eng install --platform cursor --scope global   # ~/.cursor/plugins/local/ai-eng-system/ + skills
-  ai-eng install --platform pi --scope global       # ~/.agents/skills/ (minimal)
-  ai-eng install --platform gemini                  # ./.gemini/
-  ai-eng install --platform gemini --scope global   # merge into ~/.gemini/
-  ai-eng install --platform pi                      # .pi/ + .agents/skills/
+  ai-eng install --platform opencode --scope global # commands/agents/tools -> ~/.config/opencode/; skills -> ~/.agents/skills/
+  ai-eng install --platform cursor                  # plugin -> .cursor/; skills -> .agents/skills/
+  ai-eng install --platform cursor --scope global   # plugin -> ~/.cursor/; skills -> ~/.agents/skills/
+  ai-eng install --platform gemini                  # commands -> .gemini/; skills -> .agents/skills/
+  ai-eng install --platform gemini --scope global   # commands -> ~/.gemini/; skills -> ~/.agents/skills/
+  ai-eng install --platform pi                      # skills -> .agents/skills/
+  ai-eng install --platform pi --scope global       # skills -> ~/.agents/skills/
   ai-eng install --platform all --scope global      # Install all platforms globally
   ai-eng install --scope project                    # OpenCode project .opencode/
   ai-eng install --scope global                     # OpenCode ~/.config/opencode/

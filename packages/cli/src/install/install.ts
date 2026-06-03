@@ -21,7 +21,7 @@ import {
 import { type InstallManifestEntry, upsertManifestEntry } from "./manifest";
 import {
     listSkillTreeEntries,
-    mergeGeminiHarness,
+    syncGeminiCommands,
     syncSkillsTree,
 } from "./sync-skills";
 import {
@@ -179,8 +179,7 @@ function buildOpenCodeManifestEntry(
         platform: "opencode",
         scope,
         installedAt: new Date().toISOString(),
-        agentSkillEntries: [],
-        openCodeSkillDirs: extractOpenCodeSkillDirs(content),
+        agentSkillEntries: extractOpenCodeSkillDirs(content),
         openCodeToolPaths: extractOpenCodeToolPaths(content),
     };
 }
@@ -224,9 +223,9 @@ async function installToolkitHarness(
             console.log("   (after cleaning previous ai-eng install)");
         }
         console.log(`   Skills -> ${agentSkillsDir}`);
-        if (harness === "gemini" && scope === "global") {
+        if (harness === "gemini") {
             console.log(
-                `   Gemini merge -> ${path.join(baseDir, ".gemini")}/skills, commands/`,
+                `   Gemini commands -> ${path.join(baseDir, ".gemini")}/commands/`,
             );
         } else if (!skillsOnly) {
             console.log(
@@ -250,16 +249,11 @@ async function installToolkitHarness(
 
     if (harness === "gemini") {
         const geminiTarget = getInstallTargetDir("gemini", baseDir, scope);
-        if (scope === "global") {
-            mergeGeminiHarness(sourceDir, geminiTarget);
-            console.log(
-                `  ✅ Merged Gemini skills/commands into ${geminiTarget}`,
-            );
-        } else {
-            await fsp.mkdir(path.dirname(geminiTarget), { recursive: true });
-            await copyRecursive(sourceDir, geminiTarget);
-            console.log(`  ✅ Installed Gemini bundle to ${geminiTarget}`);
-        }
+        await fsp.mkdir(path.dirname(geminiTarget), { recursive: true });
+        syncGeminiCommands(sourceDir, geminiTarget);
+        console.log(
+            `  ✅ Installed Gemini commands to ${path.join(geminiTarget, "commands")}`,
+        );
     } else if (!skillsOnly) {
         const targetDir = getInstallTargetDir(harness, baseDir, scope);
         await fsp.mkdir(path.dirname(targetDir), { recursive: true });
@@ -313,9 +307,7 @@ function printToolkitPostInstall(
         }
     } else if (harness === "gemini") {
         console.log(
-            scope === "global"
-                ? "   Gemini CLI loads user skills from ~/.gemini/skills/"
-                : "   Gemini CLI loads skills and commands from .gemini/",
+            "   Gemini commands installed. Skills loaded from ~/.agents/skills/",
         );
     } else if (harness === "pi") {
         if (skillsOnly) {
@@ -377,6 +369,8 @@ async function runInstaller(flags: InstallFlags): Promise<void> {
         );
     }
 
+    const agentSkillsDir = getAgentSkillsInstallDir(scope, projectDir);
+
     if (flags.dryRun) {
         console.log("🔍 dry-run: Would install the following files:");
         if (shouldClean) {
@@ -388,7 +382,7 @@ async function runInstaller(flags: InstallFlags): Promise<void> {
         console.log(
             `   Agents   -> ${targetOpenCodeDir}/agent/${NAMESPACE_PREFIX}/`,
         );
-        console.log(`   Skills   -> ${targetOpenCodeDir}/skill/`);
+        console.log(`   Skills   -> ${agentSkillsDir}/`);
         console.log(`   Tools    -> ${targetOpenCodeDir}/tool/`);
         return;
     }
@@ -399,10 +393,12 @@ async function runInstaller(flags: InstallFlags): Promise<void> {
             targetOpenCodeDir,
             openCodeContent,
             toCleanFlags(flags),
+            undefined,
+            agentSkillsDir,
         );
     }
 
-    await installContentFromCore(openCodeContent, targetOpenCodeDir);
+    await installContentFromCore(openCodeContent, targetOpenCodeDir, agentSkillsDir);
 
     upsertManifestEntry(
         scope,
@@ -437,6 +433,7 @@ async function runInstaller(flags: InstallFlags): Promise<void> {
 async function installContentFromCore(
     content: OpenCodeContent,
     targetOpenCodeDir: string,
+    agentSkillsDir: string,
 ): Promise<void> {
     if (content.commands.length > 0) {
         const commandsDir = path.join(
@@ -489,11 +486,10 @@ async function installContentFromCore(
     }
 
     if (content.skills.length > 0) {
-        const skillsDir = path.join(targetOpenCodeDir, "skill");
-        await fsp.mkdir(skillsDir, { recursive: true });
+        await fsp.mkdir(agentSkillsDir, { recursive: true });
 
         for (const skill of content.skills) {
-            const targetPath = path.join(skillsDir, skill.path);
+            const targetPath = path.join(agentSkillsDir, skill.path);
             await fsp.mkdir(path.dirname(targetPath), { recursive: true });
 
             if (skill.content) {
@@ -502,7 +498,7 @@ async function installContentFromCore(
         }
 
         console.log(
-            `  ✅ Installed ${content.skills.length} skills to ${skillsDir}`,
+            `  ✅ Installed ${content.skills.length} skills to ${agentSkillsDir}`,
         );
     }
 

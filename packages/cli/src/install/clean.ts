@@ -207,12 +207,17 @@ function cleanFromManifestEntry(
         cleanNamespacedDirectory(openCodeDir, "command", flags, result);
         cleanNamespacedDirectory(openCodeDir, "agent", flags, result);
 
-        if (entry.openCodeSkillDirs?.length) {
-            cleanOpenCodeSkills(
-                openCodeDir,
-                entry.openCodeSkillDirs,
-                flags,
+        const skillDirs = mergeUnique(
+            entry.agentSkillEntries ?? [],
+            entry.openCodeSkillDirs ?? [],
+        );
+        if (skillDirs.length) {
+            removeSkillTreeEntries(
+                agentSkillsDir,
+                skillDirs,
+                flags.dryRun,
                 result,
+                flags.verbose,
             );
         }
         if (entry.openCodeToolPaths?.length) {
@@ -242,6 +247,7 @@ export function cleanOpenCodeInstall(
     content: OpenCodeContent,
     flags: CleanFlags,
     manifestEntry?: InstallManifestEntry,
+    agentSkillsDir?: string,
 ): CleanResult {
     const result: CleanResult = { removed: [], skipped: [] };
 
@@ -250,9 +256,21 @@ export function cleanOpenCodeInstall(
 
     const skillDirs = mergeUnique(
         extractOpenCodeSkillDirs(content),
+        manifestEntry?.agentSkillEntries ?? [],
         manifestEntry?.openCodeSkillDirs ?? [],
     );
-    cleanOpenCodeSkills(targetOpenCodeDir, skillDirs, flags, result);
+
+    if (agentSkillsDir) {
+        removeSkillTreeEntries(
+            agentSkillsDir,
+            skillDirs,
+            flags.dryRun,
+            result,
+            flags.verbose,
+        );
+    } else {
+        cleanOpenCodeSkills(targetOpenCodeDir, skillDirs, flags, result);
+    }
 
     const toolPaths = mergeUnique(
         extractOpenCodeToolPaths(content),
@@ -360,11 +378,13 @@ export async function runCleaner(
                     ? path.join(homeDir, ".config", "opencode")
                     : path.join(projectDir, ".opencode");
 
+            const agentSkillsDir = getAgentSkillsInstallDir(scope, projectDir);
             const result = cleanOpenCodeInstall(
                 targetOpenCodeDir,
                 content,
                 flags,
                 manifestEntry,
+                agentSkillsDir,
             );
             totalRemoved += result.removed.length;
         } else {

@@ -99,35 +99,33 @@ export function syncSkillsTree(
 }
 
 /**
- * Merge gemini skills/commands without wiping unrelated ~/.gemini content.
- * Replaces only paths present in the source bundle.
+ * Copy only Gemini commands (not skills) into ~/.gemini/commands/.
+ * Skills are managed uniformly via ~/.agents/skills/.
  */
-export function mergeGeminiHarness(
+export function syncGeminiCommands(
     sourceGeminiDir: string,
     targetGeminiDir: string,
 ): void {
-    for (const subdir of ["skills", "commands"] as const) {
-        const srcSub = path.join(sourceGeminiDir, subdir);
-        if (!fs.existsSync(srcSub)) continue;
+    const srcCmd = path.join(sourceGeminiDir, "commands");
+    if (!fs.existsSync(srcCmd)) return;
 
-        const destSub = path.join(targetGeminiDir, subdir);
-        fs.mkdirSync(destSub, { recursive: true });
+    const destCmd = path.join(targetGeminiDir, "commands");
+    fs.mkdirSync(destCmd, { recursive: true });
 
-        for (const entry of fs.readdirSync(srcSub, { withFileTypes: true })) {
-            const srcPath = path.join(srcSub, entry.name);
-            const destPath = path.join(destSub, entry.name);
+    for (const entry of fs.readdirSync(srcCmd, { withFileTypes: true })) {
+        const srcPath = path.join(srcCmd, entry.name);
+        const destPath = path.join(destCmd, entry.name);
 
-            if (entry.isDirectory()) {
-                if (fs.existsSync(destPath)) {
-                    fs.rmSync(destPath, { recursive: true, force: true });
-                }
-                copyRecursive(srcPath, destPath);
-                continue;
+        if (entry.isDirectory()) {
+            if (fs.existsSync(destPath)) {
+                fs.rmSync(destPath, { recursive: true, force: true });
             }
+            copyRecursive(srcPath, destPath);
+            continue;
+        }
 
-            if (entry.isFile()) {
-                fs.copyFileSync(srcPath, destPath);
-            }
+        if (entry.isFile()) {
+            fs.copyFileSync(srcPath, destPath);
         }
     }
 }
