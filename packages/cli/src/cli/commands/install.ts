@@ -16,14 +16,14 @@ USAGE:
   ai-eng install [options]
 
 OPTIONS:
-  --platform opencode|cursor|gemini|pi   Target harness (default: opencode)
-  --scope project|global|auto            Install scope (default: auto-detect)
-  --fresh                                Clean before install (default)
-  --skip-clean                           Install without removing previous ai-eng files
-  --dry-run                              Show what would be done without writing
-  --yes                                  Skip confirmation prompts
-  -v, --verbose                          Verbose output
-  -h, --help                             Show this help message
+  --platform opencode|cursor|gemini|pi|all  Target harness (default: opencode)
+  --scope project|global|auto               Install scope (default: auto-detect)
+  --fresh                                   Clean before install (default)
+  --skip-clean                              Install without removing previous ai-eng files
+  --dry-run                                 Show what would be done without writing
+  --yes                                     Skip confirmation prompts
+  -v, --verbose                             Verbose output
+  -h, --help                                Show this help message
 
 EXAMPLES:
   ai-eng install                                    # OpenCode (auto scope, clean first)
@@ -33,6 +33,7 @@ EXAMPLES:
   ai-eng install --platform gemini                  # ./.gemini/
   ai-eng install --platform gemini --scope global   # merge into ~/.gemini/
   ai-eng install --platform pi                      # .pi/ + .agents/skills/
+  ai-eng install --platform all --scope global      # Install all platforms globally
   ai-eng install --scope project                    # OpenCode project .opencode/
   ai-eng install --scope global                     # OpenCode ~/.config/opencode/
   ai-eng reinstall --platform cursor                # Same as clean + install
@@ -87,7 +88,38 @@ async function runInstall(args: string[]): Promise<void> {
         allowPositionals: true,
     });
 
-    const platform = parsePlatformArg(values.platform as string | undefined);
+    const platform = parsePlatformArg(
+        values.platform as string | undefined,
+        true,
+    );
+
+    if (platform === "all") {
+        const platforms: InstallFlags["platform"][] = [
+            "opencode",
+            "cursor",
+            "gemini",
+            "pi",
+        ];
+        for (const p of platforms) {
+            const flags: InstallCommandFlags = {
+                scope: values.scope as InstallFlags["scope"],
+                platform: p,
+                dryRun: values["dry-run"],
+                yes: values.yes,
+                fresh: values.fresh,
+                skipClean: values["skip-clean"],
+                verbose: values.verbose,
+                help: values.help,
+            };
+            if (flags.help) {
+                console.log(INSTALL_HELP_TEXT);
+                return;
+            }
+            await runInstaller(flags);
+            console.log("");
+        }
+        return;
+    }
 
     const flags: InstallCommandFlags = {
         scope: values.scope as InstallFlags["scope"],

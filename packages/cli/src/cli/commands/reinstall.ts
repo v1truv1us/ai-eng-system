@@ -23,6 +23,7 @@ OPTIONS:
 EXAMPLES:
   ai-eng reinstall --platform cursor
   ai-eng reinstall --platform gemini --scope global
+  ai-eng reinstall --platform all --scope global
 `;
 
 interface CleanCommandFlags extends CleanFlags {
@@ -46,27 +47,26 @@ async function runReinstall(args: string[]): Promise<void> {
         allowPositionals: true,
     });
 
-    const platform = parsePlatformArg(values.platform as string | undefined);
+    const platform = parsePlatformArg(
+        values.platform as string | undefined,
+        true,
+    );
 
     if (values.help) {
         console.log(REINSTALL_HELP_TEXT);
         return;
     }
 
+    const platforms: InstallFlags["platform"][] =
+        platform === "all"
+            ? ["opencode", "cursor", "gemini", "pi"]
+            : [(platform as InstallFlags["platform"]) ?? "opencode"];
+
     const cleanFlags: CleanCommandFlags = {
         scope: values.scope as CleanFlags["scope"],
         platform: (platform as CleanFlags["platform"]) ?? "opencode",
         dryRun: values["dry-run"],
         verbose: values.verbose,
-    };
-
-    const installFlags: InstallCommandFlags = {
-        scope: values.scope as InstallFlags["scope"],
-        platform: (platform as InstallFlags["platform"]) ?? "opencode",
-        dryRun: values["dry-run"],
-        verbose: values.verbose,
-        fresh: true,
-        skipClean: false,
     };
 
     await runCleaner(cleanFlags, (projectDir) =>
@@ -77,7 +77,20 @@ async function runReinstall(args: string[]): Promise<void> {
         console.log("");
     }
 
-    await runInstaller(installFlags);
+    for (const p of platforms) {
+        const installFlags: InstallCommandFlags = {
+            scope: values.scope as InstallFlags["scope"],
+            platform: p,
+            dryRun: values["dry-run"],
+            verbose: values.verbose,
+            fresh: true,
+            skipClean: false,
+        };
+        await runInstaller(installFlags);
+        if (p !== platforms[platforms.length - 1]) {
+            console.log("");
+        }
+    }
 }
 
 export const reinstallCommand: Subcommand = {
