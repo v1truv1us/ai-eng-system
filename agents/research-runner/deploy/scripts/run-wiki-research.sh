@@ -37,7 +37,7 @@ mkdir -p "$OUTPUT_DIR"
 OUT_DIR="$OUTPUT_DIR"
 
 pi -p $MODEL_FLAG --skill "/app/skills/wiki-research-${TAG}" \
-    "Process all unchecked #${TAG} items in RESEARCH_QUEUE.md. Research each topic using intelli_research, create or update wiki pages, mark items done, and move them to Archive. Append a log entry to wiki/log.md." \
+    "Process all unchecked #${TAG} items in RESEARCH_QUEUE.md. Research each topic using web_search (engine brave) to find current sources, then use intelli_extract and intelli_collate on the results. Create or update wiki pages, mark items done, and move them to Archive. Append a log entry to wiki/log.md." \
     >"${OUT_DIR}/wiki-research-${TAG}-$(date '+%Y-%m-%d').md" 2>&1
 
 EXIT=$?
