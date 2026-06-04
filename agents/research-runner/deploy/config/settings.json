@@ -9,7 +9,7 @@
   "pi-intelli-search": {
     "searchModel": { "provider": "zai", "model": "glm-4.5-air" },
     "extractModel": { "provider": "zai", "model": "glm-4.5-air" },
-    "collateModel": { "provider": "zai", "model": "glm-4.5-air" },
+    "collateModel": { "provider": "zai", "model": "glm-5.1" },
     "cacheDir": ".search"
   }
 }
