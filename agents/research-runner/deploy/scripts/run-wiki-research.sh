@@ -61,7 +61,7 @@ fi
 # intelli_* tools call zai (which has no web access) and hallucinate URLs.
 # web_search via pi-browse calls the real Brave Search API with BRAVE_API_KEY.
 pi -p $MODEL_FLAG \
-    --exclude-tools intelli_search,intelli_research \
+    -xt intelli_search,intelli_research \
     --skill "/app/skills/wiki-research-${TAG}" \
     "$RESEARCH_PROMPT
 
