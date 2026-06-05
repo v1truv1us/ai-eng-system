@@ -1,15 +1,16 @@
 {
   "defaultProvider": "zai",
-  "defaultModel": "glm-4.5-air",
+  "defaultModel": "zai/glm-5.1",
   "defaultThinkingLevel": "minimal",
   "hideThinkingBlock": false,
   "packages": [
-    "npm:@curio-data/pi-intelli-search"
+    "npm:@curio-data/pi-intelli-search",
+    "npm:pi-browse"
   ],
   "pi-intelli-search": {
-    "searchModel": { "provider": "zai", "model": "glm-4.5-air" },
-    "extractModel": { "provider": "zai", "model": "glm-4.5-air" },
-    "collateModel": { "provider": "zai", "model": "glm-5.1" },
+    "searchModel": { "provider": "zai", "model": "zai/glm-5.1" },
+    "extractModel": { "provider": "zai", "model": "zai/glm-5.1" },
+    "collateModel": { "provider": "zai", "model": "zai/glm-5.1" },
     "cacheDir": ".search"
   }
 }

@@ -19,8 +19,11 @@ RUN apk add --no-cache git python3 bash curl make g++ procps dcron
 # Install pi globally
 RUN npm install -g @earendil-works/pi-coding-agent
 
-# Install pi-intelli-search (provides intelli_search, intelli_research, intelli_extract, etc.)
+# Install pi-intelli-search (provides intelli_extract, intelli_collate for per-URL synthesis)
 RUN npm install -g @curio-data/pi-intelli-search
+
+# Install pi-browse (provides web_search via Brave API + web_fetch — real web grounding)
+RUN npm install -g pi-browse
 
 # ── ai-eng-system research-runner (runs via tsx, no build step) ──
 # Copy only what the research-runner needs
