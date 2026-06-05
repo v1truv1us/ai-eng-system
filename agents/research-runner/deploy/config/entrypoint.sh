@@ -100,6 +100,23 @@ echo "crond: $(which crond)"
 echo "Vault: $VAULT"
 echo ""
 
+# ── 5b. pi-browse config (Brave Search key) ──
+# Coolify regenerates .env files on each deploy which can wipe BRAVE_API_KEY.
+# Write the key directly to /root/.pi/pi-browse.json as a durable fallback.
+BROWSE_CONFIG="${PI_DIR}/pi-browse.json"
+if [ -n "${BRAVE_API_KEY:-}" ]; then
+  cat > "$BROWSE_CONFIG" <<EOF
+{
+  "apiKeys": {
+    "brave": "${BRAVE_API_KEY}"
+  }
+}
+EOF
+  echo "[init] pi-browse config written with Brave key from env"
+elif [ ! -f "$BROWSE_CONFIG" ]; then
+  echo "[WARN] BRAVE_API_KEY not set and no pi-browse.json — Brave web_search will fail"
+fi
+
 # ── 6. Start queue web UI (background, auto-restarts if it crashes) ──
 if [ -z "${QUEUE_UI_DISABLE:-}" ]; then
     echo "[init] Starting queue UI server on :${QUEUE_UI_PORT:-8080}"
