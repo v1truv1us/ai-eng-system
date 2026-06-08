@@ -361,6 +361,21 @@ function transformAgentMarkdownForOpenCode(
         }
     }
 
+    // Transform tools from Claude Code array format to OpenCode object format
+    // Claude Code: tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash"]
+    // OpenCode: tools: { read: true, write: true, edit: true, grep: true, glob: true, bash: true }
+    if (meta.tools && Array.isArray(meta.tools)) {
+        const toolsObject: Record<string, boolean> = {};
+        for (const tool of meta.tools) {
+            if (typeof tool === "string") {
+                // Convert PascalCase tool names to lowercase keys
+                const toolKey = tool.toLowerCase();
+                toolsObject[toolKey] = true;
+            }
+        }
+        meta.tools = toolsObject;
+    }
+
     const fm = serializeFrontmatter(meta);
     return {
         category,

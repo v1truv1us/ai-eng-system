@@ -1,6 +1,6 @@
 {
   "name": "@ai-eng-system/workspace",
-  "version": "1.6.8",
+  "version": "1.6.10",
   "description": "AI Engineering System: AI-powered engineering automation with comprehensive research, validation, and deployment workflows",
   "private": true,
   "type": "module",
