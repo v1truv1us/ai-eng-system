@@ -33,6 +33,14 @@ PLAN (break down the work)
   → Researching before planning?
     → comprehensive-research
 
+LEARN (teach and grow)
+  → Interactive lessons over multiple sessions with a file-backed workspace?
+    → teach
+  → Week-by-week roadmap and milestones without lesson artifacts?
+    → create-learning-path
+  → Team knowledge base or domain map (not personal tutoring)?
+    → knowledge-architecture
+
 BUILD (write the code)
   → Implementing a feature across multiple files?
     → incremental-implementation
@@ -56,6 +64,8 @@ VERIFY (prove it works)
 REVIEW (improve code health)
   → Reviewing code before merge?
     → code-review-and-quality
+  → Full repo health check or improvement plan?
+    → repo-audit (or /ai-eng/repo-audit)
   → Code works but is hard to read?
     → code-simplification
   → Security concerns?

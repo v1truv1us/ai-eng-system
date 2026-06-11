@@ -4,14 +4,14 @@ import {
     DiscoveryHandler,
     PatternFinder,
     ResearchLocator,
-} from "../../src/research/discovery";
+} from "../../packages/cli/src/research/discovery";
 import {
     ConfidenceLevel,
     ResearchConstraints,
     ResearchDepth,
     type ResearchQuery,
     ResearchScope,
-} from "../../src/research/types";
+} from "../../packages/cli/src/research/types";
 
 describe("Discovery Phase", () => {
     let config: any;

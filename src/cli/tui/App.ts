@@ -1,1 +1,0 @@
-../../../packages/cli/src/cli/tui/App.ts

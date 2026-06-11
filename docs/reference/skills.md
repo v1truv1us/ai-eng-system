@@ -87,3 +87,5 @@ These skills are included in default installs (see `.ai-eng/install-manifest.jso
 - Repo-specific skills supplement the lifecycle with domain or tool-specific workflows.
 - Namespaced skills use `namespace/name` directory paths.
 - See `docs/reference/skills-first-map.md` for the complete ownership mapping.
+
+This repository currently ships **85** skills.

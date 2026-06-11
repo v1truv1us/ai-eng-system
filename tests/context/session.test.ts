@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from "bun:test";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { SessionManager } from "../../src/context/session";
+import { SessionManager } from "../../packages/cli/src/context/session";
 
 describe("SessionManager", () => {
     let manager: SessionManager;

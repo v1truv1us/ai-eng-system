@@ -1,1 +1,0 @@
-../packages/cli/src/opencode-tool-prompt-optimize.ts

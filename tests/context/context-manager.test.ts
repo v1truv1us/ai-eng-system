@@ -19,12 +19,12 @@ import type {
     AgentType,
     ConfidenceLevel,
     ContextEnvelope,
-} from "../../src/agents/types";
-import { MemoryManager } from "../../src/context/memory";
-import { ProgressiveSkillLoader } from "../../src/context/progressive";
-import { ContextRetriever } from "../../src/context/retrieval";
-import { SessionManager } from "../../src/context/session";
-import { VectorMemoryManager } from "../../src/context/vector";
+} from "../../packages/cli/src/agents/types";
+import { MemoryManager } from "../../packages/cli/src/context/memory";
+import { ProgressiveSkillLoader } from "../../packages/cli/src/context/progressive";
+import { ContextRetriever } from "../../packages/cli/src/context/retrieval";
+import { SessionManager } from "../../packages/cli/src/context/session";
+import { VectorMemoryManager } from "../../packages/cli/src/context/vector";
 
 function makeTempDir(): string {
     // randomUUID is available in Bun

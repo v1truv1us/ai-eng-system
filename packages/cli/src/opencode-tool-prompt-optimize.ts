@@ -26,7 +26,6 @@ const promptOptimizeTool: any = tool({
     },
 
     async execute({ prompt }: { prompt: string }) {
-
         // Escape hatch: ! prefix skips optimization
         if (prompt.startsWith("!")) {
             const result: PromptOptimizationResult = {

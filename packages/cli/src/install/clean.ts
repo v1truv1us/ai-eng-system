@@ -186,7 +186,7 @@ function cleanFromManifestEntry(
     removeSkillTreeEntries(
         agentSkillsDir,
         entry.agentSkillEntries,
-        flags.dryRun,
+        flags.dryRun ?? false,
         result,
         flags.verbose,
     );
@@ -215,7 +215,7 @@ function cleanFromManifestEntry(
             removeSkillTreeEntries(
                 agentSkillsDir,
                 skillDirs,
-                flags.dryRun,
+                flags.dryRun ?? false,
                 result,
                 flags.verbose,
             );
@@ -264,7 +264,7 @@ export function cleanOpenCodeInstall(
         removeSkillTreeEntries(
             agentSkillsDir,
             skillDirs,
-            flags.dryRun,
+            flags.dryRun ?? false,
             result,
             flags.verbose,
         );
@@ -303,7 +303,7 @@ export function cleanToolkitHarness(
     removeSkillTreeEntries(
         agentSkillsDir,
         skillEntries,
-        flags.dryRun,
+        flags.dryRun ?? false,
         result,
         flags.verbose,
     );

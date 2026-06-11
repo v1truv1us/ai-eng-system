@@ -63,16 +63,29 @@ function parseQueue() {
         for (const line of lines) {
             const trimmed = line.trim();
             if (trimmed.startsWith("- [ ] ")) {
-                items.push({ text: trimmed.slice(6), checked: false, raw: line });
+                items.push({
+                    text: trimmed.slice(6),
+                    checked: false,
+                    raw: line,
+                });
             } else if (trimmed.startsWith("- [x] ")) {
-                items.push({ text: trimmed.slice(6), checked: true, raw: line });
+                items.push({
+                    text: trimmed.slice(6),
+                    checked: true,
+                    raw: line,
+                });
             } else if (
                 trimmed &&
                 !trimmed.startsWith("<!--") &&
                 !trimmed.startsWith("#")
             ) {
                 // Malformed item — text without checkbox. Treat as unchecked.
-                items.push({ text: trimmed, checked: false, raw: line, malformed: true });
+                items.push({
+                    text: trimmed,
+                    checked: false,
+                    raw: line,
+                    malformed: true,
+                });
             }
         }
         sections.push({ tag, items });
@@ -135,7 +148,7 @@ function renderItemHtml(items, tag) {
             const display = escapeHtml(
                 item.text.length > 120
                     ? item.text.slice(0, 120) + "…"
-                    : item.text
+                    : item.text,
             );
             const malformatted = item.malformed
                 ? ' <span style="color:var(--bad);font-size:.75rem">⚠ malformed</span>'
@@ -314,13 +327,8 @@ const server = http.createServer((req, res) => {
                 const after = parts[1];
                 const nl = after.indexOf("\n");
                 const line = `\n- [ ] ${topic}`;
-                parts[1] =
-                    after.slice(0, nl + 1) + line + after.slice(nl + 1);
-                fs.writeFileSync(
-                    QUEUE_FILE,
-                    parts.join(marker),
-                    "utf8"
-                );
+                parts[1] = after.slice(0, nl + 1) + line + after.slice(nl + 1);
+                fs.writeFileSync(QUEUE_FILE, parts.join(marker), "utf8");
                 res.writeHead(200, {
                     "Content-Type": "text/html; charset=utf-8",
                 });
@@ -328,7 +336,7 @@ const server = http.createServer((req, res) => {
                     page({
                         message: `Added to #${escapeHtml(tag)}: ${escapeHtml(topic)}`,
                         status: "ok",
-                    })
+                    }),
                 );
             } catch (e) {
                 res.writeHead(500, {
@@ -338,7 +346,7 @@ const server = http.createServer((req, res) => {
                     page({
                         message: `Error: ${escapeHtml(e.message)}`,
                         status: "err",
-                    })
+                    }),
                 );
             }
         });
@@ -367,7 +375,7 @@ const server = http.createServer((req, res) => {
                     page({
                         message: "Invalid tag or index.",
                         status: "err",
-                    })
+                    }),
                 );
             }
 
@@ -378,7 +386,7 @@ const server = http.createServer((req, res) => {
                         page({
                             message: "Item not found.",
                             status: "err",
-                        })
+                        }),
                     );
                 }
                 res.writeHead(200, {
@@ -388,7 +396,7 @@ const server = http.createServer((req, res) => {
                     page({
                         message: `Removed item ${index} from #${escapeHtml(tag)}.`,
                         status: "ok",
-                    })
+                    }),
                 );
             } catch (e) {
                 res.writeHead(500, {
@@ -398,7 +406,7 @@ const server = http.createServer((req, res) => {
                     page({
                         message: `Error: ${escapeHtml(e.message)}`,
                         status: "err",
-                    })
+                    }),
                 );
             }
         });
@@ -410,7 +418,5 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, () => {
-    console.log(
-        `[queue-ui] Listening on :${PORT} (auth user: ${AUTH_USER})`
-    );
+    console.log(`[queue-ui] Listening on :${PORT} (auth user: ${AUTH_USER})`);
 });

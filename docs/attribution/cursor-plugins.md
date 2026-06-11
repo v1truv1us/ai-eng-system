@@ -92,6 +92,7 @@ Import source clone: `tmp/cursor-import` (ref: ref: refs/heads/main)
 
 **Skills**
 - **Skipped (duplicate):** run-learning-retrospective, create-learning-path
+- **Inspired by:** [mattpocock/skills teach](https://github.com/mattpocock/skills/tree/main/skills/productivity/teach) → `teach` (adapted for multi-harness use)
 
 **Agents**
 - (none)

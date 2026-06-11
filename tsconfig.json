@@ -8,8 +8,17 @@
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
         "noEmit": true,
-        "types": ["bun-types"]
+        "types": [
+            "bun-types"
+        ]
     },
-    "include": ["src/**/*.ts", "packages/cli/src/**/*.ts", "packages/core/src/**/*.ts", "build.ts"],
-    "exclude": ["node_modules", "dist"]
+    "include": [
+        "packages/cli/src/**/*.ts",
+        "packages/core/src/**/*.ts",
+        "build.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
 }

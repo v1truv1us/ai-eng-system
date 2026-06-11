@@ -5,23 +5,23 @@ import { existsSync } from "node:fs";
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { AiEngSystem } from "../src/index.js";
-import { buildLearningCandidates } from "../src/learning-automation/heuristics.js";
-import { createLearningAutomationRuntime } from "../src/learning-automation/runtime.js";
+import { AiEngSystem } from "../packages/cli/src/index.js";
+import { buildLearningCandidates } from "../packages/cli/src/learning-automation/heuristics.js";
+import { createLearningAutomationRuntime } from "../packages/cli/src/learning-automation/runtime.js";
 import {
     loadLearningPolicy,
     withLearningStateLock,
-} from "../src/learning-automation/state.js";
+} from "../packages/cli/src/learning-automation/state.js";
 import {
     applySurfacedSuggestion,
     normalizeLearningState,
     selectSuggestion,
-} from "../src/learning-automation/suggestions.js";
+} from "../packages/cli/src/learning-automation/suggestions.js";
 import type {
     LearningPolicy,
     LearningRecommendation,
     LearningState,
-} from "../src/learning-automation/types.js";
+} from "../packages/cli/src/learning-automation/types.js";
 
 const createdDirs: string[] = [];
 const originalHome = process.env.HOME;

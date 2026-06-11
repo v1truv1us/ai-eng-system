@@ -7,15 +7,15 @@ import {
     mock,
     spyOn,
 } from "bun:test";
-import { DiscoveryHandler } from "../../src/research/discovery";
-import { ResearchOrchestrator } from "../../src/research/orchestrator";
+import { DiscoveryHandler } from "../../packages/cli/src/research/discovery";
+import { ResearchOrchestrator } from "../../packages/cli/src/research/orchestrator";
 import {
     type ResearchConfig,
     ResearchDepth,
     ResearchPhase,
     ResearchQuery,
     ResearchScope,
-} from "../../src/research/types";
+} from "../../packages/cli/src/research/types";
 
 describe("ResearchOrchestrator", () => {
     let orchestrator: ResearchOrchestrator;

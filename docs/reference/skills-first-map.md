@@ -62,6 +62,7 @@ These are unique to ai-eng-system and sit outside the standard lifecycle.
 | `plugin-dev` | `skills/plugin-dev/` | Plugin creation workflows |
 | `ai-eng/simplify` | `skills/ai-eng/simplify/` | Code quality simplification |
 | `workflow/ralph-wiggum` | `skills/workflow/ralph-wiggum/` | Iterative full-cycle workflow |
+| `repo-audit` | `skills/repo-audit/` | Four-phase repo health audit and improvement plan |
 
 ## Deprecated / Consolidation Candidates
 
@@ -82,3 +83,14 @@ These are unique to ai-eng-system and sit outside the standard lifecycle.
 - Alias commands have no prefix (e.g. `/spec`, `/build`, `/ship`)
 - Agent names match their filename: `content/agents/{name}.md`
 - Runtime features surface through commands, never directly
+
+## Source Tree (runtime)
+
+| Path | Status |
+|------|--------|
+| `packages/cli/src/` | **Canonical** — shipped CLI/runtime implementation |
+| `src/` (repo root) | **Removed** (2026-06-10) — was legacy duplicate of `packages/cli/src` |
+| `packages/core/` | Shared library consumed by CLI; extract shared modules here during de-duplication |
+
+See [2026-06-10-source-tree-and-ci-policy.md](../decisions/2026-06-10-source-tree-and-ci-policy.md).
+

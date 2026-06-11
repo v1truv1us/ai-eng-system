@@ -3,12 +3,12 @@
  */
 
 import { beforeEach, describe, expect, it } from "bun:test";
-import { QualityGateRunner } from "../../src/execution/quality-gates";
+import { QualityGateRunner } from "../../packages/cli/src/execution/quality-gates";
 import {
     type QualityGateConfig,
     QualityGateType,
     TaskStatus,
-} from "../../src/execution/types";
+} from "../../packages/cli/src/execution/types";
 
 describe("QualityGateRunner", () => {
     let runner: QualityGateRunner;

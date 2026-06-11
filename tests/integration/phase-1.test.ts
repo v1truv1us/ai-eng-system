@@ -5,14 +5,14 @@
 import { afterEach, beforeEach, describe, expect, it } from "bun:test";
 import { mkdirSync, rmdirSync, unlinkSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { PlanParser } from "../../src/execution/plan-parser";
-import { QualityGateRunner } from "../../src/execution/quality-gates";
-import { TaskExecutor } from "../../src/execution/task-executor";
+import { PlanParser } from "../../packages/cli/src/execution/plan-parser";
+import { QualityGateRunner } from "../../packages/cli/src/execution/quality-gates";
+import { TaskExecutor } from "../../packages/cli/src/execution/task-executor";
 import {
     QualityGateType,
     TaskStatus,
     TaskType,
-} from "../../src/execution/types";
+} from "../../packages/cli/src/execution/types";
 
 describe("Execution Engine Integration", () => {
     const testDir = "/tmp/ai-eng-test";

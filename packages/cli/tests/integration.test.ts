@@ -88,7 +88,10 @@ describe("AI Engineering System - Integration Tests", () => {
 
             // Check main components
             expect(existsSync(join(claudePluginDir, "plugin.json"))).toBe(true);
-            expect(existsSync(join(claudePluginDir, "hooks.json"))).toBe(true);
+            expect(existsSync(join(claudePluginDir, "hooks"))).toBe(true);
+            expect(
+                existsSync(join(claudePluginDir, "hooks", "session-start.sh")),
+            ).toBe(true);
             expect(existsSync(join(claudePluginDir, "commands"))).toBe(true);
             expect(existsSync(join(claudePluginDir, "agents"))).toBe(true);
             expect(existsSync(join(claudePluginDir, "skills"))).toBe(true);
@@ -473,21 +476,17 @@ This is test agent ${i}.
             expect(pluginJson.version).toBe(packageJson.version);
         });
 
-        it("should generate correct hooks.json", async () => {
-            const hooksJsonPath = join(
+        it("should install Claude hook scripts", async () => {
+            const hooksDir = join(
                 TEST_ROOT,
                 "dist",
                 ".claude-plugin",
-                "hooks.json",
-            );
-            const hooksJson = JSON.parse(
-                await readFile(hooksJsonPath, "utf-8"),
+                "hooks",
             );
 
-            expect(hooksJson.hooks).toBeDefined();
-            expect(hooksJson.hooks.SessionStart).toBeDefined();
-            expect(hooksJson.hooks.SessionStart[0].description).toContain(
-                "Initialize ai-eng-system",
+            expect(existsSync(join(hooksDir, "session-start.sh"))).toBe(true);
+            expect(existsSync(join(hooksDir, "cooking-stop-hook.sh"))).toBe(
+                true,
             );
         });
 
@@ -520,9 +519,10 @@ async function copyProjectStructure(): Promise<void> {
         "skills/",
         "docs/",
         "templates/",
-        "src/",
+        "packages/cli/src/",
         "scripts/",
         "packages/",
+        "hooks/",
         ".claude/",
         ".opencode/",
         ".claude-plugin/",

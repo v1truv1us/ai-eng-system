@@ -11,9 +11,9 @@ import {
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-import { MarkdownContextExporter } from "../../src/context/exporters/markdown";
-import { MemoryManager } from "../../src/context/memory";
-import { createCommandEnvelope } from "../../src/context/types";
+import { MarkdownContextExporter } from "../../packages/cli/src/context/exporters/markdown";
+import { MemoryManager } from "../../packages/cli/src/context/memory";
+import { createCommandEnvelope } from "../../packages/cli/src/context/types";
 
 function makeTempDir(): string {
     const id = crypto.randomUUID();

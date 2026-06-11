@@ -1,6 +1,6 @@
 {
   "name": "@ai-eng-system/workspace",
-  "version": "1.6.10",
+  "version": "1.7.0",
   "description": "AI Engineering System: AI-powered engineering automation with comprehensive research, validation, and deployment workflows",
   "private": true,
   "type": "module",
@@ -94,7 +94,6 @@
     "@ai-eng-system/core": "workspace:*",
     "@opencode-ai/plugin": "^1.15.10",
     "@opencode-ai/sdk": "^1.15.10",
-    "ai-eng-system": "^0.4.0",
     "yaml": "^2.9.0"
   },
   "devDependencies": {

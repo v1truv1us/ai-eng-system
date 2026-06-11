@@ -9,8 +9,8 @@
  * - skills/<skill-pack>/SKILL.md
  * - .claude/hooks/          (Claude Code prompt optimization hooks)
  * - .opencode/opencode.jsonc + .opencode/plugin/ai-eng-system.ts (optional)
- * - src/opencode-tool-prompt-optimize.ts (OpenCode prompt optimization tool)
- * - src/prompt-optimization/* (shared prompt optimization library)
+ * - packages/cli/src/opencode-tool-prompt-optimize.ts (OpenCode prompt optimization tool)
+ * - packages/cli/src/prompt-optimization/* (shared prompt optimization library)
  *
  * Derived outputs:
  * - dist/.claude-plugin/   (for CI validation + tests)
@@ -41,7 +41,7 @@ import YAML from "yaml";
 import {
     formatSkillContent,
     validateSkillName,
-} from "./scripts/lib/agent-skills.ts";
+} from "./scripts/lib/agent-skills";
 
 const IS_TEST_MODE = !!process.env.TEST_ROOT;
 const ROOT = process.env.TEST_ROOT
@@ -56,6 +56,7 @@ const PROMPT_OPT_DIR = join(
     "src",
     "prompt-optimization",
 );
+const CLI_SRC = join(ROOT, "packages", "cli", "src");
 const DIST_DIR = join(ROOT, "dist");
 
 const CLAUDE_DIR = join(DIST_DIR, ".claude-plugin");
@@ -723,7 +724,9 @@ async function buildCursor(): Promise<void> {
 
     await copySkillsPreservePath(SKILLS_DIR, cursorSkillsDir);
     await mkdir(cursorAgentsDir, { recursive: true });
-    const cursorAgentFiles = await getMarkdownFiles(join(CONTENT_DIR, "agents"));
+    const cursorAgentFiles = await getMarkdownFiles(
+        join(CONTENT_DIR, "agents"),
+    );
     for (const src of cursorAgentFiles) {
         const content = await readFile(src, "utf-8");
         const transformed = transformAgentMarkdownForCursor(content, src);
@@ -932,7 +935,7 @@ async function copyPromptOptimization(): Promise<void> {
 async function transpileCLI(): Promise<void> {
     console.log("🔧 Transpiling TypeScript to JavaScript...");
 
-    const srcDir = join(ROOT, "src");
+    const srcDir = CLI_SRC;
     const distDir = join(DIST_DIR);
 
     // List of all TypeScript entry points that need transpilation
@@ -1179,17 +1182,23 @@ async function syncToLocalClaude(): Promise<void> {
 
     // Sync prompt optimization library to dist/ (for npm package consumers)
     const promptOptFiles = [
-        "src/prompt-optimization/types.ts",
-        "src/prompt-optimization/analyzer.ts",
-        "src/prompt-optimization/techniques.ts",
-        "src/prompt-optimization/optimizer.ts",
-        "src/prompt-optimization/formatter.ts",
-        "src/prompt-optimization/index.ts",
+        "packages/cli/src/prompt-optimization/types.ts",
+        "packages/cli/src/prompt-optimization/analyzer.ts",
+        "packages/cli/src/prompt-optimization/techniques.ts",
+        "packages/cli/src/prompt-optimization/optimizer.ts",
+        "packages/cli/src/prompt-optimization/formatter.ts",
+        "packages/cli/src/prompt-optimization/index.ts",
     ];
     for (const file of promptOptFiles) {
         const src = join(ROOT, file);
         if (existsSync(src)) {
-            const dest = join(DIST_DIR, "prompt-optimization", basename(file));
+            const dest = join(
+                DIST_DIR,
+                "prompt-optimization",
+                basename(
+                    file.replace("packages/cli/src/prompt-optimization/", ""),
+                ),
+            );
             await copyFile(src, dest);
         }
     }
@@ -1308,6 +1317,7 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "knowledge-architecture",
             "continuous-learning",
             "dreaming-consolidator",
+            "teach",
         ],
         assetDirs: [
             "docs/knowledge",
@@ -1359,10 +1369,7 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
         tags: ["research-orchestration", "documentation", "knowledge-capture"],
     },
     "ai-eng-devops": {
-        commands: [
-            "deploy",
-            "ship",
-        ],
+        commands: ["deploy", "ship"],
         agents: [
             "deployment-engineer",
             "infrastructure-builder",
@@ -1404,10 +1411,7 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
         tags: ["devops", "deployment", "infrastructure", "monitoring"],
     },
     "ai-eng-quality": {
-        commands: [
-            "deep-review",
-            "verify",
-        ],
+        commands: ["deep-review", "repo-audit", "verify"],
         agents: [
             "code-reviewer",
             "security-scanner",
@@ -1420,8 +1424,10 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "startup-review",
             "validation-review",
             "docs-reliability-review",
+            "repo-audit-review",
         ],
         skills: [
+            "repo-audit",
             "code-review-and-quality",
             "debugging-and-error-recovery",
             "check-agent-compatibility",
@@ -1462,10 +1468,7 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
         tags: ["quality-assurance", "security", "code-review", "testing"],
     },
     "ai-eng-content": {
-        commands: [
-            "seo",
-            "ralph-wiggum",
-        ],
+        commands: ["seo", "ralph-wiggum"],
         agents: ["seo-specialist", "text-cleaner", "prompt-optimizer"],
         skills: ["seo-audit", "content-optimization", "slack"],
         description: "Content optimization, SEO, and communication tools",
@@ -1923,7 +1926,7 @@ async function generateCursorMarketplaceJson(): Promise<void> {
 async function buildNpmEntrypoint(): Promise<void> {
     // Build npm-loadable OpenCode plugin entrypoint.
     // Skip if src/index.ts doesn't exist (e.g., in test environments)
-    const srcIndexPath = join(ROOT, "src", "index.ts");
+    const srcIndexPath = join(CLI_SRC, "index.ts");
     if (!existsSync(srcIndexPath)) {
         console.log(
             "⚠️  Skipping npm entrypoint build (src/index.ts not found)",
@@ -2076,8 +2079,13 @@ async function validateAgents(): Promise<void> {
     console.log("✅ All agents validated successfully");
 }
 
+interface RootPackageJson {
+    version: string;
+    [key: string]: unknown;
+}
+
 interface BuildCache {
-    packageJson: Record<string, unknown> | null;
+    packageJson: RootPackageJson | null;
     commandFiles: string[] | null;
     agentFiles: string[] | null;
     skills: SkillInfo[] | null;
@@ -2090,7 +2098,7 @@ const buildCache: BuildCache = {
     skills: null,
 };
 
-async function getPackageJson(): Promise<Record<string, unknown>> {
+async function getPackageJson(): Promise<RootPackageJson> {
     if (!buildCache.packageJson) {
         buildCache.packageJson = JSON.parse(
             await readFile(join(ROOT, "package.json"), "utf-8"),

@@ -85,3 +85,7 @@ The standalone `@ai-eng-system/pi` package was removed. Pi assets are:
 3. Consumed via `pi install npm:@ai-eng-system/toolkit` using the toolkit `pi` manifest
 
 Migration: replace `pi install npm:@ai-eng-system/pi` with `pi install npm:@ai-eng-system/toolkit`.
+## Runtime source (2026-06-10)
+
+Shipped CLI/runtime code is canonical in `packages/cli/src/`. Root `src/` is a legacy duplicate slated for removal. See [2026-06-10-source-tree-and-ci-policy.md](./2026-06-10-source-tree-and-ci-policy.md).
+

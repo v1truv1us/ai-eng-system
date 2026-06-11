@@ -21,11 +21,11 @@ import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { parseArgs } from "node:util";
-import { OpenCodeClient } from "../../src/backends/opencode/client";
-import type { RalphFlags } from "../../src/cli/flags";
-import { loadConfig } from "../../src/config/loadConfig";
-import type { AiEngConfig } from "../../src/config/schema";
-import { PromptOptimizer } from "../../src/prompt-optimization/optimizer";
+import { OpenCodeClient } from "../../packages/cli/src/backends/opencode/client";
+import type { RalphFlags } from "../../packages/cli/src/cli/flags";
+import { loadConfig } from "../../packages/cli/src/config/loadConfig";
+import type { AiEngConfig } from "../../packages/cli/src/config/schema";
+import { PromptOptimizer } from "../../packages/cli/src/prompt-optimization/optimizer";
 
 describe("CLI Flag Parsing", () => {
     it("should parse help flag", async () => {
@@ -353,7 +353,7 @@ describe("Prompt Optimizer", () => {
 
 describe("CLI Integration", () => {
     it("should import TUI launch function", async () => {
-        const module = await import("../../src/cli/tui/App.ts");
+        const module = await import("../../packages/cli/src/cli/tui/App.ts");
         expect(module.launchTui).toBeDefined();
         expect(typeof module.launchTui).toBe("function");
     });
@@ -393,25 +393,27 @@ describe("CLI Integration", () => {
 
 describe("Build Verification", () => {
     it("should import flags module", async () => {
-        const module = await import("../../src/cli/flags");
+        const module = await import("../../packages/cli/src/cli/flags");
         expect(module).toBeDefined();
     });
 
     it("should import config schema", async () => {
-        const module = await import("../../src/config/schema");
+        const module = await import("../../packages/cli/src/config/schema");
         expect(module).toBeDefined();
         // Interfaces aren't exported as module properties in TypeScript
         // Just verify module loads correctly
     });
 
     it("should import loadConfig function", async () => {
-        const module = await import("../../src/config/loadConfig");
+        const module = await import("../../packages/cli/src/config/loadConfig");
         expect(module).toBeDefined();
         expect(module.loadConfig).toBeDefined();
     });
 
     it("should import OpenCode client", async () => {
-        const module = await import("../../src/backends/opencode/client");
+        const module = await import(
+            "../../packages/cli/src/backends/opencode/client"
+        );
         expect(module).toBeDefined();
         expect(module.OpenCodeClient).toBeDefined();
     });
@@ -472,7 +474,7 @@ describe("TUI Components", () => {
     });
 
     it("should export launchTui function", async () => {
-        const module = await import("../../src/cli/tui/App.ts");
+        const module = await import("../../packages/cli/src/cli/tui/App.ts");
         expect(typeof module.launchTui).toBe("function");
     });
 });

@@ -5,18 +5,18 @@ import { afterEach, beforeEach, describe, expect, it } from "bun:test";
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import type { RalphFlags } from "../../src/cli/flags";
-import type { AiEngConfig } from "../../src/config/schema";
-import { FlowStore } from "../../src/execution/flow-store";
+import type { RalphFlags } from "../../packages/cli/src/cli/flags";
+import type { AiEngConfig } from "../../packages/cli/src/config/schema";
+import { FlowStore } from "../../packages/cli/src/execution/flow-store";
 import {
     type CycleState,
     FLOW_SCHEMA_VERSION,
     Phase,
     RunStatus,
     StopReason,
-} from "../../src/execution/flow-types";
-import { RalphLoopRunner } from "../../src/execution/ralph-loop";
-import { PromptOptimizer } from "../../src/prompt-optimization/optimizer";
+} from "../../packages/cli/src/execution/flow-types";
+import { RalphLoopRunner } from "../../packages/cli/src/execution/ralph-loop";
+import { PromptOptimizer } from "../../packages/cli/src/prompt-optimization/optimizer";
 
 describe("Flow Store", () => {
     let tempDir: string;

@@ -1,0 +1,29 @@
+{
+  "skill_name": "repo-audit",
+  "evals": [
+    {
+      "id": 1,
+      "name": "basic-invocation",
+      "prompt": "Audit this repository using the repo-audit skill. Focus on CI and test enforcement.",
+      "expected_output": "A four-phase audit report with executive summary, file:line citations, severity ratings, and a task plan saved to reports/.",
+      "assertions": [
+        "Output follows all four phases in order",
+        "Findings cite file paths or explicitly note unverified areas",
+        "Includes an A-F health grade with top risks and opportunities",
+        "Includes quick wins and milestone-ordered tasks",
+        "Does not propose modifying source code during the audit"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "maturity-calibration",
+      "prompt": "Run repo-audit on a small weekend prototype. Do not recommend enterprise infrastructure unless justified.",
+      "expected_output": "Recommendations scaled to a prototype's maturity with explicit trade-offs on what not to fix.",
+      "assertions": [
+        "Recommendations match stated project maturity",
+        "Includes explicit not fixing trade-offs",
+        "Healthy dimensions are summarized briefly without padding"
+      ]
+    }
+  ]
+}

@@ -177,4 +177,15 @@ describe("Content Parity", () => {
             expect(content).toContain(String(count));
         });
     });
+    describe("Source tree", () => {
+        it("should not have legacy root src/ tree", () => {
+            expect(existsSync(join(ROOT, "src"))).toBe(false);
+        });
+
+        it("should keep canonical runtime under packages/cli/src", () => {
+            expect(existsSync(join(ROOT, "packages/cli/src/index.ts"))).toBe(
+                true,
+            );
+        });
+    });
 });

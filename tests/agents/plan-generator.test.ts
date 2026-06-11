@@ -3,9 +3,9 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it } from "bun:test";
-import { AgentCoordinator } from "../../src/agents/coordinator";
-import { PlanGenerator } from "../../src/agents/plan-generator";
-import { AgentRegistry } from "../../src/agents/registry";
+import { AgentCoordinator } from "../../packages/cli/src/agents/coordinator";
+import { PlanGenerator } from "../../packages/cli/src/agents/plan-generator";
+import { AgentRegistry } from "../../packages/cli/src/agents/registry";
 import {
     type AgentCoordinatorConfig,
     type AgentDefinition,
@@ -14,7 +14,7 @@ import {
     AgentType,
     ConfidenceLevel,
     type PlanGenerationInput,
-} from "../../src/agents/types";
+} from "../../packages/cli/src/agents/types";
 
 // Mock registry for testing
 class MockAgentRegistry extends AgentRegistry {

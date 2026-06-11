@@ -9,7 +9,7 @@
 
 import { afterEach, beforeEach, describe, expect, it, mock } from "bun:test";
 import { parseArgs } from "node:util";
-import type { RalphFlags } from "../../src/cli/flags";
+import type { RalphFlags } from "../../packages/cli/src/cli/flags";
 
 // Test the subcommand routing logic
 describe("CLI Dispatcher Routing", () => {

@@ -24,6 +24,7 @@ import {
     syncGeminiCommands,
     syncSkillsTree,
 } from "./sync-skills";
+import { appendTelemetryEvent, isTelemetryEnabled } from "./telemetry";
 import {
     getAgentSkillsInstallDir,
     getHarnessSkillsSourceDir,
@@ -35,10 +36,9 @@ import {
     usesSkillsOnlyInstall,
 } from "./toolkit-path";
 import type { CleanFlags, InstallFlags, InstallPlatform } from "./types";
-import { appendTelemetryEvent, isTelemetryEnabled } from "./telemetry";
 
 const NAMESPACE_PREFIX = "ai-eng";
-const PACKAGE_VERSION = "1.6.8"; // TODO: read from package.json at build time
+const PACKAGE_VERSION = "1.7.0"; // TODO: read from package.json at build time
 
 async function copyRecursive(src: string, dest: string): Promise<void> {
     const stat = await fsp.stat(src);
@@ -398,7 +398,11 @@ async function runInstaller(flags: InstallFlags): Promise<void> {
         );
     }
 
-    await installContentFromCore(openCodeContent, targetOpenCodeDir, agentSkillsDir);
+    await installContentFromCore(
+        openCodeContent,
+        targetOpenCodeDir,
+        agentSkillsDir,
+    );
 
     upsertManifestEntry(
         scope,

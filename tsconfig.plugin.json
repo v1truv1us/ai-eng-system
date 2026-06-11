@@ -8,8 +8,15 @@
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
         "noEmit": true,
-        "types": ["bun-types"]
+        "types": [
+            "bun-types"
+        ]
     },
-    "include": ["src/index.ts"],
-    "exclude": ["node_modules", "dist"]
+    "include": [
+        "packages/cli/src/index.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
 }

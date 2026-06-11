@@ -5,9 +5,9 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it } from "bun:test";
-import { ExecutorBridge } from "../../src/agents/executor-bridge";
-import { AgentRegistry } from "../../src/agents/registry";
-import { AgentType } from "../../src/agents/types";
+import { ExecutorBridge } from "../../packages/cli/src/agents/executor-bridge";
+import { AgentRegistry } from "../../packages/cli/src/agents/registry";
+import { AgentType } from "../../packages/cli/src/agents/types";
 
 describe("ExecutorBridge", () => {
     let bridge: ExecutorBridge;

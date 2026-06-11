@@ -1,6 +1,12 @@
 {
     "$schema": "https://biomejs.dev/schemas/2.4.11/schema.json",
-    "assist": { "actions": { "source": { "organizeImports": "on" } } },
+    "assist": {
+        "actions": {
+            "source": {
+                "organizeImports": "on"
+            }
+        }
+    },
     "linter": {
         "enabled": true,
         "rules": {
@@ -38,7 +44,10 @@
             "!**/.venv",
             "!**/venv_validation",
             "!**/tmp",
-            "!**/*.d.ts"
+            "!**/*.d.ts",
+            "!**/.claude/worktrees",
+            "!**/.claude/packages",
+            "!**/packages/cli/src/**/*.d.ts"
         ]
     }
 }

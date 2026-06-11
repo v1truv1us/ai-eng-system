@@ -1,6 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import type { Plugin } from "@opencode-ai/plugin";
+import { createLearningAutomationRuntime } from "./learning-automation/runtime.js";
 
 /**
  * Check if a config file references to ai-eng-system plugin.
@@ -24,32 +26,43 @@ function fileContainsPlugin(configPath: string): boolean {
  */
 function findInstallationTarget(projectDir: string): string | null {
     const homeDir = process.env.HOME || process.env.USERPROFILE || "";
+    const globalConfigDir = path.join(homeDir, ".config", "opencode");
+    const projectOpenCodeDir = path.join(projectDir, ".opencode");
 
-    // Priority 1: Check global config - if we're referenced there, install globally
-    const globalConfigPath = path.join(
-        homeDir,
-        ".config",
-        "opencode",
-        "opencode.jsonc",
-    );
-    if (
-        fs.existsSync(globalConfigPath) &&
-        fileContainsPlugin(globalConfigPath)
-    ) {
-        return path.join(homeDir, ".config", "opencode");
-    }
+    const candidates = [
+        {
+            configPath: path.join(globalConfigDir, "opencode.jsonc"),
+            targetDir: globalConfigDir,
+        },
+        {
+            configPath: path.join(globalConfigDir, "opencode.json"),
+            targetDir: globalConfigDir,
+        },
+        {
+            configPath: path.join(projectOpenCodeDir, "opencode.jsonc"),
+            targetDir: projectOpenCodeDir,
+        },
+        {
+            configPath: path.join(projectOpenCodeDir, "opencode.json"),
+            targetDir: projectOpenCodeDir,
+        },
+        {
+            configPath: path.join(projectDir, "opencode.jsonc"),
+            targetDir: projectOpenCodeDir,
+        },
+        {
+            configPath: path.join(projectDir, "opencode.json"),
+            targetDir: projectOpenCodeDir,
+        },
+    ];
 
-    // Priority 2: Check project config - if we're referenced there, install locally
-    const projectConfigPath = path.join(
-        projectDir,
-        ".opencode",
-        "opencode.jsonc",
-    );
-    if (
-        fs.existsSync(projectConfigPath) &&
-        fileContainsPlugin(projectConfigPath)
-    ) {
-        return path.join(projectDir, ".opencode");
+    for (const candidate of candidates) {
+        if (
+            fs.existsSync(candidate.configPath) &&
+            fileContainsPlugin(candidate.configPath)
+        ) {
+            return candidate.targetDir;
+        }
     }
 
     // Not referenced anywhere (edge case - shouldn't happen if plugin is loaded)
@@ -241,11 +254,13 @@ export const AiEngSystem: Plugin = async ({
     directory,
     worktree,
 }) => {
+    const projectRoot = worktree || directory;
+
     // Get plugin directory (where this package is installed)
-    const pluginDir = path.dirname(new URL(import.meta.url).pathname);
+    const pluginDir = path.dirname(fileURLToPath(import.meta.url));
 
     // Find installation target based on which config references us
-    const targetDir = findInstallationTarget(directory);
+    const targetDir = findInstallationTarget(projectRoot);
 
     if (!targetDir) {
         // Plugin not referenced in any config - skip installation silently
@@ -275,8 +290,47 @@ export const AiEngSystem: Plugin = async ({
         );
     }
 
+    const learningAutomation = createLearningAutomationRuntime({
+        projectDir: projectRoot,
+        notifySuggestion: async (recommendation) => {
+            await client.tui.showToast({
+                body: {
+                    title: "AI Eng learning suggestion",
+                    message: `${recommendation.commandLine} (${Math.round(recommendation.confidence * 100)}%). Approve: /ai-eng/learning-approve · Dismiss: /ai-eng/learning-dismiss · Snooze: /ai-eng/learning-snooze [duration]`,
+                    variant: "info",
+                    duration: 8000,
+                },
+            });
+        },
+        notifyStatus: async (message, variant) => {
+            await client.tui.showToast({
+                body: {
+                    title: "AI Eng learning automation",
+                    message,
+                    variant,
+                    duration: 8000,
+                },
+            });
+        },
+        executeCommand: async (command) => {
+            await client.tui.executeCommand({
+                body: { command },
+                query: { directory: projectRoot },
+            });
+        },
+    });
+
     // Return hooks object with config function - OpenCode calls hook.config during init
     return {
+        event: async ({ event }) => {
+            try {
+                await learningAutomation.handleEvent(event);
+            } catch (error) {
+                console.warn(
+                    `[ai-eng-system] Learning automation warning: ${error instanceof Error ? error.message : String(error)}`,
+                );
+            }
+        },
         config: async (input: Record<string, unknown>) => {
             // No-op config hook
         },

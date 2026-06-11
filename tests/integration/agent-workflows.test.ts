@@ -3,9 +3,9 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it } from "bun:test";
-import { CodeReviewExecutor } from "../../src/agents/code-review-executor";
-import { AgentCoordinator } from "../../src/agents/coordinator";
-import { PlanGenerator } from "../../src/agents/plan-generator";
+import { CodeReviewExecutor } from "../../packages/cli/src/agents/code-review-executor";
+import { AgentCoordinator } from "../../packages/cli/src/agents/coordinator";
+import { PlanGenerator } from "../../packages/cli/src/agents/plan-generator";
 import {
     type AgentCoordinatorConfig,
     type AgentTaskResult,
@@ -15,10 +15,10 @@ import {
     ConfidenceLevel,
     ExecutionStrategy,
     type PlanGenerationInput,
-} from "../../src/agents/types";
-import { PlanParser } from "../../src/execution/plan-parser";
-import { TaskExecutor } from "../../src/execution/task-executor";
-import { TaskStatus } from "../../src/execution/types";
+} from "../../packages/cli/src/agents/types";
+import { PlanParser } from "../../packages/cli/src/execution/plan-parser";
+import { TaskExecutor } from "../../packages/cli/src/execution/task-executor";
+import { TaskStatus } from "../../packages/cli/src/execution/types";
 
 // Mock coordinator for testing - returns properly structured results
 class MockCoordinator {

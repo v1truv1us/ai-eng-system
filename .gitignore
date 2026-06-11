@@ -96,3 +96,6 @@ packages/*/package.json.dev
 !.crew/graphs/
 !.crew/artifacts/.gitkeep
 !.crew/graphs/.gitkeep
+.claude/worktrees/
+
+.claude/packages/

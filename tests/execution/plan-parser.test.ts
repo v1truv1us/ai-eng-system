@@ -3,12 +3,12 @@
  */
 
 import { beforeEach, describe, expect, it } from "bun:test";
-import { PlanParser } from "../../src/execution/plan-parser";
+import { PlanParser } from "../../packages/cli/src/execution/plan-parser";
 import {
     QualityGateType,
     TaskType,
     ValidationErrorType,
-} from "../../src/execution/types";
+} from "../../packages/cli/src/execution/types";
 
 describe("PlanParser", () => {
     let parser: PlanParser;

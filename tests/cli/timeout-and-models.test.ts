@@ -6,11 +6,14 @@ import { afterAll, beforeAll, describe, expect, it } from "bun:test";
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { OpenCodeClient } from "../../src/backends/opencode/client";
-import type { RalphFlags } from "../../src/cli/flags";
-import { loadConfig } from "../../src/config/loadConfig";
-import { getAllModels, resolveModel } from "../../src/config/modelResolver";
-import type { AiEngConfig } from "../../src/config/schema";
+import { OpenCodeClient } from "../../packages/cli/src/backends/opencode/client";
+import type { RalphFlags } from "../../packages/cli/src/cli/flags";
+import { loadConfig } from "../../packages/cli/src/config/loadConfig";
+import {
+    getAllModels,
+    resolveModel,
+} from "../../packages/cli/src/config/modelResolver";
+import type { AiEngConfig } from "../../packages/cli/src/config/schema";
 
 // Use a temporary directory for tests that call loadConfig
 // to avoid loading the project's .ai-eng/config.yaml

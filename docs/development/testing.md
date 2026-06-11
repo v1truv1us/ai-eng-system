@@ -46,3 +46,21 @@ test-hooks-install.js - Hook installation tests
 integration-test.js - Complete flow tests
 
 Run verify: `node scripts/integration-test.js`
+
+---
+
+## CI Policy (planned)
+
+Aligned with [source-tree and CI decision](../decisions/2026-06-10-source-tree-and-ci-policy.md).
+
+**Required on PR / main:**
+
+- `bun run typecheck`
+- `bun run lint`
+- `bun test tests/unit.test.ts tests/build.test.ts`
+
+**Nightly (non-blocking):**
+
+- Performance, learning-automation, integration, and other slow suites
+- Full `bun test` where practical
+

@@ -3,13 +3,13 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it } from "bun:test";
-import { TaskExecutor } from "../../src/execution/task-executor";
+import { TaskExecutor } from "../../packages/cli/src/execution/task-executor";
 import {
     type Plan,
     type Task,
     TaskStatus,
     TaskType,
-} from "../../src/execution/types";
+} from "../../packages/cli/src/execution/types";
 
 describe("TaskExecutor", () => {
     let executor: TaskExecutor;

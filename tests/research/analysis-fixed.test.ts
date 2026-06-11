@@ -15,14 +15,14 @@ import {
     AnalysisHandler,
     CodebaseAnalyzer,
     ResearchAnalyzer,
-} from "../../src/research/analysis";
+} from "../../packages/cli/src/research/analysis";
 import {
     ConfidenceLevel,
     type DiscoveryResult,
     ResearchDepth,
     type ResearchQuery,
     ResearchScope,
-} from "../../src/research/types";
+} from "../../packages/cli/src/research/types";
 
 describe("CodebaseAnalyzer (Fixed)", () => {
     let analyzer: CodebaseAnalyzer;
