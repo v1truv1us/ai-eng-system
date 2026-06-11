@@ -1,0 +1,38 @@
+{
+  "skill_name": "teach",
+  "evals": [
+    {
+      "id": 1,
+      "name": "first-session-mission",
+      "prompt": "Apply the teach skill. I want to learn Rust for writing CLI tools.",
+      "expected_output": "Interviews or drafts MISSION.md before dumping content; proposes a teaching workspace structure.",
+      "assertions": [
+        "The output references or follows teach guidance",
+        "Asks about or records why the user wants to learn",
+        "References workspace artifacts like MISSION.md or lessons/"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "continuing-session",
+      "prompt": "Apply the teach skill. Continue my learning — MISSION.md and learning-records/ already exist in this directory.",
+      "expected_output": "Reads existing state and proposes the next lesson in zone of proximal development.",
+      "assertions": [
+        "Acknowledges prior learning records or mission",
+        "Proposes a single scoped next step or lesson",
+        "Does not restart from zero without reason"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "resource-grounding",
+      "prompt": "Apply the teach skill. Teach me about PostgreSQL indexing for a production API.",
+      "expected_output": "Searches for or curates resources before teaching; cites sources in lesson plan.",
+      "assertions": [
+        "Mentions updating or using RESOURCES.md",
+        "Includes retrieval practice or feedback loop in lesson design",
+        "Scopes content to a tangible skill, not encyclopedic coverage"
+      ]
+    }
+  ]
+}
