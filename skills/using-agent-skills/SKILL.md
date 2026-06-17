@@ -32,6 +32,10 @@ PLAN (break down the work)
     → planning-and-task-breakdown
   → Researching before planning?
     → comprehensive-research
+  → Stress-testing a plan or design before committing?
+    → grill-me
+  → Grilling a plan and persisting the decisions as a document?
+    → grill-with-docs
 
 LEARN (teach and grow)
   → Interactive lessons over multiple sessions with a file-backed workspace?

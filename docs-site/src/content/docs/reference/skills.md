@@ -4,7 +4,7 @@ title: Skills
 
 # Skills Reference
 
-ai-eng-system currently ships 13 canonical skills.
+ai-eng-system currently ships 15 canonical skills.
 
 ## Namespaced Skills
 
@@ -24,5 +24,7 @@ ai-eng-system currently ships 13 canonical skills.
 - `knowledge-capture`
 - `monorepo-initialization`
 - `plugin-dev`
+- `grill-me`
+- `grill-with-docs`
 
 Generated outputs now preserve namespaced skill paths instead of flattening them.

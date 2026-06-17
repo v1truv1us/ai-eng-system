@@ -489,12 +489,7 @@ This is test agent ${i}.
         });
 
         it("should install Claude hook scripts", async () => {
-            const hooksDir = join(
-                TEST_ROOT,
-                "dist",
-                ".claude-plugin",
-                "hooks",
-            );
+            const hooksDir = join(TEST_ROOT, "dist", ".claude-plugin", "hooks");
 
             expect(existsSync(join(hooksDir, "session-start.sh"))).toBe(true);
             expect(existsSync(join(hooksDir, "cooking-stop-hook.sh"))).toBe(

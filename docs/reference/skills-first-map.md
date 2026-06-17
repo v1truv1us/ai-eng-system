@@ -63,6 +63,8 @@ These are unique to ai-eng-system and sit outside the standard lifecycle.
 | `ai-eng/simplify` | `skills/ai-eng/simplify/` | Code quality simplification |
 | `workflow/ralph-wiggum` | `skills/workflow/ralph-wiggum/` | Iterative full-cycle workflow |
 | `repo-audit` | `skills/repo-audit/` | Four-phase repo health audit and improvement plan |
+| `grill-me` | `skills/grill-me/` | Relentless one-question-at-a-time interview to stress-test a plan or design |
+| `grill-with-docs` | `skills/grill-with-docs/` | Same interview, persisted as a `CONTEXT.md` or ADR-style decision record |
 
 ## Deprecated / Consolidation Candidates
 

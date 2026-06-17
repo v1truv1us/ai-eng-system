@@ -1283,6 +1283,8 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "principle-prove-it-works",
             "principle-never-block-on-the-human",
             "create-goal",
+            "grill-me",
+            "grill-with-docs",
         ],
         description:
             "Core workflow: plan, work, review cycle with research and context engineering",

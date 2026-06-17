@@ -1,6 +1,6 @@
 # Skills Reference
 
-ai-eng-system currently ships 83 skills organized by lifecycle phase, domain, and repository-specific purpose.
+ai-eng-system currently ships 85 skills organized by lifecycle phase, domain, and repository-specific purpose.
 
 ## Namespaced Skills
 
@@ -50,6 +50,8 @@ ai-eng-system currently ships 83 skills organized by lifecycle phase, domain, an
 ## Research and Prompting
 
 - `comprehensive-research` - multi-phase research orchestration
+- `grill-me` - relentless one-question-at-a-time interview to stress-test a plan or design
+- `grill-with-docs` - same interview, persisted as a `CONTEXT.md` or ADR-style decision record
 - `prompt-engineering` - comprehensive prompt engineering for coding agents (structured prompts, few-shot, chain-of-thought, decomposition, agent workflow patterns)
 - `prompt-refinement` - TCRO prompt structuring
 - `incentive-prompting` - research-backed prompting techniques (+45-115% quality)
@@ -88,4 +90,4 @@ These skills are included in default installs (see `.ai-eng/install-manifest.jso
 - Namespaced skills use `namespace/name` directory paths.
 - See `docs/reference/skills-first-map.md` for the complete ownership mapping.
 
-This repository currently ships **85** skills.
+This repository currently ships **87** skills.

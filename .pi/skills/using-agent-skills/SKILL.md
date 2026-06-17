@@ -47,6 +47,10 @@ PLAN (break down the work)
     → planning-and-task-breakdown
   → Researching before planning?
     → comprehensive-research
+  → Stress-testing a plan or design before committing?
+    → grill-me
+  → Grilling a plan and persisting the decisions as a document?
+    → grill-with-docs
 
 BUILD (write the code)
   → Implementing a feature across multiple files?

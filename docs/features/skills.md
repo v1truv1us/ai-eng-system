@@ -8,6 +8,10 @@ Modular capability packs for specialized workflows.
 
 comprehensive-research: Multi-phase research orchestration
 
+grill-me: Relentless one-question-at-a-time interview to stress-test a plan or design
+
+grill-with-docs: Same interview, persisted as a CONTEXT.md or ADR-style decision record
+
 coolify-deploy: Deployment best practices for Coolify
 
 git-worktree: Git worktree management workflows

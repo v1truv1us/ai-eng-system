@@ -3,7 +3,7 @@ import { fileURLToPath } from "node:url";
 
 const packageRoot = dirname(fileURLToPath(import.meta.url));
 
-export const version = "1.7.0";
+export const version = "1.8.0";
 
 export function getToolkitRoot() {
     return packageRoot;
