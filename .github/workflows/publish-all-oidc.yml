@@ -27,7 +27,7 @@ jobs:
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
     permissions:
-      contents: read
+      contents: write
       id-token: write
     environment: production
     steps:
@@ -138,3 +138,11 @@ jobs:
       - name: Restore development manifest
         if: always() && contains(env.PACKAGES_TO_PUBLISH, 'cli')
         run: bun scripts/postpublish-cli.ts
+      - name: Create GitHub Release
+        if: github.event_name == 'push' && github.event.inputs.dry_run != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "v${VERSION}" \
+            --title "v${VERSION}" \
+            --generate-notes
