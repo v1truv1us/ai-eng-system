@@ -104,3 +104,9 @@ packages/*/package.json.dev
 .claude/worktrees/
 
 .claude/packages/
+
+# GTM skills — vendored from LeadMagic/gtm-skills, opt-in only.
+# skills-gtm/ holds the source; skills/gtm is a symlink created by
+# scripts/install-gtm-skills.sh. Neither ships in the default build.
+skills-gtm/
+skills/gtm/

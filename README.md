@@ -121,6 +121,30 @@ Examples:
 
 See `docs/reference/skills.md` for the full skill inventory.
 
+### Optional: GTM skills (opt-in)
+
+This repo vendors [LeadMagic/gtm-skills](https://github.com/LeadMagic/gtm-skills) (205
+B2B go-to-market playbooks across 24 categories: ABM, outbound, prospecting,
+sales-plays, demand-gen, etc.) as an **opt-in** add-on. They are NOT included in
+the default build.
+
+```bash
+# Vendor/refresh from upstream (one-time or on update)
+./scripts/vendor-gtm-skills.sh
+
+# Expose to the build (copies skills-gtm/ → skills/gtm/)
+./scripts/install-gtm-skills.sh
+bun run build   # now emits 332 skills (127 core + 205 GTM)
+
+# Remove
+./scripts/install-gtm-skills.sh remove
+bun run build   # back to 127 core skills
+```
+
+GTM skills keep their domain in `metadata.domain` (e.g. `abm`) and are tagged
+`metadata.category: model-invoked` so they participate in routing when installed.
+See `skills-gtm/_taxonomy.csv` for the full catalog.
+
 ## Alignment Notes
 
 This repository now aligns more closely with the `addyosmani/agent-skills` lifecycle without dropping its existing `ai-eng/*` command namespace, marketplace build pipeline, or specialized agent model.
