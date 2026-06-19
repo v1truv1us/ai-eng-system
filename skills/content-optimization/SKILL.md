@@ -2,6 +2,7 @@
 name: content-optimization
 description: Enhance any content type using research-backed techniques. Optimize AI prompts with step-by-step approval, improve code quality, refine database queries, enhance documentation, optimize commit messages, and improve communication. Wraps incentive-prompting skill with content-type detection.
 metadata:
+  category: model-invoked
   version: 1.0.0
   tags: optimization, prompts, code, queries, documentation, communication
 ---

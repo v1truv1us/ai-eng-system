@@ -1,6 +1,8 @@
 ---
 name: continuous-learning
 description: Instinct-based learning with confidence scoring, AGENTS.md memory updates, and evolution into durable skills. Use when extracting patterns from completed work or mining transcript deltas for reusable preferences.
+metadata:
+  category: model-invoked
 ---
 
 # Continuous Learning

@@ -1,6 +1,8 @@
 ---
 name: dreaming-consolidator
 description: Read the auto-memory graph (~/.claude/projects/*/memory/*.md), find cross-session patterns, and write a digest. The skill never mutates memory — output goes to a fresh file the user reads. The cron-driven version is the daily-brief-sdk dream-digest workflow, which writes to a separate dedicated directory.
+metadata:
+  category: model-invoked
 ---
 
 # Dreaming Consolidator

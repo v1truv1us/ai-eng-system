@@ -1,6 +1,8 @@
 ---
 name: docker
 description: Build, run, and secure Docker containers with current best practices. Use for Dockerfile review, multi-stage builds, Compose orchestration, image hardening, and CI/CD integration.
+metadata:
+  category: user-invoked
 disable-model-invocation: true
 ---
 

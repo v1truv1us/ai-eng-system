@@ -2,6 +2,7 @@
 name: cli-for-agents
 description: "Designs or reviews CLIs so coding agents can run them reliably: non-interactive flags, layered --help with examples, stdin/pipelines, fast actionable errors, idempotency, dry-run, and predictable structure. Use when building a CLI, adding commands, writing --help, or when the user mentions agents, terminals, or automation-friendly CLIs."
 metadata:
+  category: model-invoked
   version: 1.0.0
   tags: cursor-import, cli-for-agent
 ---

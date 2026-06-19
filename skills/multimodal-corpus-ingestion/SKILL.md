@@ -1,6 +1,8 @@
 ---
 name: multimodal-corpus-ingestion
 description: Normalize mixed inputs like code, docs, PDFs, screenshots, diagrams, audio, and transcripts into a structured corpus. Use when the task depends on combining multiple artifact types before analysis or retrieval.
+metadata:
+  category: model-invoked
 ---
 
 # Multimodal Corpus Ingestion

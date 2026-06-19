@@ -1,6 +1,8 @@
 ---
 name: thermo-nuclear-performance-review
 description: Run an extremely strict performance review for runtime efficiency, memory usage, bundle size, database query patterns, and scalability limits. Use for a thermo-nuclear performance review, thermonuclear performance audit, or especially harsh performance review.
+metadata:
+  category: user-invoked
 disable-model-invocation: true
 ---
 

@@ -1,6 +1,8 @@
 ---
 name: cross-repo-refactor
 description: Coordinate a multi-repo refactor by fanning out subagents per repo, gathering changes onto a single feature branch named cook/refactor-<slug>-<short-sha>, and pushing for review. Pairs with the branch-guard PreToolUse hook to make pushes to main physically impossible.
+metadata:
+  category: model-invoked
 ---
 
 # Cross-Repo Refactor

@@ -2,6 +2,7 @@
 name: pr-review-canvas
 description: "Generate an interactive PR review walkthrough as an HTML page. Fetches PR data via gh API, categorizes files into core vs mechanical changes, adds reviewer annotations, and renders diffs with moved-code detection. Use when the user pastes a GitHub PR URL and asks for a review, walkthrough, or summary, or says \\\"review this PR\\\"."
 metadata:
+  category: model-invoked
   version: 1.0.0
   tags: cursor-import, cursor-team-kit
 ---

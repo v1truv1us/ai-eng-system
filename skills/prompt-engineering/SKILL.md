@@ -2,6 +2,7 @@
 name: prompt-engineering
 description: Comprehensive prompt engineering for coding agents covering structured instruction design, few-shot prompting, chain-of-thought, decomposition, agent workflow patterns, and reliability techniques for multi-step pipelines.
 metadata:
+  category: model-invoked
   version: 1.0.0
   tags: prompt-engineering, coding-agents, agentic-workflows, few-shot, chain-of-thought, prompting
 ---

@@ -1,6 +1,8 @@
 ---
 name: planning-and-task-breakdown
 description: Decompose specs into small, verifiable tasks with acceptance criteria and dependency ordering. Use when you have a spec and need implementable units.
+metadata:
+  category: model-invoked
 ---
 
 # Planning and Task Breakdown

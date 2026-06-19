@@ -1,6 +1,8 @@
 ---
 name: shipping-and-launch
 description: Review changes, open PRs, run pre-launch checks, staged rollouts, and rollback. Use when preparing to ship to production or closing out a branch.
+metadata:
+  category: model-invoked
 ---
 
 # Shipping and Launch

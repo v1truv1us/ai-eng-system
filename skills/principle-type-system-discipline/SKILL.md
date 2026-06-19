@@ -2,6 +2,7 @@
 name: principle-type-system-discipline
 description: Apply when designing types, reviewing a function signature, or writing code in any statically-typed language. Make illegal states unrepresentable, brand semantic primitives, parse external data at boundaries, refuse to lie to the compiler, exhaust variants, derive from authoritative schemas.
 metadata:
+  category: model-invoked
   version: 1.0.0
   tags: quality
 ---

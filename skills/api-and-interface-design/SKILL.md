@@ -1,6 +1,8 @@
 ---
 name: api-and-interface-design
 description: Contract-first design, Hyrum's Law, One-Version Rule, error semantics, boundary validation. Use when designing APIs, module boundaries, or public interfaces.
+metadata:
+  category: model-invoked
 ---
 
 # API and Interface Design

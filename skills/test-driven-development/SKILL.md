@@ -1,6 +1,8 @@
 ---
 name: test-driven-development
 description: Red-Green-Refactor workflow. Write tests before implementation, maintain 80%+ coverage. Use when implementing logic, fixing bugs, or changing behavior.
+metadata:
+  category: model-invoked
 ---
 
 # Test-Driven Development

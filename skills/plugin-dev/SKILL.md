@@ -2,6 +2,7 @@
 name: plugin-dev
 description: This skill should be used when creating extensions for Claude Code or OpenCode, including plugins, commands, agents, skills, and custom tools. Covers both platforms with format specifications, best practices, and the ai-eng-system build system.
 metadata:
+  category: model-invoked
   version: 1.0.0
 ---
 

@@ -1,6 +1,8 @@
 ---
 name: source-driven-development
 description: Ground every framework decision in official documentation. Use when you want authoritative, source-cited code for any framework or library.
+metadata:
+  category: model-invoked
 ---
 
 # Source-Driven Development

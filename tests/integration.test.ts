@@ -14,7 +14,6 @@
 import {
     afterAll,
     beforeAll,
-    beforeEach,
     describe,
     expect,
     it,
@@ -78,7 +77,9 @@ describe("AI Engineering System - Integration Tests", () => {
     });
 
     describe("Plugin Structure Validation", () => {
-        beforeEach(async () => {
+        // Build is idempotent; run once for the block instead of per-test
+        // (per-test rebuilds exceeded bun:test's default timeout)
+        beforeAll(async () => {
             execSync("bun run build", { cwd: TEST_ROOT });
         });
 
@@ -153,7 +154,7 @@ describe("AI Engineering System - Integration Tests", () => {
     });
 
     describe("Content Transformation Accuracy", () => {
-        beforeEach(async () => {
+        beforeAll(async () => {
             execSync("bun run build", { cwd: TEST_ROOT });
         });
 
@@ -266,7 +267,7 @@ describe("AI Engineering System - Integration Tests", () => {
     });
 
     describe("Real-world Content Scenarios", () => {
-        beforeEach(async () => {
+        beforeAll(async () => {
             execSync("bun run build", { cwd: TEST_ROOT });
         });
 
@@ -457,7 +458,7 @@ This is test agent ${i}.
     });
 
     describe("Plugin Metadata Accuracy", () => {
-        beforeEach(async () => {
+        beforeAll(async () => {
             execSync("bun run build", { cwd: TEST_ROOT });
         });
 

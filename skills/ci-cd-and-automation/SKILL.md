@@ -1,6 +1,8 @@
 ---
 name: ci-cd-and-automation
 description: Design CI/CD pipelines, quality gates, and iterate on failing PR checks until green. Use when setting up pipelines or fixing CI on a branch.
+metadata:
+  category: model-invoked
 ---
 
 # CI/CD and Automation

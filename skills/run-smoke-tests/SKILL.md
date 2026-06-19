@@ -2,6 +2,7 @@
 name: run-smoke-tests
 description: Run Playwright smoke tests, debug failures, and verify fixes
 metadata:
+  category: model-invoked
   version: 1.0.0
   tags: cursor-import, cursor-team-kit
 ---

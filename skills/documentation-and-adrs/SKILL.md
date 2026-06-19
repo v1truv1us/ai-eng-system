@@ -1,6 +1,8 @@
 ---
 name: documentation-and-adrs
 description: Architecture Decision Records, API docs, inline documentation standards. Use when making architectural decisions, changing APIs, or shipping features. Document the why, not the what.
+metadata:
+  category: model-invoked
 ---
 
 # Documentation and ADRs

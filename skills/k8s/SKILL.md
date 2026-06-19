@@ -1,6 +1,8 @@
 ---
 name: k8s
 description: Deploy, manage, and troubleshoot Kubernetes workloads. Use for manifest review, Helm chart validation, resource tuning, RBAC, and cluster operations.
+metadata:
+  category: user-invoked
 disable-model-invocation: true
 ---
 

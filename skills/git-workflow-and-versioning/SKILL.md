@@ -1,6 +1,8 @@
 ---
 name: git-workflow-and-versioning
 description: Trunk-based development, atomic commits, change sizing (~100 lines), commit-as-save-point pattern. Use when making any code change.
+metadata:
+  category: model-invoked
 ---
 
 # Git Workflow and Versioning

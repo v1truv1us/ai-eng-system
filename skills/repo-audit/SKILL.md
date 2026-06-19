@@ -1,6 +1,8 @@
 ---
 name: repo-audit
 description: "Principal-engineer repository audit and prioritized improvement plan. Four phases - discovery, evidence-based audit, strategy, task plan - with file:line citations and severity ratings. Analysis only, no code changes. Use when asked to \"audit this repo\", \"project review\", \"health check\", \"improvement plan\", or after a model upgrade to re-baseline important projects."
+metadata:
+  category: model-invoked
 ---
 
 # Repo Audit & Improvement Plan

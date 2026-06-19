@@ -2,6 +2,7 @@
 name: create-goal
 description: "Transform a vague idea, request, or prompt into a concrete, actionable goal with clear success criteria, scope boundaries, and measurable outcomes. Use when the user has an intention but needs help defining what \"done\" looks like."
 metadata:
+  category: model-invoked
   version: 1.1.0
   tags: ai-eng-core, goal-setting, planning
 argument-hint: <task or idea>

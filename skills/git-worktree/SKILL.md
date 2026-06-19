@@ -2,6 +2,7 @@
 name: git-worktree
 description: Manage Git worktrees for parallel development. Use when creating isolated workspaces for parallel feature work, running multiple Claude sessions simultaneously, or managing concurrent development tasks.
 metadata:
+  category: model-invoked
   version: 1.0.0
 ---
 

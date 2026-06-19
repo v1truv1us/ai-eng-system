@@ -2,6 +2,7 @@
 name: unslop
 description: Cut AI tells from any writing. Must always apply.
 metadata:
+  category: model-invoked
   version: 1.0.0
   tags: content-optimization
 ---
