@@ -7,9 +7,9 @@
 # Does:
 #   1. Shallow-clone LeadMagic/gtm-skills to a temp dir
 #   2. Replaces skills-gtm/ with the clone's skills/ tree + taxonomy.csv + references/
-#   3. Remaps metadata.category (their domain like 'abm') → metadata.domain,
-#      sets metadata.category: model-invoked so it won't clash with the
-#      repo's user-invoked/model-invoked taxonomy.
+#   3. Remaps their metadata.category (domain like 'abm') → metadata.domain,
+#      adds an `invocation` column to _taxonomy.csv, and applies the policy
+#      via scripts/apply-gtm-invocation.py (150 user-invoked / 55 model-invoked).
 #
 # Usage:
 #   ./scripts/vendor-gtm-skills.sh           # vendor at latest
@@ -44,11 +44,6 @@ cp -R "$TMP/src/skills/." "$DEST/"
 [ -d "$TMP/src/references" ] && cp -R "$TMP/src/references" "$DEST/_references"
 
 echo "→ Remapping metadata.category → metadata.domain…"
-python3 - <<'PY'
-import glob, re, os
-root = os.environ.get('DEST') or '$DEST'
-# fallback if env not set
-PY
 python3 - "$DEST" <<'PY'
 import glob, re, sys
 dest = sys.argv[1]
@@ -67,6 +62,31 @@ for path in glob.glob(f'{dest}/**/SKILL.md', recursive=True):
     changed += 1
 print(f"  remapped {changed} skills")
 PY
+
+echo "→ Writing invocation column to _taxonomy.csv…"
+python3 - "$DEST" <<'PY'
+import csv, sys
+dest = sys.argv[1]
+MODEL_DOMAINS = {'outbound','creative','content-seo','inbound','foundation','customer-success','growth'}
+rows = []
+with open(f'{dest}/_taxonomy.csv') as f:
+    reader = csv.DictReader(f)
+    fields = reader.fieldnames
+    for r in reader:
+        r['invocation'] = 'model' if r['category'] in MODEL_DOMAINS else 'user'
+        rows.append(r)
+if 'invocation' not in fields:
+    idx = fields.index('category') + 1
+    fields = fields[:idx] + ['invocation'] + fields[idx:]
+with open(f'{dest}/_taxonomy.csv', 'w', newline='') as f:
+    w = csv.DictWriter(f, fieldnames=fields, quoting=csv.QUOTE_MINIMAL)
+    w.writeheader(); w.writerows(rows)
+from collections import Counter
+print(f"  invocation: {dict(Counter(r['invocation'] for r in rows))}")
+PY
+
+echo "→ Applying invocation policy to SKILL.md files…"
+python3 "$ROOT/scripts/apply-gtm-invocation.py"
 
 count=$(find "$DEST" -name SKILL.md | wc -l | tr -d ' ')
 echo "✓ Vendored $count GTM skills into $DEST"

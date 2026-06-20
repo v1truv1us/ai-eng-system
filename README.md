@@ -141,9 +141,15 @@ bun run build   # now emits 332 skills (127 core + 205 GTM)
 bun run build   # back to 127 core skills
 ```
 
-GTM skills keep their domain in `metadata.domain` (e.g. `abm`) and are tagged
-`metadata.category: model-invoked` so they participate in routing when installed.
-See `skills-gtm/_taxonomy.csv` for the full catalog.
+GTM skills keep their domain in `metadata.domain` (e.g. `abm`) and are split by
+invocation: **55 broad-capability skills stay model-invoked** (outbound,
+creative, content-seo, inbound, foundation, customer-success, growth — the
+model auto-routes to these from task context), while **150 narrow playbook
+skills are user-invoked** (`disable-model-invocation: true`, excluded from
+routing context — invoke explicitly by name). This cuts GTM's routing token
+cost by ~57%. The split is encoded in `skills-gtm/_taxonomy.csv` (`invocation`
+column) and applied by `scripts/apply-gtm-invocation.py`. Edit the CSV and
+re-run the applier to adjust.
 
 ## Alignment Notes
 
