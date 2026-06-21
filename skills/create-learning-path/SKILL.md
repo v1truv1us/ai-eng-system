@@ -2,9 +2,10 @@
 name: create-learning-path
 description: Build a personalized learning roadmap with milestones and practice checkpoints
 metadata:
-  category: model-invoked
+  category: user-invoked
   version: 1.0.0
   tags: cursor-import, teaching
+disable-model-invocation: true
 ---
 
 ## Pi Context-Aware Execution

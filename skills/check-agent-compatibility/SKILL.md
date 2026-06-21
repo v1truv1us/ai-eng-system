@@ -2,9 +2,10 @@
 name: check-agent-compatibility
 description: "Run the full repository compatibility pass: scanner score, startup path, validation loop, and docs reliability."
 metadata:
-  category: model-invoked
+  category: user-invoked
   version: 1.0.0
   tags: cursor-import, agent-compatibility
+disable-model-invocation: true
 ---
 
 # Check agent compatibility

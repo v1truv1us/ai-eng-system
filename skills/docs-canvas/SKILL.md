@@ -2,9 +2,10 @@
 name: docs-canvas
 description: Render a documentation-style Cursor Canvas that organizes architecture notes, API references, walkthroughs, and how-tos into a navigable layout with sections, tables of contents, and cross-references. Use when the user asks for a docs canvas, documentation overview, architecture walkthrough, API reference page, or wants to render structured documentation as an interactive canvas.
 metadata:
-  category: model-invoked
+  category: user-invoked
   version: 1.0.0
   tags: cursor-import, docs-canvas
+disable-model-invocation: true
 ---
 
 ## Pi Context-Aware Execution

@@ -2,7 +2,8 @@
 name: investigation-loop
 description: Long-running Jira investigation that self-continues past natural stops until a written hypothesis with evidence citations is produced. Pairs with the cooking Stop hook and hard-stops at 10 iterations.
 metadata:
-  category: model-invoked
+  category: user-invoked
+disable-model-invocation: true
 ---
 
 # Investigation Loop

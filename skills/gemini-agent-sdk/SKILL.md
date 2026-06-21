@@ -2,9 +2,10 @@
 name: gemini-agent-sdk
 description: Build Gemini-backed agent workflows and adapters. Use for Google Gemini API/ADK-style runners, Gemini CLI workflow parity, tool calling, structured outputs, or adding a Gemini variant beside Cursor/OpenCode/Claude runners.
 metadata:
-  category: model-invoked
+  category: user-invoked
   version: 1.0.0
   tags: agent-sdk, gemini, google, workflow-runner
+disable-model-invocation: true
 ---
 
 # Gemini Agent SDK / Gemini Workflow Adapter

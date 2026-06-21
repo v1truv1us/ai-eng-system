@@ -2,9 +2,10 @@
 name: research-deep
 description: "Multi-source deep research with confidence-rated synthesis. Use for \"research deeply\", \"deep dive on\", \"comprehensive research\", or /research-deep."
 metadata:
-  category: model-invoked
+  category: user-invoked
   version: 1.0.0
   tags: research, investigation, synthesis
+disable-model-invocation: true
 ---
 
 ## Pi Context-Aware Execution

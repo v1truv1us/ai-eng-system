@@ -2,9 +2,10 @@
 name: repurpose
 description: "Adapt existing content into new formats for different channels. Use for \"repurpose this\", \"turn this into\", \"adapt for\", or /repurpose."
 metadata:
-  category: model-invoked
+  category: user-invoked
   version: 1.0.0
   tags: content, writing, marketing
+disable-model-invocation: true
 ---
 
 ## Pi Context-Aware Execution

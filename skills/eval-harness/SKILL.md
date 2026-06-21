@@ -2,7 +2,8 @@
 name: eval-harness
 description: Agent evaluation framework. Measure agent performance, identify weaknesses, and track improvement over time. Use when assessing agent quality, comparing approaches, or validating changes.
 metadata:
-  category: model-invoked
+  category: user-invoked
+disable-model-invocation: true
 ---
 
 ## Pi Context-Aware Execution

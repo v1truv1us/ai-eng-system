@@ -2,9 +2,10 @@
 name: doc-review
 description: "Structured document review for structure, clarity, and technical accuracy. Use for \"review this doc\", feedback, critique, or /doc-review."
 metadata:
-  category: model-invoked
+  category: user-invoked
   version: 1.0.0
   tags: documentation, review, editing
+disable-model-invocation: true
 ---
 
 ## Pi Context-Aware Execution

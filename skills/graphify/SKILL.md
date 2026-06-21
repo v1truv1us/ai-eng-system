@@ -2,7 +2,8 @@
 name: graphify
 description: Knowledge graph development for LLM applications. Graph storage selection, graph algorithms, extraction from documents/code/websites, entity extraction, Graph RAG, and visualization. Use when building knowledge graphs, graph databases, or LLM graph applications.
 metadata:
-  category: model-invoked
+  category: user-invoked
+disable-model-invocation: true
 ---
 
 # Graphify

@@ -2,9 +2,10 @@
 name: what-did-i-get-done
 description: Summarize authored commits over a user-specified time period into a concise update
 metadata:
-  category: model-invoked
+  category: user-invoked
   version: 1.0.0
   tags: cursor-import, cursor-team-kit
+disable-model-invocation: true
 ---
 
 ## Pi Context-Aware Execution

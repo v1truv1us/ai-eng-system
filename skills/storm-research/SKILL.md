@@ -2,7 +2,8 @@
 name: storm-research
 description: "Stanford STORM multi-perspective research method. Runs four sequential phases (multi-perspective scan, contradiction map, synthesis, peer review) in one thread to produce a PhD-level briefing on any topic. Use for \"storm research X\", \"multi-perspective research\", \"STORM method\", or any topic where a single-prompt answer is too shallow."
 metadata:
-  category: model-invoked
+  category: user-invoked
+disable-model-invocation: true
 ---
 
 # STORM Research

@@ -2,9 +2,10 @@
 name: morning-brief
 description: "Daily briefing synthesizing calendar, tasks, and priorities. Use for \"morning brief\", \"daily briefing\", \"start my day\", or /morning-brief."
 metadata:
-  category: model-invoked
+  category: user-invoked
   version: 1.0.0
   tags: productivity, briefing, planning
+disable-model-invocation: true
 ---
 
 ## Pi Context-Aware Execution

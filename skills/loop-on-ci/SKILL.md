@@ -2,7 +2,8 @@
 name: loop-on-ci
 description: Monitor PR checks and fix failures until green. Uses gh pr checks as the source of truth for PR-attached checks.
 metadata:
-  category: model-invoked
+  category: user-invoked
+disable-model-invocation: true
 ---
 
 # Loop on CI

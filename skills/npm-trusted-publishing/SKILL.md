@@ -2,8 +2,9 @@
 name: npm-trusted-publishing
 description: Publish npm packages via GitHub Actions with OIDC trusted publishing and provenance. Use when setting up automated npm publishes, debugging ENEEDAUTH/E404 errors, configuring provenance attestations, or setting up a new package for publication.
 metadata:
-  category: model-invoked
+  category: user-invoked
   version: 2.0.0
+disable-model-invocation: true
 ---
 
 # npm Trusted Publishing

@@ -2,9 +2,10 @@
 name: cursor-sdk
 description: Guide building apps, scripts, CI pipelines, and automations with the Cursor TypeScript SDK (`@cursor/sdk`). Use when integrating `Agent.create`, `Agent.prompt`, `Agent.resume`, streaming, MCP servers, local vs cloud runtime, errors, or porting REST `/v1/agents` calls to the SDK. Prefer this skill over memory—the SDK surface evolves and references here are the source of truth.
 metadata:
-  category: model-invoked
+  category: user-invoked
   version: 1.0.0
   tags: cursor-import, cursor-sdk
+disable-model-invocation: true
 ---
 
 ## Pi Context-Aware Execution

@@ -2,9 +2,10 @@
 name: agents-sdk-dev
 description: "Unified agent application scaffolding across 5 harnesses: Anthropic, Cursor, OpenAI, OpenCode, and Pi. Interactive project generator with live SDK docs, per-harness code patterns, and built-in verification. Use when someone says \"create an agent app\", \"new SDK project\", \"build with [harness] SDK\", \"scaffold agent\", or wants to verify an existing agent setup."
 metadata:
-  category: model-invoked
+  category: user-invoked
   version: 1.0.0
   tags: agent-sdk, scaffold, anthropic, cursor, openai, opencode, pi, verification
+disable-model-invocation: true
 ---
 
 # Agents SDK Dev

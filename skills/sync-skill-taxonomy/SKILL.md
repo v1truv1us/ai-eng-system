@@ -2,9 +2,10 @@
 name: sync-skill-taxonomy
 description: "Classify every skill in skills/ as user-invoked or model-invoked, ensure disable-model-invocation is set on user-invoked skills, and inject metadata.category on all. Run after adding or changing skills, or when token-cost/routing quality is being reviewed. Use for \"sync skill taxonomy\", \"classify skills\", \"fix disable-model-invocation\", or \"skill token audit\"."
 metadata:
-  category: model-invoked
+  category: user-invoked
   version: 1.0.0
   tags: maintenance, skills, taxonomy
+disable-model-invocation: true
 ---
 
 # Sync skill taxonomy

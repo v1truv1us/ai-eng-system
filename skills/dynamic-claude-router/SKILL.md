@@ -2,9 +2,10 @@
 name: dynamic-claude-router
 description: Conductor/subagent routing for tasks across multiple harnesses. Assesses task complexity and intent, then dispatches to the appropriate subagent model via a harness-specific adapter. Supports Anthropic (Claude), Cursor, OpenCode, Codex (OpenAI), and Pi adapters. Use via /dynamic-task command or direct invocation from other skills.
 metadata:
-  category: model-invoked
+  category: user-invoked
   version: 2.0.0
   tags: routing, conductor, subagent, adapter, anthropic, cursor, opencode, codex, pi
+disable-model-invocation: true
 ---
 
 # Dynamic Router

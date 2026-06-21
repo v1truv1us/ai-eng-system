@@ -2,9 +2,10 @@
 name: run-learning-retrospective
 description: Evaluate learning progress, identify blockers, and adjust the learning plan
 metadata:
-  category: model-invoked
+  category: user-invoked
   version: 1.0.0
   tags: cursor-import, teaching
+disable-model-invocation: true
 ---
 
 ## Pi Context-Aware Execution

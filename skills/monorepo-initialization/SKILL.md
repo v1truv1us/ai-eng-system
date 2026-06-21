@@ -2,9 +2,10 @@
 name: monorepo-initialization
 description: Recursively initialize AGENTS.md in monorepo subdirectories with smart detection. Creates hierarchical agent context files with proper linking to root CLAUDE.md and parent AGENTS.md. Use for setting up multi-package projects, microservices, or any project with important subdirectories that need AI agent guidance.
 metadata:
-  category: model-invoked
+  category: user-invoked
   version: 1.0.0
   tags: monorepo, agents, context-engineering, setup, hierarchy
+disable-model-invocation: true
 ---
 
 # Monorepo Initialization Skill

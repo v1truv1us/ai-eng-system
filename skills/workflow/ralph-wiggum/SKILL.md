@@ -2,9 +2,10 @@
 name: ralph-wiggum
 description: Continuous iteration loop pattern for well-defined tasks with clear completion criteria. Use when getting tests to pass, implementing features with automatic verification, bug fixing with clear success conditions, or running automated development overnight. Provides prompt templates, safety guidelines, and integration patterns for ai-eng-system workflows.
 metadata:
-  category: model-invoked
+  category: user-invoked
   version: 1.0.0
   tags: workflow, iteration, automation, continuous, looping
+disable-model-invocation: true
 ---
 
 # Ralph Wiggum Continuous Iteration

@@ -2,9 +2,10 @@
 name: workflow-from-chats
 description: Extract durable working preferences from recent Cursor chats and convert them into skills, rules, or workflow docs. Use when asked to learn preferences, mine feedback, personalize workflows, or generate team/person-specific agent guidance.
 metadata:
-  category: model-invoked
+  category: user-invoked
   version: 1.0.0
   tags: cursor-import, cursor-team-kit
+disable-model-invocation: true
 ---
 
 ## Pi Context-Aware Execution

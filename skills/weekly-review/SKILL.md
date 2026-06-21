@@ -2,9 +2,10 @@
 name: weekly-review
 description: Produce a weekly synthesis of authored commits with highlights by bugfix, tech debt, and net-new work
 metadata:
-  category: model-invoked
+  category: user-invoked
   version: 1.0.0
   tags: cursor-import, cursor-team-kit
+disable-model-invocation: true
 ---
 
 ## Pi Context-Aware Execution

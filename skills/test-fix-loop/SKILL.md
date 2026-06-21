@@ -2,7 +2,8 @@
 name: test-fix-loop
 description: Self-continuing loop that fixes a deliberately failing test, reruns it, and exits cleanly when green. Smallest cooking-routines skill — pairs with the cooking Stop hook to keep iterating past natural stops.
 metadata:
-  category: model-invoked
+  category: user-invoked
+disable-model-invocation: true
 ---
 
 # Test Fix Loop
