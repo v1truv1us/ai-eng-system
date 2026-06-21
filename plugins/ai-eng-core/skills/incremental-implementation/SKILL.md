@@ -1,6 +1,8 @@
 ---
 name: incremental-implementation
-description: Delivers changes in thin vertical slices. Use when implementing any feature or refactor that touches more than one file or feels too large to land safely in one pass.
+description: Deliver changes in thin vertical slices. Use when implementing a feature or refactor that touches more than one file.
+metadata:
+  category: model-invoked
 ---
 
 # Incremental Implementation

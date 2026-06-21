@@ -1,6 +1,8 @@
 ---
 name: thermo-nuclear-architecture-review
 description: Run an extremely strict architecture and system design review for coupling, boundary violations, dependency direction, layering, and structural decay. Use for a thermo-nuclear architecture review, thermonuclear system design audit, or especially harsh architecture review.
+metadata:
+  category: user-invoked
 disable-model-invocation: true
 ---
 

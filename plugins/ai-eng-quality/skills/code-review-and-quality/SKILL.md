@@ -1,6 +1,8 @@
 ---
 name: code-review-and-quality
 description: Multi-axis code review with optional strict maintainability mode. Use before merging any change—human, agent, or automation output.
+metadata:
+  category: model-invoked
 ---
 
 # Code Review and Quality

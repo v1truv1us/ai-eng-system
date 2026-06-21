@@ -1,6 +1,8 @@
 ---
 name: xcodebuild
 description: Build, test, and archive iOS/macOS apps with xcodebuild and Xcode CLI tools. Use for CI integration, scheme management, simulator control, and build troubleshooting.
+metadata:
+  category: user-invoked
 disable-model-invocation: true
 ---
 

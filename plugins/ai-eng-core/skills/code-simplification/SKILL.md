@@ -1,6 +1,8 @@
 ---
 name: code-simplification
 description: Simplifies code for clarity without changing behavior. Use when code works but is harder to read, maintain, or extend than it should be.
+metadata:
+  category: model-invoked
 ---
 
 # Code Simplification

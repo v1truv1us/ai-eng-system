@@ -1,6 +1,8 @@
 ---
 name: sentry
 description: Set up and operate Sentry for error tracking, performance monitoring, and release health. Use for SDK integration, alert tuning, and incident investigation.
+metadata:
+  category: user-invoked
 disable-model-invocation: true
 ---
 

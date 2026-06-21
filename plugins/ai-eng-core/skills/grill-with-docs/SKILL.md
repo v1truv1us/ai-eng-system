@@ -1,6 +1,9 @@
 ---
 name: grill-with-docs
 description: Extend grill-me by producing or updating a CONTEXT.md or ADR-style decision record while stress-testing a plan. Use when the user wants to be grilled and wants the shared understanding persisted as a living document.
+metadata:
+  category: user-invoked
+disable-model-invocation: true
 ---
 
 # Grill With Docs

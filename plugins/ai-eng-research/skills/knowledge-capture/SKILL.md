@@ -1,7 +1,8 @@
 ---
 name: knowledge-capture
-description: Document solved problems to build cumulative team knowledge. Systematically capture solutions with context, code examples, gotchas, and related links. Use after completing workflows to ensure learnings compound for future team members.
+description: Document solved problems with context, examples, and gotchas so learnings compound for the team. Use after completing a workflow worth remembering.
 metadata:
+  category: model-invoked
   version: 1.0.0
   tags: documentation, knowledge-management, team-learning, problem-solving
 ---

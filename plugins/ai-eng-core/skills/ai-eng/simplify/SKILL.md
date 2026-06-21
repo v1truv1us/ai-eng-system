@@ -1,6 +1,8 @@
 ---
 name: simplify
-description: Review recently changed files for code reuse, quality, and efficiency issues, then fix them. Alias for code-simplification skill with multi-agent review additions.
+description: Review recently changed files for reuse, quality, and efficiency issues, then fix them. Use after completing a change, before declaring done.
+metadata:
+  category: model-invoked
 ---
 
 # Simplify

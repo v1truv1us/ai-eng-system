@@ -1,6 +1,9 @@
 ---
 name: graph-rag
 description: Relationship-aware retrieval using graph traversal, entity anchors, community expansion, and hybrid vector plus graph search. Use when chunk similarity alone misses paths, entities, or subsystem context.
+metadata:
+  category: user-invoked
+disable-model-invocation: true
 ---
 
 # Graph RAG

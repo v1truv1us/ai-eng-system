@@ -1,6 +1,6 @@
 ---
 name: security-and-hardening
-description: OWASP Top 10 prevention, auth patterns, secrets management, dependency auditing, three-tier boundary system. Use when handling user input, auth, data storage, or external integrations.
+description: OWASP Top 10 prevention, auth patterns, secrets management, dependency auditing, boundary validation. Use when handling user input, auth, or external integrations.
 metadata:
   category: model-invoked
 ---

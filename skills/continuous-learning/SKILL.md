@@ -1,6 +1,6 @@
 ---
 name: continuous-learning
-description: Instinct-based learning with confidence scoring, AGENTS.md memory updates, and evolution into durable skills. Use when extracting patterns from completed work or mining transcript deltas for reusable preferences.
+description: Extract reusable patterns from sessions, score confidence, and promote high-confidence instincts into durable skills. Use after completing significant work.
 metadata:
   category: model-invoked
 ---

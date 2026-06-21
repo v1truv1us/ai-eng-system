@@ -1,7 +1,8 @@
 ---
 name: principle-fix-root-causes
-description: Apply when debugging. Trace each symptom to its root cause and fix it there; reproduce first, ask why until you reach it, resist nil-check guards that silence crashes.
+description: Apply when debugging. Trace each symptom to its root cause and fix it there; resist nil-check guards that silence crashes.
 metadata:
+  category: model-invoked
   version: 1.0.0
   tags: ai-eng-core
 ---

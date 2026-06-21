@@ -1,6 +1,8 @@
 ---
 name: monitoring
 description: Design and operate application observability with metrics, logs, traces, and alerts. Use for SLO definition, dashboard design, on-call runbooks, and incident response.
+metadata:
+  category: user-invoked
 disable-model-invocation: true
 ---
 

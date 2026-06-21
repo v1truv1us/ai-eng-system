@@ -1,6 +1,8 @@
 ---
 name: thermo-nuclear-security-review
 description: Run an extremely strict security audit for auth flaws, injection vectors, secrets exposure, broken access control, and boundary validation failures. Use for a thermo-nuclear security review, thermonuclear security audit, or especially harsh security review.
+metadata:
+  category: user-invoked
 disable-model-invocation: true
 ---
 

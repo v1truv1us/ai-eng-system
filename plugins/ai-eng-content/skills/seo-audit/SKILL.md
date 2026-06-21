@@ -1,6 +1,9 @@
 ---
 name: seo-audit
 description: Full SEO and performance audit for any website. Use when asked to check SEO, run a lighthouse scan, audit performance, check accessibility, or validate structured data.
+metadata:
+  category: user-invoked
+disable-model-invocation: true
 ---
 
 # SEO Audit Skill

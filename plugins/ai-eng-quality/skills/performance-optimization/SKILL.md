@@ -1,6 +1,8 @@
 ---
 name: performance-optimization
-description: Measure-first approach for Core Web Vitals targets, profiling workflows, bundle analysis, and anti-pattern detection. Use when performance requirements exist or you suspect regressions.
+description: Measure-first approach for Core Web Vitals, profiling workflows, bundle analysis, and anti-pattern detection. Use when performance matters or regressions are suspected.
+metadata:
+  category: model-invoked
 ---
 
 # Performance Optimization

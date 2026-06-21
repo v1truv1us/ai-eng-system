@@ -3,6 +3,7 @@ name: teach
 description: Teach the user a topic through a stateful learning workspace — mission-driven lessons, retrieval practice, cited resources, and durable learning records. Use when the user says teach me, /teach, wants interactive lessons, or is learning something over multiple sessions.
 compatibility: Works across Claude Code, Cursor, OpenCode, Pi, and Gemini CLI. Uses file-backed workspace state; web search tools required for resource gathering.
 metadata:
+  category: user-invoked
   version: 1.0.0
   tags: teaching, learning, productivity, education
   attribution: Adapted from mattpocock/skills teach skill (MIT)

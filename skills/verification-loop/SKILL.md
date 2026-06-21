@@ -1,6 +1,6 @@
 ---
 name: verification-loop
-description: Continuous verification after every change, plus claim-based proof when evidence is required. Use when implementing, fixing bugs, refactoring, or when asked to verify a specific claim.
+description: Continuous verification after each change, plus claim-based proof when evidence is required. Use when implementing, fixing bugs, or refactoring.
 metadata:
   category: model-invoked
 ---

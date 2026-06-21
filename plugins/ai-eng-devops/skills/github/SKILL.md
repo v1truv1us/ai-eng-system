@@ -1,6 +1,8 @@
 ---
 name: github
 description: Operate GitHub repositories, workflows, and PRs efficiently. Use for Actions optimization, PR hygiene, repo maintenance, and team collaboration patterns.
+metadata:
+  category: user-invoked
 disable-model-invocation: true
 ---
 

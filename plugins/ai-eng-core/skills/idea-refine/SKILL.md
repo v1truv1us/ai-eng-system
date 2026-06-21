@@ -1,6 +1,9 @@
 ---
 name: idea-refine
 description: Structured divergent/convergent thinking to turn vague ideas into concrete proposals. Use when you have a rough concept that needs exploration before committing to a spec.
+metadata:
+  category: user-invoked
+disable-model-invocation: true
 ---
 
 # Idea Refine

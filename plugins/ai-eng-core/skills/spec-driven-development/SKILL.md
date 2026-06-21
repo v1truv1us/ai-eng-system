@@ -1,6 +1,8 @@
 ---
 name: spec-driven-development
-description: Write a structured specification before writing code. Use when starting a new project, feature, or significant change. Defines objectives, commands, structure, code style, testing strategy, and boundaries.
+description: "Write a structured specification before code: objectives, structure, code style, testing strategy, boundaries. Use when starting a new project or feature."
+metadata:
+  category: model-invoked
 ---
 
 # Spec-Driven Development

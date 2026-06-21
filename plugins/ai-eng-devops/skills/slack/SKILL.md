@@ -1,6 +1,8 @@
 ---
 name: slack
 description: Build secure, reliable Slack integrations and bots. Use for webhook design, Block Kit UI, Socket Mode, and API best practices.
+metadata:
+  category: user-invoked
 disable-model-invocation: true
 ---
 

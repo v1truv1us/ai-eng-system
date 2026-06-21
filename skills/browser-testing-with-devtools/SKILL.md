@@ -1,6 +1,6 @@
 ---
 name: browser-testing-with-devtools
-description: Chrome DevTools for live runtime data - DOM inspection, console logs, network traces, performance profiling. Use when building or debugging anything that runs in a browser.
+description: "Chrome DevTools for live runtime data: DOM inspection, console logs, network traces, performance profiling. Use when building or debugging anything in a browser."
 metadata:
   category: model-invoked
 ---

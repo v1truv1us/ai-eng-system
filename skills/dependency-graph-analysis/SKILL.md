@@ -1,6 +1,6 @@
 ---
 name: dependency-graph-analysis
-description: Build and reason about import graphs, call graphs, schema graphs, and service dependency graphs. Use when tracing paths, finding god nodes, surfacing cycles, or answering architecture questions about how parts connect.
+description: Build and reason about import, call, schema, or service dependency graphs. Use when tracing paths, finding god nodes, or surfacing cycles.
 metadata:
   category: model-invoked
 ---

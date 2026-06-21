@@ -2,6 +2,7 @@
 name: text-cleanup
 description: Comprehensive patterns and techniques for removing AI-generated verbosity and slop
 metadata:
+  category: model-invoked
   version: 1.0.0
   tags: text-cleanup, slop-removal, pattern-matching, content-optimization
 ---

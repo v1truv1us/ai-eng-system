@@ -1,6 +1,6 @@
 ---
 name: context-engineering
-description: Feed agents the right information at the right time. Use when starting a session, switching tasks, or when output quality drops due to missing or stale context.
+description: Feed agents the right information at the right time. Use when starting a session, switching tasks, or when output quality drops from missing context.
 metadata:
   category: model-invoked
 ---

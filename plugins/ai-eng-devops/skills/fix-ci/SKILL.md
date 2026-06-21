@@ -1,6 +1,8 @@
 ---
 name: fix-ci
 description: Find failing PR checks, inspect logs or external check links, and apply focused fixes
+metadata:
+  category: model-invoked
 ---
 
 # Fix CI

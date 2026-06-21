@@ -1,6 +1,6 @@
 ---
 name: principle-exhaust-the-design-space
-description: Apply when facing a novel UI interaction or architectural decision with no precedent in the codebase. Build 2-3 competing prototypes and compare side by side before committing.
+description: Apply when facing a novel UI interaction or architectural decision with no precedent. Build 2-3 competing prototypes and compare before committing.
 metadata:
   category: model-invoked
   version: 1.0.0

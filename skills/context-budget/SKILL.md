@@ -1,6 +1,6 @@
 ---
 name: context-budget
-description: Context window management for AI agents. Optimize context usage, prevent overflow, and ensure critical information is always available. Use when working with large codebases or long sessions.
+description: Manage context window usage for AI agents. Use when working with large codebases, long sessions, or when context is filling up.
 metadata:
   category: model-invoked
 ---

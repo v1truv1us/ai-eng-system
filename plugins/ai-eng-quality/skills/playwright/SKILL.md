@@ -1,6 +1,8 @@
 ---
 name: playwright
 description: Write, run, and maintain reliable end-to-end tests with Playwright. Use for test generation, CI integration, trace debugging, and cross-browser validation.
+metadata:
+  category: user-invoked
 disable-model-invocation: true
 ---
 

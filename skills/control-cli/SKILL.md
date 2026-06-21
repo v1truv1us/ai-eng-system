@@ -1,6 +1,6 @@
 ---
 name: control-cli
-description: Build or adapt a local harness to drive, inspect, and profile an interactive CLI or TUI without external services. Use for CLI UX checks, startup regressions, memory leaks, hangs, prompt flows, or terminal demos.
+description: Build a local harness to drive, inspect, and profile an interactive CLI or TUI. Use for CLI UX checks, startup regressions, hangs, or prompt-flow verification.
 metadata:
   category: model-invoked
   version: 1.0.0

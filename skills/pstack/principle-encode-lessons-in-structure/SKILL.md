@@ -1,6 +1,6 @@
 ---
 name: principle-encode-lessons-in-structure
-description: Apply when you catch yourself writing the same instruction a second time, or notice a recurring correction. Encode the rule as a lint, metadata flag, runtime check, or script instead of more text.
+description: Apply when you write the same instruction twice or notice a recurring correction. Encode the rule as a lint, metadata flag, or runtime check, not more text.
 metadata:
   category: model-invoked
   version: 1.0.0
