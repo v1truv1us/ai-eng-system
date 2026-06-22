@@ -20,12 +20,14 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 DEST="$ROOT/skills-gtm"
 REF="main"
-[ "${1:-}" = "--ref" ] && REF="${2:?--ref requires a value}"
+if [ "${1:-}" = "--ref" ] && [ -n "${2:-}" ]; then
+    REF="$2"
+fi
 
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
-echo "→ Cloning LeadMagic/gtm-skills@$REF…"
+echo "→ Cloning LeadMagic/gtm-skills@$REF..."
 git clone --depth 1 --branch "$REF" https://github.com/LeadMagic/gtm-skills.git "$TMP/src" 2>&1 | tail -1
 
 if [ ! -d "$TMP/src/skills" ]; then
@@ -33,7 +35,7 @@ if [ ! -d "$TMP/src/skills" ]; then
   exit 1
 fi
 
-echo "→ Replacing $DEST…"
+echo "→ Replacing $DEST..."
 rm -rf "$DEST"
 mkdir -p "$DEST"
 # skills/ → skills-gtm/<category>/<skill>
@@ -43,7 +45,7 @@ cp -R "$TMP/src/skills/." "$DEST/"
 [ -f "$TMP/src/taxonomy.csv" ] && cp "$TMP/src/taxonomy.csv" "$DEST/_taxonomy.csv"
 [ -d "$TMP/src/references" ] && cp -R "$TMP/src/references" "$DEST/_references"
 
-echo "→ Remapping metadata.category → metadata.domain…"
+echo "→ Remapping metadata.category → metadata.domain..."
 python3 - "$DEST" <<'PY'
 import glob, re, sys
 dest = sys.argv[1]
@@ -63,17 +65,18 @@ for path in glob.glob(f'{dest}/**/SKILL.md', recursive=True):
 print(f"  remapped {changed} skills")
 PY
 
-echo "→ Writing invocation column to _taxonomy.csv…"
+echo "→ Writing invocation column to _taxonomy.csv..."
 python3 - "$DEST" <<'PY'
 import csv, sys
 dest = sys.argv[1]
-MODEL_DOMAINS = {'outbound','creative','content-seo','inbound','foundation','customer-success','growth'}
+# All GTM skills are user-invoked: specialized B2B playbooks invoked deliberately,
+# not mid-task routing candidates. Edit invocation per-skill to opt back into routing.
 rows = []
 with open(f'{dest}/_taxonomy.csv') as f:
     reader = csv.DictReader(f)
     fields = reader.fieldnames
     for r in reader:
-        r['invocation'] = 'model' if r['category'] in MODEL_DOMAINS else 'user'
+        r['invocation'] = 'user'
         rows.append(r)
 if 'invocation' not in fields:
     idx = fields.index('category') + 1
@@ -85,7 +88,40 @@ from collections import Counter
 print(f"  invocation: {dict(Counter(r['invocation'] for r in rows))}")
 PY
 
-echo "→ Applying invocation policy to SKILL.md files…"
+echo "→ Applying curated description rewrites (scripts/gtm-description-rewrites.tsv)..."
+python3 - "$DEST" "$ROOT" <<'PY'
+import glob, re, os, sys
+dest, root = sys.argv[1], sys.argv[2]
+rewrites_path = os.path.join(root, 'scripts', 'gtm-description-rewrites.tsv')
+if not os.path.exists(rewrites_path):
+    print("  (no rewrites file; skipping)")
+else:
+    rewrites = {}
+    for line in open(rewrites_path).read().strip().split('\n'):
+        slug, desc = line.split('|||', 1)
+        rewrites[slug] = desc
+    changed = 0
+    for path in glob.glob(f'{dest}/**/SKILL.md', recursive=True):
+        slug = os.path.basename(os.path.dirname(path))
+        if slug not in rewrites: continue
+        desc_val = rewrites[slug].replace('"', "'")
+        if re.search(r'[:#\[\]{}&*!|>%@`]', desc_val):
+            desc_val = f'"{desc_val}"'
+        content = open(path).read()
+        m = re.match(r'^(---\n)(.*?)(\n---)', content, re.DOTALL)
+        fm = m.group(2)
+        new_fm = re.sub(
+            r'^description:\s*(?:[>|]-?\s*\n(?:[ \t]+[^\n]*\n)*|[^\n]+)\n?',
+            f'description: {desc_val}\n',
+            fm, count=1, flags=re.MULTILINE
+        )
+        if new_fm != fm:
+            open(path, 'w').write('---\n' + new_fm + '\n---' + content[m.end():])
+            changed += 1
+    print(f"  rewrote {changed} descriptions")
+PY
+
+echo "→ Applying invocation policy to SKILL.md files..."
 python3 "$ROOT/scripts/apply-gtm-invocation.py"
 
 count=$(find "$DEST" -name SKILL.md | wc -l | tr -d ' ')
