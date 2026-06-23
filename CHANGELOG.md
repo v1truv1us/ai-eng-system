@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.9.0] - 2026-06-22
+
+### Added
+- **GTM skills (opt-in)**: vendor [LeadMagic/gtm-skills](https://github.com/LeadMagic/gtm-skills) (205 B2B go-to-market playbooks across 24 categories) via `scripts/vendor-gtm-skills.sh`; expose to the build with `scripts/install-gtm-skills.sh`. Gitignored by default — installed only on demand.
+- **storm-research skill**: Stanford STORM multi-perspective research method (4 sequential phases: scan, contradiction map, synthesis, peer review).
+- **sync-skill-taxonomy skill**: classifies every skill as user-invoked vs model-invoked, ensures `disable-model-invocation` consistency, injects `metadata.category`.
+- **Skill taxonomy**: every skill now carries `metadata.category` (`user-invoked` or `model-invoked`) and `disable-model-invocation: true` on user-invoked skills.
+
+### Changed
+- **Skill catalog consolidated**: canonical `skills/` is now the single source. Promoted 48 unique skills out of the drifted `.pi/skills/` and `.agents/skills/` trees (both now gitignored as derived outputs). Removed 9 stale pstack duplicates and the superseded `continuous-learning-v2`.
+- **Routing token cost cut ~73%**: startup routing dropped from ~10,875 to ~2,894 tokens. 269 of 332 skills are now user-invoked (excluded from model routing); only 63 broad-capability core skills remain model-invoked. All 205 GTM skills are user-invoked.
+- **Tightened descriptions**: 42 core model-invoked descriptions rewritten to 80–150 chars; all 205 GTM descriptions tightened (81.8k → 24.7k chars, 70% smaller). Stripped trigger-phrase lists, framework attributions, and feature enumerations.
+- **Plugin build artifacts untracked**: `plugins/ai-eng-*/{skills,agents,commands,hooks,docs,templates,plugin.json,.cursor-plugin}` are now correctly gitignored (were committed historically). `bun run build` regenerates them.
+
+### Fixed
+- `scripts/vendor-gtm-skills.sh`: `set -u` crash from non-ASCII ellipsis adjacent to variable refs; `--ref` arg handling.
+- `tests/integration.test.ts`: per-test `beforeEach(build)` → `beforeAll(build)` to reduce build overhead (strict improvement; remaining test timeouts are pre-existing).
+
 ## [1.6.3] - 2026-05-23
 
 ### Changed

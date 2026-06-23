@@ -1,6 +1,6 @@
 {
   "name": "@ai-eng-system/toolkit",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "description": "Packaged Claude, OpenCode, Cursor, Gemini, Pi, and marketplace integration assets for ai-eng-system",
   "type": "module",
   "main": "./index.js",
