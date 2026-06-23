@@ -1,0 +1,10 @@
+{
+  "name": "ai-eng-research",
+  "version": "1.9.0",
+  "description": "Deep research, knowledge capture, and documentation tools",
+  "author": {
+    "name": "v1truv1us"
+  },
+  "license": "MIT",
+  "commands": []
+}

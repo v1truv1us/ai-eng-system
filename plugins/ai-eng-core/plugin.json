@@ -1,0 +1,22 @@
+{
+  "name": "ai-eng-core",
+  "version": "1.9.0",
+  "description": "Core workflow: plan, work, review cycle with research and context engineering",
+  "author": {
+    "name": "v1truv1us"
+  },
+  "license": "MIT",
+  "commands": [
+    "./commands/plan.md",
+    "./commands/work.md",
+    "./commands/review.md",
+    "./commands/spec.md",
+    "./commands/research.md",
+    "./commands/simplify.md",
+    "./commands/context.md",
+    "./commands/init.md",
+    "./commands/cook-status.md",
+    "./commands/dynamic-task.md",
+    "./commands/orchestrate.md"
+  ]
+}

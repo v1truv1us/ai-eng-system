@@ -1,0 +1,30 @@
+{
+  "name": "ai-eng-learning",
+  "displayName": "AI Engineering Learning",
+  "version": "1.9.0",
+  "description": "Learning workflows for knowledge mapping, decisions, quality gates, and maintenance reviews",
+  "author": {
+    "name": "v1truv1us",
+    "url": "https://github.com/v1truv1us/ai-eng-system"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/v1truv1us/ai-eng-system",
+  "repository": "https://github.com/v1truv1us/ai-eng-system",
+  "keywords": [
+    "learning",
+    "knowledge",
+    "decisions",
+    "quality",
+    "maintenance"
+  ],
+  "category": "development",
+  "tags": [
+    "learning-workflows",
+    "knowledge-management",
+    "quality-gates",
+    "maintenance"
+  ],
+  "skills": "./skills/",
+  "agents": "./agents/",
+  "commands": "./commands/"
+}

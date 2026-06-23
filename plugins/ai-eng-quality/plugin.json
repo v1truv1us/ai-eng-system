@@ -1,0 +1,14 @@
+{
+  "name": "ai-eng-quality",
+  "version": "1.9.0",
+  "description": "Testing, security scanning, code review, and quality assurance",
+  "author": {
+    "name": "v1truv1us"
+  },
+  "license": "MIT",
+  "commands": [
+    "./commands/deep-review.md",
+    "./commands/repo-audit.md",
+    "./commands/verify.md"
+  ]
+}

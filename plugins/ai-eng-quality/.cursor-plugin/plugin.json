@@ -1,0 +1,30 @@
+{
+  "name": "ai-eng-quality",
+  "displayName": "AI Engineering Quality",
+  "version": "1.9.0",
+  "description": "Testing, security scanning, code review, and quality assurance",
+  "author": {
+    "name": "v1truv1us",
+    "url": "https://github.com/v1truv1us/ai-eng-system"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/v1truv1us/ai-eng-system",
+  "repository": "https://github.com/v1truv1us/ai-eng-system",
+  "keywords": [
+    "testing",
+    "security",
+    "code-review",
+    "quality",
+    "performance"
+  ],
+  "category": "development",
+  "tags": [
+    "quality-assurance",
+    "security",
+    "code-review",
+    "testing"
+  ],
+  "skills": "./skills/",
+  "agents": "./agents/",
+  "commands": "./commands/"
+}

@@ -1,0 +1,43 @@
+{
+  "skill_name": "incremental-implementation",
+  "evals": [
+    {
+      "id": 1,
+      "name": "thin-vertical-slice",
+      "prompt": "Implement a user profile page with avatar upload, bio editing, and social links. The backend uses GraphQL.",
+      "expected_output": "A sequence of vertical slices where each slice delivers end-to-end value (e.g., read-only profile first, then edit, then avatar).",
+      "assertions": [
+        "The plan uses vertical slices, not horizontal layers",
+        "Each slice delivers user-visible value",
+        "The first slice is deployable independently",
+        "Dependencies between slices are explicit",
+        "No slice requires more than 2 days of work"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "database-migration-safety",
+      "prompt": "Add a required 'tenant_id' column to the 'users' table which has 10M rows and is queried by 50+ features.",
+      "expected_output": "A migration plan that preserves uptime, handles backfill, and updates queries incrementally.",
+      "assertions": [
+        "The plan includes a zero-downtime migration strategy",
+        "Backfill of existing rows is addressed",
+        "Queries are updated before the column is enforced",
+        "A rollback plan exists for each step",
+        "The plan uses feature flags or gradual rollout"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "resists-big-bang",
+      "prompt": "Rewrite the entire frontend from React to Vue.",
+      "expected_output": "The skill pushes back on big-bang rewrites and proposes an incremental strangler fig approach.",
+      "assertions": [
+        "The output questions the need for a full rewrite",
+        "The output proposes incremental migration",
+        "The output identifies risks of big-bang approaches",
+        "The output suggests a pilot or proof-of-concept first"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "name": "ai-eng-plugin-dev",
+  "displayName": "AI Engineering Plugin Dev",
+  "version": "1.9.0",
+  "description": "Meta-tooling for creating plugins, agents, commands, and skills",
+  "author": {
+    "name": "v1truv1us",
+    "url": "https://github.com/v1truv1us/ai-eng-system"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/v1truv1us/ai-eng-system",
+  "repository": "https://github.com/v1truv1us/ai-eng-system",
+  "keywords": [
+    "plugin",
+    "agent",
+    "meta-tooling",
+    "code-generation"
+  ],
+  "category": "development",
+  "tags": [
+    "plugin-development",
+    "meta-tooling",
+    "code-generation"
+  ],
+  "skills": "./skills/",
+  "agents": "./agents/",
+  "commands": "./commands/"
+}

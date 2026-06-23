@@ -1,0 +1,13 @@
+{
+  "name": "ai-eng-devops",
+  "version": "1.9.0",
+  "description": "Infrastructure, deployment, and DevOps automation",
+  "author": {
+    "name": "v1truv1us"
+  },
+  "license": "MIT",
+  "commands": [
+    "./commands/deploy.md",
+    "./commands/ship.md"
+  ]
+}
