@@ -1,7 +1,8 @@
 ---
 name: repo-audit-review
-description: Principal-engineer repository audit — discovery, evidence-based findings,
-  improvement strategy, and prioritized task plan. Analysis only; writes report to reports/.
+description: Principal-engineer repository audit — discovery, evidence-based
+  findings, improvement strategy, and prioritized task plan. Analysis only;
+  writes report to reports/.
 mode: subagent
 category: quality-testing
 tags:
@@ -9,16 +10,18 @@ tags:
   - project-review
   - health-check
 tools:
-  read: true
-  grep: true
-  glob: true
-  list: true
-  bash: true
-  write: true
-  edit: true
+  - Read
+  - Grep
+  - Glob
+  - List
+  - Bash
+  - Write
+  - Edit
 model: inherit
 readonly: false
 ---
+
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
 
 # Repo audit review
 

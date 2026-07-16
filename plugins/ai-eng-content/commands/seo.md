@@ -4,19 +4,13 @@ description: Run SEO audit on a page or site
 agent: review
 ---
 
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
+
 # SEO Command
 
 Run an SEO audit on: $ARGUMENTS
 
  systematically analyze SEO factors. Check technical SEO, content quality, performance metrics, and accessibility to identify optimization opportunities.
-
-## Why This Matters
-
-SEO issues prevent content from being discovered by search engines. Poor performance metrics negatively impact rankings and user experience. Missing technical SEO elements block indexing. This SEO audit task is critical for ensuring content reaches its intended audience.
-
-## The Challenge
-
-The identify all SEO issues without overwhelming the user with low-priority recommendations. The challenge is distinguishing between critical blocking issues and nice-to-have optimizations. Success means audit prioritizes high-impact changes and provides actionable guidance that significantly improves search visibility.
 
 ## Checklist
 
@@ -48,5 +42,3 @@ Prioritized recommendations with expected impact:
 - 🔴 Critical (blocking indexing/ranking)
 - 🟡 High Priority (significant opportunity)
 - 🟢 Nice to Have (optimization)
-
-After completing SEO audit, rate your confidence in findings accuracy and prioritization (0.0-1.0). Identify any uncertainties about SEO best practices, areas where technical constraints may limit implementation, or metrics that may be misleading. Note any recommendations that require additional information to be actionable.

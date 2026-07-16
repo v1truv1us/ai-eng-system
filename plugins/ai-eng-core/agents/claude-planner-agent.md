@@ -1,8 +1,8 @@
 ---
 name: claude-planner-agent
 description: >
-  High-reasoning agent for architecture, planning, system design, and
-  complex multi-step problems. Uses claude-opus-4-8.
+  High-reasoning agent for architecture, planning, system design, and complex
+  multi-step problems. Uses claude-opus-4-8.
 mode: subagent
 model: claude-opus-4-8
 tools:
@@ -10,6 +10,8 @@ tools:
   - Grep
   - Glob
 ---
+
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
 
 # PlannerAgent
 

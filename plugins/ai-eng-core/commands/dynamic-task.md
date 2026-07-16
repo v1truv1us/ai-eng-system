@@ -11,6 +11,8 @@ arguments:
     required: true
 ---
 
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
+
 # /dynamic-task
 
 Route a task to the optimal Anthropic model via the dynamic-claude-router conductor.

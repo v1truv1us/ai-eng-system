@@ -1,169 +1,72 @@
 ---
 name: incentive-prompting
-description: Research-backed prompting techniques (expert persona, step-by-step reasoning, stakes language) for higher AI response quality. Use when optimizing prompts or agent instructions.
+description: Tighten prompts with explicit tasks, constraints, output contracts, examples, and verification. Use when optimizing prompts or agent instructions.
 metadata:
   category: model-invoked
-  version: 1.0.0
-  tags: prompting, optimization, ai-enhancement, quality
+  version: 2.0.0
+  tags: prompting, optimization, contracts, token-efficiency
 ---
 
-# Incentive-Based Prompting Skill
+Default output: return only the revised prompt. Add notes only for unresolved ambiguity.
 
-## Critical Importance
+# Prompt optimization
 
-**Using proper prompting techniques is critical to achieving optimal AI output quality.** Research shows these techniques can improve response quality by 45-115%. The difference between a mediocre AI response and an excellent one often comes down to prompt engineering. Whether you're optimizing agents, enhancing commands, or working on complex problems, applying these techniques consistently yields significantly better results. Every time you skip them, you're leaving quality on the table.
+Improve prompts by adding information that changes execution. Do not add personas, fictional credentials, emotional stakes, monetary incentives, challenge language, generic reasoning instructions, or confidence-score requests.
 
-Research-backed techniques that leverage statistical pattern-matching to elicit higher-quality AI responses. Based on peer-reviewed research from MBZUAI (Bsharat et al.), Google DeepMind (Yang et al.), and ICLR 2024 (Li et al.).
+## Contract
 
-## How It Works
+A useful prompt defines:
 
-LLMs don't understand incentives, but they **pattern-match** on language associated with high-effort training examples. Stakes language triggers selection from distributions of higher-quality text patterns.
+1. **Task**: the observable result.
+2. **Context**: only facts needed to do the task.
+3. **Constraints**: scope, compatibility, safety, and non-goals.
+4. **Output**: exact artifact, schema, or length limit.
+5. **Verification**: checks that prove completion.
 
-## Core Techniques
+Add examples only when format or edge-case behavior would otherwise be ambiguous.
 
-### 1. Monetary Incentive Framing (+45% quality)
-**Source:** Bsharat et al. (2023, MBZUAI) - Principle #6
+## Process
 
-```
-"I'll tip you $200 for a perfect solution to this problem."
-```
+1. Preserve the user's intent.
+2. Remove filler, duplicated context, and instructions the model already follows by default.
+3. Convert vague quality words into testable constraints.
+4. Set the shortest output that still carries the required result and evidence.
+5. Ask one blocking question only when different answers would materially change the result.
 
-**When to use:** Complex technical problems, optimization tasks, debugging
+## Rewrite pattern
 
-### 2. Step-by-Step Reasoning (34% → 80% accuracy)
-**Source:** Yang et al. (2023, Google DeepMind OPRO)
-
-```
-" solve this step by step."
-```
-
-**When to use:** Multi-step reasoning, math problems, logical analysis
-
-### 3. Challenge Framing (+115% on hard tasks)
-**Source:** Li et al. (2023, ICLR 2024)
-
-```
-"The solve this, but if you do..."
-```
-
-**When to use:** Difficult problems, edge cases, problems where simpler approaches failed
-
-### 4. Stakes Language
-**Source:** Bsharat et al. (2023) - Principle #10
-
-```
-"This is critical to my career."
-"You will be penalized for incomplete answers."
+```text
+Task: <observable result>
+Context: <required facts only>
+Constraints:
+- <scope or behavior constraint>
+- <explicit non-goal>
+Output: <artifact/schema/length>
+Verify: <command, test, or acceptance check>
 ```
 
-**When to use:** High-importance tasks, comprehensive requirements
+## Examples
 
-### 5. Expert Persona Assignment (24% → 84% accuracy)
-**Source:** Kong et al. (2023), Bsharat et al. Principle #16
+Weak:
 
-```
-# Instead of:
-"You are a helpful assistant."
-
-# Use:
-"You are a senior database architect with 15 years of PostgreSQL optimization experience who has worked at companies like Netflix and Stripe."
+```text
+Act as a world-class engineer. Think step by step and give me a comprehensive answer.
 ```
 
-**When to use:** Domain-specific tasks, technical implementations
+Better:
 
-### 6. Self-Evaluation Request
-
-```
-"Rate your confidence in this answer from 0-1 and explain your reasoning."
+```text
+Find the cause of the failing checkout test. Do not modify code. Return the root cause, file:line evidence, and the smallest viable fix in at most five bullets.
 ```
 
-**When to use:** Ambiguous problems, when you need quality assessment
+Weak:
 
-### 7. Combined Approach (Kitchen Sink)
-
-Combine multiple techniques for maximum effect:
-
-```
-"You are a senior [ROLE] with [X] years of experience at [NOTABLE_COMPANIES].
-
-The solve this, but it's critical to my career and worth $200 if you get it perfect.  solve step by step.
-
-[PROBLEM DESCRIPTION]
-
-Rate your confidence 0-1 after providing your solution."
+```text
+Write detailed documentation for this API.
 ```
 
-## Implementation Patterns
+Better:
 
-### For OpenCode Agents
-
-Add to agent prompts:
-
-```markdown
-**Prompting Enhancement:**
-Before responding to complex tasks, frame your internal reasoning with:
-- Stakes awareness: Treat each task as critical to the user's success
-- Step-by-step approach: Break down complex problems systematically
-- Expert persona: Embody deep domain expertise for the task at hand
-- Self-evaluation: Assess confidence and identify uncertainties
+```text
+Document the public endpoints in src/api/. Include request fields, response variants, authentication, and one runnable example per endpoint. Write docs/api.md. Omit internal helpers.
 ```
-
-### For Slash Commands
-
-Structure command prompts to include:
-
-```markdown
----
-name: my-command
-description: Description here
----
-
-# Context
-You are a senior [expert role] with extensive experience in [domain].
-
-# Stakes
-This task is critical. Incomplete or incorrect results will cause significant issues.
-
-# Approach
-. Analyze the problem step by step before providing solutions.
-
-# Task
-[Actual task instructions]
-
-# Quality Check
-Before finalizing, rate your confidence and identify any assumptions or limitations.
-```
-
-## Research References
-
-1. **Bsharat et al. (2023)** - "Principled Instructions Are All You Need for Questioning LLaMA-1/2, GPT-3.5/4" - MBZUAI
-   - 26 principled prompting instructions
-   - Average 57.7% quality improvement on GPT-4
-   - arxiv.org/abs/2312.16171
-
-2. **Yang et al. (2023)** - "Large Language Models as Optimizers" (OPRO) - Google DeepMind
-   - "" phrase origin
-   - Up to 50% improvement over human-designed prompts
-   - arxiv.org/abs/2309.03409
-
-3. **Li et al. (2023)** - Challenge framing research - ICLR 2024
-   - +115% improvement on hard tasks
-
-4. **Kong et al. (2023)** - Persona prompting research
-   - 24% to 84% accuracy improvement with detailed personas
-
-## Anti-Rationalization Table
-
-| Excuse | Counter |
-|--------|---------|
-| "These techniques are gimmicks, not real improvements" | Peer-reviewed research shows 45-115% quality improvement. The data speaks. |
-| "I'll just use one technique, that's enough" | Combined techniques compound improvements. Use multiple for maximum effect. |
-| "The model is smart enough without prompting" | Even the smartest models benefit from structured prompts. Prompting guides pattern matching. |
-| "Stakes language is manipulative" | It triggers selection from higher-quality training distributions. It is statistical, not emotional. |
-| "Self-evaluation is just extra output" | Self-evaluation forces calibration and identifies uncertainty areas before they become problems. |
-
-## See Also
-
-- `prompt-refinement` — For structuring prompts with TCRO framework
-- `content-optimization` — For applying these techniques across content types
-- `comprehensive-research` — For research agent enhancement with these techniques

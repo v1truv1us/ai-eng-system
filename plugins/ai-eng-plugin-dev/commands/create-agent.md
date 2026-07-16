@@ -5,19 +5,13 @@ agent: agent-creator
 subtask: true
 ---
 
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
+
 # Create Agent Command
 
 Create a new OpenCode agent using AI assistance.
 
  design agent systematically, ensuring clear triggering logic, proper expertise definition, and smooth integration with existing system.
-
-## Why This Matters
-
-Agents are used repeatedly across thousands of interactions. Poorly designed agents with unclear triggering or weak expertise waste tokens, produce inconsistent results, and frustrate users. This agent design task is critical for creating tools that will reliably serve the system for months.
-
-## The Challenge
-
-The balance specificity with flexibility in agent design. The challenge is defining triggering conditions specific enough to invoke at right times, while making expertise broad enough to handle variations. Success means agent activates when relevant, provides expert guidance, and doesn't interfere with other workflows.
 
 ## Process
 1. **Understand Requirements**: What should the agent do?
@@ -56,5 +50,3 @@ Agent will be saved to:
 ```
 
 The agent-creator will handle platform-specific formatting and ensure the agent follows best practices for triggering, expertise, and integration.
-
-After creating the agent, rate your confidence in its design quality (0.0-1.0). Identify any assumptions about triggering scenarios, potential overlap with existing agents, or areas where expertise may be insufficient. Note any integration challenges or platform-specific concerns.

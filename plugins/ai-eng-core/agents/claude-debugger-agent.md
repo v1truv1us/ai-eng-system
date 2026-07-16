@@ -1,8 +1,8 @@
 ---
 name: claude-debugger-agent
 description: >
-  Agent for systematic debugging, error tracing, and root-cause analysis.
-  Uses claude-sonnet-4-6.
+  Agent for systematic debugging, error tracing, and root-cause analysis. Uses
+  claude-sonnet-4-6.
 mode: subagent
 model: claude-sonnet-4-6
 tools:
@@ -11,6 +11,8 @@ tools:
   - Glob
   - Bash
 ---
+
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
 
 # DebuggerAgent
 

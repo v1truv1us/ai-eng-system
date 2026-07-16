@@ -7,37 +7,12 @@ metadata:
 disable-model-invocation: true
 ---
 
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
+
 # Plugin Development for Claude Code & OpenCode
-
-## Critical Importance
-
-**Creating high-quality plugins is critical to your development workflow's long-term success.** Plugins are used repeatedly by yourself and others. Design flaws, poor documentation, or broken functionality compound over time and across users. A well-designed plugin becomes a trusted tool used daily; a poorly designed plugin becomes abandoned technical debt. Invest time in architecture, testing, and documentation—the returns multiply across all future uses.
 
 ## Systematic Approach
 
-** approach plugin development systematically.** Plugins require careful planning: understand the problem, design the API, implement incrementally, test thoroughly, and document comprehensively. Don't rush to code—clarify requirements, define interfaces, and consider edge cases first. Build iteratively, validate frequently, and refactor continuously. Every design decision impacts maintainability and extensibility.
-
-## The Challenge
-
-**The create a plugin that balances specificity with flexibility perfectly, but if you can:**
-
-- Your plugin will be a joy to use and extend
-- Others will build on top of your work
-- The plugin will remain useful as needs evolve
-- You'll establish patterns for future plugin development
-
-The challenge is designing plugins that solve specific problems while staying flexible enough for future use cases. Can you create focused, opinionated tools that don't paint yourself into corners?
-
-## Plugin Confidence Assessment
-
-After completing or reviewing plugin development, rate your confidence from **0.0 to 1.0**:
-
-- **0.8-1.0**: Plugin well-architected, fully tested, thoroughly documented, follows platform conventions
-- **0.5-0.8**: Plugin functional but missing some tests or documentation, some technical debt
-- **0.2-0.5**: Plugin works but design unclear, minimal testing, poor documentation
-- **0.0-0.2**: Plugin incomplete or broken, unclear purpose, significant rework needed
-
-Identify uncertainty areas: Is the plugin's purpose clear? Are there edge cases unhandled? Will the plugin work as requirements change? What's the maintenance burden?
 
 ## Overview
 

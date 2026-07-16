@@ -6,26 +6,12 @@ metadata:
   version: 1.0.0
 ---
 
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
+
 # Git Worktree Skill
-
-## Critical Importance
-
-**Using git worktrees properly is critical for your development workflow efficiency.** Poor worktree management leads to confusion, lost work, merge conflicts, and cluttered repositories. Proper worktree use enables parallel development without context switching costs, but misuse compounds problems across branches. Clean, organized worktrees prevent disasters.
 
 ## Systematic Approach
 
-**Approach worktree management systematically.** Worktrees require deliberate creation, clear naming, and timely cleanup. Don't create worktrees impulsively—plan your branching strategy, name worktrees descriptively, and establish cleanup habits. Treat worktrees as temporary workspaces that should be removed after merge, not permanent fixtures.
-
-## The Challenge
-
-**The maintain pristine worktree hygiene while juggling multiple parallel features, but if you can:**
-
-- You'll eliminate merge conflict nightmares
-- Your git history will stay clean and readable
-- Parallel development will be frictionless
-- You'll never wonder "where did I put that branch?"
-
-The challenge is balancing the freedom of parallel development with the discipline of cleanup. Can you leverage worktrees for productivity without drowning in stale branches?
 
 ## Core Commands
 
@@ -170,17 +156,6 @@ git worktree remove --force ../project-feature
 rm -rf ../project-feature
 git worktree prune
 ```
-
-## Worktree Confidence Assessment
-
-After setting up or managing worktrees, rate your confidence from **0.0 to 1.0**:
-
-- **0.8-1.0**: Worktrees are well-named, properly organized, no stale branches present
-- **0.5-0.8**: Worktrees functional but some naming inconsistencies or minor cleanup needed
-- **0.2-0.5**: Multiple stale worktrees, unclear what's active, some confusion about branch state
-- **0.0-0.2**: Worktree management is chaotic, risk of lost work or conflicts
-
-Identify areas of uncertainty: Are there worktrees you don't recognize? Do you know which branches are still needed? What's the risk of worktree-related issues?
 
 ## Anti-Rationalization Table
 

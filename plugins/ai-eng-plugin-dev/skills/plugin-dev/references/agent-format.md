@@ -58,12 +58,19 @@ Agent system prompt here...
 
 ## OpenCode Output
 
-Build.ts transforms canonical to OpenCode format (YAML frontmatter):
+Build.ts transforms canonical to OpenCode format (YAML frontmatter). The `name`, `model`, and `temperature` fields are stripped because OpenCode derives the agent name from the file path and does not support the `model` or `temperature` fields:
 
 ```markdown
-| description | mode |
-|---|---|
-| Use this agent when user asks to "specific trigger phrases" or describes agent functionality. Examples: <example>...</example> | subagent |
+---
+description: Use this agent when user asks to "specific trigger phrases" or describes agent functionality. Examples: <example>...</example>
+mode: subagent
+tools:
+  read: true
+  write: true
+  bash: true
+  grep: true
+  glob: true
+---
 
 # System Prompt
 
@@ -256,8 +263,7 @@ The `build.ts` script performs automatic transformations to ensure compatibility
 - **OpenCode only**: Removes `name` and `category` fields from frontmatter
 - **Permission cleaning**: Filters to valid OpenCode permission keys (edit, bash, webfetch, doom_loop, external_directory)
 
-### Validation
-The build script validates OpenCode output:
-- Checks for hex color format (`^#[0-9a-fA-F]{6}$`)
-- Ensures required fields are present (description, mode)
-- Validates nested directory structure (ai-eng/<category>/<agent>.md)
+### Tool Format Conversion
+- **Canonical → Claude Code**: Converts object tools to PascalCase array (e.g., `tools: { read: true }` → `tools: ["Read"]`)
+- **Canonical → OpenCode**: Preserves object tools (e.g., `tools: { read: true }`)
+- **Validation**: The build script validates that canonical `content/agents/` files use object syntax for `tools`. It also validates that generated Claude agents have array tools and generated OpenCode agents have object tools.

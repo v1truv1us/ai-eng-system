@@ -8,6 +8,8 @@ metadata:
 disable-model-invocation: true
 ---
 
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
+
 # Gemini Agent SDK / Gemini Workflow Adapter
 
 Use this skill when implementing a Gemini-backed runner for a workflow that also exists for Cursor, OpenCode, Claude, or OpenAI. This repo currently packages Gemini CLI skills/commands, so a Gemini workflow adapter should be added deliberately and kept compatible with the shared workflow contract.

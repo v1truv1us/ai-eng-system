@@ -19,6 +19,8 @@ outputs:
     description: Specification saved to specs/[feature]/spec.md
 ---
 
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
+
 # Spec Command
 
 Create a comprehensive feature specification: $ARGUMENTS
