@@ -23,61 +23,6 @@ const packageRoot = path.dirname(__dirname);
 const NAMESPACE_PREFIX = "ai-eng";
 
 /**
- * Clean a namespaced directory before reinstallation.
- * Only removes ai-eng namespace, preserving other user content.
- */
-function cleanNamespacedDirectory(
-    baseDir: string,
-    subdir: string,
-    namespace: string,
-    silent = false,
-): void {
-    const dir = path.join(baseDir, subdir, namespace);
-    if (fs.existsSync(dir)) {
-        fs.rmSync(dir, { recursive: true, force: true });
-        if (!silent) {
-            console.log(`  🧹 Cleaned existing ${subdir}/${namespace}/`);
-        }
-    }
-}
-
-/**
- * Clean ai-eng-system skills by reading skill names from dist.
- * Only removes skills that are part of ai-eng-system, preserving user skills.
- */
-function cleanAiEngSkills(
-    targetOpenCodeDir: string,
-    distOpenCodeDir: string,
-    silent = false,
-): void {
-    const targetSkillDir = path.join(targetOpenCodeDir, "skills");
-    const distSkillDir = path.join(distOpenCodeDir, "skills");
-
-    if (!fs.existsSync(distSkillDir)) return;
-
-    // Get list of ai-eng-system skill names from dist
-    const aiEngSkillNames = fs
-        .readdirSync(distSkillDir, { withFileTypes: true })
-        .filter((entry) => entry.isDirectory())
-        .map((entry) => entry.name);
-
-    if (aiEngSkillNames.length === 0) return;
-
-    let cleanedCount = 0;
-    for (const skillName of aiEngSkillNames) {
-        const skillPath = path.join(targetSkillDir, skillName);
-        if (fs.existsSync(skillPath)) {
-            fs.rmSync(skillPath, { recursive: true, force: true });
-            cleanedCount++;
-        }
-    }
-
-    if (!silent && cleanedCount > 0) {
-        console.log(`  🧹 Cleaned ${cleanedCount} existing ai-eng skills`);
-    }
-}
-
-/**
  * Check if ai-eng-system plugin is referenced in opencode.jsonc
  */
 function isPluginReferenced(configPath: string): boolean {
@@ -315,8 +260,23 @@ async function installClaudeHooks(
 }
 
 /**
- * Install AI Engineering System files
+ * Install AI Engineering System files.
+ *
+ * dist/.opencode is built with BOTH singular (agent/command/skill/tool, read
+ * by opencode 1.18) and plural (agents/commands/skills/tools, read by >=1.19)
+ * surfaces, all with flat agent names. We mirror both through to the target
+ * and purge stale namespaced content from older installs first.
  */
+function countFilesRecursive(dir: string): number {
+    let n = 0;
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        const p = path.join(dir, entry.name);
+        if (entry.isDirectory()) n += countFilesRecursive(p);
+        else if (entry.isFile()) n++;
+    }
+    return n;
+}
+
 async function install(
     targetDir: string,
     claudeRoot: string,
@@ -326,11 +286,8 @@ async function install(
         console.log(`🔧 Installing AI Engineering System to ${targetDir}`);
     }
 
-    const distDir = path.join(packageRoot, "dist");
-    const distOpenCodeDir = path.join(distDir, ".opencode");
-    const targetOpenCodeDir = targetDir;
+    const distOpenCodeDir = path.join(packageRoot, "dist", ".opencode");
 
-    // Verify dist directory exists
     if (!fs.existsSync(distOpenCodeDir)) {
         if (!silent) {
             console.error(
@@ -340,94 +297,38 @@ async function install(
         process.exit(1);
     }
 
-    // Clean existing ai-eng commands before copying
-    cleanNamespacedDirectory(
-        targetOpenCodeDir,
-        "commands",
-        NAMESPACE_PREFIX,
-        silent,
-    );
-
-    // Copy commands (namespaced under ai-eng/)
-    const commandsSrc = path.join(
-        distOpenCodeDir,
-        "commands",
-        NAMESPACE_PREFIX,
-    );
-    if (fs.existsSync(commandsSrc)) {
-        const commandsDest = path.join(
-            targetOpenCodeDir,
-            "commands",
-            NAMESPACE_PREFIX,
-        );
-        copyRecursive(commandsSrc, commandsDest);
-
-        const commandCount = fs
-            .readdirSync(commandsSrc)
-            .filter((f) => f.endsWith(".md")).length;
-        if (!silent)
-            console.log(
-                `  ✓ commands/${NAMESPACE_PREFIX}/ (${commandCount} commands)`,
-            );
-    }
-
-    // Clean existing ai-eng agents before copying
-    cleanNamespacedDirectory(
-        targetOpenCodeDir,
-        "agents",
-        NAMESPACE_PREFIX,
-        silent,
-    );
-
-    // Copy agents (namespaced under ai-eng/)
-    const agentsSrc = path.join(distOpenCodeDir, "agents", NAMESPACE_PREFIX);
-    if (fs.existsSync(agentsSrc)) {
-        const agentsDest = path.join(
-            targetOpenCodeDir,
-            "agents",
-            NAMESPACE_PREFIX,
-        );
-        copyRecursive(agentsSrc, agentsDest);
-
-        let agentCount = 0;
-        const agentEntries = fs.readdirSync(agentsSrc);
-        for (const entry of agentEntries) {
-            const fullPath = path.join(agentsSrc, entry);
-            if (fs.statSync(fullPath).isDirectory()) {
-                agentCount++;
-            }
+    // Purge stale namespaced content from older installs:
+    //  - agents used to be nested under <surface>/ai-eng/<category>/
+    //  - commands live under <surface>/ai-eng/ (rebuilt each install)
+    for (const sub of ["agent", "agents", "command", "commands"]) {
+        const stale = path.join(targetDir, sub, NAMESPACE_PREFIX);
+        if (fs.existsSync(stale)) {
+            fs.rmSync(stale, { recursive: true, force: true });
+            if (!silent)
+                console.log(`  🧹 Cleaned stale ${sub}/${NAMESPACE_PREFIX}/`);
         }
-        if (!silent)
-            console.log(
-                `  ✓ agents/${NAMESPACE_PREFIX}/ (${agentCount} agents)`,
-            );
     }
 
-    // Clean existing ai-eng skills before copying
-    cleanAiEngSkills(targetOpenCodeDir, distDir, silent);
-
-    // Copy skills (to skills/, matching OpenCode docs)
-    const distSkillDir = path.join(distOpenCodeDir, "skills");
-    if (fs.existsSync(distSkillDir)) {
-        const skillDest = path.join(targetOpenCodeDir, "skills");
-        copyRecursive(distSkillDir, skillDest);
-
-        const skillDirs = fs.readdirSync(distSkillDir);
-        const skillCount = skillDirs.length;
-        if (!silent) console.log(`  ✓ skills/ (${skillCount} skills)`);
-    }
-
-    // Copy tools (e.g. prompt-optimize) to tools/
-    const distToolsDir = path.join(distOpenCodeDir, "tools");
-    if (fs.existsSync(distToolsDir)) {
-        const toolsDest = path.join(targetOpenCodeDir, "tools");
-        copyRecursive(distToolsDir, toolsDest);
-
-        const toolCount = fs
-            .readdirSync(distToolsDir)
-            .filter((f) => f.endsWith(".ts") || f.endsWith(".js")).length;
-        if (!silent && toolCount > 0)
-            console.log(`  ✓ tools/ (${toolCount} tools)`);
+    // Copy each surface (singular + plural) straight through from the build.
+    // Only log the singular variant to avoid duplicate output.
+    const surfaces: Array<{ dir: string; label: string; log: boolean }> = [
+        { dir: "command", label: "commands", log: true },
+        { dir: "commands", label: "commands", log: false },
+        { dir: "agent", label: "agents", log: true },
+        { dir: "agents", label: "agents", log: false },
+        { dir: "skill", label: "skills", log: true },
+        { dir: "skills", label: "skills", log: false },
+        { dir: "tool", label: "tools", log: true },
+        { dir: "tools", label: "tools", log: false },
+    ];
+    for (const { dir, label, log } of surfaces) {
+        const src = path.join(distOpenCodeDir, dir);
+        if (!fs.existsSync(src)) continue;
+        copyRecursive(src, path.join(targetDir, dir));
+        if (log && !silent) {
+            const n = countFilesRecursive(src);
+            console.log(`  ✓ ${dir}/ (${n} ${label})`);
+        }
     }
 
     // Install Claude Code hooks (global ~/.claude/ or project root)

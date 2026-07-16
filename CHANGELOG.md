@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.11.2] - 2026-07-16
+
+### Fixed
+- **OpenCode agent discovery (the real fix):** OpenCode 1.18 reads **singular** dirs (`agent/`, `command/`, `skill/`, `tool/`), not plural — the v1.11.0 plural change broke discovery on 1.18. The build now writes **both** singular (1.18) and plural (≥1.19), with **flat** agent names (`agent/code-reviewer.md`), so `@code-reviewer` resolves on every version.
+- **Installer cleans stale nested installs:** older installs wrote agents nested under `agent/ai-eng/<category>/` (so `code-reviewer` was only discoverable as `ai-eng/quality-testing/code-reviewer`). The installer now purges that stale namespace and writes flat agents to both singular + plural target dirs. Re-run the installer to repair an existing global install.
+
 ## [1.11.1] - 2026-07-16
 
 ### Fixed

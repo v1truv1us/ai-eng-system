@@ -9,40 +9,6 @@ var __filename2 = fileURLToPath(import.meta.url);
 var __dirname2 = path.dirname(__filename2);
 var packageRoot = path.dirname(__dirname2);
 var NAMESPACE_PREFIX = "ai-eng";
-function cleanNamespacedDirectory(baseDir, subdir, namespace, silent = false) {
-    const dir = path.join(baseDir, subdir, namespace);
-    if (fs.existsSync(dir)) {
-        fs.rmSync(dir, { recursive: true, force: true });
-        if (!silent) {
-            console.log(
-                `  \uD83E\uDDF9 Cleaned existing ${subdir}/${namespace}/`,
-            );
-        }
-    }
-}
-function cleanAiEngSkills(targetOpenCodeDir, distOpenCodeDir, silent = false) {
-    const targetSkillDir = path.join(targetOpenCodeDir, "skills");
-    const distSkillDir = path.join(distOpenCodeDir, "skills");
-    if (!fs.existsSync(distSkillDir)) return;
-    const aiEngSkillNames = fs
-        .readdirSync(distSkillDir, { withFileTypes: true })
-        .filter((entry) => entry.isDirectory())
-        .map((entry) => entry.name);
-    if (aiEngSkillNames.length === 0) return;
-    let cleanedCount = 0;
-    for (const skillName of aiEngSkillNames) {
-        const skillPath = path.join(targetSkillDir, skillName);
-        if (fs.existsSync(skillPath)) {
-            fs.rmSync(skillPath, { recursive: true, force: true });
-            cleanedCount++;
-        }
-    }
-    if (!silent && cleanedCount > 0) {
-        console.log(
-            `  \uD83E\uDDF9 Cleaned ${cleanedCount} existing ai-eng skills`,
-        );
-    }
-}
 function isClaudeCodeProject(targetDir) {
     if (fs.existsSync(path.join(targetDir, ".claude"))) {
         return true;
@@ -176,15 +142,22 @@ async function installClaudeHooks(targetDir, silent = false) {
         );
     }
 }
+function countFilesRecursive(dir) {
+    let n = 0;
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        const p = path.join(dir, entry.name);
+        if (entry.isDirectory()) n += countFilesRecursive(p);
+        else if (entry.isFile()) n++;
+    }
+    return n;
+}
 async function install(targetDir, claudeRoot, silent = false) {
     if (!silent) {
         console.log(
             `\uD83D\uDD27 Installing AI Engineering System to ${targetDir}`,
         );
     }
-    const distDir = path.join(packageRoot, "dist");
-    const distOpenCodeDir = path.join(distDir, ".opencode");
-    const targetOpenCodeDir = targetDir;
+    const distOpenCodeDir = path.join(packageRoot, "dist", ".opencode");
     if (!fs.existsSync(distOpenCodeDir)) {
         if (!silent) {
             console.error(
@@ -193,77 +166,34 @@ async function install(targetDir, claudeRoot, silent = false) {
         }
         process.exit(1);
     }
-    cleanNamespacedDirectory(
-        targetOpenCodeDir,
-        "commands",
-        NAMESPACE_PREFIX,
-        silent,
-    );
-    const commandsSrc = path.join(
-        distOpenCodeDir,
-        "commands",
-        NAMESPACE_PREFIX,
-    );
-    if (fs.existsSync(commandsSrc)) {
-        const commandsDest = path.join(
-            targetOpenCodeDir,
-            "commands",
-            NAMESPACE_PREFIX,
-        );
-        copyRecursive(commandsSrc, commandsDest);
-        const commandCount = fs
-            .readdirSync(commandsSrc)
-            .filter((f) => f.endsWith(".md")).length;
-        if (!silent)
-            console.log(
-                `  ✓ commands/${NAMESPACE_PREFIX}/ (${commandCount} commands)`,
-            );
-    }
-    cleanNamespacedDirectory(
-        targetOpenCodeDir,
-        "agents",
-        NAMESPACE_PREFIX,
-        silent,
-    );
-    const agentsSrc = path.join(distOpenCodeDir, "agents", NAMESPACE_PREFIX);
-    if (fs.existsSync(agentsSrc)) {
-        const agentsDest = path.join(
-            targetOpenCodeDir,
-            "agents",
-            NAMESPACE_PREFIX,
-        );
-        copyRecursive(agentsSrc, agentsDest);
-        let agentCount = 0;
-        const agentEntries = fs.readdirSync(agentsSrc);
-        for (const entry of agentEntries) {
-            const fullPath = path.join(agentsSrc, entry);
-            if (fs.statSync(fullPath).isDirectory()) {
-                agentCount++;
-            }
+    for (const sub of ["agent", "agents", "command", "commands"]) {
+        const stale = path.join(targetDir, sub, NAMESPACE_PREFIX);
+        if (fs.existsSync(stale)) {
+            fs.rmSync(stale, { recursive: true, force: true });
+            if (!silent)
+                console.log(
+                    `  \uD83E\uDDF9 Cleaned stale ${sub}/${NAMESPACE_PREFIX}/`,
+                );
         }
-        if (!silent)
-            console.log(
-                `  ✓ agents/${NAMESPACE_PREFIX}/ (${agentCount} agents)`,
-            );
     }
-    cleanAiEngSkills(targetOpenCodeDir, distDir, silent);
-    const distSkillDir = path.join(distOpenCodeDir, "skills");
-    if (fs.existsSync(distSkillDir)) {
-        const skillDest = path.join(targetOpenCodeDir, "skills");
-        copyRecursive(distSkillDir, skillDest);
-        const skillDirs = fs.readdirSync(distSkillDir);
-        const skillCount = skillDirs.length;
-        if (!silent) console.log(`  ✓ skills/ (${skillCount} skills)`);
-    }
-    const distToolsDir = path.join(distOpenCodeDir, "tools");
-    if (fs.existsSync(distToolsDir)) {
-        const toolsDest = path.join(targetOpenCodeDir, "tools");
-        copyRecursive(distToolsDir, toolsDest);
-        const toolCount = fs
-            .readdirSync(distToolsDir)
-            .filter((f) => f.endsWith(".ts") || f.endsWith(".js")).length;
-        if (!silent && toolCount > 0)
-            console.log(`  ✓ tools/ (${toolCount} tools)`);
+    const surfaces = [
+        { dir: "command", label: "commands", log: true },
+        { dir: "commands", label: "commands", log: false },
+        { dir: "agent", label: "agents", log: true },
+        { dir: "agents", label: "agents", log: false },
+        { dir: "skill", label: "skills", log: true },
+        { dir: "skills", label: "skills", log: false },
+        { dir: "tool", label: "tools", log: true },
+        { dir: "tools", label: "tools", log: false },
+    ];
+    for (const { dir, label, log } of surfaces) {
+        const src = path.join(distOpenCodeDir, dir);
+        if (!fs.existsSync(src)) continue;
+        copyRecursive(src, path.join(targetDir, dir));
+        if (log && !silent) {
+            const n = countFilesRecursive(src);
+            console.log(`  ✓ ${dir}/ (${n} ${label})`);
+        }
     }
     await installClaudeHooks(claudeRoot, silent);
     if (!silent) {

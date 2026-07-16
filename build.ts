@@ -449,9 +449,9 @@ function transformAgentMarkdownForClaude(
 }
 
 async function validateOpenCodeOutput(opencodeRoot: string): Promise<void> {
-    const cmdRoot = join(opencodeRoot, "commands", NAMESPACE_PREFIX);
-    const agentRoot = join(opencodeRoot, "agents");
-    const skillRoot = join(opencodeRoot, "skills");
+    const cmdRoot = join(opencodeRoot, "command", NAMESPACE_PREFIX);
+    const agentRoot = join(opencodeRoot, "agent");
+    const skillRoot = join(opencodeRoot, "skill");
 
     const commandFiles = await getMarkdownFiles(cmdRoot);
     const agentFiles = await getMarkdownFiles(agentRoot);
@@ -590,21 +590,26 @@ async function buildOpenCode(): Promise<void> {
         ? [DIST_OPENCODE_DIR]
         : [DIST_OPENCODE_DIR, ROOT_OPENCODE_DIR];
     for (const targetDir of targetDirs) {
-        // Clean target directories before building to remove stale files
-        const parentCommandsDir = join(targetDir, "commands");
-        const commandsDir = join(targetDir, "commands", NAMESPACE_PREFIX);
-        const agentsDir = join(targetDir, "agents");
-        const skillsDir = join(targetDir, "skills");
+        // OpenCode 1.18 reads SINGULAR dirs (agent/command/skill/tool); newer
+        // versions read plural. We write singular (primary) and mirror to
+        // plural below so both work.
+        const commandsDir = join(targetDir, "command", NAMESPACE_PREFIX);
+        const agentsDir = join(targetDir, "agent");
+        const skillsDir = join(targetDir, "skill");
 
-        // Clean parent command directory completely to prevent duplicates
-        if (existsSync(parentCommandsDir)) {
-            await rm(parentCommandsDir, { recursive: true, force: true });
-        }
-        if (existsSync(agentsDir)) {
-            await rm(agentsDir, { recursive: true, force: true });
-        }
-        if (existsSync(skillsDir)) {
-            await rm(skillsDir, { recursive: true, force: true });
+        // Clean both singular and plural dirs before building to remove stale files
+        for (const sub of [
+            "command",
+            "commands",
+            "agent",
+            "agents",
+            "skill",
+            "skills",
+            "tool",
+            "tools",
+        ]) {
+            const d = join(targetDir, sub);
+            if (existsSync(d)) await rm(d, { recursive: true, force: true });
         }
 
         await mkdir(commandsDir, { recursive: true });
@@ -616,7 +621,7 @@ async function buildOpenCode(): Promise<void> {
             CLI_SRC,
             "opencode-tool-prompt-optimize.ts",
         );
-        const opencodeToolDir = join(targetDir, "tools");
+        const opencodeToolDir = join(targetDir, "tool");
         if (existsSync(opencodeToolSrc)) {
             await mkdir(opencodeToolDir, { recursive: true });
             await copyFile(
@@ -647,7 +652,7 @@ async function buildOpenCode(): Promise<void> {
             );
         }
 
-        // Skills: Copy to .opencode/skill/ (singular) while preserving namespaces.
+        // Skills: Copy to .opencode/skill/ while preserving namespaces.
         // This keeps paths like ai-eng/simplify intact in generated outputs.
         await copySkillsPreservePath(SKILLS_DIR, skillsDir);
 
@@ -658,6 +663,19 @@ async function buildOpenCode(): Promise<void> {
                 opencodeConfigSrc,
                 join(targetDir, "opencode.jsonc"),
             );
+        }
+
+        // Mirror singular -> plural for opencode >=1.19 (which reads plural).
+        for (const [singular, plural] of [
+            ["command", "commands"],
+            ["agent", "agents"],
+            ["skill", "skills"],
+            ["tool", "tools"],
+        ]) {
+            const s = join(targetDir, singular);
+            if (existsSync(s)) {
+                await copyDirRecursive(s, join(targetDir, plural));
+            }
         }
     }
 
@@ -2190,7 +2208,7 @@ async function validateAgents(): Promise<void> {
         ? [DIST_OPENCODE_DIR]
         : [DIST_OPENCODE_DIR, ROOT_OPENCODE_DIR];
     for (const opencodeRoot of openCodeDirs) {
-        const agentDir = join(opencodeRoot, "agents");
+        const agentDir = join(opencodeRoot, "agent");
         if (!existsSync(agentDir)) continue;
 
         const agentFiles = await getMarkdownFiles(agentDir);
