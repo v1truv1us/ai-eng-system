@@ -473,14 +473,14 @@ Missing description field.
             expect(existsSync(opencodeDir)).toBe(true);
 
             // Check commands
-            const commandsDir = join(opencodeDir, "command", "ai-eng");
+            const commandsDir = join(opencodeDir, "commands", "ai-eng");
             expect(existsSync(commandsDir)).toBe(true);
 
             const testCommandPath = join(commandsDir, "test-command.md");
             expect(existsSync(testCommandPath)).toBe(true);
 
             // Check agents
-            const agentsDir = join(opencodeDir, "agent", "ai-eng");
+            const agentsDir = join(opencodeDir, "agents", "ai-eng");
             expect(existsSync(agentsDir)).toBe(true);
 
             const testAgentPath = join(
@@ -569,7 +569,7 @@ Missing description field.
             await runBuild();
 
             // Check OpenCode skill directory (singular)
-            const opencodeSkillDir = join(DIST_DIR, ".opencode", "skill");
+            const opencodeSkillDir = join(DIST_DIR, ".opencode", "skills");
             expect(existsSync(opencodeSkillDir)).toBe(true);
 
             // Check flattened skill
@@ -711,7 +711,7 @@ description: Mismatch test
             const opencodeCommandPath = join(
                 DIST_DIR,
                 ".opencode",
-                "command",
+                "commands",
                 "ai-eng",
                 "test-command.md",
             );
@@ -737,7 +737,7 @@ description: Mismatch test
             const opencodeAgentPath = join(
                 DIST_DIR,
                 ".opencode",
-                "agent",
+                "agents",
                 "ai-eng",
                 "quality-testing",
                 "test-agent.md",

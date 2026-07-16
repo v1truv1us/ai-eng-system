@@ -5,10 +5,10 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const __filename2 = fileURLToPath(import.meta.url);
-const __dirname2 = path.dirname(__filename2);
-const packageRoot = path.dirname(__dirname2);
-const NAMESPACE_PREFIX = "ai-eng";
+var __filename2 = fileURLToPath(import.meta.url);
+var __dirname2 = path.dirname(__filename2);
+var packageRoot = path.dirname(__dirname2);
+var NAMESPACE_PREFIX = "ai-eng";
 function cleanNamespacedDirectory(baseDir, subdir, namespace, silent = false) {
     const dir = path.join(baseDir, subdir, namespace);
     if (fs.existsSync(dir)) {
@@ -21,8 +21,8 @@ function cleanNamespacedDirectory(baseDir, subdir, namespace, silent = false) {
     }
 }
 function cleanAiEngSkills(targetOpenCodeDir, distOpenCodeDir, silent = false) {
-    const targetSkillDir = path.join(targetOpenCodeDir, "skill");
-    const distSkillDir = path.join(distOpenCodeDir, "skill");
+    const targetSkillDir = path.join(targetOpenCodeDir, "skills");
+    const distSkillDir = path.join(distOpenCodeDir, "skills");
     if (!fs.existsSync(distSkillDir)) return;
     const aiEngSkillNames = fs
         .readdirSync(distSkillDir, { withFileTypes: true })
@@ -42,39 +42,6 @@ function cleanAiEngSkills(targetOpenCodeDir, distOpenCodeDir, silent = false) {
             `  \uD83E\uDDF9 Cleaned ${cleanedCount} existing ai-eng skills`,
         );
     }
-}
-function isPluginReferenced(configPath) {
-    try {
-        const configContent = fs.readFileSync(configPath, "utf-8");
-        const config = JSON.parse(configContent);
-        if (Array.isArray(config.plugin)) {
-            return config.plugin.includes("ai-eng-system");
-        }
-        return false;
-    } catch (error) {
-        return false;
-    }
-}
-function findOpenCodeConfig(startDir) {
-    const homeDir = process.env.HOME || process.env.USERPROFILE || "";
-    const projectConfigPath = path.join(
-        startDir,
-        ".opencode",
-        "opencode.jsonc",
-    );
-    if (fs.existsSync(projectConfigPath)) {
-        return { path: projectConfigPath, scope: "project" };
-    }
-    const globalConfigPath = path.join(
-        homeDir,
-        ".config",
-        "opencode",
-        "opencode.jsonc",
-    );
-    if (fs.existsSync(globalConfigPath)) {
-        return { path: globalConfigPath, scope: "global" };
-    }
-    return null;
 }
 function isClaudeCodeProject(targetDir) {
     if (fs.existsSync(path.join(targetDir, ".claude"))) {
@@ -195,7 +162,7 @@ async function installClaudeHooks(targetDir, silent = false) {
         );
     }
 }
-async function install(targetDir, silent = false) {
+async function install(targetDir, claudeRoot, silent = false) {
     if (!silent) {
         console.log(
             `\uD83D\uDD27 Installing AI Engineering System to ${targetDir}`,
@@ -214,15 +181,19 @@ async function install(targetDir, silent = false) {
     }
     cleanNamespacedDirectory(
         targetOpenCodeDir,
-        "command",
+        "commands",
         NAMESPACE_PREFIX,
         silent,
     );
-    const commandsSrc = path.join(distOpenCodeDir, "command", NAMESPACE_PREFIX);
+    const commandsSrc = path.join(
+        distOpenCodeDir,
+        "commands",
+        NAMESPACE_PREFIX,
+    );
     if (fs.existsSync(commandsSrc)) {
         const commandsDest = path.join(
             targetOpenCodeDir,
-            "command",
+            "commands",
             NAMESPACE_PREFIX,
         );
         copyRecursive(commandsSrc, commandsDest);
@@ -231,20 +202,20 @@ async function install(targetDir, silent = false) {
             .filter((f) => f.endsWith(".md")).length;
         if (!silent)
             console.log(
-                `  ✓ command/${NAMESPACE_PREFIX}/ (${commandCount} commands)`,
+                `  ✓ commands/${NAMESPACE_PREFIX}/ (${commandCount} commands)`,
             );
     }
     cleanNamespacedDirectory(
         targetOpenCodeDir,
-        "agent",
+        "agents",
         NAMESPACE_PREFIX,
         silent,
     );
-    const agentsSrc = path.join(distOpenCodeDir, "agent", NAMESPACE_PREFIX);
+    const agentsSrc = path.join(distOpenCodeDir, "agents", NAMESPACE_PREFIX);
     if (fs.existsSync(agentsSrc)) {
         const agentsDest = path.join(
             targetOpenCodeDir,
-            "agent",
+            "agents",
             NAMESPACE_PREFIX,
         );
         copyRecursive(agentsSrc, agentsDest);
@@ -258,20 +229,29 @@ async function install(targetDir, silent = false) {
         }
         if (!silent)
             console.log(
-                `  ✓ agent/${NAMESPACE_PREFIX}/ (${agentCount} agents)`,
+                `  ✓ agents/${NAMESPACE_PREFIX}/ (${agentCount} agents)`,
             );
     }
     cleanAiEngSkills(targetOpenCodeDir, distDir, silent);
-    const distSkillDir = path.join(distOpenCodeDir, "skill");
+    const distSkillDir = path.join(distOpenCodeDir, "skills");
     if (fs.existsSync(distSkillDir)) {
-        const skillDest = path.join(targetOpenCodeDir, "skill");
+        const skillDest = path.join(targetOpenCodeDir, "skills");
         copyRecursive(distSkillDir, skillDest);
         const skillDirs = fs.readdirSync(distSkillDir);
         const skillCount = skillDirs.length;
-        if (!silent) console.log(`  ✓ skill/ (${skillCount} skills)`);
+        if (!silent) console.log(`  ✓ skills/ (${skillCount} skills)`);
     }
-    const projectRootDir = path.dirname(targetDir);
-    await installClaudeHooks(projectRootDir, silent);
+    const distToolsDir = path.join(distOpenCodeDir, "tools");
+    if (fs.existsSync(distToolsDir)) {
+        const toolsDest = path.join(targetOpenCodeDir, "tools");
+        copyRecursive(distToolsDir, toolsDest);
+        const toolCount = fs
+            .readdirSync(distToolsDir)
+            .filter((f) => f.endsWith(".ts") || f.endsWith(".js")).length;
+        if (!silent && toolCount > 0)
+            console.log(`  ✓ tools/ (${toolCount} tools)`);
+    }
+    await installClaudeHooks(claudeRoot, silent);
     if (!silent) {
         console.log(`
 ✅ Installation complete!`);
@@ -279,42 +259,29 @@ async function install(targetDir, silent = false) {
     }
 }
 async function main() {
-    const isPostInstall = process.env.npm_lifecycle_event === "postinstall";
-    if (isPostInstall) {
-        const cwd = process.cwd();
-        const configResult = findOpenCodeConfig(cwd);
-        if (!configResult) {
-            return;
-        }
-        if (!isPluginReferenced(configResult.path)) {
-            return;
-        }
-        const targetDir = path.dirname(configResult.path);
-        await install(targetDir, true);
+    const args = process.argv.slice(2);
+    const isLocal = args.includes("--local") || args.includes("-l");
+    const silent = process.env.npm_lifecycle_event === "postinstall";
+    const homeDir = process.env.HOME || process.env.USERPROFILE || "";
+    let openCodeTarget;
+    let claudeRoot;
+    if (isLocal) {
+        openCodeTarget = path.join(process.cwd(), ".opencode");
+        claudeRoot = process.cwd();
     } else {
-        const cwd = process.cwd();
-        const configResult = findOpenCodeConfig(cwd);
-        if (!configResult) {
-            console.error(
-                "❌ Error: opencode.jsonc not found in .opencode/ or ~/.config/opencode/",
-            );
-            console.error(
-                "   Create .opencode/opencode.jsonc in your project, or use ~/.config/opencode/opencode.jsonc for global installation",
-            );
-            process.exit(1);
-        }
-        if (!isPluginReferenced(configResult.path)) {
-            console.error(
-                "❌ Error: ai-eng-system is not referenced in opencode.jsonc plugin list",
-            );
-            console.error(
-                "   Add 'ai-eng-system' to the plugin array in opencode.jsonc",
-            );
-            process.exit(1);
-        }
-        const targetDir = path.dirname(configResult.path);
-        await install(targetDir, false);
+        openCodeTarget = path.join(homeDir, ".config", "opencode");
+        claudeRoot = homeDir;
     }
+    if (!silent) {
+        console.log(
+            `\uD83D\uDD27 Installing AI Engineering System (${isLocal ? "project-local" : "global"})`,
+        );
+        console.log(`   OpenCode -> ${openCodeTarget}`);
+        console.log(
+            `   Claude   -> ${path.join(claudeRoot, ".claude", "hooks")}`,
+        );
+    }
+    await install(openCodeTarget, claudeRoot, silent);
 }
 main().catch((error) => {
     const message = error instanceof Error ? error.message : String(error);

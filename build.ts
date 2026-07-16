@@ -449,9 +449,9 @@ function transformAgentMarkdownForClaude(
 }
 
 async function validateOpenCodeOutput(opencodeRoot: string): Promise<void> {
-    const cmdRoot = join(opencodeRoot, "command", NAMESPACE_PREFIX);
-    const agentRoot = join(opencodeRoot, "agent", NAMESPACE_PREFIX);
-    const skillRoot = join(opencodeRoot, "skill"); // Note: singular
+    const cmdRoot = join(opencodeRoot, "commands", NAMESPACE_PREFIX);
+    const agentRoot = join(opencodeRoot, "agents", NAMESPACE_PREFIX);
+    const skillRoot = join(opencodeRoot, "skills");
 
     const commandFiles = await getMarkdownFiles(cmdRoot);
     const agentFiles = await getMarkdownFiles(agentRoot);
@@ -597,10 +597,10 @@ async function buildOpenCode(): Promise<void> {
         : [DIST_OPENCODE_DIR, ROOT_OPENCODE_DIR];
     for (const targetDir of targetDirs) {
         // Clean target directories before building to remove stale files
-        const parentCommandsDir = join(targetDir, "command");
-        const commandsDir = join(targetDir, "command", NAMESPACE_PREFIX);
-        const agentsDir = join(targetDir, "agent", NAMESPACE_PREFIX);
-        const skillsDir = join(targetDir, "skill"); // Note: singular, per OpenCode docs
+        const parentCommandsDir = join(targetDir, "commands");
+        const commandsDir = join(targetDir, "commands", NAMESPACE_PREFIX);
+        const agentsDir = join(targetDir, "agents", NAMESPACE_PREFIX);
+        const skillsDir = join(targetDir, "skills");
 
         // Clean parent command directory completely to prevent duplicates
         if (existsSync(parentCommandsDir)) {
@@ -617,13 +617,12 @@ async function buildOpenCode(): Promise<void> {
         await mkdir(agentsDir, { recursive: true });
         await mkdir(skillsDir, { recursive: true });
 
-        // Copy prompt optimization tool
+        // Copy prompt optimization tool (canonical source: packages/cli/src/)
         const opencodeToolSrc = join(
-            ROOT,
-            "src",
+            CLI_SRC,
             "opencode-tool-prompt-optimize.ts",
         );
-        const opencodeToolDir = join(targetDir, "tool");
+        const opencodeToolDir = join(targetDir, "tools");
         if (existsSync(opencodeToolSrc)) {
             await mkdir(opencodeToolDir, { recursive: true });
             await copyFile(
@@ -1766,29 +1765,77 @@ async function syncToMarketplacePlugins(): Promise<void> {
 
     const packageJson = await getPackageJson();
 
+    // --- Parity: ensure every catalog item lands in at least one plugin ---
+    // The Claude Code marketplace plugins must collectively ship the same
+    // content OpenCode gets. Any skill/agent/command not assigned to a themed
+    // plugin is routed into the ai-eng-core catch-all so nothing is dropped.
+    const CATCHALL_PLUGIN = "ai-eng-core";
+    const allSkillRelDirs = (await getCachedSkills()).map((s) => s.relativeDir);
+    const allAgentNames = (await getCachedAgentFiles()).map((f) =>
+        basename(f).replace(/\.md$/, ""),
+    );
+    const allCommandNames = (await getCachedCommandFiles()).map((f) =>
+        basename(f).replace(/\.md$/, ""),
+    );
+
+    const placedSkills = new Set<string>();
+    const placedAgents = new Set<string>();
+    const placedCommands = new Set<string>();
+    for (const cfg of Object.values(PLUGIN_MAP)) {
+        for (const entry of cfg.skills) {
+            for (const rel of allSkillRelDirs) {
+                if (rel === entry || rel.startsWith(`${entry}/`))
+                    placedSkills.add(rel);
+            }
+        }
+        for (const a of cfg.agents) placedAgents.add(a);
+        for (const c of cfg.commands) placedCommands.add(c);
+    }
+    const unplacedSkills = allSkillRelDirs.filter(
+        (rel) => !placedSkills.has(rel),
+    );
+    const unplacedAgents = allAgentNames.filter((a) => !placedAgents.has(a));
+    const unplacedCommands = allCommandNames.filter(
+        (c) => !placedCommands.has(c),
+    );
+
     for (const [pluginName, config] of Object.entries(PLUGIN_MAP)) {
         const pluginDir = join(pluginsBaseDir, pluginName);
         await mkdir(pluginDir, { recursive: true });
+
+        // Route unassigned catalog items into the catch-all plugin.
+        const skillsToCopy =
+            pluginName === CATCHALL_PLUGIN
+                ? [...config.skills, ...unplacedSkills]
+                : config.skills;
+        const agentsToCopy =
+            pluginName === CATCHALL_PLUGIN
+                ? [...config.agents, ...unplacedAgents]
+                : config.agents;
+        const commandsToCopy =
+            pluginName === CATCHALL_PLUGIN
+                ? [...config.commands, ...unplacedCommands]
+                : config.commands;
 
         // Copy commands
         const commandPaths = await copySelectedMarkdownFiles(
             join(CONTENT_DIR, "commands"),
             join(pluginDir, "commands"),
-            config.commands,
+            commandsToCopy,
         );
 
         // Copy agents
         await copySelectedAgentFiles(
             join(CONTENT_DIR, "agents"),
             join(pluginDir, "agents"),
-            config.agents,
+            agentsToCopy,
         );
 
         // Copy skills
         await copySelectedSkills(
             SKILLS_DIR,
             join(pluginDir, "skills"),
-            config.skills,
+            skillsToCopy,
         );
 
         // Copy plugin-specific support assets such as templates and docs.
@@ -1907,6 +1954,17 @@ async function syncToMarketplacePlugins(): Promise<void> {
         );
     }
 
+    if (
+        unplacedSkills.length ||
+        unplacedAgents.length ||
+        unplacedCommands.length
+    ) {
+        console.log(
+            `  ✓ Parity: routed ${unplacedSkills.length} skill(s), ${unplacedAgents.length} agent(s), ${unplacedCommands.length} command(s) into ${CATCHALL_PLUGIN}`,
+        );
+    } else {
+        console.log("  ✓ Parity: every catalog item assigned to a plugin");
+    }
     console.log("  ✓ Synced all marketplace plugins");
 }
 
@@ -2138,7 +2196,7 @@ async function validateAgents(): Promise<void> {
         ? [DIST_OPENCODE_DIR]
         : [DIST_OPENCODE_DIR, ROOT_OPENCODE_DIR];
     for (const opencodeRoot of openCodeDirs) {
-        const agentDir = join(opencodeRoot, "agent", NAMESPACE_PREFIX);
+        const agentDir = join(opencodeRoot, "agents", NAMESPACE_PREFIX);
         if (!existsSync(agentDir)) continue;
 
         const agentFiles = await getMarkdownFiles(agentDir);

@@ -109,7 +109,7 @@ async function installToProject(
         if (content.commands.length > 0) {
             const commandsDest = path.join(
                 targetOpenCodeDir,
-                "command",
+                "commands",
                 NAMESPACE_PREFIX,
             );
             fs.mkdirSync(commandsDest, { recursive: true });
@@ -129,7 +129,7 @@ async function installToProject(
         if (content.agents.length > 0) {
             const agentsDest = path.join(
                 targetOpenCodeDir,
-                "agent",
+                "agents",
                 NAMESPACE_PREFIX,
             );
             fs.mkdirSync(agentsDest, { recursive: true });
@@ -147,7 +147,7 @@ async function installToProject(
 
         // Install skills (to .opencode/skill/)
         if (content.skills.length > 0) {
-            const skillDest = path.join(targetOpenCodeDir, "skill");
+            const skillDest = path.join(targetOpenCodeDir, "skills");
             fs.mkdirSync(skillDest, { recursive: true });
 
             for (const skill of content.skills) {
@@ -163,7 +163,7 @@ async function installToProject(
 
         // Install tools if any
         if (content.tools.length > 0) {
-            const toolsDest = path.join(targetOpenCodeDir, "tool");
+            const toolsDest = path.join(targetOpenCodeDir, "tools");
             fs.mkdirSync(toolsDest, { recursive: true });
 
             for (const tool of content.tools) {
@@ -201,22 +201,26 @@ function installToProjectFallback(pluginDir: string, targetDir: string): void {
     const targetOpenCodeDir = targetDir;
 
     // Copy commands (namespaced under ai-eng/)
-    const commandsSrc = path.join(distOpenCodeDir, "command", NAMESPACE_PREFIX);
+    const commandsSrc = path.join(
+        distOpenCodeDir,
+        "commands",
+        NAMESPACE_PREFIX,
+    );
     if (fs.existsSync(commandsSrc)) {
         const commandsDest = path.join(
             targetOpenCodeDir,
-            "command",
+            "commands",
             NAMESPACE_PREFIX,
         );
         copyRecursive(commandsSrc, commandsDest);
     }
 
     // Copy agents (namespaced under ai-eng/)
-    const agentsSrc = path.join(distOpenCodeDir, "agent", NAMESPACE_PREFIX);
+    const agentsSrc = path.join(distOpenCodeDir, "agents", NAMESPACE_PREFIX);
     if (fs.existsSync(agentsSrc)) {
         const agentsDest = path.join(
             targetOpenCodeDir,
-            "agent",
+            "agents",
             NAMESPACE_PREFIX,
         );
         copyRecursive(agentsSrc, agentsDest);
@@ -224,9 +228,9 @@ function installToProjectFallback(pluginDir: string, targetDir: string): void {
 
     // Copy skills (to .opencode/skill/)
     // OpenCode expects skills at .opencode/skill/ (singular, per https://opencode.ai/docs/skills)
-    const distSkillDir = path.join(distDir, ".opencode", "skill");
+    const distSkillDir = path.join(distDir, ".opencode", "skills");
     if (fs.existsSync(distSkillDir)) {
-        const skillDest = path.join(targetOpenCodeDir, "skill");
+        const skillDest = path.join(targetOpenCodeDir, "skills");
         copyRecursive(distSkillDir, skillDest);
     }
 }
@@ -273,7 +277,7 @@ export const AiEngSystem: Plugin = async ({
 
     // Check if this is first installation (for logging)
     const isFirstRun = !fs.existsSync(
-        path.join(targetDir, "command", "ai-eng"),
+        path.join(targetDir, "commands", "ai-eng"),
     );
 
     // Install files to target directory

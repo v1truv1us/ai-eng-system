@@ -189,4 +189,70 @@ describe("Content Parity", () => {
             );
         });
     });
+
+    // --- Claude plugin / OpenCode parity ---
+    // Every catalog item must land in at least one marketplace plugin so the
+    // Claude Code plugins collectively ship the same content OpenCode gets.
+    function listSkillRels(dir: string, prefix = ""): string[] {
+        if (!existsSync(dir)) return [];
+        const out: string[] = [];
+        for (const entry of readdirSync(dir, { withFileTypes: true })) {
+            if (!entry.isDirectory()) continue;
+            if (entry.name === "gtm") continue; // opt-in, excluded from default
+            const rel = prefix ? `${prefix}/${entry.name}` : entry.name;
+            if (existsSync(join(dir, entry.name, "SKILL.md"))) out.push(rel);
+            else out.push(...listSkillRels(join(dir, entry.name), rel));
+        }
+        return out;
+    }
+
+    function listPluginUnion(
+        dirName: "skills" | "agents" | "commands",
+    ): Set<string> {
+        const set = new Set<string>();
+        const pluginsDir = join(ROOT, "plugins");
+        if (!existsSync(pluginsDir)) return set;
+        for (const plugin of readdirSync(pluginsDir, { withFileTypes: true })) {
+            if (!plugin.isDirectory() || !plugin.name.startsWith("ai-eng-"))
+                continue;
+            const sub = join(pluginsDir, plugin.name, dirName);
+            if (!existsSync(sub)) continue;
+            if (dirName === "skills") {
+                for (const rel of listSkillRels(sub)) set.add(rel);
+            } else {
+                for (const f of readdirSync(sub).filter((f) =>
+                    f.endsWith(".md"),
+                ))
+                    set.add(f);
+            }
+        }
+        return set;
+    }
+
+    describe("Claude plugin parity (vs OpenCode catalog)", () => {
+        it("every catalog skill appears in at least one marketplace plugin", () => {
+            const catalog = listSkillRels(join(ROOT, "skills"));
+            const union = listPluginUnion("skills");
+            const missing = catalog.filter((s) => !union.has(s));
+            expect(missing).toEqual([]);
+        });
+
+        it("every catalog agent appears in at least one marketplace plugin", () => {
+            const agents = readdirSync(join(ROOT, "content/agents")).filter(
+                (f) => f.endsWith(".md"),
+            );
+            const union = listPluginUnion("agents");
+            const missing = agents.filter((a) => !union.has(a));
+            expect(missing).toEqual([]);
+        });
+
+        it("every catalog command appears in at least one marketplace plugin", () => {
+            const commands = readdirSync(join(ROOT, "content/commands")).filter(
+                (f) => f.endsWith(".md"),
+            );
+            const union = listPluginUnion("commands");
+            const missing = commands.filter((c) => !union.has(c));
+            expect(missing).toEqual([]);
+        });
+    });
 });

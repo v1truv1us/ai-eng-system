@@ -89,10 +89,12 @@ describe("AI Engineering System - Integration Tests", () => {
             const opencodeDir = join(TEST_ROOT, "dist", ".opencode");
 
             // Check main components
-            expect(existsSync(join(opencodeDir, "command", "ai-eng"))).toBe(
+            expect(existsSync(join(opencodeDir, "commands", "ai-eng"))).toBe(
                 true,
             );
-            expect(existsSync(join(opencodeDir, "agent", "ai-eng"))).toBe(true);
+            expect(existsSync(join(opencodeDir, "agents", "ai-eng"))).toBe(
+                true,
+            );
         });
 
         it("should copy skills to both platforms", async () => {
@@ -107,7 +109,7 @@ describe("AI Engineering System - Integration Tests", () => {
                 TEST_ROOT,
                 "dist",
                 ".opencode",
-                "skill",
+                "skills",
             ); // singular
 
             expect(existsSync(skillsDir)).toBe(true);
@@ -148,7 +150,7 @@ describe("AI Engineering System - Integration Tests", () => {
                 TEST_ROOT,
                 "dist",
                 ".opencode",
-                "command",
+                "commands",
                 "ai-eng",
             );
             const claudeCommandsDir = join(
@@ -193,7 +195,7 @@ describe("AI Engineering System - Integration Tests", () => {
                 TEST_ROOT,
                 "dist",
                 ".opencode",
-                "agent",
+                "agents",
                 "ai-eng",
             );
             const claudeAgentsDir = join(

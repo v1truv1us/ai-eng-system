@@ -50,8 +50,8 @@ function cleanAiEngSkills(
     distOpenCodeDir: string,
     silent = false,
 ): void {
-    const targetSkillDir = path.join(targetOpenCodeDir, "skill");
-    const distSkillDir = path.join(distOpenCodeDir, "skill");
+    const targetSkillDir = path.join(targetOpenCodeDir, "skills");
+    const distSkillDir = path.join(distOpenCodeDir, "skills");
 
     if (!fs.existsSync(distSkillDir)) return;
 
@@ -299,7 +299,11 @@ async function installClaudeHooks(
 /**
  * Install AI Engineering System files
  */
-async function install(targetDir: string, silent = false): Promise<void> {
+async function install(
+    targetDir: string,
+    claudeRoot: string,
+    silent = false,
+): Promise<void> {
     if (!silent) {
         console.log(`🔧 Installing AI Engineering System to ${targetDir}`);
     }
@@ -321,17 +325,21 @@ async function install(targetDir: string, silent = false): Promise<void> {
     // Clean existing ai-eng commands before copying
     cleanNamespacedDirectory(
         targetOpenCodeDir,
-        "command",
+        "commands",
         NAMESPACE_PREFIX,
         silent,
     );
 
     // Copy commands (namespaced under ai-eng/)
-    const commandsSrc = path.join(distOpenCodeDir, "command", NAMESPACE_PREFIX);
+    const commandsSrc = path.join(
+        distOpenCodeDir,
+        "commands",
+        NAMESPACE_PREFIX,
+    );
     if (fs.existsSync(commandsSrc)) {
         const commandsDest = path.join(
             targetOpenCodeDir,
-            "command",
+            "commands",
             NAMESPACE_PREFIX,
         );
         copyRecursive(commandsSrc, commandsDest);
@@ -341,24 +349,24 @@ async function install(targetDir: string, silent = false): Promise<void> {
             .filter((f) => f.endsWith(".md")).length;
         if (!silent)
             console.log(
-                `  ✓ command/${NAMESPACE_PREFIX}/ (${commandCount} commands)`,
+                `  ✓ commands/${NAMESPACE_PREFIX}/ (${commandCount} commands)`,
             );
     }
 
     // Clean existing ai-eng agents before copying
     cleanNamespacedDirectory(
         targetOpenCodeDir,
-        "agent",
+        "agents",
         NAMESPACE_PREFIX,
         silent,
     );
 
     // Copy agents (namespaced under ai-eng/)
-    const agentsSrc = path.join(distOpenCodeDir, "agent", NAMESPACE_PREFIX);
+    const agentsSrc = path.join(distOpenCodeDir, "agents", NAMESPACE_PREFIX);
     if (fs.existsSync(agentsSrc)) {
         const agentsDest = path.join(
             targetOpenCodeDir,
-            "agent",
+            "agents",
             NAMESPACE_PREFIX,
         );
         copyRecursive(agentsSrc, agentsDest);
@@ -373,27 +381,39 @@ async function install(targetDir: string, silent = false): Promise<void> {
         }
         if (!silent)
             console.log(
-                `  ✓ agent/${NAMESPACE_PREFIX}/ (${agentCount} agents)`,
+                `  ✓ agents/${NAMESPACE_PREFIX}/ (${agentCount} agents)`,
             );
     }
 
     // Clean existing ai-eng skills before copying
     cleanAiEngSkills(targetOpenCodeDir, distDir, silent);
 
-    // Copy skills (to skill/ - SINGULAR, matching OpenCode docs)
-    const distSkillDir = path.join(distOpenCodeDir, "skill");
+    // Copy skills (to skills/, matching OpenCode docs)
+    const distSkillDir = path.join(distOpenCodeDir, "skills");
     if (fs.existsSync(distSkillDir)) {
-        const skillDest = path.join(targetOpenCodeDir, "skill");
+        const skillDest = path.join(targetOpenCodeDir, "skills");
         copyRecursive(distSkillDir, skillDest);
 
         const skillDirs = fs.readdirSync(distSkillDir);
         const skillCount = skillDirs.length;
-        if (!silent) console.log(`  ✓ skill/ (${skillCount} skills)`);
+        if (!silent) console.log(`  ✓ skills/ (${skillCount} skills)`);
     }
 
-    // Install Claude Code hooks (in parent directory of .opencode)
-    const projectRootDir = path.dirname(targetDir);
-    await installClaudeHooks(projectRootDir, silent);
+    // Copy tools (e.g. prompt-optimize) to tools/
+    const distToolsDir = path.join(distOpenCodeDir, "tools");
+    if (fs.existsSync(distToolsDir)) {
+        const toolsDest = path.join(targetOpenCodeDir, "tools");
+        copyRecursive(distToolsDir, toolsDest);
+
+        const toolCount = fs
+            .readdirSync(distToolsDir)
+            .filter((f) => f.endsWith(".ts") || f.endsWith(".js")).length;
+        if (!silent && toolCount > 0)
+            console.log(`  ✓ tools/ (${toolCount} tools)`);
+    }
+
+    // Install Claude Code hooks (global ~/.claude/ or project root)
+    await installClaudeHooks(claudeRoot, silent);
 
     if (!silent) {
         console.log("\n✅ Installation complete!");
@@ -403,57 +423,43 @@ async function install(targetDir: string, silent = false): Promise<void> {
 
 /**
  * Entry point
+ *
+ * Default (and --global): install to ~/.config/opencode/ (global library)
+ *   - OpenCode content -> ~/.config/opencode/{commands,agents,skills,tools}/
+ *   - Claude hooks      -> ~/.claude/hooks/
+ * --local: install to <cwd>/.opencode/ and <cwd>/.claude/hooks/
+ *
+ * Content is discovered natively by OpenCode (no plugin reference required).
  */
 async function main(): Promise<void> {
-    const isPostInstall = process.env.npm_lifecycle_event === "postinstall";
+    const args = process.argv.slice(2);
+    const isLocal = args.includes("--local") || args.includes("-l");
+    const silent = process.env.npm_lifecycle_event === "postinstall";
+    const homeDir = process.env.HOME || process.env.USERPROFILE || "";
 
-    if (isPostInstall) {
-        // During npm install, find opencode.jsonc and install there
-        const cwd = process.cwd();
-        const configResult = findOpenCodeConfig(cwd);
+    let openCodeTarget: string;
+    let claudeRoot: string;
 
-        if (!configResult) {
-            // Silent exit - no OpenCode config found
-            return;
-        }
-
-        // Check if plugin is referenced
-        if (!isPluginReferenced(configResult.path)) {
-            // Silent exit - plugin not referenced
-            return;
-        }
-
-        const targetDir = path.dirname(configResult.path);
-        await install(targetDir, true); // Silent mode
+    if (isLocal) {
+        openCodeTarget = path.join(process.cwd(), ".opencode");
+        claudeRoot = process.cwd();
     } else {
-        // Manual invocation
-        const cwd = process.cwd();
-        const configResult = findOpenCodeConfig(cwd);
-
-        if (!configResult) {
-            console.error(
-                "❌ Error: opencode.jsonc not found in .opencode/ or ~/.config/opencode/",
-            );
-            console.error(
-                "   Create .opencode/opencode.jsonc in your project, or use ~/.config/opencode/opencode.jsonc for global installation",
-            );
-            process.exit(1);
-        }
-
-        // Check if plugin is referenced
-        if (!isPluginReferenced(configResult.path)) {
-            console.error(
-                "❌ Error: ai-eng-system is not referenced in opencode.jsonc plugin list",
-            );
-            console.error(
-                "   Add 'ai-eng-system' to the plugin array in opencode.jsonc",
-            );
-            process.exit(1);
-        }
-
-        const targetDir = path.dirname(configResult.path);
-        await install(targetDir, false); // Verbose mode
+        // Global library (default)
+        openCodeTarget = path.join(homeDir, ".config", "opencode");
+        claudeRoot = homeDir; // ~/.claude/hooks/
     }
+
+    if (!silent) {
+        console.log(
+            `🔧 Installing AI Engineering System (${isLocal ? "project-local" : "global"})`,
+        );
+        console.log(`   OpenCode -> ${openCodeTarget}`);
+        console.log(
+            `   Claude   -> ${path.join(claudeRoot, ".claude", "hooks")}`,
+        );
+    }
+
+    await install(openCodeTarget, claudeRoot, silent);
 }
 
 main().catch((error) => {

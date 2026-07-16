@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.11.0] - 2026-07-16
+
+### Changed
+- **OpenCode = global content library**: the installer now targets `~/.config/opencode/` by default (`--local` for project). Content is discovered natively — the `plugin: ["ai-eng-system"]` reference is removed, so OpenCode no longer loads the stale legacy `ai-eng-system@0.4.0` package. Content lands in `~/.config/opencode/{commands,agents,skills,tools}/` (and Claude hooks in `~/.claude/hooks/`).
+- **Plural OpenCode dirs**: generated outputs now use the canonical `commands/`, `agents/`, `skills/`, `tools/` (previously singular), matching current OpenCode docs.
+- **Claude plugin / OpenCode parity**: every catalog skill/agent/command now lands in at least one marketplace plugin. `build.ts` routes any unassigned item into the `ai-eng-core` catch-all (245 skills routed this release), so the Claude plugins collectively ship the same catalog OpenCode gets. Enforced by a new parity test.
+
+### Fixed
+- **build.ts tool path**: `buildOpenCode()` now copies the `prompt-optimize` tool from its real source (`packages/cli/src/opencode-tool-prompt-optimize.ts`) instead of a non-existent `src/` path, so the tool regenerates with the canonical source.
+- **Installer copies tools**: the global/project install now also installs `tools/` (e.g. `prompt-optimize`), not just commands/agents/skills.
+
 ## [1.10.0] - 2026-07-16
 
 ### Changed
