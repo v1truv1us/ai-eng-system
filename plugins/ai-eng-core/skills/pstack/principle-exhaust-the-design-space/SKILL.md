@@ -1,0 +1,25 @@
+---
+name: principle-exhaust-the-design-space
+description: Apply when facing a novel UI interaction or architectural decision with no precedent. Build 2-3 competing prototypes and compare before committing.
+metadata:
+  category: model-invoked
+  version: 1.0.0
+  tags: cursor-import, pstack
+---
+
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
+# Exhaust the Design Space
+
+When a novel interaction or architectural decision has no established precedent, explore several concrete alternatives before implementation. Building the wrong thing costs more than exploring three options.
+
+**The rule:** When the right answer is not obvious, build 2-3 competing prototypes or sketches. Compare them side by side. Only then commit.
+
+**When it applies:**
+- Novel UI interactions (no prior art in the codebase)
+- Architectural choices with multiple viable approaches
+- Product design decisions where user experience depends on feel, not logic
+
+**When it doesn't:**
+- Mechanical implementation where the pattern is established
+- Bug fixes or refactors with a clear target state
+- Changes where constraints dictate a single viable approach
