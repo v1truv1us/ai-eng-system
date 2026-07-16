@@ -450,7 +450,7 @@ function transformAgentMarkdownForClaude(
 
 async function validateOpenCodeOutput(opencodeRoot: string): Promise<void> {
     const cmdRoot = join(opencodeRoot, "commands", NAMESPACE_PREFIX);
-    const agentRoot = join(opencodeRoot, "agents", NAMESPACE_PREFIX);
+    const agentRoot = join(opencodeRoot, "agents");
     const skillRoot = join(opencodeRoot, "skills");
 
     const commandFiles = await getMarkdownFiles(cmdRoot);
@@ -490,13 +490,7 @@ async function validateOpenCodeOutput(opencodeRoot: string): Promise<void> {
             }
         }
 
-        // Ensure nested directory structure exists: ai-eng/<category>/<agent>.md
-        const rel = fp.slice(agentRoot.length + 1);
-        const parts = rel.split("/");
-        if (parts.length < 2)
-            errors.push(
-                `OpenCode agent must be nested under a category folder: ${fp}`,
-            );
+        // Agent name is path-derived; flat files yield flat names (@code-reviewer).
     }
 
     // Validate skills (if present), preserving nested namespace folders.
@@ -599,7 +593,7 @@ async function buildOpenCode(): Promise<void> {
         // Clean target directories before building to remove stale files
         const parentCommandsDir = join(targetDir, "commands");
         const commandsDir = join(targetDir, "commands", NAMESPACE_PREFIX);
-        const agentsDir = join(targetDir, "agents", NAMESPACE_PREFIX);
+        const agentsDir = join(targetDir, "agents");
         const skillsDir = join(targetDir, "skills");
 
         // Clean parent command directory completely to prevent duplicates
@@ -639,16 +633,16 @@ async function buildOpenCode(): Promise<void> {
             await copyFile(src, join(commandsDir, basename(src)));
         }
 
-        // Agents: MD-first but strip `name` and nest by category.
+        // Agents: MD-first, flat. OpenCode derives agent names from the file
+        // path, so flat names (e.g. code-reviewer) match command references
+        // like @code-reviewer. Nesting would produce ai-eng/<cat>/<name>.
         const agentFiles = await getCachedAgentFiles();
         for (const src of agentFiles) {
             const content = await readFile(src, "utf-8");
             const transformed = transformAgentMarkdownForOpenCode(content, src);
 
-            const categoryDir = join(agentsDir, transformed.category);
-            await mkdir(categoryDir, { recursive: true });
             await writeFile(
-                join(categoryDir, basename(src)),
+                join(agentsDir, basename(src)),
                 transformed.markdown,
             );
         }
@@ -2196,7 +2190,7 @@ async function validateAgents(): Promise<void> {
         ? [DIST_OPENCODE_DIR]
         : [DIST_OPENCODE_DIR, ROOT_OPENCODE_DIR];
     for (const opencodeRoot of openCodeDirs) {
-        const agentDir = join(opencodeRoot, "agents", NAMESPACE_PREFIX);
+        const agentDir = join(opencodeRoot, "agents");
         if (!existsSync(agentDir)) continue;
 
         const agentFiles = await getMarkdownFiles(agentDir);

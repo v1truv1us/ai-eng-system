@@ -366,14 +366,10 @@ Missing description field.
             expect(existsSync(testCommandPath)).toBe(true);
 
             // Check agents
-            const agentsDir = join(opencodeDir, "agents", "ai-eng");
+            const agentsDir = join(opencodeDir, "agents");
             expect(existsSync(agentsDir)).toBe(true);
 
-            const testAgentPath = join(
-                agentsDir,
-                "quality-testing",
-                "test-agent.md",
-            );
+            const testAgentPath = join(agentsDir, "test-agent.md");
             expect(existsSync(testAgentPath)).toBe(true);
         });
 
@@ -480,16 +476,14 @@ description: Mismatch test
             );
         });
 
-        it("should namespace OpenCode agents by category and strip frontmatter name", async () => {
+        it("should write OpenCode agents flat and strip frontmatter name", async () => {
             await runBuild();
 
-            // OpenCode agent should be nested by YAML category.
+            // OpenCode derives agent names from the file path, so agents are flat.
             const opencodeAgentPath = join(
                 DIST_DIR,
                 ".opencode",
                 "agents",
-                "ai-eng",
-                "quality-testing",
                 "test-agent.md",
             );
             const content = await readFile(opencodeAgentPath, "utf-8");

@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.11.1] - 2026-07-16
+
+### Fixed
+- **OpenCode agents not found** (`/deep-review`, etc.): agents were nested under `agents/ai-eng/<category>/`, and OpenCode derives agent names from the full file path — so `code-reviewer` was only discoverable as `ai-eng/quality-testing/code-reviewer`, which commands never reference. Agents are now written **flat** (`agents/<name>.md`), matching the OpenCode docs convention and command references like `@code-reviewer`.
+- **Claude hook install**: the installer looked for hooks at the removed `plugins/ai-eng-system/hooks/` (gone since v1.9.0), so the hook step always skipped. It now resolves from `dist/.claude-plugin/hooks/` (with `.claude/hooks/` fallback) and skips `test_*`/doc files so only real hooks land in `~/.claude/hooks/`.
+
 ## [1.11.0] - 2026-07-16
 
 ### Changed
