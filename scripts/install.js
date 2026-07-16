@@ -98,17 +98,18 @@ async function backupHooksDir(hooksDir) {
     }
 }
 async function installClaudeHooks(targetDir, silent = false) {
-    const canonicalHooksDir = path.join(
-        packageRoot,
-        "plugins",
-        "ai-eng-system",
-        "hooks",
-    );
+    const hookSourceCandidates = [
+        path.join(packageRoot, "dist", ".claude-plugin", "hooks"),
+        path.join(packageRoot, ".claude", "hooks"),
+        path.join(packageRoot, "plugins", "ai-eng-system", "hooks"),
+    ];
+    const canonicalHooksDir =
+        hookSourceCandidates.find((d) => fs.existsSync(d)) ?? null;
     const targetHooksDir = path.join(targetDir, ".claude", "hooks");
-    if (!fs.existsSync(canonicalHooksDir)) {
+    if (!canonicalHooksDir) {
         if (!silent) {
             console.log(
-                "  ℹ️  No hooks found in plugins/ai-eng-system/hooks/ (skip)",
+                "  ℹ️  No hook sources found (run `bun run build`) (skip)",
             );
         }
         return;
@@ -129,8 +130,21 @@ async function installClaudeHooks(targetDir, silent = false) {
         }
     }
     await fs.promises.mkdir(targetHooksDir, { recursive: true });
+    const NON_HOOK_PATTERNS = [/^test_/i, /\.md$/i];
+    const isHookFile = (name) => !NON_HOOK_PATTERNS.some((re) => re.test(name));
     try {
-        await copyDirRecursive(canonicalHooksDir, targetHooksDir);
+        const entries = await fs.promises.readdir(canonicalHooksDir, {
+            withFileTypes: true,
+        });
+        for (const entry of entries) {
+            const src = path.join(canonicalHooksDir, entry.name);
+            const dest = path.join(targetHooksDir, entry.name);
+            if (entry.isDirectory()) {
+                await copyDirRecursive(src, dest);
+            } else if (entry.isFile() && isHookFile(entry.name)) {
+                await fs.promises.copyFile(src, dest);
+            }
+        }
     } catch (error) {
         throw new Error(
             `Failed to copy hooks: ${error instanceof Error ? error.message : String(error)}`,

@@ -212,25 +212,29 @@ async function backupHooksDir(hooksDir: string): Promise<string | null> {
 }
 
 /**
- * Install Claude Code hooks from canonical marketplace source
+ * Install Claude Code hooks from the built/canonical hook source.
  */
 async function installClaudeHooks(
     targetDir: string,
     silent = false,
 ): Promise<void> {
-    const canonicalHooksDir = path.join(
-        packageRoot,
-        "plugins",
-        "ai-eng-system",
-        "hooks",
-    );
+    // Resolve hook source. Prefer the built dist (shipped in the published
+    // package and consistent with the OpenCode content source), then the
+    // repo's .claude/hooks/, then the legacy marketplace path.
+    const hookSourceCandidates = [
+        path.join(packageRoot, "dist", ".claude-plugin", "hooks"),
+        path.join(packageRoot, ".claude", "hooks"),
+        path.join(packageRoot, "plugins", "ai-eng-system", "hooks"),
+    ];
+    const canonicalHooksDir =
+        hookSourceCandidates.find((d) => fs.existsSync(d)) ?? null;
     const targetHooksDir = path.join(targetDir, ".claude", "hooks");
 
-    // Verify canonical hooks directory exists
-    if (!fs.existsSync(canonicalHooksDir)) {
+    // No hook source available
+    if (!canonicalHooksDir) {
         if (!silent) {
             console.log(
-                "  ℹ️  No hooks found in plugins/ai-eng-system/hooks/ (skip)",
+                "  ℹ️  No hook sources found (run `bun run build`) (skip)",
             );
         }
         return;
@@ -258,9 +262,23 @@ async function installClaudeHooks(
     // Create target hooks directory (including .claude/ if needed)
     await fs.promises.mkdir(targetHooksDir, { recursive: true });
 
-    // Copy hooks from canonical source
+    // Copy hooks from canonical source (skip test/doc files)
+    const NON_HOOK_PATTERNS = [/^test_/i, /\.md$/i];
+    const isHookFile = (name: string) =>
+        !NON_HOOK_PATTERNS.some((re) => re.test(name));
     try {
-        await copyDirRecursive(canonicalHooksDir, targetHooksDir);
+        const entries = await fs.promises.readdir(canonicalHooksDir, {
+            withFileTypes: true,
+        });
+        for (const entry of entries) {
+            const src = path.join(canonicalHooksDir, entry.name);
+            const dest = path.join(targetHooksDir, entry.name);
+            if (entry.isDirectory()) {
+                await copyDirRecursive(src, dest);
+            } else if (entry.isFile() && isHookFile(entry.name)) {
+                await fs.promises.copyFile(src, dest);
+            }
+        }
     } catch (error) {
         throw new Error(
             `Failed to copy hooks: ${error instanceof Error ? error.message : String(error)}`,
