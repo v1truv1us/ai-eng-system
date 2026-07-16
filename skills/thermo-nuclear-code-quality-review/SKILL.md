@@ -2,9 +2,10 @@
 name: thermo-nuclear-code-quality-review
 description: Run an extremely strict maintainability review for abstraction quality, giant files, and spaghetti-condition growth. Use for a thermo-nuclear code quality review, thermonuclear review, deep code quality audit, or especially harsh maintainability review.
 metadata:
-  category: user-invoked
-disable-model-invocation: true
+  category: model-invoked
 ---
+
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
 
 # Thermo-Nuclear Code Quality Review
 

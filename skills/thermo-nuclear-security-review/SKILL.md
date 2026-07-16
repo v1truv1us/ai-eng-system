@@ -2,9 +2,10 @@
 name: thermo-nuclear-security-review
 description: Run an extremely strict security audit for auth flaws, injection vectors, secrets exposure, broken access control, and boundary validation failures. Use for a thermo-nuclear security review, thermonuclear security audit, or especially harsh security review.
 metadata:
-  category: user-invoked
-disable-model-invocation: true
+  category: model-invoked
 ---
+
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
 
 # Thermo-Nuclear Security Review
 

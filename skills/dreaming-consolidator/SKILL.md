@@ -6,6 +6,8 @@ metadata:
 disable-model-invocation: true
 ---
 
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
+
 # Dreaming Consolidator
 
 Read-only consolidator across the auto-memory graph. The agent walks every memory file under `~/.claude/projects/*/memory/`, identifies cross-session patterns (recurring frictions, repeated user corrections, project facts that span multiple sessions), and writes a digest naming at least three patterns with citations.

@@ -8,6 +8,8 @@ metadata:
 disable-model-invocation: true
 ---
 
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
+
 # Sync skill taxonomy
 
 Keeps the skill catalog consistent: every `skills/**/SKILL.md` carries a `metadata.category` (user-invoked or model-invoked), and every user-invoked skill carries `disable-model-invocation: true` so its description is excluded from model routing context.

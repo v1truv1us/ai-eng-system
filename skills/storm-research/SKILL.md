@@ -6,6 +6,8 @@ metadata:
 disable-model-invocation: true
 ---
 
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
+
 # STORM Research
 
 Stanford OVAL's STORM method (Synthesis of Topic Outlines through Retrieval and Multi-perspective Question Asking, NAACL 2024), distilled into four sequential prompts run in one thread.

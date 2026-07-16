@@ -5,6 +5,8 @@ metadata:
   category: model-invoked
 ---
 
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
+
 # Cross-Repo Refactor
 
 Coordinate a refactor that spans multiple repos. The orchestrating session reads the change description, plans the per-repo edits, fans out subagents to make them, collects the results onto a single feature branch in each repo, and pushes for review. The branch-guard hook ships alongside this skill — it physically prevents pushing to `main`/`master`/`develop` or any pre-existing branch.

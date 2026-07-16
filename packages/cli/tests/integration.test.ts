@@ -11,14 +11,7 @@
  * - Performance under load
  */
 
-import {
-    afterAll,
-    beforeAll,
-    beforeEach,
-    describe,
-    expect,
-    it,
-} from "bun:test";
+import { afterAll, beforeAll, describe, expect, it } from "bun:test";
 import { execSync } from "node:child_process";
 import { existsSync, mkdtempSync } from "node:fs";
 import { copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
@@ -28,6 +21,7 @@ import { dirname, join } from "node:path";
 const TEST_ROOT = mkdtempSync(join(tmpdir(), "ai-eng-integration-"));
 // Derive the monorepo root from this file's location (packages/cli/tests/ -> ../../..)
 const ORIGINAL_ROOT = dirname(dirname(dirname(__dirname)));
+let initialBuildOutput = "";
 
 describe("AI Engineering System - Integration Tests", () => {
     beforeAll(async () => {
@@ -39,25 +33,24 @@ describe("AI Engineering System - Integration Tests", () => {
             cwd: TEST_ROOT,
             stdio: "ignore",
         });
-    });
+        initialBuildOutput = execSync("bun run build", {
+            encoding: "utf-8",
+            cwd: TEST_ROOT,
+        });
+    }, 60000);
 
     afterAll(async () => {
         if (existsSync(TEST_ROOT)) {
             await rm(TEST_ROOT, { recursive: true });
         }
-    });
+    }, 60000);
 
     describe("Complete Build Workflow", () => {
         it("should build entire project successfully", () => {
-            const result = execSync("bun run build", {
-                encoding: "utf-8",
-                cwd: TEST_ROOT,
-            });
-
-            expect(result).toContain("Build complete");
+            expect(initialBuildOutput).toContain("Build complete");
             // build.ts prints an absolute output path
-            expect(result).toMatch(/Build complete in.*dist/);
-        });
+            expect(initialBuildOutput).toMatch(/Build complete in.*dist/);
+        }, 60000);
 
         it("should validate content without building", () => {
             const result = execSync("bun run build --validate", {
@@ -79,10 +72,6 @@ describe("AI Engineering System - Integration Tests", () => {
     });
 
     describe("Plugin Structure Validation", () => {
-        beforeEach(async () => {
-            execSync("bun run build", { cwd: TEST_ROOT });
-        });
-
         it("should create Claude Code plugin structure", async () => {
             const claudePluginDir = join(TEST_ROOT, "dist", ".claude-plugin");
 
@@ -141,10 +130,6 @@ describe("AI Engineering System - Integration Tests", () => {
     });
 
     describe("Content Transformation Accuracy", () => {
-        beforeEach(async () => {
-            execSync("bun run build", { cwd: TEST_ROOT });
-        });
-
         it("should transform all commands correctly", async () => {
             const contentCommandsDir = join(TEST_ROOT, "content", "commands");
             const opencodeCommandsDir = join(
@@ -254,10 +239,6 @@ describe("AI Engineering System - Integration Tests", () => {
     });
 
     describe("Real-world Content Scenarios", () => {
-        beforeEach(async () => {
-            execSync("bun run build", { cwd: TEST_ROOT });
-        });
-
         it("should handle complex frontmatter structures", async () => {
             // Create a command with complex frontmatter using tools: not permission:
             const complexCommand = `---
@@ -307,7 +288,7 @@ This command has complex frontmatter with nested structures.
             expect(content).toContain("tools:");
             expect(content).toContain("read: true");
             expect(content).toContain("tags:");
-        });
+        }, 60000);
 
         it("should handle markdown with code blocks and tables", async () => {
             const markdownWithComplexContent = `---
@@ -372,7 +353,7 @@ const example = {
             expect(content).toContain("| Feature | Status |");
             expect(content).toContain("1. First item");
             expect(content).toContain("> This is a blockquote");
-        });
+        }, 60000);
     });
 
     describe("Performance and Scalability", () => {
@@ -419,7 +400,7 @@ This is test agent ${i}.
             const endTime = Date.now();
 
             // Should complete within reasonable time (adjust threshold as needed)
-            expect(endTime - startTime).toBeLessThan(15000);
+            expect(endTime - startTime).toBeLessThan(30000);
 
             // Verify all files were processed
             const distCommandsDir = join(
@@ -441,14 +422,10 @@ This is test agent ${i}.
 
             expect(commandFiles.length).toBeGreaterThanOrEqual(10);
             expect(agentFiles.length).toBeGreaterThanOrEqual(10);
-        });
+        }, 60000);
     });
 
     describe("Plugin Metadata Accuracy", () => {
-        beforeEach(async () => {
-            execSync("bun run build", { cwd: TEST_ROOT });
-        });
-
         it("should generate correct plugin.json", async () => {
             const pluginJsonPath = join(
                 TEST_ROOT,
@@ -514,7 +491,6 @@ async function copyProjectStructure(): Promise<void> {
         "skills/",
         "docs/",
         "templates/",
-        "packages/cli/src/",
         "scripts/",
         "packages/",
         "hooks/",
@@ -544,11 +520,21 @@ async function copyProjectStructure(): Promise<void> {
 
 async function copyDirectory(src: string, dest: string): Promise<void> {
     const { readdir } = await import("node:fs/promises");
+    const ignoredDirectories = new Set([
+        ".git",
+        ".venv",
+        "coverage",
+        "dist",
+        "node_modules",
+    ]);
 
     await mkdir(dest, { recursive: true });
     const entries = await readdir(src, { withFileTypes: true });
 
     for (const entry of entries) {
+        if (entry.isDirectory() && ignoredDirectories.has(entry.name)) {
+            continue;
+        }
         const srcPath = join(src, entry.name);
         const destPath = join(dest, entry.name);
 

@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.10.0] - 2026-07-16
+
+### Changed
+- **Output-contract discipline across the catalog**: 128 skills, 45 agents, and 29 commands now carry a `Default output:` contract (return only result, blockers, and required evidence; omit preambles, process narration, repeated context, confidence scores, and follow-up offers). Net ~2.7k lines of narration removed from generated assets, continuing the routing/execution token-cost reduction.
+- **Canonical `tools` object format**: agent frontmatter is now authored in OpenCode object form (`tools: { read: true, ... }`) as the single source; per-harness transforms convert to each target.
+
+### Fixed
+- **Claude Code agent build**: added `transformAgentMarkdownForClaude()` so generated `.claude`/marketplace agents convert canonical object `tools` to the Claude Code array form and strip the OpenCode-only `permission` field (previously copied through verbatim). Cursor output now validates agent `tools` is an array.
+- **Install telemetry paths**: `packages/cli/src/install/telemetry.ts` resolves `~/.ai-eng` via `process.env.HOME || os.homedir()` instead of `os.homedir()` alone, fixing telemetry/opt-out location in environments where the two differ.
+
 ## [1.9.0] - 2026-06-22
 
 ### Added

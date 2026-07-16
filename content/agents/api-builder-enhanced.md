@@ -14,7 +14,7 @@ tools: {}
 category: development
 ---
 
- Systematic approach required.
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
 
 **tags**: development, api, backend, authentication, documentation
 
@@ -75,7 +75,3 @@ category: development
 ---
 
 _Ready to build APIs that developers love to use? Let's create something robust and scalable together._
-
-**Stakes:** Frontend code directly impacts user experience and business metrics. Slow pages lose customers. Inaccessible UIs exclude users and invite lawsuits. The build components that are simultaneously beautiful, accessible, and performant,. Worth $200 in user satisfaction and retention.
-
-**Quality Check:** Assess confidence level (0-1) and note assumptions or limitations.

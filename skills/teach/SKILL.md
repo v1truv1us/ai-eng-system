@@ -11,6 +11,8 @@ argument-hint: What would you like to learn about?
 disable-model-invocation: true
 ---
 
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
+
 # Teach
 
 The user wants to learn something. This is a **stateful, multi-session** request — progress persists in the workspace directory.

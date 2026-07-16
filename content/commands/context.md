@@ -4,19 +4,11 @@ description: Manage session state, memories, and context engineering
 agent: build
 ---
 
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
+
 # Context Command
 
 Manage the context engineering system including sessions, memories, and context assembly.
-
- approach context management systematically, ensuring memories are stored correctly, organized logically, and retrieved efficiently when needed.
-
-## Why This Matters
-
-Context system provides persistent session state and intelligent memory management across conversations. Poor context management leads to lost knowledge, repeated learning, and inefficient AI interactions. This context work is critical for maintaining productive long-term conversations and accumulating valuable insights over time.
-
-## The Challenge
-
-The organize context and memories in a way that balances specificity with generalizability. The challenge is capturing details precisely enough to be useful later, while making them general enough to apply across multiple scenarios. Success means context system enables efficient retrieval without overwhelming noise or irrelevant information.
 
 ## Overview
 
@@ -326,5 +318,3 @@ All context data is stored locally in `.ai-context/` directory:
 - Fully under your control
 
 Add `.ai-context/` to `.gitignore` to keep it out of version control.
-
-After completing context operations, rate your confidence in data integrity and organization (0.0-1.0). Identify any uncertainties about memory classification, potential data loss risks, or areas where context retrieval may be inefficient. Note any operations that failed or had unexpected behavior.

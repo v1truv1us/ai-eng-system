@@ -72,7 +72,7 @@ describe("QualityGateRunner", () => {
                 type: QualityGateType.LINT,
                 required: true,
                 config: {
-                    command: "exit 1",
+                    command: "false",
                 },
             };
 
@@ -152,7 +152,7 @@ describe("QualityGateRunner", () => {
                     name: "Failing Gate",
                     type: QualityGateType.LINT,
                     required: true,
-                    config: { command: "exit 1" },
+                    config: { command: "false" },
                 },
                 {
                     id: "subsequent-gate",
@@ -177,7 +177,7 @@ describe("QualityGateRunner", () => {
                     name: "Failing Optional Gate",
                     type: QualityGateType.INTEGRATION,
                     required: false,
-                    config: { command: "exit 1" },
+                    config: { command: "false" },
                 },
                 {
                     id: "subsequent-gate",
@@ -216,7 +216,7 @@ describe("QualityGateRunner", () => {
                 type: QualityGateType.TESTS,
                 required: true,
                 config: {
-                    command: 'echo "Tests failed ✗"; exit 1',
+                    command: "false",
                 },
             };
 
@@ -244,7 +244,7 @@ describe("QualityGateRunner", () => {
                 type: QualityGateType.BUILD,
                 required: true,
                 config: {
-                    command: 'echo "Build failed: error"; exit 1',
+                    command: "false",
                 },
             };
 

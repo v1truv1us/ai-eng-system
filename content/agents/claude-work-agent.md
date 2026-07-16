@@ -6,13 +6,15 @@ description: >
 mode: subagent
 model: claude-sonnet-4-6
 tools:
-  - Read
-  - Write
-  - Edit
-  - Grep
-  - Glob
-  - Bash
+  read: true
+  write: true
+  edit: true
+  grep: true
+  glob: true
+  bash: true
 ---
+
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
 
 # WorkAgent
 

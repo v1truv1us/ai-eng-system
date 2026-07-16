@@ -2,7 +2,7 @@
   "name": "ai-eng-system",
   "metadata": {
     "description": "AI Engineering System - Modular development tools with context engineering, research orchestration, and specialized agents",
-    "version": "1.9.0"
+    "version": "1.10.0"
   },
   "plugins": [
     {

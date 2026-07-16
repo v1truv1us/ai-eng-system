@@ -7,6 +7,8 @@ metadata:
   tags: ai-eng-core
 ---
 
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
+
 # Fix Root Causes
 
 When debugging, do not paper over symptoms. Trace every problem to its root cause and fix it there.

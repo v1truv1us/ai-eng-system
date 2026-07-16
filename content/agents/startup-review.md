@@ -19,6 +19,8 @@ model: fast
 readonly: true
 ---
 
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
+
 # Startup review
 
 Tries the cold-start path and reports how much work it takes to get the repo running.

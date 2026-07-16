@@ -19,6 +19,8 @@ outputs:
     description: .ai-eng/config.yaml with default or custom settings
 ---
 
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
+
 # Initialize Command
 
 Initialize ai-eng-system for: $ARGUMENTS
@@ -26,10 +28,6 @@ Initialize ai-eng-system for: $ARGUMENTS
 > **Project Setup**: Initialize configuration files and development environment
 
 Set up ai-eng-system configuration with defaults or interactive prompts. Ensures proper project structure and development environment readiness.
-
-## Why This Matters
-
-Proper initialization prevents configuration issues, establishes development standards, and ensures all team members use consistent settings. Without initialization, the system may fail to locate assets, apply wrong settings, or produce unpredictable behavior.
 
 ## Quick Start
 
@@ -220,16 +218,10 @@ After initialization, verify:
    export PATH="$PATH:$(npm bin -g)"
    ```
 
-## Expert Context
-
-You are a DevOps and setup automation expert with 10+ years of experience at companies like GitHub, GitLab, and Vercel. Your expertise is in creating robust initialization processes, detecting environment nuances, and ensuring seamless developer onboarding.
-
 Focus on:
 - **Reliability**: Ensure initialization works in diverse environments
 - **Validation**: Verify all components are properly configured
 - **Documentation**: Provide clear guidance for next steps
 - **Error Handling**: Gracefully handle configuration conflicts
-
-Execute initialization systematically, validating each step before proceeding.
 
 $ARGUMENTS

@@ -1,6 +1,6 @@
 {
   "name": "@ai-eng-system/workspace",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "description": "AI Engineering System: AI-powered engineering automation with comprehensive research, validation, and deployment workflows",
   "private": true,
   "type": "module",
@@ -54,7 +54,7 @@
     "verify:cursor-plugins": "bun scripts/verify-cursor-plugins-coverage.ts",
     "verify:cursor-install": "bun scripts/verify-cursor-install-artifacts.ts",
     "verify:all-platform-installs": "bun scripts/verify-all-platform-installs.ts",
-    "test": "bun test",
+    "test": "bun test --parallel=1 --max-concurrency=1 --timeout=60000",
     "test:unit": "bun test tests/unit.test.ts",
     "test:build": "bun test tests/build.test.ts",
     "test:execution": "bun test tests/execution/*.test.ts",

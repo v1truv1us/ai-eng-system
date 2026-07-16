@@ -8,6 +8,8 @@ metadata:
 disable-model-invocation: true
 ---
 
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
+
 # Orchestrate
 
 > **Status: planned.** The spawn/wait/handoff driver (`scripts/cli.ts`) and role references (`references/dispatcher.md`, `references/planner.md`) are not in this repository yet. Until they land, use the **`agents-sdk-dev`** skill (harness=cursor) with cloud `Agent.create({ cloud: { repos } })` for multi-agent work, or the local pattern in `agents/research-runner/cursor/runner.ts`.

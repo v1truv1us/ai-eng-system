@@ -7,6 +7,8 @@ metadata:
   tags: quality
 ---
 
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
+
 # Type System Discipline
 
 The type checker is a proof assistant. Use it to eliminate impossible states, mismatched primitives, and unhandled variants at compile time. Anything you let through as runtime data becomes a runtime failure the compiler could have stopped.

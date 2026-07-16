@@ -18,7 +18,7 @@ import {
 
 const CURSOR_COMMANDS = [
     "research.md",
-    "specify.md",
+    "spec.md",
     "plan.md",
     "work.md",
     "review.md",
@@ -52,15 +52,12 @@ function assertCursorBundle(bundleRoot: string): void {
     expect(
         fs.existsSync(path.join(bundleRoot, "hooks", "cursor-hooks.json")),
     ).toBe(true);
-    expect(fs.existsSync(path.join(bundleRoot, "hooks", "stop-hook.sh"))).toBe(
-        true,
-    );
     expect(
-        fs.existsSync(path.join(bundleRoot, "hooks", "capture-response.sh")),
+        fs.existsSync(path.join(bundleRoot, "hooks", "cooking-stop-hook.sh")),
     ).toBe(true);
     expect(
         fs.existsSync(
-            path.join(bundleRoot, "skills", "pstack", "architect", "SKILL.md"),
+            path.join(bundleRoot, "skills", "pstack", "arena", "SKILL.md"),
         ),
     ).toBe(true);
 }

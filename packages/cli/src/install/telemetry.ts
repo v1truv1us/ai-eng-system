@@ -4,13 +4,22 @@
  * No PII, no project paths, no file contents.
  */
 
-import { appendFileSync, existsSync, mkdirSync } from "node:fs";
+import { appendFileSync, existsSync, mkdirSync, readFileSync } from "node:fs";
 import { homedir } from "node:os";
-import { dirname, join } from "node:path";
+import { join } from "node:path";
 
-const TELEMETRY_DIR = join(homedir(), ".ai-eng");
-const TELEMETRY_FILE = join(TELEMETRY_DIR, "telemetry.jsonl");
-const OPT_OUT_FLAG = join(TELEMETRY_DIR, "telemetry-opt-out");
+function telemetryPaths(): {
+    directory: string;
+    file: string;
+    optOutFlag: string;
+} {
+    const directory = join(process.env.HOME || homedir(), ".ai-eng");
+    return {
+        directory,
+        file: join(directory, "telemetry.jsonl"),
+        optOutFlag: join(directory, "telemetry-opt-out"),
+    };
+}
 
 export interface InstallTelemetryEvent {
     event: "install";
@@ -36,26 +45,33 @@ export type TelemetryEvent = InstallTelemetryEvent | BuildTelemetryEvent;
 
 export function isTelemetryEnabled(): boolean {
     if (process.env.AI_ENG_TELEMETRY === "false") return false;
-    if (existsSync(OPT_OUT_FLAG)) return false;
+    if (existsSync(telemetryPaths().optOutFlag)) return false;
     return true;
 }
 
 export function optOutTelemetry(): void {
-    mkdirSync(TELEMETRY_DIR, { recursive: true });
-    appendFileSync(OPT_OUT_FLAG, "", { encoding: "utf-8" });
+    const paths = telemetryPaths();
+    mkdirSync(paths.directory, { recursive: true });
+    appendFileSync(paths.optOutFlag, "", { encoding: "utf-8" });
 }
 
 export function appendTelemetryEvent(event: TelemetryEvent): void {
     if (!isTelemetryEnabled()) return;
 
-    mkdirSync(TELEMETRY_DIR, { recursive: true });
-    const line = `${JSON.stringify(event)}\n`;
-    appendFileSync(TELEMETRY_FILE, line, { encoding: "utf-8" });
+    try {
+        const paths = telemetryPaths();
+        mkdirSync(paths.directory, { recursive: true });
+        const line = `${JSON.stringify(event)}\n`;
+        appendFileSync(paths.file, line, { encoding: "utf-8" });
+    } catch {
+        // Telemetry must never block installation or builds.
+    }
 }
 
 export function readTelemetry(): TelemetryEvent[] {
-    if (!existsSync(TELEMETRY_FILE)) return [];
-    const content = require("node:fs").readFileSync(TELEMETRY_FILE, "utf-8");
+    const paths = telemetryPaths();
+    if (!existsSync(paths.file)) return [];
+    const content = readFileSync(paths.file, "utf-8");
     return content
         .split("\n")
         .filter((l: string) => l.trim())

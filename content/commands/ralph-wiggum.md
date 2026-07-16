@@ -27,6 +27,8 @@ outputs:
     description: Complete build report with all phase outputs, cycle history, and final summary
 ---
 
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
+
 # Ralph Wiggum Full-Cycle Command
 
 Execute complete feature development cycle: $ARGUMENTS
@@ -34,14 +36,6 @@ Execute complete feature development cycle: $ARGUMENTS
 > **Phase 0-6 of Spec-Driven Workflow**: Orchestrates Research → Specify → Plan → Work → Verify → Review in continuous loop
 
  orchestrate this complex multi-phase workflow systematically. Manage iteration cycles, track progress across all phases, and ensure comprehensive quality at each stage.
-
-## Why This Matters
-
-This workflow handles complete feature development from research to review. Poor orchestration leads to wasted cycles, incomplete phases, and features that fail quality gates. This orchestration task is critical for ensuring features are developed thoroughly and meet all requirements.
-
-## The Challenge
-
-The manage continuous iteration across all workflow phases without getting stuck in loops. The challenge is knowing when to advance to next phase versus when to return for refinement, balancing persistence with efficiency. Success means feature completes all requirements, passes all quality gates, and doesn't exceed reasonable iteration limits.
 
 ## Quick Start
 

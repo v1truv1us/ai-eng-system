@@ -22,6 +22,7 @@ function countSkillsRecursive(dir: string): number {
     const entries = readdirSync(dir, { withFileTypes: true });
     for (const entry of entries) {
         if (entry.isDirectory()) {
+            if (entry.name === "gtm") continue;
             const skillPath = join(dir, entry.name, "SKILL.md");
             if (existsSync(skillPath)) {
                 count++;

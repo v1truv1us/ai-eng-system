@@ -28,14 +28,14 @@ describe("TaskExecutor", () => {
                 id: "echo-task",
                 name: "Echo Task",
                 type: TaskType.SHELL,
-                command: 'echo "Hello, World!"',
+                command: "echo Hello-World",
             };
 
             const result = await executor.executeTask(task);
 
             expect(result.status).toBe(TaskStatus.COMPLETED);
             expect(result.exitCode).toBe(0);
-            expect(result.stdout).toContain("Hello, World!");
+            expect(result.stdout).toContain("Hello-World");
             expect(result.stderr).toBe("");
             expect(result.duration).toBeGreaterThan(0);
         });
@@ -45,7 +45,7 @@ describe("TaskExecutor", () => {
                 id: "fail-task",
                 name: "Fail Task",
                 type: TaskType.SHELL,
-                command: "exit 1",
+                command: "false",
             };
 
             const result = await executor.executeTask(task);
@@ -153,7 +153,7 @@ describe("TaskExecutor", () => {
                         id: "failing-task",
                         name: "Failing Task",
                         type: TaskType.SHELL,
-                        command: "exit 1",
+                        command: "false",
                     },
                     {
                         id: "dependent-task",
@@ -190,7 +190,7 @@ describe("TaskExecutor", () => {
                         id: "failing-task",
                         name: "Failing Task",
                         type: TaskType.SHELL,
-                        command: "exit 1",
+                        command: "false",
                     },
                     {
                         id: "independent-task",
@@ -239,7 +239,7 @@ describe("TaskExecutor", () => {
                 id: "always-fail-task",
                 name: "Always Fail Task",
                 type: TaskType.SHELL,
-                command: "exit 1",
+                command: "false",
                 retry: {
                     maxAttempts: 3,
                     delay: 0.01,
@@ -274,7 +274,7 @@ describe("TaskExecutor", () => {
                 id: "env-task",
                 name: "Environment Task",
                 type: TaskType.SHELL,
-                command: "echo $TEST_VAR",
+                command: "printenv TEST_VAR",
                 environment: {
                     TEST_VAR: "test-value",
                 },

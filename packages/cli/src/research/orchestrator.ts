@@ -111,6 +111,10 @@ export class ResearchOrchestrator extends EventEmitter {
                 query,
                 analysisResults,
             );
+            report.executionTime = Math.max(
+                1,
+                Date.now() - this.startTime.getTime(),
+            );
 
             // Emit completion event
             this.emitEvent("research_completed", {

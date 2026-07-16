@@ -5,19 +5,13 @@ agent: command-creator
 subtask: true
 ---
 
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
+
 # Create Command Command
 
 Create a new OpenCode command using AI assistance.
 
  design command systematically, ensuring clear argument structure, proper shell integration, and comprehensive documentation.
-
-## Why This Matters
-
-Commands become part of user's daily workflow. Poorly designed commands with confusing arguments, inadequate validation, or missing documentation waste time and cause errors. This command design task is critical for building reliable, user-friendly tools.
-
-## The Challenge
-
-The design command interface that balances simplicity with power. The challenge is creating argument structure that's intuitive for common use cases while supporting advanced scenarios. Success means command is easy to discover, simple to use, and powerful enough to handle complex workflows.
 
 ## Process
 1. **Understand Requirements**: What should the command do?
@@ -56,5 +50,3 @@ Command will be saved to:
 ```
 
 The command-creator will handle platform-specific formatting and ensure the command follows best practices for arguments, shell integration, and tool usage.
-
-After creating the command, rate your confidence in its usability and completeness (0.0-1.0). Identify any uncertainties about argument design, validation edge cases, or areas where documentation may be insufficient. Note any platform-specific challenges or integration concerns.

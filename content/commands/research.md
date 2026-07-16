@@ -19,6 +19,8 @@ outputs:
     description: Research findings saved to docs/research/
 ---
 
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
+
 # Research Command
 
 Conduct comprehensive research for: $ARGUMENTS

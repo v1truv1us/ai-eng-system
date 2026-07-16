@@ -1,7 +1,7 @@
 # TODO: AI Engineering System
 
 **Current Version**: 1.0.0
-**Last Updated**: 2026-04-14
+**Last Updated**: 2026-06-24
 
 ## High Priority
 
@@ -28,6 +28,14 @@
 - [ ] Context budget analysis operator surface
 
 ## Completed Tasks
+
+### Prompt Token Efficiency Audit (2026-06-24)
+
+- [x] Removed no-op prompting language from canonical agents, commands, and skills
+- [x] Added compact default output contracts across canonical definitions
+- [x] Replaced incentive/persona prompting with explicit task, constraint, output, and verification contracts
+- [x] Added regression tests for prompt efficiency
+- [x] Stabilized the full test suite and fixed async, discovery, telemetry, and fixture isolation failures
 
 ### Lifecycle Skills Expansion (2026-04-14)
 

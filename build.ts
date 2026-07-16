@@ -362,7 +362,8 @@ function transformAgentMarkdownForOpenCode(
         }
     }
 
-    // Transform tools from Claude Code array format to OpenCode object format
+    // Defensive fallback: canonical source is validated to use object tools,
+    // but if a legacy array is present, convert it to the OpenCode object format.
     // Claude Code: tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash"]
     // OpenCode: tools: { read: true, write: true, edit: true, grep: true, glob: true, bash: true }
     if (meta.tools && Array.isArray(meta.tools)) {
@@ -398,6 +399,50 @@ function transformAgentMarkdownForCursor(
     // Strip Claude-only fields that Cursor does not support
     meta.model = undefined;
     meta.temperature = undefined;
+
+    // Convert canonical object tools to Cursor/Claude Code array format
+    if (meta.tools && !Array.isArray(meta.tools)) {
+        const toolsArray: string[] = [];
+        for (const [key, value] of Object.entries(meta.tools)) {
+            if (value === true) {
+                toolsArray.push(key.charAt(0).toUpperCase() + key.slice(1));
+            }
+        }
+        meta.tools = toolsArray.length > 0 ? toolsArray : undefined;
+    }
+
+    const fm = serializeFrontmatter(meta);
+    return `---\n${fm}\n---\n${parsed.body}`;
+}
+
+function transformAgentMarkdownForClaude(
+    markdown: string,
+    filePathForErrors: string,
+): string {
+    const parsed = parseFrontmatterStrict(markdown, filePathForErrors);
+    if (!parsed.hasFrontmatter) {
+        return markdown;
+    }
+
+    const meta = { ...parsed.meta };
+
+    // Convert canonical object tools to Claude Code array format
+    // Canonical: tools: { read: true, write: true }
+    // Claude Code: tools: ["Read", "Write"]
+    if (meta.tools && !Array.isArray(meta.tools)) {
+        const toolsArray: string[] = [];
+        for (const [key, value] of Object.entries(meta.tools)) {
+            if (value === true) {
+                toolsArray.push(key.charAt(0).toUpperCase() + key.slice(1));
+            }
+        }
+        meta.tools = toolsArray.length > 0 ? toolsArray : undefined;
+    }
+
+    // Claude Code agents do not support the OpenCode permission field
+    if (meta.permission) {
+        meta.permission = undefined;
+    }
 
     const fm = serializeFrontmatter(meta);
     return `---\n${fm}\n---\n${parsed.body}`;
@@ -503,7 +548,9 @@ async function buildClaude(): Promise<void> {
     await mkdir(claudeAgentsDir, { recursive: true });
     const agentFiles = await getCachedAgentFiles();
     for (const src of agentFiles) {
-        await copyFile(src, join(claudeAgentsDir, basename(src)));
+        const content = await readFile(src, "utf-8");
+        const transformed = transformAgentMarkdownForClaude(content, src);
+        await writeFile(join(claudeAgentsDir, basename(src)), transformed);
     }
 
     // Skills
@@ -821,6 +868,18 @@ async function validateCursorOutput(cursorRoot: string): Promise<void> {
                 errors.push(
                     `Cursor skill missing description: ${skill.skillFile}`,
                 );
+            }
+        }
+    }
+
+    const agentsRoot = join(cursorRoot, "agents");
+    if (existsSync(agentsRoot)) {
+        const agentFiles = await getMarkdownFiles(agentsRoot);
+        for (const fp of agentFiles) {
+            const content = await readFile(fp, "utf-8");
+            const { meta } = parseFrontmatterStrict(content, fp);
+            if (meta.tools && !Array.isArray(meta.tools)) {
+                errors.push(`${fp}: Cursor agent tools must be an array`);
             }
         }
     }
@@ -1160,7 +1219,13 @@ async function syncToLocalClaude(): Promise<void> {
     // Sync agents for local Claude Code development
     const claudeAgentsDir = join(ROOT_CLAUDE_DIR, "agents");
     await cleanDirectory(claudeAgentsDir);
-    await copyMarkdownFiles(join(CONTENT_DIR, "agents"), claudeAgentsDir);
+    const contentAgentsDir = join(CONTENT_DIR, "agents");
+    const agentFiles = await getMarkdownFiles(contentAgentsDir);
+    for (const src of agentFiles) {
+        const content = await readFile(src, "utf-8");
+        const transformed = transformAgentMarkdownForClaude(content, src);
+        await writeFile(join(claudeAgentsDir, basename(src)), transformed);
+    }
 
     // Sync hooks to .claude/hooks/ directory
     const claudeHooksDir = join(ROOT_CLAUDE_DIR, "hooks");
@@ -1546,7 +1611,9 @@ async function copySelectedAgentFiles(
     for (const name of names) {
         const src = join(srcDir, `${name}.md`);
         if (existsSync(src)) {
-            await copyFile(src, join(destDir, `${name}.md`));
+            const content = await readFile(src, "utf-8");
+            const transformed = transformAgentMarkdownForClaude(content, src);
+            await writeFile(join(destDir, `${name}.md`), transformed);
         } else if (!IS_TEST_MODE) {
             throw new Error(`Agent not found during marketplace sync: ${src}`);
         }
@@ -2014,6 +2081,24 @@ async function validateContentOnly(): Promise<void> {
         if (!meta.description)
             errors.push(`${fp}: missing 'description' in frontmatter`);
         if (!meta.mode) errors.push(`${fp}: missing 'mode' in frontmatter`);
+
+        if (meta.tools) {
+            if (Array.isArray(meta.tools)) {
+                errors.push(
+                    `${fp}: tools must be an OpenCode object, not a Claude Code array`,
+                );
+            } else if (typeof meta.tools !== "object" || meta.tools === null) {
+                errors.push(`${fp}: tools must be an object`);
+            } else {
+                for (const [tool, value] of Object.entries(meta.tools)) {
+                    if (typeof value !== "boolean") {
+                        errors.push(
+                            `${fp}: tools.${tool} must be a boolean value`,
+                        );
+                    }
+                }
+            }
+        }
     }
 
     if (errors.length) {
@@ -2032,7 +2117,7 @@ async function validateAgents(): Promise<void> {
     const errors: string[] = [];
 
     // Validate Claude Code agents (dist/.claude-plugin/agents/)
-    const claudeAgentFiles = await getMarkdownFiles(CLAUDE_DIR);
+    const claudeAgentFiles = await getMarkdownFiles(join(CLAUDE_DIR, "agents"));
     for (const fp of claudeAgentFiles) {
         const fileContent = await readFile(fp, "utf-8");
         const { meta } = parseFrontmatterStrict(fileContent, fp);
@@ -2041,6 +2126,10 @@ async function validateAgents(): Promise<void> {
             errors.push(
                 `${fp}: Claude Code agents should not have permission field (use tools instead)`,
             );
+        }
+
+        if (meta.tools && !Array.isArray(meta.tools)) {
+            errors.push(`${fp}: Claude Code agent tools must be an array`);
         }
     }
 
@@ -2066,6 +2155,10 @@ async function validateAgents(): Promise<void> {
                         );
                     }
                 }
+            }
+
+            if (meta.tools && Array.isArray(meta.tools)) {
+                errors.push(`${fp}: OpenCode agent tools must be an object`);
             }
         }
     }

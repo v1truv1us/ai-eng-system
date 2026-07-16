@@ -49,6 +49,7 @@ const DEFAULT_IGNORE_PATTERNS = [
     "**/node_modules/**",
     "**/dist/**",
     "**/.git/**",
+    "**/.venv/**",
     "**/coverage/**",
 ];
 
@@ -144,6 +145,8 @@ export class CodebaseLocator implements DiscoveryAgent {
         for (const pattern of patterns) {
             const globFiles = await glob(pattern, {
                 absolute: true,
+                nodir: true,
+                ignore: DEFAULT_IGNORE_PATTERNS,
             });
             const files = globFiles.filter((filePath) => {
                 return !isIgnored(filePath);
@@ -393,6 +396,8 @@ export class ResearchLocator implements DiscoveryAgent {
         for (const pattern of docPatterns) {
             const allFiles = await glob(pattern, {
                 absolute: true,
+                nodir: true,
+                ignore: DEFAULT_IGNORE_PATTERNS,
             });
             const files = allFiles.filter((filePath: string) => {
                 return !isIgnored(filePath);
@@ -651,6 +656,8 @@ export class PatternFinder implements DiscoveryAgent {
             "**/*.{ts,js,tsx,jsx,py,java,cpp,c,h,hpp,md,mdx}",
             {
                 absolute: true,
+                nodir: true,
+                ignore: DEFAULT_IGNORE_PATTERNS,
             },
         );
         const codeFiles = allCodeFiles.filter((filePath: string) => {

@@ -445,13 +445,15 @@ export class TaskExecutor {
                 clearTimeout(timeoutId);
                 const endTime = new Date();
                 const duration = endTime.getTime() - startTime.getTime();
+                const processError = error as NodeJS.ErrnoException;
+                const exitCode = processError.code === "ENOENT" ? 127 : -1;
 
                 const result: TaskResult = {
                     id: shellTask.id,
                     status: TaskStatus.FAILED,
-                    exitCode: -1,
+                    exitCode,
                     stdout,
-                    stderr,
+                    stderr: stderr || error.message,
                     duration,
                     startTime,
                     endTime,

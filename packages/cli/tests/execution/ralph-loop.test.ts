@@ -39,8 +39,8 @@ describe("Flow Store", () => {
         }
     });
 
-    it("initializes directory structure", () => {
-        flowStore.initialize();
+    it("initializes directory structure", async () => {
+        await flowStore.initialize();
 
         const basePath = flowStore.basePath;
         expect(join(basePath, "iterations")).toBeTruthy();
@@ -48,10 +48,10 @@ describe("Flow Store", () => {
         expect(join(basePath, "gates")).toBeTruthy();
     });
 
-    it("creates initial state", () => {
-        flowStore.initialize();
+    it("creates initial state", async () => {
+        await flowStore.initialize();
 
-        const state = flowStore.createInitialState({
+        const state = await flowStore.createInitialState({
             prompt: "Test prompt",
             completionPromise: "<promise>SHIP</promise>",
             maxCycles: 50,
@@ -70,9 +70,9 @@ describe("Flow Store", () => {
         expect(state.currentCycle).toBe(0);
     });
 
-    it("loads existing state", () => {
-        flowStore.initialize();
-        flowStore.createInitialState({
+    it("loads existing state", async () => {
+        await flowStore.initialize();
+        await flowStore.createInitialState({
             prompt: "Test prompt",
             completionPromise: "<promise>SHIP</promise>",
             maxCycles: 30,
@@ -80,24 +80,24 @@ describe("Flow Store", () => {
             gates: ["acceptance"],
         });
 
-        const loaded = flowStore.load();
+        const loaded = await flowStore.load();
 
         expect(loaded).not.toBeNull();
         expect(loaded?.prompt).toBe("Test prompt");
         expect(loaded?.maxCycles).toBe(30);
     });
 
-    it("returns null for non-existent state", () => {
+    it("returns null for non-existent state", async () => {
         const emptyStore = new FlowStore({
             flowDir: tempDir,
             runId: "non-existent",
         });
-        expect(emptyStore.load()).toBeNull();
+        expect(await emptyStore.load()).toBeNull();
     });
 
-    it("saves and retrieves iterations", () => {
-        flowStore.initialize();
-        flowStore.createInitialState({
+    it("saves and retrieves iterations", async () => {
+        await flowStore.initialize();
+        await flowStore.createInitialState({
             prompt: "Test",
             completionPromise: "<promise>DONE</promise>",
             maxCycles: 10,
@@ -132,8 +132,8 @@ describe("Flow Store", () => {
             outputHash: "abc123",
         };
 
-        flowStore.saveIteration(cycle);
-        const loaded = flowStore.getIteration(1);
+        await flowStore.saveIteration(cycle);
+        const loaded = await flowStore.getIteration(1);
 
         expect(loaded).not.toBeNull();
         expect(loaded?.cycleNumber).toBe(1);
@@ -144,9 +144,9 @@ describe("Flow Store", () => {
         expect(loaded?.gateResults[0]?.gate).toBe("tests");
     });
 
-    it("tracks cycle counters", () => {
-        flowStore.initialize();
-        flowStore.createInitialState({
+    it("tracks cycle counters", async () => {
+        await flowStore.initialize();
+        await flowStore.createInitialState({
             prompt: "Test",
             completionPromise: "<promise>DONE</promise>",
             maxCycles: 10,
@@ -154,7 +154,7 @@ describe("Flow Store", () => {
             gates: [],
         });
 
-        const state = flowStore.load();
+        const state = await flowStore.load();
         expect(state?.completedCycles).toBe(0);
         expect(state?.failedCycles).toBe(0);
         expect(state?.stuckCount).toBe(0);
@@ -169,16 +169,16 @@ describe("Flow Store", () => {
             completionPromiseObserved: false,
         };
 
-        flowStore.recordSuccessfulCycle(cycle, "Test summary");
+        await flowStore.recordSuccessfulCycle(cycle, "Test summary");
 
-        const updatedState = flowStore.load();
+        const updatedState = await flowStore.load();
         expect(updatedState?.completedCycles).toBe(1);
         expect(updatedState?.stuckCount).toBe(0);
     });
 
-    it("detects stuck state after threshold", () => {
-        flowStore.initialize();
-        flowStore.createInitialState({
+    it("detects stuck state after threshold", async () => {
+        await flowStore.initialize();
+        await flowStore.createInitialState({
             prompt: "Test",
             completionPromise: "<promise>DONE</promise>",
             maxCycles: 10,
@@ -199,17 +199,17 @@ describe("Flow Store", () => {
         // Record 3 failed cycles
         for (let i = 1; i <= 3; i++) {
             cycle.cycleNumber = i;
-            flowStore.recordFailedCycle(cycle);
+            await flowStore.recordFailedCycle(cycle);
         }
 
-        const state = flowStore.load();
+        const state = await flowStore.load();
         expect(state?.failedCycles).toBe(3);
         expect(state?.stuckCount).toBe(3);
     });
 
-    it("saves and loads checkpoints", () => {
-        flowStore.initialize();
-        const state = flowStore.createInitialState({
+    it("saves and loads checkpoints", async () => {
+        await flowStore.initialize();
+        const state = await flowStore.createInitialState({
             prompt: "Test",
             completionPromise: "<promise>DONE</promise>",
             maxCycles: 10,
@@ -227,9 +227,9 @@ describe("Flow Store", () => {
             },
         };
 
-        flowStore.saveCheckpoint(state, phases);
+        await flowStore.saveCheckpoint(state, phases);
 
-        const checkpoint = flowStore.loadCheckpoint();
+        const checkpoint = await flowStore.loadCheckpoint();
         expect(checkpoint).not.toBeNull();
         expect(checkpoint?.cycleNumber).toBe(0);
         expect(checkpoint?.lastPhaseOutputs[Phase.RESEARCH]?.summary).toBe(

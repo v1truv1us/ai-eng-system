@@ -6,6 +6,8 @@ metadata:
 disable-model-invocation: true
 ---
 
+Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.
+
 # SEO Audit Skill
 
 ## When to Use
@@ -183,10 +185,3 @@ When `--full` is specified:
 3. Run full audit on each page
 4. Generate aggregate report with worst offenders
 5. List pages sorted by score (lowest first)
-
-## Confidence Assessment
-After completing audit, rate confidence **0.0 to 1.0**:
-- **0.9-1.0**: Full Lighthouse + all 10 checks, clear prioritized issues
-- **0.6-0.9**: Lighthouse run but some checks incomplete
-- **0.3-0.6**: Only partial audit completed
-- **0.0-0.3**: Could not access site or run Lighthouse
