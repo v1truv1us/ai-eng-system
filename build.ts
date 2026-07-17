@@ -1503,6 +1503,7 @@ const PLUGIN_MAP: Record<string, PluginConfig> = {
             "validation-review",
             "docs-reliability-review",
             "repo-audit-review",
+            "review",
         ],
         skills: [
             "repo-audit",

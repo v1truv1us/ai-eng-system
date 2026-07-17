@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.11.3] - 2026-07-16
+
+### Fixed
+- **`/deep-review`, `/review`, `/maintenance-review`, `/seo` failed with "Agent Not Found":** these commands set `agent: review`, but no `review` agent existed. Added a `review` agent (read-only multi-axis review orchestrator that dispatches `code-reviewer` / `security-scanner` / `architect-advisor` / `performance-engineer` via the Task tool) and wired it into the `ai-eng-quality` plugin.
+
 ## [1.11.2] - 2026-07-16
 
 ### Fixed

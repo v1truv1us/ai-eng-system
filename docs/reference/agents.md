@@ -1,6 +1,6 @@
 # Agents Reference
 
-44 specialized agents for engineering workflows.
+46 specialized agents for engineering workflows.
 
 ---
 
@@ -121,4 +121,4 @@
 All agents enhanced with research-backed prompting.
 See `docs/reference/workflow-surface-matrix.md` for command-to-skill-to-agent routing.
 
-This repository currently ships **45** agents.
+This repository currently ships **46** agents.
