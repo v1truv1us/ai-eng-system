@@ -42,13 +42,57 @@ This document records skills that were deleted from the ai-eng-system, with rati
 
 ---
 
-## Deletion Criteria Applied
+## Batch 2 — 2026-07-17 (Skills audit: public-knowledge restatements, duplicates, and redundancy)
 
-A skill is deleted when it meets ALL of these:
-1. **< 20 lines** with no meaningful process, version info, or validation
-2. **Plain prompting equivalent** — a generic prompt produces the same output
-3. **MCP/server superseded** — an MCP server or tool provides the same capability better
-4. **Overlapping** — a larger, more specific skill covers the same domain
+Audited the library against the "skills should earn their place" framework (a skill earns its place only by providing private context, custom tool access, or a specific custom workflow; public-knowledge restatements fight the model's training and inflate routing cost). 40 skills retired across three sub-batches. See `reports/skills-audit-2026-07.md` for the full classification and evidence.
+
+### 2a — Stubs & public-knowledge domain restatements (20)
+
+Each restated public knowledge a frontier model already applies, or duplicated a larger skill. No command or agent hard-loaded any of these (verified via `validateCommandSkillReferences` + reference sweep).
+
+- `check-compiler-errors`, `fix-merge-conflicts`, `get-pr-comments`, `new-branch-and-pr`, `run-smoke-tests`, `review-and-ship`, `what-did-i-get-done` — thin "do the obvious thing" stubs; plain prompting is equivalent. Migration: invoke the underlying tool (`bun run`, `gh pr`, `git`) directly, or use `verification-loop`.
+- `git-workflow-and-versioning`, `deprecation-and-migration`, `documentation-and-adrs`, `frontend-ui-engineering`, `api-and-interface-design`, `performance-optimization`, `context-budget`, `context-engineering`, `idea-refine` — public best-practice (trunk-based commits, ADRs, WCAG, Hyrum's Law, Core Web Vitals, context tiers, divergent/convergent thinking). Migration: plain prompting with the specific constraint; `source-driven-development` for version-pinned guidance.
+- `graphify`, `dependency-graph-analysis` — public CS/graph-DB primers (BFS, Dijkstra, PageRank, import graphs). Migration: plain prompting; `graph-rag` for retrieval-specific patterns.
+- `content-optimization` — subset of `text-cleanup` / `unslop`. Migration: `unslop` (prose), `text-cleanup` (generic).
+- `verify-this` — duplicate of `verification-loop` (same VERIFIED/NOT-VERIFIED schema). Migration: `verification-loop`.
+
+### 2b — Duplicate principle skills (18)
+
+Every principle skill restated a well-known engineering axiom (YAGNI, root-cause debugging, type discipline, boundary validation, etc.). `docs/attribution/cursor-plugins.md` already listed them as "Skipped (duplicate)". The `poteto-mode` aggregator was updated to inline the one-line guidance, so the leaf skills are no longer needed.
+
+- Root (5): `principle-fix-root-causes`, `principle-laziness-protocol`, `principle-never-block-on-the-human`, `principle-prove-it-works`, `principle-type-system-discipline`
+- `pstack/` (13): `principle-boundary-discipline`, `principle-encode-lessons-in-structure`, `principle-exhaust-the-design-space`, `principle-experience-first`, `principle-foundational-thinking`, `principle-guard-the-context-window`, `principle-make-operations-idempotent`, `principle-migrate-callers-then-delete-legacy-apis`, `principle-minimize-reader-load`, `principle-outcome-oriented-execution`, `principle-redesign-from-first-principles`, `principle-separate-before-serializing-shared-state`, `principle-subtract-before-you-add`
+- Migration: the guidance is inlined in `skills/pstack/poteto-mode/SKILL.md`; otherwise plain prompting applies these by default.
+
+### 2c — Prompt cluster collapse (2)
+
+- `prompt-engineering` — duplicate of `prompt-refinement` (same Task/Context/Constraints/Output/Verify contract). Migration: `prompt-refinement` (the only one wired into `/ai-eng/{research,specify,plan,work,review}`).
+- `incentive-prompting` — its v2 explicitly forbade the persona/stakes/challenge techniques that `AGENTS.md` still advertised as "+45-115% quality" (a live self-contradiction); the advertised apparatus was retired. Migration: `prompt-refinement`. `AGENTS.md` and `skills/AGENTS.md` marketing was corrected to match the surviving skill's real contract.
+
+### Deferred (wired — not deleted)
+
+These public-knowledge skills are hard-loaded as the procedure of a command or agent, so they qualify as a "specific custom workflow" and were kept pending a deliberate repoint: `code-simplification` (`/simplify`), `incremental-implementation` (`/work`), `spec-driven-development` (`/spec`), `thermo-nuclear-*` (`/deep-review` + reviewer agents), `security-and-hardening` (`security-scanner`), `knowledge-capture` (`teach`). `research-deep` stays (deployed research-runner service).
+
+---
+
+## Batch 3 — 2026-07-17 (Review-skill consolidation + demotion)
+
+Resolved the deferred set from Batch 2.
+
+### Retired (2) — genuine duplicates
+
+- `thermo-nuclear-code-quality-review` — deep-mode content duplicated `code-review-and-quality` strict maintainability mode. Migration: `code-review-and-quality` (used by `code-reviewer` standard + deep mode, and `/deep-review`).
+- `thermo-nuclear-security-review` — duplicated `security-and-hardening`. Migration: `security-and-hardening` (used by `security-scanner` and `/deep-review`).
+
+Repointed `content/commands/deep-review.md`, `content/agents/code-reviewer.md`, `content/agents/security-scanner.md`. `thermo-nuclear-architecture-review` and `thermo-nuclear-performance-review` were kept (no surviving domain counterpart for those axes).
+
+### Demoted model-invoked → user-invoked (18)
+
+These are command-loaded (so they keep working via explicit `Load skills/.../SKILL.md`), but restate public knowledge the model already applies. Demoting removes their startup routing cost without changing any command behavior: `ai-eng/simplify`, `browser-testing-with-devtools`, `ci-cd-and-automation`, `code-review-and-quality`, `code-simplification`, `debugging-and-error-recovery`, `fix-ci`, `git-worktree`, `incremental-implementation`, `knowledge-capture`, `pstack/typescript-best-practices`, `security-and-hardening`, `shipping-and-launch`, `spec-driven-development`, `test-driven-development`, `thermo-nuclear-architecture-review`, `thermo-nuclear-performance-review`, `verification-loop`.
+
+Result: auto-loading (model-invoked) skills dropped from 69 (original) → 11. The survivors are repo-specific workflows (`prompt-refinement`, `using-agent-skills`, `control-cli`, `control-ui`, `cross-repo-refactor`, `planning-and-task-breakdown`, `make-pr-easy-to-review`, `cli-for-agents`, `continuous-learning`, `source-driven-development`, `unslop`).
+
+---
 
 ## What Was Preserved
 

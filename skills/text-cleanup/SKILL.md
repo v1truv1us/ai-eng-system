@@ -2,8 +2,10 @@
 name: text-cleanup
 description: Remove AI-generated filler, repetition, inflated language, and redundant comments while preserving meaning.
 metadata:
+  category: user-invoked
   version: 2.0.0
-  tags: text-cleanup, slop-removal, content-optimization
+  tags: text-cleanup, slop-removal
+disable-model-invocation: true
 ---
 
 Default output: return the cleaned text only. For file edits, report changed files and verification in at most three bullets.

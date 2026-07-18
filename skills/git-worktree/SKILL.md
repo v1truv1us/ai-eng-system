@@ -2,8 +2,9 @@
 name: git-worktree
 description: Manage git worktrees for isolated parallel development. Use when running multiple sessions concurrently or working on parallel features.
 metadata:
-  category: model-invoked
+  category: user-invoked
   version: 1.0.0
+disable-model-invocation: true
 ---
 
 Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.

@@ -15,15 +15,13 @@
     "engineering",
     "workflow",
     "planning",
-    "review",
-    "context-engineering"
+    "review"
   ],
   "category": "development",
   "tags": [
     "productivity",
     "workflow",
-    "architecture",
-    "context-engineering"
+    "architecture"
   ],
   "skills": "./skills/",
   "agents": "./agents/",

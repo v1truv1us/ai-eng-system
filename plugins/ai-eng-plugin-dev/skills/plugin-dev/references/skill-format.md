@@ -195,7 +195,7 @@ The opencode-skills plugin validates:
 
 ### Existing Skills
 
-- `skills/prompting/incentive-prompting` - Research-backed techniques
+- `skills/prompt-refinement` - Prompt contracts
 - `skills/devops/git-worktree` - Git worktree management
 - `skills/devops/coolify-deploy` - Coolify deployment
 

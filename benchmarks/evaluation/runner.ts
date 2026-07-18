@@ -480,7 +480,10 @@ async function main() {
     }
 }
 
-// Always run main when this file is executed
-main().catch(console.error);
+// Run main only when this file is the entry point (not when imported, e.g. by
+// the skill-ablation harness).
+if (import.meta.main) {
+    main().catch(console.error);
+}
 
 export { EvaluationRunner };

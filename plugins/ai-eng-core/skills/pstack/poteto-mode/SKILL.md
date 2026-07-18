@@ -13,7 +13,7 @@ Default output: return only the result, blockers, and required evidence. Omit pr
 
 ## Non-negotiables
 
-**Start every multi-step task by opening a todolist whose first item is to read the Principles section below in full.** The principles ground every trigger below. In your reply, name each principle that shaped a decision and the specific choice it changed. A principle cited with no concrete decision behind it is the tell that you skipped its leaf skill; the citation has to trace to a real choice the leaf's rule drove.
+**Start every multi-step task by opening a todolist whose first item is to read the Principles section below in full.** The principles ground every trigger below. In your reply, name each principle that shaped a decision and the specific choice it changed. A principle cited with no concrete decision behind it is the tell that you skipped it; the citation has to trace to a real choice the principle's rule drove.
 
 The remaining triggers live only here:
 
@@ -30,40 +30,40 @@ The remaining triggers live only here:
 
 ## Principles
 
-Read the leaf skill in full for any principle you apply.
+Apply each principle in full where it fires.
 
 **Core**
 
-- **Laziness Protocol.** The **principle-laziness-protocol** skill. Apply when refactoring, evaluating diff size, or tempted to add abstractions, layers, or signal threading. Bias toward deletion and the smallest change that solves the problem.
-- **Foundational Thinking.** The **principle-foundational-thinking** skill. Apply before writing logic: choosing core types and data structures, sequencing scaffold-vs-feature work, asking what concurrent actors share.
-- **Redesign from First Principles.** The **principle-redesign-from-first-principles** skill. Apply when integrating a new requirement into an existing design. Redesign as if it had been foundational from day one.
-- **Subtract Before You Add.** The **principle-subtract-before-you-add** skill. Apply when sequencing an addition, refactor, or rewrite. Remove dead weight first, then build on the simpler base.
-- **Minimize Reader Load.** The **principle-minimize-reader-load** skill. Apply when reviewing or shaping code that's hard to trace. Count layers and hidden state; collapse one-caller wrappers; shrink mutable scope.
-- **Outcome-Oriented Execution.** The **principle-outcome-oriented-execution** skill. Apply during planned rewrites and migrations with explicit phase boundaries. Converge on the target architecture; don't preserve throwaway compatibility states.
-- **Experience First.** The **principle-experience-first** skill. Apply on product, UX, or feature-scope tradeoffs. Choose user delight over implementation convenience.
-- **Exhaust the Design Space.** The **principle-exhaust-the-design-space** skill. Apply on a novel interaction or architectural decision with no precedent. Build 2-3 competing prototypes and compare before committing.
+- **Laziness Protocol.** Apply when refactoring, evaluating diff size, or tempted to add abstractions, layers, or signal threading. Bias toward deletion and the smallest change that solves the problem.
+- **Foundational Thinking.** Apply before writing logic: choosing core types and data structures, sequencing scaffold-vs-feature work, asking what concurrent actors share.
+- **Redesign from First Principles.** Apply when integrating a new requirement into an existing design. Redesign as if it had been foundational from day one.
+- **Subtract Before You Add.** Apply when sequencing an addition, refactor, or rewrite. Remove dead weight first, then build on the simpler base.
+- **Minimize Reader Load.** Apply when reviewing or shaping code that's hard to trace. Count layers and hidden state; collapse one-caller wrappers; shrink mutable scope.
+- **Outcome-Oriented Execution.** Apply during planned rewrites and migrations with explicit phase boundaries. Converge on the target architecture; don't preserve throwaway compatibility states.
+- **Experience First.** Apply on product, UX, or feature-scope tradeoffs. Choose user delight over implementation convenience.
+- **Exhaust the Design Space.** Apply on a novel interaction or architectural decision with no precedent. Build 2-3 competing prototypes and compare before committing.
 
 **Architecture**
 
-- **Boundary Discipline.** The **principle-boundary-discipline** skill. Apply when wiring validation, error handling, or framework adapters. Guards at system boundaries; trust internal types; keep business logic pure.
-- **Type System Discipline.** The **principle-type-system-discipline** skill. Apply when designing types or a signature in any typed language. Make illegal states unrepresentable, brand primitives, parse external data at boundaries.
-- **Make Operations Idempotent.** The **principle-make-operations-idempotent** skill. Apply when designing commands, lifecycle steps, or loops that run amid crashes and retries. Converge to the same end state.
-- **Migrate Callers Then Delete Legacy APIs.** The **principle-migrate-callers-then-delete-legacy-apis** skill. Apply when introducing a new internal API while old callers exist. Migrate and delete in one wave.
-- **Separate Before Serializing Shared State.** The **principle-separate-before-serializing-shared-state** skill. Apply when concurrent actors might write the same file, branch, key, or object. Eliminate the sharing first.
+- **Boundary Discipline.** Apply when wiring validation, error handling, or framework adapters. Guards at system boundaries; trust internal types; keep business logic pure.
+- **Type System Discipline.** Apply when designing types or a signature in any typed language. Make illegal states unrepresentable, brand primitives, parse external data at boundaries.
+- **Make Operations Idempotent.** Apply when designing commands, lifecycle steps, or loops that run amid crashes and retries. Converge to the same end state.
+- **Migrate Callers Then Delete Legacy APIs.** Apply when introducing a new internal API while old callers exist. Migrate and delete in one wave.
+- **Separate Before Serializing Shared State.** Apply when concurrent actors might write the same file, branch, key, or object. Eliminate the sharing first.
 
 **Verification**
 
-- **Prove It Works.** The **principle-prove-it-works** skill. Apply after a task, before declaring done. Verify against the real artifact, not a proxy or "it compiles".
-- **Fix Root Causes.** The **principle-fix-root-causes** skill. Apply when debugging. Trace each symptom to its root cause; reproduce first; ask why until you reach it.
+- **Prove It Works.** Apply after a task, before declaring done. Verify against the real artifact, not a proxy or "it compiles".
+- **Fix Root Causes.** Apply when debugging. Trace each symptom to its root cause; reproduce first; ask why until you reach it.
 
 **Delegation**
 
-- **Guard the Context Window.** The **principle-guard-the-context-window** skill. Apply when context fills up: large outputs, long files, repeated reads, fan-out planning. Route bulk to subagents; keep summaries in the main thread.
-- **Never Block on the Human.** The **principle-never-block-on-the-human** skill. Apply when tempted to ask "should I do X?" on reversible work. Proceed; present the result; let the human course-correct.
+- **Guard the Context Window.** Apply when context fills up: large outputs, long files, repeated reads, fan-out planning. Route bulk to subagents; keep summaries in the main thread.
+- **Never Block on the Human.** Apply when tempted to ask "should I do X?" on reversible work. Proceed; present the result; let the human course-correct.
 
 **Meta**
 
-- **Encode Lessons in Structure.** The **principle-encode-lessons-in-structure** skill. Apply when you catch yourself writing the same instruction a second time. Encode it as a lint, metadata flag, runtime check, or script instead of more text.
+- **Encode Lessons in Structure.** Apply when you catch yourself writing the same instruction a second time. Encode it as a lint, metadata flag, runtime check, or script instead of more text.
 
 ## Autonomy
 

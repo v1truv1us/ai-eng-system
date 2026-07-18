@@ -30,5 +30,10 @@ jobs:
       - name: Lint
         run: bun run lint
 
+      - name: Skill format + evals
+        run: |
+          bun run format:skills
+          bun run lint:skill-evals
+
       - name: Fast tests
         run: bun test tests/unit.test.ts tests/build.test.ts tests/ci-workflow.test.ts

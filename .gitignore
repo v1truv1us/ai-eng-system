@@ -115,3 +115,7 @@ packages/*/package.json.dev
 # scripts/install-gtm-skills.sh. Neither ships in the default build.
 skills-gtm/
 skills/gtm/
+
+# macOS
+.DS_Store
+**/.DS_Store

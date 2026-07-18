@@ -206,7 +206,7 @@ Apply the `code-review-and-quality` skill in standard mode. Focus on correctness
 ### Deep review (`--depth=deep`)
 When invoked with `--depth=deep` or `--thermo-nuclear`:
 
-1. Load and apply the `thermo-nuclear-code-quality-review` skill.
+1. Load and apply the `code-review-and-quality` skill in **strict maintainability mode**.
 2. Be extremely strict about maintainability, abstraction quality, and structural simplification.
 3. Apply the 1k-line file rule, spaghetti-code detection, and code-judo restructuring.
 4. Do not approve unless structural quality is genuinely improved.
