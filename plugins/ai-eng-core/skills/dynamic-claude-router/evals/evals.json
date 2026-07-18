@@ -1,0 +1,38 @@
+{
+  "skill_name": "dynamic-claude-router",
+  "evals": [
+    {
+      "id": 1,
+      "name": "single-step-dispatch",
+      "prompt": "Apply the dynamic-claude-router skill to route this task: 'Find the function that sends the welcome email and summarize it.'",
+      "expected_output": "Output classifies the task (single-step, lookup) and dispatches to the matching cheap/fast subagent rather than a heavy reasoning model.",
+      "assertions": [
+        "The output names the chosen subagent/model and the complexity signal that drove the choice",
+        "The chosen model is the cheapest that fits the task type",
+        "The output does not over-route a trivial lookup to an expensive reasoning model"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "multi-step-chaining",
+      "prompt": "Use dynamic-claude-router for this compound task: 'Audit the auth module, then write tests for any gaps found.'",
+      "expected_output": "Output decomposes the task into a multi-step chain with distinct subagents per step and a defined handoff between them.",
+      "assertions": [
+        "The output separates the audit step from the test-writing step",
+        "Each step is routed to a subagent appropriate to its intent",
+        "The handoff/handoff contract between steps is explicit"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "harness-adapter-selection",
+      "prompt": "Apply dynamic-claude-router to run a research task under the Cursor harness specifically.",
+      "expected_output": "Output uses the Cursor adapter (not Anthropic/OpenCode) and the correct provider/modelID slugs for that harness.",
+      "assertions": [
+        "The output selects the correct harness adapter",
+        "The model identifiers referenced are valid provider/modelID pairs",
+        "The output notes that model slugs must be refreshed against current docs"
+      ]
+    }
+  ]
+}
