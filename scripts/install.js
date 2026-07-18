@@ -223,6 +223,33 @@ async function install(targetDir, claudeRoot, silent = false) {
             console.log(`  ✓ ${dir}/ (${n} ${label})`);
         }
     }
+    // Single source of truth for skills: opencode scans BOTH `skill/` (legacy
+    // singular) and `skills/` (canonical plural). Install physically into
+    // `skills/` and replace the legacy `skill/` with a symlink to it so the two
+    // paths never drift into duplicate copies. See
+    // https://opencode.ai/docs/skills/ and anomalyco/opencode#6065, #8054.
+    const skillsDir = path.join(targetDir, "skills");
+    const skillDir = path.join(targetDir, "skill");
+    if (fs.existsSync(skillsDir)) {
+        try {
+            const stat = fs.lstatSync(skillDir);
+            if (stat.isSymbolicLink() && fs.readlinkSync(skillDir) === skillsDir) {
+                // already a correct symlink
+            } else {
+                fs.rmSync(skillDir, { recursive: true, force: true });
+                fs.symlinkSync(skillsDir, skillDir);
+                if (!silent)
+                    console.log(
+                        "  🔗 Linked skill/ -> skills/ (single skill source)",
+                    );
+            }
+        } catch (error) {
+            if (!silent)
+                console.warn(
+                    `  ⚠️  could not symlink skill/ -> skills/: ${error instanceof Error ? error.message : String(error)}`,
+                );
+        }
+    }
     await installClaudeHooks(claudeRoot, silent);
     if (!silent) {
         console.log(`
