@@ -112,3 +112,6 @@ Return:
 
 Do not convert the findings into posts or account actions unless the user asks
 and approves that separate workflow.
+
+Xquik is an independent third-party service. Not affiliated with X Corp.
+"Twitter" and "X" are trademarks of X Corp.
