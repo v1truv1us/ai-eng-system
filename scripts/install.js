@@ -135,7 +135,7 @@ async function installClaudeHooks(targetDir, silent = false) {
             `  ✓ Installed ${copiedFiles.length} hook file(s) to .claude/hooks/`,
         );
         console.log(
-            "    \uD83D\uDCDD Hooks enable automatic prompt optimization (+45-115% quality)",
+            "    \uD83D\uDCDD Hooks load project context and log skill usage for the health loop",
         );
         console.log(
             "    \uD83D\uDEAB Use '!' prefix to skip optimization for specific prompts",
@@ -186,6 +186,34 @@ async function install(targetDir, claudeRoot, silent = false) {
         { dir: "tool", label: "tools", log: true },
         { dir: "tools", label: "tools", log: false },
     ];
+    // Clean-sync the skill surfaces: the installer owns the entire ai-eng skill
+    // set, so remove target skill dirs that no longer exist in the source before
+    // copying. This prevents deleted skills from accumulating across installs
+    // (the append-only bug). Other plugins' skills under the same target dir are
+    // untouched only if they are not part of our source set.
+    for (const dir of ["skill", "skills"]) {
+        const srcDir = path.join(distOpenCodeDir, dir);
+        const tgtDir = path.join(targetDir, dir);
+        if (!fs.existsSync(srcDir) || !fs.existsSync(tgtDir)) continue;
+        const srcSet = new Set(
+            fs.readdirSync(srcDir, { withFileTypes: true })
+                .filter((e) => e.isDirectory())
+                .map((e) => e.name),
+        );
+        for (const entry of fs.readdirSync(tgtDir, { withFileTypes: true })) {
+            if (!entry.isDirectory()) continue;
+            if (!srcSet.has(entry.name)) {
+                fs.rmSync(path.join(tgtDir, entry.name), {
+                    recursive: true,
+                    force: true,
+                });
+                if (!silent)
+                    console.log(
+                        `  \uD83E\uDDF9 Cleaned removed skill ${dir}/${entry.name}/`,
+                    );
+            }
+        }
+    }
     for (const { dir, label, log } of surfaces) {
         const src = path.join(distOpenCodeDir, dir);
         if (!fs.existsSync(src)) continue;
