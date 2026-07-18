@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [1.12.0](https://github.com/v1truv1us/ai-eng-system/compare/v1.11.3...v1.12.0) (2026-07-18)
 
+### Fixed
+- **Singular `skill/` re-pollution**: the build and installer were writing skills to both `skill/` (singular, legacy) and `skills/` (plural, canonical), causing stale duplicates to reappear after `bun run install:global`. The build now writes skills to `skills/` only; the installer removes any legacy `skill/` dir and no longer copies a singular surface. Deleted stale `packages/core/opencode/skill/` and `packages/core/skills/` sources.
+- **Retired `+45-115%` hook claim**: removed the unverified prompt-optimization quality claim from the installer output.
+
 ## [1.11.3] - 2026-07-16
 
 ### Fixed

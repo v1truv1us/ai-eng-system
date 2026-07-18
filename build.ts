@@ -590,12 +590,13 @@ async function buildOpenCode(): Promise<void> {
         ? [DIST_OPENCODE_DIR]
         : [DIST_OPENCODE_DIR, ROOT_OPENCODE_DIR];
     for (const targetDir of targetDirs) {
-        // OpenCode 1.18 reads SINGULAR dirs (agent/command/skill/tool); newer
-        // versions read plural. We write singular (primary) and mirror to
-        // plural below so both work.
+        // OpenCode reads plural dirs as canonical (agent(s), command(s),
+        // skills, tool(s)). We keep singular+plural for commands/agents/tools
+        // for backward compatibility, but skills are plural-only per
+        // https://opencode.ai/docs/skills (canonical) and anomalyco/opencode#6065.
         const commandsDir = join(targetDir, "command", NAMESPACE_PREFIX);
         const agentsDir = join(targetDir, "agent");
-        const skillsDir = join(targetDir, "skill");
+        const skillsDir = join(targetDir, "skills");
 
         // Clean both singular and plural dirs before building to remove stale files
         for (const sub of [
@@ -652,7 +653,7 @@ async function buildOpenCode(): Promise<void> {
             );
         }
 
-        // Skills: Copy to .opencode/skill/ while preserving namespaces.
+        // Skills: Copy to .opencode/skills/ while preserving namespaces.
         // This keeps paths like ai-eng/simplify intact in generated outputs.
         await copySkillsPreservePath(SKILLS_DIR, skillsDir);
 
@@ -665,11 +666,11 @@ async function buildOpenCode(): Promise<void> {
             );
         }
 
-        // Mirror singular -> plural for opencode >=1.19 (which reads plural).
+        // Mirror singular -> plural for commands/agents/tools so both naming
+        // conventions work. Skills are already plural-only above.
         for (const [singular, plural] of [
             ["command", "commands"],
             ["agent", "agents"],
-            ["skill", "skills"],
             ["tool", "tools"],
         ]) {
             const s = join(targetDir, singular);

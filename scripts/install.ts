@@ -251,7 +251,7 @@ async function installClaudeHooks(
             `  ✓ Installed ${copiedFiles.length} hook file(s) to .claude/hooks/`,
         );
         console.log(
-            "    📝 Hooks enable automatic prompt optimization (+45-115% quality)",
+            "    📝 Hooks load project context and log skill usage for the health loop",
         );
         console.log(
             "    🚫 Use '!' prefix to skip optimization for specific prompts",
@@ -262,10 +262,9 @@ async function installClaudeHooks(
 /**
  * Install AI Engineering System files.
  *
- * dist/.opencode is built with BOTH singular (agent/command/skill/tool, read
- * by opencode 1.18) and plural (agents/commands/skills/tools, read by >=1.19)
- * surfaces, all with flat agent names. We mirror both through to the target
- * and purge stale namespaced content from older installs first.
+ * dist/.opencode is built with plural-first surfaces (commands, agents,
+ * skills, tools). Skills are plural-only per OpenCode canonical naming; we
+ * also remove any legacy singular skill/ directory from older installs.
  */
 function countFilesRecursive(dir: string): number {
     let n = 0;
@@ -309,15 +308,44 @@ async function install(
         }
     }
 
-    // Copy each surface (singular + plural) straight through from the build.
-    // Only log the singular variant to avoid duplicate output.
+    // Single source of truth for skills: opencode's canonical skill dir is the
+    // PLURAL `skills/` (see https://opencode.ai/docs/skills/ and
+    // anomalyco/opencode#6065). The legacy singular `skill/` is still scanned for
+    // backward compatibility, but installing to both produced two physical copies
+    // that drifted into duplicates (anomalyco/opencode#8054). We install to
+    // `skills/` only and remove any legacy `skill/` dir (real dir or symlink).
+    for (const dir of ["skill", "skills"]) {
+        const srcDir = path.join(distOpenCodeDir, dir);
+        const tgtDir = path.join(targetDir, dir);
+        if (!fs.existsSync(srcDir) || !fs.existsSync(tgtDir)) continue;
+        const srcSet = new Set(
+            fs.readdirSync(srcDir, { withFileTypes: true })
+                .filter((e) => e.isDirectory())
+                .map((e) => e.name),
+        );
+        for (const entry of fs.readdirSync(tgtDir, { withFileTypes: true })) {
+            if (!entry.isDirectory()) continue;
+            if (!srcSet.has(entry.name)) {
+                fs.rmSync(path.join(tgtDir, entry.name), {
+                    recursive: true,
+                    force: true,
+                });
+                if (!silent)
+                    console.log(
+                        `  🧹 Cleaned removed skill ${dir}/${entry.name}/`,
+                    );
+            }
+        }
+    }
+
+    // Copy each surface from the build. Only log the singular variant for
+    // commands/agents/tools to avoid duplicate output.
     const surfaces: Array<{ dir: string; label: string; log: boolean }> = [
         { dir: "command", label: "commands", log: true },
         { dir: "commands", label: "commands", log: false },
         { dir: "agent", label: "agents", log: true },
         { dir: "agents", label: "agents", log: false },
-        { dir: "skill", label: "skills", log: true },
-        { dir: "skills", label: "skills", log: false },
+        { dir: "skills", label: "skills", log: true },
         { dir: "tool", label: "tools", log: true },
         { dir: "tools", label: "tools", log: false },
     ];
@@ -329,6 +357,15 @@ async function install(
             const n = countFilesRecursive(src);
             console.log(`  ✓ ${dir}/ (${n} ${label})`);
         }
+    }
+
+    // Remove any legacy singular skill/ dir (real dir or symlink) so skills live
+    // only under the canonical plural skills/.
+    const legacySkillDir = path.join(targetDir, "skill");
+    if (fs.existsSync(legacySkillDir)) {
+        fs.rmSync(legacySkillDir, { recursive: true, force: true });
+        if (!silent)
+            console.log("  🧹 Removed legacy skill/ (skills live in skills/)");
     }
 
     // Install Claude Code hooks (global ~/.claude/ or project root)
