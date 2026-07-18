@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.12.0](https://github.com/v1truv1us/ai-eng-system/compare/v1.11.3...v1.12.0) (2026-07-18)
+
 ## [1.11.3] - 2026-07-16
 
 ### Fixed
