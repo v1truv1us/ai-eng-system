@@ -2,7 +2,8 @@
 name: code-simplification
 description: Simplifies code for clarity without changing behavior. Use when code works but is harder to read, maintain, or extend than it should be.
 metadata:
-  category: model-invoked
+  category: user-invoked
+disable-model-invocation: true
 ---
 
 Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.

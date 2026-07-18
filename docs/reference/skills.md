@@ -1,6 +1,6 @@
 # Skills Reference
 
-ai-eng-system currently ships 127 base skills organized by lifecycle phase, domain, and repository-specific purpose.
+ai-eng-system currently ships 85 base skills organized by lifecycle phase, domain, and repository-specific purpose.
 
 ## Namespaced Skills
 
@@ -11,7 +11,6 @@ ai-eng-system currently ships 127 base skills organized by lifecycle phase, doma
 
 ### Define
 
-- `idea-refine` - structured divergent/convergent thinking for vague concepts
 - `spec-driven-development` - write structured specifications before code
 
 ### Plan
@@ -22,10 +21,7 @@ ai-eng-system currently ships 127 base skills organized by lifecycle phase, doma
 
 - `incremental-implementation` - thin vertical slice delivery
 - `test-driven-development` - Red-Green-Refactor with 80%+ coverage
-- `context-engineering` - feed agents the right information at the right time
 - `source-driven-development` - ground decisions in official documentation
-- `frontend-ui-engineering` - component architecture, accessibility, responsive design
-- `api-and-interface-design` - contract-first API and module boundary design
 
 ### Verify
 
@@ -37,14 +33,10 @@ ai-eng-system currently ships 127 base skills organized by lifecycle phase, doma
 - `code-review-and-quality` - five-axis code review before merge
 - `code-simplification` - reduce complexity while preserving behavior
 - `security-and-hardening` - OWASP Top 10 prevention and boundary validation
-- `performance-optimization` - measure-first performance improvement
 
 ### Ship
 
-- `git-workflow-and-versioning` - trunk-based development with atomic commits
 - `ci-cd-and-automation` - Shift Left pipelines and feature flag releases
-- `deprecation-and-migration` - code-as-liability removal and migration patterns
-- `documentation-and-adrs` - Architecture Decision Records and API docs
 - `shipping-and-launch` - pre-launch checklists and staged rollouts
 
 ## Research and Prompting
@@ -52,10 +44,7 @@ ai-eng-system currently ships 127 base skills organized by lifecycle phase, doma
 - `comprehensive-research` - multi-phase research orchestration
 - `grill-me` - relentless one-question-at-a-time interview to stress-test a plan or design
 - `grill-with-docs` - same interview, persisted as a `CONTEXT.md` or ADR-style decision record
-- `prompt-engineering` - comprehensive prompt engineering for coding agents (structured prompts, few-shot, chain-of-thought, decomposition, agent workflow patterns)
-- `prompt-refinement` - TCRO prompt structuring
-- `incentive-prompting` - research-backed prompting techniques (+45-115% quality)
-- `content-optimization` - content and prompt enhancement
+- `prompt-refinement` - TCRO prompt structuring (Task/Context/Constraints/Output/Verify)
 - `text-cleanup` - AI-generated verbosity removal
 - `seo-audit` - SEO, Lighthouse-style, metadata, structured data, and accessibility audits
 
@@ -90,4 +79,4 @@ These skills are included in default installs (see `.ai-eng/install-manifest.jso
 - Namespaced skills use `namespace/name` directory paths.
 - See `docs/reference/skills-first-map.md` for the complete ownership mapping.
 
-This repository currently ships **127** base skills.
+This repository currently ships **85** base skills.

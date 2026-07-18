@@ -1,0 +1,27 @@
+{
+  "skill_name": "typescript-best-practices",
+  "evals": [
+    {
+      "id": 1,
+      "name": "no-implicit-any",
+      "prompt": "Apply typescript-best-practices to this function: function parse(raw) { return JSON.parse(raw); }",
+      "expected_output": "Output types the parameter and return, avoiding implicit any, and prefers a narrow parsed type over unknown.",
+      "assertions": [
+        "The output removes implicit any",
+        "The output provides an explicit return type",
+        "The output does not use `any` as the parsed result type"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "exhaustive-union",
+      "prompt": "Apply typescript-best-practices to a switch over a string-literal union Status = 'open' | 'closed' | 'pending' that currently has no default.",
+      "expected_output": "Output uses a never-based exhaustiveness check so adding a new union member is a compile error.",
+      "assertions": [
+        "The output adds an exhaustiveness check (assertNever / never assignment)",
+        "The output flags the missing case rather than silently defaulting",
+        "Adding a new union member would produce a type error"
+      ]
+    }
+  ]
+}

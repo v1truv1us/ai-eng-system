@@ -344,4 +344,4 @@ This skill incorporates methodologies from:
 - `deep-web-research` — For web-focused research with source evaluation
 - `research-companion` — For research with document analysis and fact-checking
 - `prompt-refinement` — For structuring research prompts before execution
-- `incentive-prompting` — For enhancing research agent prompts
+- `prompt-refinement` — For enhancing research agent prompts

@@ -134,11 +134,11 @@ the default build.
 
 # Expose to the build (copies skills-gtm/ → skills/gtm/)
 ./scripts/install-gtm-skills.sh
-bun run build   # now emits 332 skills (127 core + 205 GTM)
+bun run build   # now emits 290 skills (85 core + 205 GTM)
 
 # Remove
 ./scripts/install-gtm-skills.sh remove
-bun run build   # back to 127 core skills
+bun run build   # back to 85 core skills
 ```
 
 GTM skills keep their domain in `metadata.domain` (e.g. `abm`) and are split by

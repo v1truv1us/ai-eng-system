@@ -26,8 +26,6 @@ This is the meta-skill for discovering and invoking the right skill, command, or
 What are you trying to do?
 
 DEFINE (understand the problem)
-  → Turning a vague idea into something concrete?
-    → idea-refine
   → Writing requirements before coding?
     → spec-driven-development
 
@@ -56,12 +54,6 @@ BUILD (write the code)
     → test-driven-development
   → Need the right documentation?
     → source-driven-development
-  → Building user-facing interfaces?
-    → frontend-ui-engineering
-  → Designing an API or module boundary?
-    → api-and-interface-design
-  → Need the right context loaded?
-    → context-engineering
 
 VERIFY (prove it works)
   → Testing in the browser?
@@ -78,26 +70,16 @@ REVIEW (improve code health)
     → code-simplification
   → Security concerns?
     → security-and-hardening
-  → Performance issues?
-    → performance-optimization
 
 SHIP (deploy safely)
   → Preparing for production?
     → shipping-and-launch
-  → Managing git workflow?
-    → git-workflow-and-versioning
   → Setting up CI/CD?
     → ci-cd-and-automation
-  → Deprecating old code?
-    → deprecation-and-migration
-  → Documenting decisions?
-    → documentation-and-adrs
 
 SPECIALIZED
-  → Analyzing dependencies or architecture?
-    → dependency-graph-analysis
   → Building knowledge graphs?
-    → graphify or graph-rag
+    → graph-rag
   → Creating plugins/commands/skills?
     → plugin-dev
   → Building a harness workflow runner (Cursor, Claude, OpenCode, OpenAI, Pi)?
@@ -108,7 +90,7 @@ SPECIALIZED
   → Large cloud multi-agent tree (/orchestrate)?
     → orchestrate (planned; use agents-sdk-dev with harness=cursor until scripts/cli.ts exists)
   → Optimizing prompts?
-    → incentive-prompting or prompt-refinement
+    → prompt-refinement
   → Cleaning up AI verbosity?
     → text-cleanup
   → Managing git worktrees?

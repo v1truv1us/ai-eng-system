@@ -1,7 +1,7 @@
 {
   "name": "ai-eng-quality",
   "displayName": "AI Engineering Quality",
-  "version": "1.11.2",
+  "version": "1.11.3",
   "description": "Testing, security scanning, code review, and quality assurance",
   "author": {
     "name": "v1truv1us",

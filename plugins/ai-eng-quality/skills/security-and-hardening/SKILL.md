@@ -2,7 +2,8 @@
 name: security-and-hardening
 description: OWASP Top 10 prevention, auth patterns, secrets management, dependency auditing, boundary validation. Use when handling user input, auth, or external integrations.
 metadata:
-  category: model-invoked
+  category: user-invoked
+disable-model-invocation: true
 ---
 
 Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.

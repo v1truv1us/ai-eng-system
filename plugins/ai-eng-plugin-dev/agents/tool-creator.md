@@ -356,7 +356,7 @@ export default tool({
 The tool-creator integrates with existing ai-eng-system components:
 - Creates tools in the established `.opencode/tool/` directory structure
 - Follows same quality standards as existing tools
-- Uses research-backed prompting techniques from `incentive-prompting` skill
+- Uses research-backed prompting techniques from `prompt-refinement` skill
 - Maintains consistency across the tool ecosystem
 
 ## Advanced Features

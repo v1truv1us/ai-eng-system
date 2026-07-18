@@ -37,8 +37,8 @@ Launches **4 parallel reviews**, each in its own context window:
 
 | Axis | Agent | Skill | Focus |
 |------|-------|-------|-------|
-| Code Quality | code-reviewer | thermo-nuclear-code-quality-review | Maintainability, structure, 1k-line rule, spaghetti |
-| Security | security-scanner | thermo-nuclear-security-review | Injection, auth bypass, secrets, OWASP |
+| Code Quality | code-reviewer | code-review-and-quality | Maintainability, structure, 1k-line rule, spaghetti |
+| Security | security-scanner | security-and-hardening | Injection, auth bypass, secrets, OWASP |
 | Architecture | architect-advisor | thermo-nuclear-architecture-review | Coupling, boundaries, layering, dependency direction |
 | Performance | performance-engineer | thermo-nuclear-performance-review | Complexity, memory, N+1, network, bundle size |
 

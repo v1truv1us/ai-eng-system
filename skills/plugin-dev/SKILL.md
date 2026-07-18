@@ -332,7 +332,7 @@ claude plugin add https://github.com/v1truv1us/ai-eng-system
 Study existing components in ai-eng-system:
 - `content/commands/plan.md` - Command structure
 - `content/agents/architect-advisor.md` - Agent structure
-- `skills/prompting/incentive-prompting/SKILL.md` - Skill structure
+- `skills/prompt-refinement/SKILL.md` - Skill structure
 
 ## Troubleshooting
 

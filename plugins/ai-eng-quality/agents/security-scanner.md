@@ -319,7 +319,7 @@ Apply the `security-and-hardening` skill. Focus on OWASP Top 10, boundary valida
 ### Deep review (`--depth=deep`)
 When invoked with `--depth=deep` or `--thermo-nuclear`:
 
-1. Load and apply the `thermo-nuclear-security-review` skill.
+1. Load and apply the `security-and-hardening` skill.
 2. Be extremely thorough: injection vectors, auth bypass, secrets exposure, boundary validation.
 3. Treat every input boundary as hostile. Every secret storage as potentially leaked.
 4. Do not approve unless all high-confidence vulnerabilities are addressed.

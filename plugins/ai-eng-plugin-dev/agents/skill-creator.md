@@ -244,7 +244,7 @@ Every skill must meet these standards:
 The skill-creator integrates with existing ai-eng-system components:
 - Can create skills in the established `skills/` directory structure
 - Follows same quality standards as existing skills
-- Uses research-backed prompting techniques from `incentive-prompting` skill
+- Uses research-backed prompting techniques from `prompt-refinement` skill
 - Maintains consistency across the skill ecosystem
 
 ## Advanced Features

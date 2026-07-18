@@ -84,21 +84,9 @@ This document defines the **agents and tools** available in this system. For the
 ### Coordination
 - `subagent-orchestration` - Routes work to the most appropriate specialist agent
 
-**All agents enhanced with research-backed prompting techniques** (+45-115% quality improvement)
+## Prompt Contracts
 
-## Incentive-Based Prompting Integration
-
-All subagents are enhanced with research-backed techniques:
-
-1. **Expert Persona Assignment** — Detailed role with years of experience and notable companies (Kong et al., 2023: 24% → 84% accuracy)
-
-2. **Step-by-Step Reasoning** — "Take a deep breath and analyze systematically" (Yang et al., 2023: 34% → 80% accuracy)
-
-3. **Stakes Language** — "This is critical", "direct impact on production" (Bsharat et al., 2023: +45% quality)
-
-4. **Challenge Framing** — "I bet you can't find the perfect balance" (Li et al., 2023: +115% on hard tasks)
-
-5. **Self-Evaluation** — Confidence ratings and uncertainty identification
+Subagent and command prompts follow a single contract enforced by the `prompt-refinement` skill: an explicit **Task, Context, Constraints, Output, Verification**. The contract favors testable constraints and the shortest output that carries the result. It deliberately avoids persona theater, emotional stakes, and challenge framing — on current frontier models those add noise and token cost without changing the output.
 
 ## Usage Examples
 
@@ -124,161 +112,40 @@ The prompt-refinement skill is automatically invoked by:
 Ask the prompt-optimizer to enhance: "Help me fix this slow database query"
 ```
 
-## Automatic Prompt Optimization System
+## Prompt Optimization
 
-The ai-eng-system includes an **automatic step-by-step prompt optimization** system that enhances all user prompts with research-backed techniques.
-
-### Features
-
-- **Automatic**: Every prompt is optimized by default (no manual action needed)
-- **Step-by-step**: Shows each optimization technique with approve/reject/modify options
-- **Research-backed**: Uses peer-reviewed prompting techniques for +45-115% quality improvement
-- **Domain-aware**: Detects technical domain (security, frontend, backend, etc.) and applies relevant expertise
-- **Escape hatch**: Use `!` prefix to skip optimization entirely
-- **Configurable**: Adjustable verbosity (quiet/normal/verbose) and auto-approve mode
-
-### Techniques Applied
-
-1. **Expert Persona** (+60% accuracy): Assigns detailed expert role with years of experience
-2. **Step-by-Step Reasoning** (+46% accuracy): Adds systematic analysis instruction
-3. **Stakes Language** (+45% quality): Adds importance and consequence framing
-4. **Challenge Framing** (+115% on hard tasks): Frames problem as challenge
-5. **Self-Evaluation** (+10% calibration): Requests confidence rating
-
-### Platform-Specific Behavior
-
-#### Claude Code
-
-**Mechanism**: UserPromptSubmit hook (intercepts every prompt)
-
-**Example Flow**:
-```
-User: help me fix the auth bug
-
-→ Hook analyzes: Complexity: Medium, Domain: Security
-→ Hook applies techniques:
-  ✓ Expert Persona (security engineer)
-  ✓ Step-by-Step Reasoning
-  ✓ Stakes Language
-  ✓ Self-Evaluation
-
-→ Returns optimized prompt with all techniques applied
-```
-
-#### OpenCode
-
-**Mechanism**: Custom tool (`prompt-optimize`) that model can call
-
-**Example Flow**:
-```
-User: help me fix the auth bug
-
-→ Model calls: prompt-optimize("help me fix the auth bug")
-→ Tool analyzes: Complexity: Medium, Domain: Security
-→ Tool applies techniques:
-  ✓ Expert Persona (security engineer)
-  ✓ Step-by-Step Reasoning
-  ✓ Stakes Language
-  ✓ Self-Evaluation
-
-→ Returns: 🧧 Prompt optimized (medium, security)
-```
+The `prompt-optimize` tool (OpenCode) and `/optimize` command restructure a prompt into an explicit **Task, Context, Constraints, Output, Verification** contract via the `prompt-refinement` skill. They add information that changes execution — testable constraints, exact output shape, verification steps — and strip filler the model already follows by default. They do not inject personas, stakes language, or challenge framing: on current frontier models those add token cost without reliably improving output.
 
 ### Usage
 
-#### Automatic Mode (Default)
-
-Every prompt is automatically optimized. No action needed.
-
-**Examples**:
-```
-# These are all automatically optimized
-"help me debug this error"
-"design a scalable architecture"
-"optimize this database query"
-```
-
-#### Escape Hatch
-
-Use `!` prefix to bypass optimization entirely:
-
-```
-!just say hello
-!no thanks, I'm good
-```
-
-#### Manual Optimization
-
-Use `/optimize` command for explicit optimization with options:
-
 ```bash
-/optimize --help                         # Show help
-/optimize "help me debug" --verbose       # Verbose mode
-/optimize "help me debug" --quiet           # Quiet mode
-/optimize --auto-approve on|off            # Toggle auto-approve
-/optimize-verbosity quiet|normal|verbose     # Change verbosity
+/optimize "help me debug this error"            # Structure a prompt
+/optimize-verbosity quiet|normal|verbose         # Change verbosity
 ```
+
+Escape hatch: prefix a prompt with `!` to skip optimization.
 
 ### Configuration
 
-**Defaults** (built-in):
-- `enabled`: true
-- `autoApprove`: false (require approval at each step)
-- `verbosity`: "normal" (condensed view)
-- `escapePrefix`: "!"
-- `skipForSimplePrompts`: true
+Customize via `.claude/ai-eng-config.json` (Claude Code) or `opencode.json` / `ai-eng-config.json` (OpenCode):
 
-**Customize via**:
-- Claude Code: `.claude/ai-eng-config.json`
-- OpenCode: `opencode.json` or `ai-eng-config.json`
-
-**Example Config**:
 ```json
 {
   "promptOptimization": {
     "enabled": true,
-    "autoApprove": true,
-    "verbosity": "verbose",
+    "autoApprove": false,
+    "verbosity": "normal",
     "skipForSimplePrompts": true,
     "escapePrefix": "!"
   }
 }
 ```
 
-### Session Commands
-
-**Toggle auto-approve**:
-```bash
-/optimize-auto on|off
-```
-
-**Change verbosity**:
-```bash
-/optimize-verbosity quiet|normal|verbose
-```
-
 ### Verification
 
-To verify optimization is working:
 ```bash
-# See verification guide
 cat docs/prompt-optimization-verification.md
 ```
-
-### Research References
-
-All techniques are based on peer-reviewed research:
-
-- **Bsharat et al. (2023, MBZUAI)**: 26 principled prompting instructions, +57.7% quality
-- **Yang et al. (2023, Google DeepMind OPRO)**: "Take a deep breath", +50% improvement
-- **Li et al. (2023, ICLR 2024)**: Challenge framing, +115% on hard tasks
-- **Kong et al. (2023)**: Expert persona, 24% → 84% accuracy
-
-### Performance
-
-- **Latency**: ~10-50ms per prompt (hook-based)
-- **Quality**: +45-115% improvement in response quality
-- **Trade-off**: Small latency for significantly better responses
 
 ### Using recursive-init
 ```
@@ -304,7 +171,6 @@ The table below highlights the most important lifecycle and alignment skills. Th
 | git-worktree | skills/git-worktree/ | Git worktree workflow |
 | incremental-implementation | skills/incremental-implementation/ | Thin-slice implementation discipline |
 | prompt-refinement | skills/prompt-refinement/ | TCRO structuring with phase-specific clarification |
-| incentive-prompting | skills/incentive-prompting/ | Research-backed prompting techniques |
 | knowledge-architecture | skills/knowledge-architecture/ | Static-first knowledge architecture and learning workflows |
 | plugin-dev | skills/plugin-dev/ | Plugin development knowledge base |
 | using-agent-skills | skills/using-agent-skills/ | Decision tree for task-to-skill mapping |
@@ -529,7 +395,4 @@ Keep TODO.md current by:
 
 ## Research References
 
-- Bsharat et al. (2023) — "Principled Instructions Are All You Need" — MBZUAI
-- Yang et al. (2023) — "Large Language Models as Optimizers" (OPRO) — Google DeepMind
-- Li et al. (2023) — Challenge framing research — ICLR 2024
-- Kong et al. (2023) — Persona prompting research
+The earlier "incentive prompting" apparatus (persona/stakes/challenge techniques, cited to Bsharat, Yang/OPRO, Li, Kong) was retired: the `prompt-refinement` skill that replaces it deliberately avoids those techniques, since on current frontier models they add token cost without reliably improving output. The underlying prompt-contract approach is documented in the `prompt-refinement` skill.

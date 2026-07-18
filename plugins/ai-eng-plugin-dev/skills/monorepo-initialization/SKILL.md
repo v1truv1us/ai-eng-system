@@ -4,7 +4,7 @@ description: Recursively initialize AGENTS.md in monorepo subdirectories with sm
 metadata:
   category: user-invoked
   version: 1.0.0
-  tags: monorepo, agents, context-engineering, setup, hierarchy
+  tags: monorepo, agents, setup, hierarchy
 disable-model-invocation: true
 ---
 

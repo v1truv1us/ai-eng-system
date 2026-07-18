@@ -44,7 +44,6 @@ Complete mapping of every command to its canonical owner: skill, runtime feature
 | `/ai-eng/k8s` | domain | Kubernetes patterns | Standalone domain command |
 | `/ai-eng/cloudflare` | domain | Cloudflare operations | Standalone domain command |
 | `/ai-eng/github` | domain | GitHub automation | Standalone domain command |
-| `/ai-eng/git-workflow` | alias | `git-workflow-and-versioning` | `skills/git-workflow-and-versioning/SKILL.md` |
 | `/ai-eng/monitoring` | agent-backed | `monitoring-expert` | Observability setup |
 | `/ai-eng/sentry` | domain | incident response | Standalone domain command |
 | `/ai-eng/slack` | domain | integration workflows | Standalone domain command |
@@ -63,7 +62,6 @@ Complete mapping of every command to its canonical owner: skill, runtime feature
 
 | Command | Type | Canonical Owner | Notes |
 |---------|------|-----------------|-------|
-| `/ai-eng/content-optimize` | skill-backed | `content-optimization` | `skills/content-optimization/SKILL.md` |
 | `/ai-eng/verbalize` | domain | verbalized sampling | Standalone domain command |
 | `/ai-eng/agent-analyzer` | agent-backed | `subagent-orchestration` | Agent performance analysis |
 

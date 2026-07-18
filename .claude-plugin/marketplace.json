@@ -26,15 +26,13 @@
         "engineering",
         "workflow",
         "planning",
-        "review",
-        "context-engineering"
+        "review"
       ],
       "category": "development",
       "tags": [
         "productivity",
         "workflow",
-        "architecture",
-        "context-engineering"
+        "architecture"
       ]
     },
     {
@@ -163,7 +161,6 @@
       ],
       "category": "development",
       "tags": [
-        "content-optimization",
         "seo",
         "communication"
       ]

@@ -22,26 +22,18 @@ Every user-facing surface in ai-eng-system maps to one of four ownership categor
 
 | Phase | Canonical Skill | Command Entrypoint | Alias |
 |-------|----------------|--------------------|-------|
-| Define | `idea-refine` | `/ai-eng/spec` | `/spec` |
 | Define | `spec-driven-development` | `/ai-eng/specify` | `/spec` |
 | Plan | `planning-and-task-breakdown` | `/ai-eng/plan` | `/plan` |
 | Build | `incremental-implementation` | `/ai-eng/work` | `/build` |
 | Build | `test-driven-development` | `/ai-eng/work` | `/test` |
-| Build | `context-engineering` | `/ai-eng/context` | - |
 | Build | `source-driven-development` | `/ai-eng/context` | - |
-| Build | `frontend-ui-engineering` | `/ai-eng/work` | - |
-| Build | `api-and-interface-design` | `/ai-eng/work` | - |
 | Verify | `browser-testing-with-devtools` | - | - |
 | Verify | `debugging-and-error-recovery` | - | - |
 | Verify | quality gate loop | `/verify` | - |
 | Review | `code-review-and-quality` | `/ai-eng/review` | - |
 | Review | `code-simplification` | `/ai-eng/simplify` | `/code-simplify` |
 | Review | `security-and-hardening` | `/ai-eng/security-scan` | - |
-| Review | `performance-optimization` | `/ai-eng/review --focus=performance` | - |
-| Ship | `git-workflow-and-versioning` | - | - |
 | Ship | `ci-cd-and-automation` | `/ai-eng/deploy` | `/ship` |
-| Ship | `deprecation-and-migration` | - | - |
-| Ship | `documentation-and-adrs` | `/ai-eng/decision-journal` | - |
 | Ship | `shipping-and-launch` | `/ai-eng/deploy` | `/ship` |
 
 ## Repo-Specific Skills
@@ -52,8 +44,6 @@ These are unique to ai-eng-system and sit outside the standard lifecycle.
 |-------|------|---------|
 | `comprehensive-research` | `skills/comprehensive-research/` | Multi-phase research orchestration |
 | `prompt-refinement` | `skills/prompt-refinement/` | TCRO prompt structuring |
-| `incentive-prompting` | `skills/incentive-prompting/` | Research-backed prompting techniques |
-| `content-optimization` | `skills/content-optimization/` | Content and prompt enhancement |
 | `text-cleanup` | `skills/text-cleanup/` | AI verbosity removal |
 | `coolify-deploy` | `skills/coolify-deploy/` | Coolify deployment workflows |
 | `git-worktree` | `skills/git-worktree/` | Git worktree management |
@@ -74,7 +64,6 @@ These are unique to ai-eng-system and sit outside the standard lifecycle.
 | `context7-docs` | Alias candidate | `comprehensive-research` (docs profile) |
 | `fact-check` | Alias candidate | `comprehensive-research` (verification profile) |
 | `deep-research` | Alias candidate | `comprehensive-research` (deep profile) |
-| `git-workflow` (command) | Alias candidate | `git-workflow-and-versioning` (skill) |
 | `ai-eng/simplify` (skill) | Alias candidate | `code-simplification` (canonical skill) |
 
 ## Naming Rules

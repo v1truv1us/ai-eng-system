@@ -1,0 +1,58 @@
+# skills-gtm KEEP list — tool/API-specific skills worth installing
+# Source: reports/skills-gtm-advisory.md (33 KEEP + 16 RETEST)
+# Usage: scripts/install-gtm-skills.sh --only reports/skills-gtm-keeplist.txt
+#
+# Format: <category>/<skill-name>
+
+# === KEEP (33) ===
+leadmagic/leadmagic-cli
+leadmagic/leadmagic-mcp
+leadmagic/leadmagic-bulk-enrichment
+leadmagic/leadmagic-job-change
+leadmagic/leadmagic-waterfall
+leadmagic/leadmagic-integrations
+tools/clay-toolkit
+tools/clay-loops-toolkit
+tools/ai-prompts-toolkit
+tools/n8n-toolkit
+tools/instantly-sequences
+tools/smartlead-workflows
+tools/hubspot-sequences
+tools/outreach-sequences
+tools/salesloft-cadences
+tools/lemlist-setup
+tools/crm-toolkit
+tools/leadmagic-toolkit
+tools/sequencing-toolkit
+tools/analytics-toolkit
+tools/support-toolkit
+automation/attio-setup
+automation/hubspot-setup
+automation/salesforce-setup
+automation/clay-automation
+automation/mcp-setup
+outbound/email-deliverability
+outbound/domain-infrastructure
+outbound/inbox-setup
+outbound/sending-platforms
+customer-success/headless-support
+customer-success/support-tool-stack
+inbound/website-visitor-identification
+
+# === RETEST (16) — install if relevant; re-audit every ~6 months ===
+automation/crm-integration
+automation/api-enrichment
+automation/ai-sdr-setup
+automation/tool-selection-stack
+creative/v0-lander
+creative/vibe-coding
+creative/ai-video-creation
+creative/vibe-marketing
+analytics/1p-tagging-pixels
+analytics/deliverability-monitoring
+analytics/event-analytics
+analytics/tracking-plan
+gtm-ops/gtm-spend-management
+inbound/linkedin-algorithm
+inbound/linkedin-live-strategy
+inbound/sales-navigator-prospecting

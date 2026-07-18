@@ -1,0 +1,54 @@
+name: Skill Health
+
+# Weekly autoreview loop: re-audit the skills catalog, self-heal safe issues
+# (frontmatter format, eval scaffolding), and open a PR with the health report
+# plus any auto-fixes. Findings that need human judgment (redundancy merges,
+# stale model slugs, unused skills) surface in the report and the PR body.
+
+on:
+  schedule:
+    # Sunday 06:00 UTC
+    - cron: "0 6 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  skill-health:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Format + eval lint (gates)
+        run: |
+          bun run format:skills
+          bun run lint:skill-evals
+
+      - name: Run autoreview skill-health loop (self-heal)
+        run: bun run skill:heal
+
+      - name: Get report date
+        id: date
+        run: echo "date=$(date +%Y-%m-%d)" >> "$GITHUB_OUTPUT"
+
+      - name: Open/refresh health PR
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: chore/skill-health
+          delete-branch: true
+          title: "chore(skills): weekly health self-heal"
+          commit-message: "chore(skills): weekly health self-heal"
+          body-path: reports/skill-health-${{ steps.date.outputs.date }}.md
+          labels: skills, automation

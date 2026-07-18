@@ -66,21 +66,13 @@ describe("Content Parity", () => {
 
     describe("Lifecycle skills", () => {
         const requiredSkills = [
-            "idea-refine",
             "spec-driven-development",
             "planning-and-task-breakdown",
             "test-driven-development",
-            "context-engineering",
             "source-driven-development",
-            "frontend-ui-engineering",
-            "api-and-interface-design",
             "browser-testing-with-devtools",
             "security-and-hardening",
-            "performance-optimization",
-            "git-workflow-and-versioning",
             "ci-cd-and-automation",
-            "deprecation-and-migration",
-            "documentation-and-adrs",
             "shipping-and-launch",
         ];
 

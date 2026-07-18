@@ -1,0 +1,22 @@
+{
+  "description": "Registry of model identifiers and version pins that appear in skills, so the health loop can detect hard-coded values that drift out of date. Refresh the `last_verified` date when a skill's slugs are checked against live provider docs. Slugs are intentionally NOT enumerated here — hard-coding them is exactly what this file exists to flag. See skills/AGENTS.md 'Adding a Skill'.",
+  "schema_version": 1,
+  "last_verified": "2026-07-17",
+  "verify_against": {
+    "anthropic": "https://docs.anthropic.com/en/docs/about-claude/models",
+    "openai": "https://platform.openai.com/docs/models",
+    "cursor": "call Cursor.models.list() at runtime",
+    "google": "https://ai.google.dev/gemini-api/docs/models"
+  },
+  "flag_patterns": [
+    "claude-[a-z0-9.\\-]+",
+    "gpt-[0-9.]+[a-z\\-]*",
+    "composer-[0-9.]+[a-z\\-]*",
+    "gemini-[0-9.]+[a-z\\-]*",
+    "o[0-9]+-(mini|pro|preview)",
+    "sonnet-[0-9.\\-]+",
+    "opus-[0-9.\\-]+",
+    "haiku-[0-9.\\-]+"
+  ],
+  "guidance": "Any skill matching a flag_pattern carries a hard-coded model slug that will drift. Prefer capability checks (run.supports(...), Cursor.models.list()) or document 'refresh against provider docs' rather than pinning a slug."
+}

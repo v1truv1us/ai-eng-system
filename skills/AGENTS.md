@@ -14,8 +14,6 @@ Mostly flat skill definitions for Claude Code and OpenCode, with a small number 
 
 ```
 skills/
-├── dependency-graph-analysis/ # Structural graph analysis and path tracing
-│   └── SKILL.md
 ├── comprehensive-research/   # Multi-phase research orchestration
 │   └── SKILL.md
 ├── code-review-and-quality/   # Multi-axis review before merge
@@ -28,13 +26,9 @@ skills/
 │   └── SKILL.md
 ├── graph-rag/                 # Relationship-aware graph retrieval
 │   └── SKILL.md
-├── graphify/                  # Knowledge graph development for LLM apps
-│   └── SKILL.md
 ├── git-worktree/             # Git worktree workflows
 │   └── SKILL.md
 ├── incremental-implementation/ # Thin-slice implementation workflow
-│   └── SKILL.md
-├── incentive-prompting/      # Research-backed prompting techniques
 │   └── SKILL.md
 ├── multimodal-corpus-ingestion/ # Mixed corpus normalization and extraction
 │   └── SKILL.md
@@ -65,6 +59,19 @@ description: Brief description for semantic matching. Include trigger words.
 [Skill instructions and content]
 ```
 
+## Adding a Skill (policy)
+
+Frontier models have absorbed most trending skills, so extra instructions fight the model's training, inflate routing cost, and add noise. A skill is added only when ALL of these hold:
+
+1. **It earns its place.** It provides at least one of: (A) **private context** the model couldn't know (company templates, internal data, personal taste, exact proprietary steps), (B) **custom tool access** (wires a tool/MCP the model can't invoke otherwise), or (C) a **specific custom workflow** (an exact sequence of steps a command/agent depends on). Restating public knowledge (OWASP, SOLID, MEDDICC, ADRs, "write clean code") is not enough — plain prompting already produces that.
+2. **It doesn't overlap an existing skill.** Search `skills/` first. Extend an existing skill rather than add a near-duplicate; if redundant, document the survivor in `skills/DELETED_SKILLS.md`.
+3. **It carries proof.** Add an `evals/evals.json` (prompt + expected_output + assertions). For `model-invoked` skills this is enforced by `scripts/check-skill-evals.ts` in CI; a skill without evals cannot be `model-invoked`.
+4. **It's correctly categorized.** Set `metadata.category: user-invoked` (slash/manual only — costs nothing at startup) unless the skill genuinely must auto-load, in which case `model-invoked`. Bias toward `user-invoked`. Run `sync-skill-taxonomy` to verify invariants.
+
+Before adding, run the deletion test: on a typical task, would the model's output be noticeably worse without this skill? If not, don't add it. See `reports/skills-audit-2026-07.md` for the framework and prior retirements.
+
+The catalog is kept honest by the **autoreview skill-health loop** (`bun run skill:health`): a weekly cron plus a PostToolUse invocation logger that re-audits redundancy, staleness, eval gaps, and unused skills, self-heals safe issues, and flags the rest. See `reports/skill-health-loop.md`.
+
 ## Selected Skills
 
 The table below highlights the most commonly invoked skills in this repository. Additional namespaced and alignment skills are also available under `skills/`.
@@ -72,14 +79,11 @@ The table below highlights the most commonly invoked skills in this repository. 
 | Skill | Description | Invoked By |
 |-------|-------------|------------|
 | `prompt-refinement` | Transform prompts into structured TCRO format | `/ai-eng/research`, `/ai-eng/plan`, `/ai-eng/work`, `/ai-eng/spec` |
-| `incentive-prompting` | Research-backed prompting techniques (+45-115% quality) | `/ai-eng/optimize`, agent enhancement |
 | `comprehensive-research` | Multi-phase research orchestration | `/ai-eng/research` |
 | `code-review-and-quality` | Multi-axis review before merge | `/ai-eng/code-review` |
 | `code-simplification` | Behavior-preserving simplification | Alignment with `/ai-eng/simplify` workflow |
 | `debugging-and-error-recovery` | Root-cause debugging and recovery | Failure analysis and break-fix work |
-| `dependency-graph-analysis` | Structural graph analysis for architecture questions | Tracing paths, cycles, god nodes, surprise edges |
 | `graph-rag` | Relationship-aware retrieval over graph structure | Multi-hop and entity-heavy retrieval tasks |
-| `graphify` | Knowledge graph development for LLM applications | Knowledge graph build and graph-native LLM workflows |
 | `incremental-implementation` | Thin vertical slice implementation | Multi-file feature and refactor work |
 | `multimodal-corpus-ingestion` | Normalize mixed corpora before analysis or retrieval | Code + docs + PDFs + diagrams + transcripts |
 | `text-cleanup` | Remove AI-generated verbosity and slop | Text cleanup and editing workflows |

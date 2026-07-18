@@ -27,6 +27,14 @@
       "description": "Check if file is in simplify ignore list before code simplification",
       "enabled": true,
       "condition": "skill matches /code-simplification|simplify/"
+    },
+    {
+      "id": "skill-invocation-logger",
+      "event": "PostToolUse",
+      "description": "Log each `skill` tool invocation to reports/.skill-invocations.jsonl so the skill-health loop can flag unused skills (learning capture)",
+      "enabled": true,
+      "script": "hooks/skill-invocation-logger.sh",
+      "condition": "tool matches /skill/"
     }
   ]
 }

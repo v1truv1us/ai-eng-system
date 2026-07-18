@@ -2,9 +2,10 @@
 name: knowledge-capture
 description: Document solved problems with context, examples, and gotchas so learnings compound for the team. Use after completing a workflow worth remembering.
 metadata:
-  category: model-invoked
+  category: user-invoked
   version: 1.0.0
   tags: documentation, knowledge-management, team-learning, problem-solving
+disable-model-invocation: true
 ---
 
 Default output: return only the result, blockers, and required evidence. Omit preambles, process narration, repeated context, confidence scores, and follow-up offers. Use at most five bullets unless a required artifact or schema needs more.

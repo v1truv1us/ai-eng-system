@@ -1,0 +1,38 @@
+{
+  "skill_name": "cursor-sdk",
+  "evals": [
+    {
+      "id": 1,
+      "name": "agent-create-vs-prompt",
+      "prompt": "Apply the cursor-sdk skill: a user wants to run a one-off code task. Should they use Agent.create or Agent.prompt? Show the correct call.",
+      "expected_output": "Output distinguishes Agent.prompt (one-off, fire-and-forget) from Agent.create (stateful/resumable) and shows the correct one-off call.",
+      "assertions": [
+        "The output recommends Agent.prompt for a one-off task",
+        "The code sample matches the current Cursor SDK signature",
+        "The output does not confuse local and cloud runtime defaults"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "resume-after-interrupt",
+      "prompt": "Use the cursor-sdk skill to resume an agent session after an interrupt, preserving prior directives.",
+      "expected_output": "Output uses Agent.resume with the prior session id, and warns that interrupt-chained resumes silently drop directives so a fresh consolidated-scope subagent is safer.",
+      "assertions": [
+        "The output references Agent.resume and the session id",
+        "The output warns about directives being dropped on interrupt-chain resume",
+        "The output recommends firing a fresh subagent with consolidated scope"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "capability-gating",
+      "prompt": "Apply the cursor-sdk skill to write code that only invokes a reviewer when the current model supports it.",
+      "expected_output": "Output gates reviewer invocation behind run.supports(...) capability checking rather than assuming the capability exists.",
+      "assertions": [
+        "The output uses run.supports(...) or equivalent capability gating",
+        "The output does not hard-assume skipReviewerRequest exists on every model",
+        "The code degrades gracefully when the capability is absent"
+      ]
+    }
+  ]
+}
