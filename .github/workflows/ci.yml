@@ -36,4 +36,4 @@ jobs:
           bun run lint:skill-evals
 
       - name: Fast tests
-        run: bun test tests/unit.test.ts tests/build.test.ts tests/ci-workflow.test.ts
+        run: bun test tests/unit.test.ts tests/build.test.ts tests/ci-workflow.test.ts tests/check-skill-evals.test.ts
