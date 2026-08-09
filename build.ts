@@ -1453,6 +1453,8 @@ async function syncToLocalClaude(): Promise<void> {
     const hookFiles = [
         ".claude/hooks/prompt-optimizer-hook.py",
         ".claude/hooks/hooks.json",
+        "hooks/skill-invocation-logger.sh",
+        "hooks/session-outcome-recorder.sh",
     ];
     for (const hookFile of hookFiles) {
         const src = join(ROOT, hookFile);
@@ -2077,6 +2079,18 @@ async function syncToMarketplacePlugins(): Promise<void> {
                                 ],
                             },
                         ],
+                        PostToolUse: [
+                            {
+                                matcher: "skill",
+                                hooks: [
+                                    {
+                                        type: "command",
+                                        command:
+                                            "$CLAUDE_PLUGIN_DIR/hooks/skill-invocation-logger.sh",
+                                    },
+                                ],
+                            },
+                        ],
                         Stop: [
                             {
                                 hooks: [
@@ -2084,6 +2098,11 @@ async function syncToMarketplacePlugins(): Promise<void> {
                                         type: "command",
                                         command:
                                             "$CLAUDE_PLUGIN_DIR/hooks/cooking-stop-hook.sh",
+                                    },
+                                    {
+                                        type: "command",
+                                        command:
+                                            "$CLAUDE_PLUGIN_DIR/hooks/session-outcome-recorder.sh",
                                     },
                                 ],
                             },

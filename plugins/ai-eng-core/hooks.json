@@ -10,12 +10,27 @@
         ]
       }
     ],
+    "PostToolUse": [
+      {
+        "matcher": "skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PLUGIN_DIR/hooks/skill-invocation-logger.sh"
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [
           {
             "type": "command",
             "command": "$CLAUDE_PLUGIN_DIR/hooks/cooking-stop-hook.sh"
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PLUGIN_DIR/hooks/session-outcome-recorder.sh"
           }
         ]
       }
