@@ -18,7 +18,7 @@
     "./commands/cook-status.md",
     "./commands/dynamic-task.md",
     "./commands/orchestrate.md",
-    "./commands/skill-learning-approve.md",
-    "./commands/skill-learning-dismiss.md"
+    "./commands/skill-learning-dismiss.md",
+    "./commands/skill-learning-approve.md"
   ]
 }
