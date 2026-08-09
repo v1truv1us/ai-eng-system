@@ -146,3 +146,28 @@ jobs:
           gh release create "v${VERSION}" \
             --title "v${VERSION}" \
             --generate-notes
+      - name: Commit version bump back to main
+        if: github.event.inputs.dry_run != 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          for path in \
+            packages/core/package.json \
+            packages/toolkit/package.json \
+            packages/cli/package.json \
+            packages/cli/package.json.dev \
+            packages/cli/package.json.publish \
+            .claude-plugin \
+            packages/toolkit/.claude-plugin \
+            packages/toolkit/plugins \
+            plugins; do
+            git add -f "$path" 2>/dev/null || true
+          done
+          if git diff --cached --quiet; then
+            echo "No version-bump changes to commit"
+            exit 0
+          fi
+          git commit -m "chore(release): v${VERSION} [skip ci]"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
