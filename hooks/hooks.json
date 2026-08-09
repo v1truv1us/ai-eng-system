@@ -35,6 +35,13 @@
       "enabled": true,
       "script": "hooks/skill-invocation-logger.sh",
       "condition": "tool matches /skill/"
+    },
+    {
+      "id": "session-outcome-recorder",
+      "event": "Stop",
+      "description": "Append outcome-labeled runs to skills/<name>/run-history.jsonl for the self-improving skills loop (observe stage)",
+      "enabled": true,
+      "script": "hooks/session-outcome-recorder.sh"
     }
   ]
 }

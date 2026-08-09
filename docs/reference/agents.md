@@ -1,6 +1,6 @@
 # Agents Reference
 
-46 specialized agents for engineering workflows.
+47 specialized agents for engineering workflows.
 
 ---
 
@@ -115,10 +115,11 @@
 | Agent | Purpose |
 |-------|---------|
 | agents-memory-updater | Automatic memory and skill updates from sessions |
+| skill-improver | Proposes minimal SKILL.md patches from observed failure clusters |
 
 ---
 
 All agents enhanced with research-backed prompting.
 See `docs/reference/workflow-surface-matrix.md` for command-to-skill-to-agent routing.
 
-This repository currently ships **46** agents.
+This repository currently ships **47** agents.

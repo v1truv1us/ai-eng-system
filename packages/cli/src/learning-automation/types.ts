@@ -1,4 +1,7 @@
-export type LearningCommandId = "decision-journal" | "quality-gate";
+export type LearningCommandId =
+    | "decision-journal"
+    | "quality-gate"
+    | "skill-learning-approve";
 
 export type LearningControlCommandId =
     | "learning-approve"

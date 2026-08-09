@@ -116,6 +116,12 @@ packages/*/package.json.dev
 skills-gtm/
 skills/gtm/
 
+# Self-improving skills loop — local telemetry and candidates (not committed)
+# (reports/skill-proposals/ IS committed: it is the audit record the weekly
+# promotion PR is built from)
+skills/**/run-history.jsonl
+skills/**/versions/candidates/
+
 # macOS
 .DS_Store
 **/.DS_Store

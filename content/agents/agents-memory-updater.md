@@ -13,8 +13,8 @@ tools:
   glob: true
   list: true
   bash: false
-  write: false
-  edit: false
+  write: true
+  edit: true
 model: inherit
 ---
 

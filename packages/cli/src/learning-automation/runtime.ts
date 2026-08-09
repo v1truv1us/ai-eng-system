@@ -29,6 +29,7 @@ const MAX_SNOOZE_MS = 7 * 24 * 60 * 60 * 1000;
 const ALLOWED_APPROVAL_COMMANDS = new Set<LearningRecommendation["commandId"]>([
     "decision-journal",
     "quality-gate",
+    "skill-learning-approve",
 ]);
 
 function normalizeControlCommandName(

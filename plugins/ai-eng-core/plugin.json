@@ -1,6 +1,6 @@
 {
   "name": "ai-eng-core",
-  "version": "1.13.0",
+  "version": "1.13.1",
   "description": "Core workflow: plan, work, review cycle with research and context engineering",
   "author": {
     "name": "v1truv1us"
@@ -17,6 +17,8 @@
     "./commands/init.md",
     "./commands/cook-status.md",
     "./commands/dynamic-task.md",
-    "./commands/orchestrate.md"
+    "./commands/orchestrate.md",
+    "./commands/skill-learning-approve.md",
+    "./commands/skill-learning-dismiss.md"
   ]
 }

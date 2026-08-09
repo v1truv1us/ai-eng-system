@@ -61,6 +61,19 @@ Before adding, run the deletion test: on a typical task, would the model's outpu
 
 The catalog is kept honest by the **autoreview skill-health loop** (`bun run skill:health`): a weekly cron plus a PostToolUse invocation logger that re-audits redundancy, staleness, eval gaps, and unused skills, self-heals safe issues, and flags the rest. See `reports/skill-health-loop.md`.
 
+## Self-Improving Loop (policy)
+
+Skills improve through a controlled feedback loop, never unrestricted self-editing:
+
+1. **Observe**: `hooks/session-outcome-recorder.sh` appends outcome-labeled runs to `skills/<name>/run-history.jsonl` (gitignored).
+2. **Diagnose**: `bun run skill:improve` clusters failure signatures; a learning requires ≥3 occurrences or 1 high-severity incident.
+3. **Learn**: qualifying learnings are auto-appended to `skills/<name>/learnings.md` (committed, terse, 90-day expiry). This is the only file automation may write inside a skill directory.
+4. **Propose**: the `skill-improver` agent turns evidence into SKILL.md patch candidates under `reports/skill-proposals/` (gitignored).
+5. **Gate**: candidates pass `scripts/check-skill-safety.ts` plus a held-out shadow eval (`scripts/skill-candidate-eval.ts`); promotion requires ≥ +3pp holdout pass rate and ≤10% runtime regression.
+6. **Promote/rollback**: promotion lands only via human-merged PR (`chore/skill-improve`); prior versions are kept immutable in `skills/<name>/versions/v<N>/` and restored by `scripts/rollback-skill.ts`.
+
+**Automation-immutable**: SKILL.md YAML frontmatter and any section titled `## Safety`, `## Scope`, or `## Boundaries` may never be edited by automation. Vendored `skills/gtm/` is exempt from the whole loop.
+
 ## Selected Skills
 
 The table below highlights the most commonly invoked skills in this repository. Additional namespaced and alignment skills are also available under `skills/`.

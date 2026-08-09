@@ -1,0 +1,72 @@
+name: Skill Improve
+
+# Weekly self-improvement loop: aggregate outcome-labeled run history into
+# learnings, shadow-evaluate approved skill_edit candidates against held-out
+# evals, promote passing candidates, and open a PR. Human merge is the only
+# SKILL.md promotion gate.
+
+on:
+  schedule:
+    # Sunday 07:00 UTC (after skill-health at 06:00)
+    - cron: "0 7 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  skill-improve:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Diagnose (cluster failures, append learnings, emit proposals)
+        run: bun run skill:improve
+
+      - name: Safety gate (reject patches touching immutable regions)
+        run: bun run skill:safety
+
+      - name: Shadow-evaluate approved candidates (heuristic holdout)
+        run: bun run skill:candidate-eval
+
+      - name: Promote passing candidates (version + apply)
+        run: bun run skill:promote
+
+      - name: Summarize proposals
+        run: |
+          {
+            echo "# Weekly skill-improve run"
+            echo ""
+            echo "- Date: $(date +%Y-%m-%d)"
+            echo "- Proposals: $(find reports/skill-proposals -name '*.json' 2>/dev/null | wc -l | tr -d ' ')"
+            echo ""
+            echo "## Learnings changed"
+            echo '```'
+            git diff --stat -- 'skills/**/learnings.md' || true
+            echo '```'
+            echo "## SKILL.md promotions"
+            echo '```'
+            git diff --stat -- 'skills/**/SKILL.md' || true
+            echo '```'
+          } > reports/skill-improve-pr-body.md
+
+      - name: Open/refresh improvement PR
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: chore/skill-improve
+          delete-branch: true
+          title: "chore(skills): weekly self-improvement loop"
+          commit-message: "chore(skills): weekly self-improvement loop"
+          body-path: reports/skill-improve-pr-body.md
+          labels: skills, automation

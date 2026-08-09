@@ -72,6 +72,88 @@ function extractLikelyFiles(argumentsText: string): string[] {
     return Array.from(new Set(matches)).slice(0, 3);
 }
 
+interface PendingSkillProposal {
+    skill: string;
+    id: string;
+    failureSignature: string;
+}
+
+function findPendingSkillProposal(
+    projectDir: string,
+): PendingSkillProposal | null {
+    const proposalsRoot = path.join(projectDir, "reports", "skill-proposals");
+    if (!fs.existsSync(proposalsRoot)) {
+        return null;
+    }
+
+    try {
+        for (const skillDir of fs.readdirSync(proposalsRoot)) {
+            const dirPath = path.join(proposalsRoot, skillDir);
+            if (!fs.statSync(dirPath).isDirectory()) continue;
+            for (const file of fs.readdirSync(dirPath)) {
+                if (!file.endsWith(".json")) continue;
+                try {
+                    const proposal = JSON.parse(
+                        fs.readFileSync(path.join(dirPath, file), "utf-8"),
+                    ) as {
+                        id?: string;
+                        skill?: string;
+                        kind?: string;
+                        decision?: string;
+                        failure_signature?: string;
+                    };
+                    if (
+                        proposal.kind === "skill_edit" &&
+                        proposal.decision === "pending" &&
+                        proposal.skill &&
+                        proposal.id
+                    ) {
+                        return {
+                            skill: proposal.skill,
+                            id: proposal.id,
+                            failureSignature:
+                                proposal.failure_signature ?? "unknown",
+                        };
+                    }
+                } catch {
+                    // skip malformed proposal
+                }
+            }
+        }
+    } catch {
+        return null;
+    }
+
+    return null;
+}
+
+function buildSkillProposalRecommendation(
+    proposal: PendingSkillProposal,
+    sourceCommand: "plan" | "work" | "review",
+    createdAt: number,
+): LearningRecommendation {
+    const commandId = "skill-learning-approve" as const;
+    const suggestedArguments = `"${proposal.skill}:${proposal.id}"`;
+
+    return {
+        id: `${commandId}-${proposal.skill}-${proposal.id}`,
+        commandId,
+        commandName: `/ai-eng/${commandId}`,
+        commandLine: `/ai-eng/${commandId} ${suggestedArguments}`,
+        suggestedArguments,
+        rationale: `A pending skill_edit proposal for ${proposal.skill} (failure: ${proposal.failureSignature}) is ready for shadow evaluation.`,
+        confidence: 0.7,
+        likelyTargetFiles: [
+            `skills/${proposal.skill}/SKILL.md`,
+            `reports/skill-proposals/${proposal.skill}/`,
+        ],
+        dedupeKey: [commandId, proposal.skill, proposal.id].join("|"),
+        mode: "suggestion-only",
+        sourceEvent: "command.executed",
+        createdAt,
+    };
+}
+
 function buildSuggestedArguments(
     commandId: LearningCommandId,
     sourceCommand: "plan" | "work" | "review",
@@ -156,12 +238,21 @@ export function buildLearningCandidates(
         return [];
     }
 
-    const argumentsText = event.properties.arguments.trim().toLowerCase();
-    if (!argumentsText) {
-        return [];
+    const candidates: LearningRecommendation[] = [];
+
+    const pendingProposal = findPendingSkillProposal(projectDir);
+    if (pendingProposal) {
+        candidates.push(
+            buildSkillProposalRecommendation(pendingProposal, commandName, now),
+        );
     }
 
-    const candidates: LearningRecommendation[] = [];
+    const argumentsText = event.properties.arguments.trim().toLowerCase();
+    if (!argumentsText) {
+        return candidates.sort(
+            (left, right) => right.confidence - left.confidence,
+        );
+    }
 
     if (commandName === "plan" || commandName === "work") {
         const decisionMatches = collectMatches(argumentsText, DECISION_TERMS);

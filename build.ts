@@ -323,6 +323,17 @@ async function discoverSkills(skillsRoot: string): Promise<SkillInfo[]> {
 }
 
 /**
+ * Self-improving loop artifacts stay repo-local; they never ship to dist or
+ * harness mirrors. Only SKILL.md, evals/, and references/ are distributed.
+ */
+const SKILL_COPY_EXCLUDES = new Set([
+    "run-history.jsonl",
+    "learnings.md",
+    "fixtures",
+    "versions",
+]);
+
+/**
  * Copy skills while preserving relative directory structure.
  * This keeps namespaces like ai-eng/simplify intact in generated outputs.
  */
@@ -339,7 +350,11 @@ async function copySkillsPreservePath(
     // Copy each skill preserving relative namespace/category folders
     for (const skill of skills) {
         const destSkillDir = join(destDir, skill.relativeDir);
-        await copyDirRecursive(skill.sourceDir, destSkillDir);
+        await copyDirRecursive(
+            skill.sourceDir,
+            destSkillDir,
+            SKILL_COPY_EXCLUDES,
+        );
     }
 }
 
@@ -1160,6 +1175,7 @@ async function validateCanonicalSkills(): Promise<string[]> {
 async function copyDirRecursive(
     srcDir: string,
     destDir: string,
+    excludes?: Set<string>,
 ): Promise<void> {
     if (!existsSync(srcDir)) return;
 
@@ -1167,11 +1183,12 @@ async function copyDirRecursive(
     await mkdir(destDir, { recursive: true });
 
     for (const entry of entries) {
+        if (excludes?.has(entry.name)) continue;
         const srcPath = join(srcDir, entry.name);
         const destPath = join(destDir, entry.name);
 
         if (entry.isDirectory()) {
-            await copyDirRecursive(srcPath, destPath);
+            await copyDirRecursive(srcPath, destPath, excludes);
         } else if (entry.isFile()) {
             await ensureDirForFile(destPath);
             await copyFile(srcPath, destPath);

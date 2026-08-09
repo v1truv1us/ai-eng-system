@@ -12,6 +12,8 @@ tools:
   - Grep
   - Glob
   - List
+  - Write
+  - Edit
 model: inherit
 ---
 

@@ -33,6 +33,11 @@ if [[ -z "$SKILL" ]]; then
   exit 0
 fi
 
+SESSION_ID=$(printf '%s' "$INPUT" | jq -r '.session_id // .session.id // empty' 2>/dev/null || true)
+
 mkdir -p "$(dirname "$LEDGER")"
-printf '{"ts":%d,"skill":%s}\n' "$(date +%s)" "$(printf '%s' "$SKILL" | jq -Rs .)" >> "$LEDGER"
+printf '{"ts":%d,"skill":%s,"session_id":%s}\n' \
+  "$(date +%s)" \
+  "$(printf '%s' "$SKILL" | jq -Rs .)" \
+  "$(printf '%s' "$SESSION_ID" | jq -Rs .)" >> "$LEDGER"
 exit 0

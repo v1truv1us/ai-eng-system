@@ -10,7 +10,7 @@ import { existsSync } from "fs";
 import { mkdir, readdir, readFile, writeFile } from "fs/promises";
 import { basename, join } from "path";
 
-interface AssertionResult {
+export interface AssertionResult {
     text: string;
     passed: boolean;
     evidence: string;
@@ -73,7 +73,7 @@ function stripMarkdown(text: string): string {
         .toLowerCase();
 }
 
-async function gradeAssertion(
+export async function gradeAssertion(
     assertion: string,
     outputText: string,
 ): Promise<AssertionResult> {
@@ -426,7 +426,10 @@ async function main(): Promise<void> {
     }
 }
 
-main().catch((e) => {
-    console.error(e);
-    process.exit(1);
-});
+const isMain = import.meta.path === Bun.main;
+if (isMain) {
+    main().catch((e) => {
+        console.error(e);
+        process.exit(1);
+    });
+}

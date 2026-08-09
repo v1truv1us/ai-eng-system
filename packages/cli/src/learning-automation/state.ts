@@ -42,6 +42,11 @@ const DEFAULT_POLICY: LearningPolicy = {
             cooldownMinutes: 360,
             minimumConfidence: 0.72,
         },
+        "skill-learning-approve": {
+            enabled: true,
+            cooldownMinutes: 360,
+            minimumConfidence: 0.6,
+        },
     },
 };
 
@@ -136,6 +141,22 @@ function mergePolicy(input: unknown): LearningPolicy {
                 minimumConfidence: sanitizeConfidence(
                     commands?.["quality-gate"]?.minimumConfidence,
                     DEFAULT_POLICY.commands["quality-gate"].minimumConfidence,
+                ),
+            },
+            "skill-learning-approve": {
+                enabled: sanitizeBoolean(
+                    commands?.["skill-learning-approve"]?.enabled,
+                    DEFAULT_POLICY.commands["skill-learning-approve"].enabled,
+                ),
+                cooldownMinutes: sanitizeNumber(
+                    commands?.["skill-learning-approve"]?.cooldownMinutes,
+                    DEFAULT_POLICY.commands["skill-learning-approve"]
+                        .cooldownMinutes,
+                ),
+                minimumConfidence: sanitizeConfidence(
+                    commands?.["skill-learning-approve"]?.minimumConfidence,
+                    DEFAULT_POLICY.commands["skill-learning-approve"]
+                        .minimumConfidence,
                 ),
             },
         },
