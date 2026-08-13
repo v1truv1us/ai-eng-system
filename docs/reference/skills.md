@@ -1,6 +1,6 @@
 # Skills Reference
 
-ai-eng-system currently ships 85 base skills organized by lifecycle phase, domain, and repository-specific purpose.
+ai-eng-system currently ships 86 base skills organized by lifecycle phase, domain, and repository-specific purpose.
 
 ## Namespaced Skills
 
@@ -42,6 +42,7 @@ ai-eng-system currently ships 85 base skills organized by lifecycle phase, domai
 ## Research and Prompting
 
 - `comprehensive-research` - multi-phase research orchestration
+- `xquik-source-research` - bounded public X/Twitter evidence collection through Xquik
 - `grill-me` - relentless one-question-at-a-time interview to stress-test a plan or design
 - `grill-with-docs` - same interview, persisted as a `CONTEXT.md` or ADR-style decision record
 - `prompt-refinement` - TCRO prompt structuring (Task/Context/Constraints/Output/Verify)
@@ -79,4 +80,4 @@ These skills are included in default installs (see `.ai-eng/install-manifest.jso
 - Namespaced skills use `namespace/name` directory paths.
 - See `docs/reference/skills-first-map.md` for the complete ownership mapping.
 
-This repository currently ships **85** base skills.
+This repository currently ships **86** base skills.
